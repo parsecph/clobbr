@@ -1,0 +1,13 @@
+{
+  "name": "@clobbr/api",
+  "version": "1.0.0",
+  "description": "Clobbr API",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/parsecph/clobbr/blob/master/packages/api"
+  },
+  "author": "Dan Mindru <mindrudan@gmail.com>",
+  "license": "MIT"
+}
