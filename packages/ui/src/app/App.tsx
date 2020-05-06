@@ -1,6 +1,5 @@
 import React from 'react';
 import logo from 'shared/static/logo.svg';
-import './App.css';
 
 import Button from '@material-ui/core/Button'
 
@@ -21,9 +20,11 @@ function App() {
           Learn React
         </a>
 
+
+
+
       <Button variant="contained">ok now!</Button>
       </header>
-
     </div>
   );
 }
