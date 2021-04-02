@@ -3,11 +3,23 @@
   "version": "1.0.0",
   "description": "Clobbr CLI",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "dev": "ts-node ./index.ts"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/parsecph/clobbr/blob/master/packages/cli"
   },
   "author": "Dan Mindru <mindrudan@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "asciichart": "^1.5.25",
+    "chalk": "^4.1.0",
+    "commander": "^7.2.0",
+    "common-tags": "^1.8.0"
+  },
+  "devDependencies": {
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.3"
+  }
 }

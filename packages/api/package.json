@@ -9,5 +9,11 @@
     "url": "https://github.com/parsecph/clobbr/blob/master/packages/api"
   },
   "author": "Dan Mindru <mindrudan@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "asciichart": "^1.5.25",
+    "axios": "^0.21.1",
+    "chalk": "^4.1.0",
+    "is-absolute-url": "^3.0.3"
+  }
 }
