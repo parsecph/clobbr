@@ -1,0 +1,9 @@
+export enum EEvents {
+  RESPONSE_OK = 'RESPONSE_OK',
+  RESPONSE_FAILED = 'RESPONSE_FAILED'
+}
+
+export const EVENTS = {
+  RESPONSE_OK: EEvents.RESPONSE_OK,
+  RESPONSE_FAILED: EEvents.RESPONSE_FAILED
+};

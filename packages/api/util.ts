@@ -2,19 +2,8 @@ import { AxiosError } from 'axios';
 
 const sizeof = require('object-sizeof');
 
-// const colorMap = {
-//   0: 'green',
-//   1: 'yellowBright',
-//   2: 'redBright'
-// };
-
-// export const getDurationColor = (duration) => {
-//   return colorMap[Math.round(duration / 1000)] || 'red';
-// };
-
 export const getNumberMeta = (index: number) => {
-  // return chalk.white.bgGray(`#${`${index + 1}`.padStart(3, '0')}`);
-  return `#${`${index + 1}`.padStart(3, '0')}`;
+  return `#${(index + 1).toString().padStart(3, '0')}`;
 };
 
 export const getFailedMessage = (index: number, error: AxiosError) => {
@@ -23,27 +12,25 @@ export const getFailedMessage = (index: number, error: AxiosError) => {
   try {
     const { status, statusText } = error.response;
 
+    console.log(error);
+
     return {
       formatted: `${baseError} ${status} (${statusText})`,
       status,
       statusText
     };
-    // return `${baseError} ${chalk.red(`${errorCode} (${errorText})`)}`;
   } catch {}
 
   return baseError;
 };
 
 export const getResponseMetas = (response, duration, index) => {
-  // const durationColor = getDurationColor(duration);
-
   const metas = {
     number: getNumberMeta(index),
-    // status: chalk.gray(`${response.status} (${response.statusText})`),
     status: `${response.status} (${response.statusText})`,
-    // duration: chalk[durationColor](`${duration}ms`),
+    statusCode: response.status,
+    index,
     duration: `${duration}ms`,
-    // size: `${chalk.gray(sizeof(response.data) / 1000)} KB`,
     size: `${sizeof(response.data) / 1000} KB`
   };
 
@@ -51,5 +38,7 @@ export const getResponseMetas = (response, duration, index) => {
 };
 
 export const getTimeAverage = (durations) => {
-  return Math.round(durations.reduce((acc, cur) => acc + cur, 0) / durations.length);
+  return Math.round(
+    durations.reduce((acc, cur) => acc + cur, 0) / durations.length
+  );
 };

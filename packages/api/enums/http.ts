@@ -1,4 +1,4 @@
-export enum EVERBS {
+export enum Everbs {
   GET = 'get',
   POST = 'post',
   PUT = 'put',
@@ -9,11 +9,11 @@ export enum EVERBS {
 }
 
 export const VERBS = {
-  GET: EVERBS.GET,
-  POST: EVERBS.POST,
-  PUT: EVERBS.PUT,
-  DELETE: EVERBS.DELETE,
-  OPTIONS: EVERBS.OPTIONS,
-  HEAD: EVERBS.HEAD,
-  PATCH: EVERBS.PATCH
+  GET: Everbs.GET,
+  POST: Everbs.POST,
+  PUT: Everbs.PUT,
+  DELETE: Everbs.DELETE,
+  OPTIONS: Everbs.OPTIONS,
+  HEAD: Everbs.HEAD,
+  PATCH: Everbs.PATCH
 };

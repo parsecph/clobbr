@@ -1,8 +1,8 @@
-import { EVERBS } from '../enums/http';
+import { Everbs } from '../enums/http';
 
 export interface ClobbrRunSettings {
   iterations: number;
   url: string;
-  verb: EVERBS;
+  verb: Everbs;
   headers: { [key: string]: string };
 }

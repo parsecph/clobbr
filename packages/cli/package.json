@@ -13,10 +13,13 @@
   "author": "Dan Mindru <mindrudan@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@clobbr/api": "^1.0.0",
     "asciichart": "^1.5.25",
     "chalk": "^4.1.0",
     "commander": "^7.2.0",
-    "common-tags": "^1.8.0"
+    "common-tags": "^1.8.0",
+    "lodash": "^4.17.21",
+    "ora": "^5.4.0"
   },
   "devDependencies": {
     "ts-node": "^9.1.1",
