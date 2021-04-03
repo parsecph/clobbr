@@ -14,4 +14,6 @@ Generates a nice report and beautiful visualizations of your averages.
 
 Coming soon in your favorite terminal, package manager or store. 
 
+<img witdh="300px" height="300px" alt="API Response Timing Chart Terminal Teaser" src="https://user-images.githubusercontent.com/1515742/113457834-215c8b00-9411-11eb-8c65-c55d381a9426.png" />  
+
 ![Clobbr icon](https://user-images.githubusercontent.com/1515742/80861773-da9a6a00-8c70-11ea-9671-77e1bb2dea04.png)
