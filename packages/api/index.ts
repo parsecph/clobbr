@@ -1,8 +1,8 @@
-import { Everbs } from './enums/http';
-import { ClobbrEventCallback } from './models/ClobbrEvent';
-import { ClobbrRunSettings } from './models/ClobbrRunSettings';
-import { runParallel } from './parallel';
-import { runSequence } from './sequence';
+import { Everbs } from './src/enums/http';
+import { ClobbrEventCallback } from './src/models/ClobbrEvent';
+import { ClobbrRunSettings } from './src/models/ClobbrRunSettings';
+import { runParallel } from './src/parallel';
+import { runSequence } from './src/sequence';
 
 export const parseOptions = (options?: ClobbrRunSettings) => {
   return {

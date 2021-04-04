@@ -1,6 +1,6 @@
 import test from 'ava';
 
-import { getTimeAverage } from '../../util';
+import { getTimeAverage } from '../../src/util';
 
 test('getTimeAverage', (t) => {
   const average = getTimeAverage([100, 200, 300]);

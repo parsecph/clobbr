@@ -2,7 +2,7 @@
   "name": "@clobbr/api",
   "version": "1.0.0",
   "description": "Clobbr API",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "test": "ava",
     "test:watch": "ava --watch"

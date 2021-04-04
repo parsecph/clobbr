@@ -3,25 +3,20 @@
     "baseUrl": "./src",
     "target": "es2015",
     "lib": [
-      "dom",
-      "dom.iterable",
       "esnext"
     ],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "strict": true,
+    "strict": false,
     "forceConsistentCasingInFileNames": true,
-    "module": "esnext",
+    "module": "commonjs",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
     "noFallthroughCasesInSwitch": true
-  },
-  "include": [
-    "src"
-  ]
+  }
 }

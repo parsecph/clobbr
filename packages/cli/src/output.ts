@@ -1,5 +1,5 @@
-import { EErrors, ERRORS } from '@clobbr/api/enums/errors';
-import { VERBS } from '@clobbr/api/enums/http';
+import { EErrors, ERRORS } from '@clobbr/api/src/enums/errors';
+import { VERBS } from '@clobbr/api/src/enums/http';
 import { stripIndent } from 'common-tags';
 
 const chalk = require('chalk');
@@ -12,7 +12,10 @@ export const success = (text: string) => log(chalk.green(text));
 export const highlightInfo = (text: string) => log(chalk.white.bgGray(text));
 export const highlightError = (text: string) => log(chalk.white.bgRed(text));
 
-export const errorMessage = (errorCode: EErrors, meta: { [key: string]: string | number }) => {
+export const errorMessage = (
+  errorCode: EErrors,
+  meta: { [key: string]: string | number }
+) => {
   const { url, verb } = meta;
 
   switch (errorCode) {

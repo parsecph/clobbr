@@ -1,12 +1,12 @@
 import { oneLine } from 'common-tags';
 import { merge } from 'lodash';
 import { run } from '@clobbr/api';
-import { errorMessage } from './output';
+import { errorMessage } from './src/output';
 import { Command } from 'commander';
-import { EEvents } from '@clobbr/api/enums/events';
-import * as ora from 'ora';
-import * as asciichart from 'asciichart';
-import * as chalk from 'chalk';
+import { EEvents } from '@clobbr/api/src/enums/events';
+import ora from 'ora';
+import asciichart from 'asciichart';
+import chalk from 'chalk';
 
 const DEFAULTS = {
   verb: 'get',
@@ -88,7 +88,7 @@ program
       );
       console.log('\n');
 
-      console.log(`\n Finished run ✅`);
+      console.log(`\n Finished run of ${iterations} iterations ✅`);
       console.log(
         ` Average response time: ${chalk[getDurationColor(average)](
           `${average}ms`

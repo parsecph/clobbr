@@ -2,8 +2,8 @@ import test from 'ava';
 
 import { COMMENTS_PATH } from './mock/rest-api';
 
-import { runParallel } from '../../parallel';
-import { VERBS } from '../../enums/http';
+import { runParallel } from '../../src/parallel';
+import { VERBS } from '../../src/enums/http';
 
 test('GET one in parallel', (t) => {
   return runParallel({

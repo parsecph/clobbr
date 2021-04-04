@@ -2,8 +2,8 @@ import test from 'ava';
 
 import { COMMENTS_PATH } from './mock/rest-api';
 
-import { runSequence } from '../../sequence';
-import { VERBS } from '../../enums/http';
+import { runSequence } from '../../src/sequence';
+import { VERBS } from '../../src/enums/http';
 
 test('GET one in sequence', (t) => {
   return runSequence({
