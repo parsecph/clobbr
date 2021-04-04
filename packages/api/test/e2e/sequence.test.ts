@@ -32,9 +32,6 @@ test('GET multiple in sequence', (t) => {
 
     t.true(Array.isArray(results));
 
-    t.true(results.length > 1);
-    t.true(Number.isInteger(results[0]));
-
     t.is(logs.length, 10);
     t.deepEqual(
       logs.map(({ metas }) => metas.index),
