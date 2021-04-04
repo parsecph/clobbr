@@ -12,11 +12,8 @@ test('GET one in sequence', (t) => {
     verb: VERBS.GET,
     headers: {}
   }).then(({ results, logs, average }) => {
-    t.is(results.length, 1);
-    t.true(Number.isInteger(results[0]));
-
+    t.true(Array.isArray(results));
     t.is(logs.length, 1);
-
     t.true(Number.isInteger(average));
   });
 });

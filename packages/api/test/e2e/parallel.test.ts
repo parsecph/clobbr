@@ -12,8 +12,8 @@ test('GET one in parallel', (t) => {
     verb: VERBS.GET,
     headers: {}
   }).then(({ results, logs, average }) => {
+    t.true(Array.isArray(results));
     t.is(logs.length, 1);
-
     t.true(Number.isInteger(average));
   });
 });
