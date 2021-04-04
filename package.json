@@ -2,7 +2,9 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "bootstrap": "lerna bootstrap"
+    "bootstrap": "lerna bootstrap",
+    "build-cli": "cd ./packages/cli && npm run build",
+    "build-api": "cd ./packages/api && npm run build"
   },
   "devDependencies": {
     "husky": "^6.0.0",

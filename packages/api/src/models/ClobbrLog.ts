@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios';
-import { Everbs } from 'enums/http';
+import { Everbs } from '../enums/http';
 
 export interface ClobbrLogItem {
   url: string;

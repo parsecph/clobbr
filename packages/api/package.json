@@ -4,6 +4,7 @@
   "description": "Clobbr API",
   "main": "index.js",
   "scripts": {
+    "build": "tsc --outDir dist",
     "test": "ava",
     "test:watch": "ava --watch"
   },
