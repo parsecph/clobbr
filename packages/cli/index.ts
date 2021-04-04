@@ -9,23 +9,40 @@ import { table } from 'table';
 import { run } from '@clobbr/api';
 import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
 import {
+  error,
   errorMessage,
   highlightError,
   highlightInfo,
-  highlightSuccess
+  highlightSuccess,
+  success
 } from './src/output';
 import { EEvents } from '@clobbr/api/src/enums/events';
+
+enum ETableTypes {
+  NONE = 'none',
+  COMPACT = 'compact',
+  FULL = 'full'
+}
+
+const TABLE_TYPES = {
+  none: ETableTypes.NONE,
+  compact: ETableTypes.COMPACT,
+  full: ETableTypes.FULL
+};
 
 const DEFAULTS = {
   verb: 'get',
   iterations: '10',
-  parallel: false
+  parallel: false,
+  table: TABLE_TYPES.none,
+  chart: true
 };
 
 const COLOR_MAP = {
   0: 'green',
-  1: 'yellowBright',
-  2: 'redBright'
+  1: 'yellow',
+  2: 'orange',
+  3: 'redBright'
 };
 
 export const getDurationColor = (duration) => {
@@ -33,47 +50,62 @@ export const getDurationColor = (duration) => {
 };
 
 const runEventCallback = (spinner) => (event: EEvents, payload) => {
+  // TODO show avg on a rolling basis
   const { index, statusCode } = payload.metas || {};
   spinner.text = `#${index + 1}`;
   spinner.color = statusCode === 200 ? 'green' : 'red';
-  // TODO show avg
 };
 
 const getLogItemTableRow = (logItem: ClobbrLogItem) => {
-  const { metas, url, verb, error } = logItem;
-  const status = error
-    ? chalk.bold.red(error.code ? error.code : metas.status)
-    : chalk.bold.green(metas.status);
-  const duration = error ? '-' : metas.duration;
+  const { metas, error } = logItem;
 
-  return [verb.toUpperCase(), url, metas.number, status, duration];
+  const status = error
+    ? chalk.bold.red(metas.status)
+    : chalk.bold.green(metas.status);
+  const duration = error
+    ? '-'
+    : chalk.keyword(getDurationColor(metas.duration))(
+        `${metas.duration} ${metas.durationUnit}`
+      );
+  const size = error ? '-' : metas.size;
+
+  return [metas.number, status, duration, size];
 };
 
 const renderTable = (
   failed: Array<ClobbrLogItem>,
-  ok: Array<ClobbrLogItem>
+  ok: Array<ClobbrLogItem>,
+  tableType: ETableTypes
 ) => {
+  if (tableType === TABLE_TYPES.none) {
+    return;
+  }
+
+  const tableHeader = ['Number', 'Status', 'Duration', 'Size'].map((t) =>
+    chalk.bold(t)
+  );
+
+  const tableOptions = {
+    drawHorizontalLine: (index: number, size: number) => {
+      if (index === 0 || index === size || tableType === TABLE_TYPES.full) {
+        return true;
+      }
+
+      return false;
+    }
+  };
+
   if (ok.length) {
     highlightSuccess(`\n\nCompleted iterations: ${ok.length}`);
     console.log(
-      table([
-        ['Method', 'URL', 'Number', 'Status', 'Duration'].map((t) =>
-          chalk.bold(t)
-        ),
-        ...ok.map(getLogItemTableRow)
-      ])
+      table([tableHeader, ...ok.map(getLogItemTableRow)], tableOptions)
     );
   }
 
   if (failed.length) {
     highlightError(`\n\nFailed iterations: ${failed.length}`);
     console.log(
-      table([
-        ['Method', 'URL', 'Number', 'Status', 'Duration'].map((t) =>
-          chalk.bold(t)
-        ),
-        ...failed.map(getLogItemTableRow)
-      ])
+      table([tableHeader, ...failed.map(getLogItemTableRow)], tableOptions)
     );
   }
 };
@@ -94,16 +126,26 @@ program
   )
 
   .requiredOption('-u, --url <url>', 'url to test')
-  .option('-v, --verb <verb>', 'request verb/method to use', DEFAULTS.verb)
+  .option(
+    '-v, -m, --method <method>, --verb <verb>',
+    'request verb/method to use',
+    DEFAULTS.verb
+  )
   .option(
     '-i, --iterations <iterations>',
     'number of requests to perform',
     DEFAULTS.iterations
   )
   .option('-p, --parallel', 'run requests in parallel', DEFAULTS.parallel)
+  .option('-c, --chart', 'display results as chart', DEFAULTS.chart)
+  .option(
+    '-t, --table <table>',
+    `display results as table (${Object.values(TABLE_TYPES).join(', ')})`,
+    DEFAULTS.table
+  )
 
   .action(async (cliOptions: { [key: string]: any }) => {
-    const { parallel, iterations, verb, url } = cliOptions;
+    const { parallel, iterations, verb, url, chart, table } = cliOptions;
     const spinner = ora({
       text: `Starting ${iterations} iterations`,
       spinner: 'dots',
@@ -134,43 +176,39 @@ program
 
         highlightInfo(` ${verb}`);
         highlightInfo(` ${url}`);
-        highlightError(
-          `\n All of the ${iterations} iterations have failed ❌ `
-        );
+        error(`\n All of the ${iterations} iterations have failed ❌ `);
         console.log(
           `\n Is the url & verb correct, or are you missing some data/headers/cookies?`
         );
 
-        renderTable(failedRequests, []);
+        renderTable(failedRequests, [], table);
       } else {
         // TODO autoresize?
-        if (results.length) {
+        if (results.length && chart) {
           console.log('\n');
           console.log(
             asciichart.plot(results, {
               height: 15,
+              width: 20,
               colors: [asciichart.green, asciichart.blue]
             })
           );
           console.log('\n');
         }
 
-        highlightSuccess(`\n Finished run of ${results.length} iterations ✅ `);
+        success(`\n Finished run of ${results.length} iterations ✅ `);
 
         if (failedRequests.length) {
-          highlightError(
-            `\n ${failedRequests.length} iterations have failed ❌ `
-          );
+          error(`\n ${failedRequests.length} iterations have failed ❌ `);
         }
 
         console.log(
-          ` Average response time: ${chalk[getDurationColor(average)](
+          ` Average response time: ${chalk.keyword(getDurationColor(average))(
             `${average}ms`
           )}`
         );
 
-        // todo only verbose should show each req as a table?
-        renderTable(failedRequests, okRequests);
+        renderTable(failedRequests, okRequests, table);
       }
     } catch (errorMessages) {
       spinner.stop();

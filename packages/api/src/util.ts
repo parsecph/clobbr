@@ -26,7 +26,7 @@ export const getFailedMessage = (
 
     return {
       formatted: `${baseError} ${status} (${statusText})`,
-      status: status.toString(),
+      status: `${status} (${statusText})`,
       statusText
     };
   } catch {}
@@ -39,14 +39,17 @@ export const getResponseMetas = (
   duration: number,
   index: number
 ): ClobbrLogItemMeta => {
+  const { status, statusText, data } = response;
+
   const metas = {
     number: getNumberMeta(index),
-    status: `${response.status} (${response.statusText})`,
-    statusCode: response.status,
+    status: `${status} (${statusText})`,
+    statusCode: status,
     index,
-    duration: `${duration}ms`,
-    size: `${sizeof(response.data) / 1000} KB`,
-    data: response.data
+    duration,
+    durationUnit: 'ms',
+    size: `${sizeof(data) / 1000} KB`,
+    data: data
   };
 
   return metas;

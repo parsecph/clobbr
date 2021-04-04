@@ -16,7 +16,8 @@ export interface ClobbrLogItemMeta {
   number?: string;
   status?: string;
   statusCode?: number;
-  duration?: string;
+  duration?: number;
+  durationUnit?: string;
   size?: string;
   data?: { [key: string]: string };
 }
