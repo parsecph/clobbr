@@ -38,3 +38,24 @@ test('GET multiple in sequence', (t) => {
     t.true(Number.isInteger(average));
   });
 });
+
+test('UPDATE multiple in sequence', (t) => {
+  return runSequence({
+    iterations: 10,
+    url: COMMENTS_PATH,
+    verb: VERBS.PUT,
+    headers: {}
+  }).then(({ results, logs, average }) => {
+    const expectedIndexes = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+    t.true(Array.isArray(results));
+
+    t.is(logs.length, 10);
+    t.deepEqual(
+      logs.map(({ metas }) => metas.index),
+      expectedIndexes
+    );
+
+    t.true(Number.isInteger(average));
+  });
+});

@@ -15,6 +15,7 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.21.1",
+    "faker": "^5.5.2",
     "is-absolute-url": "^3.0.3",
     "object-sizeof": "^1.6.1"
   },

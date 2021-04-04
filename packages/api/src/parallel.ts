@@ -1,21 +1,17 @@
-import api from './api';
 import { EVENTS } from './enums/events';
 import { Everbs } from './enums/http';
 import { ClobbrLogItem } from './models/ClobbrLog';
 import { ClobbrEventCallback } from './models/ClobbrEvent';
 import { ClobbrRunSettings } from './models/ClobbrRunSettings';
-import {
-  getFailedMessage,
-  getNumberMeta,
-  getResponseMetas,
-  getTimeAverage
-} from './util';
+import { getTimeAverage } from './util';
 import { validate } from './validate';
+import { handleApiCall, handleApiCallError } from './common';
 
 export const runParallel = async (
-  { iterations, url, verb = Everbs.GET, headers }: ClobbrRunSettings,
+  settings: ClobbrRunSettings,
   eventCallback: ClobbrEventCallback = () => null
 ) => {
+  const { iterations, url, verb = Everbs.GET } = settings;
   const { valid, errors } = validate(url, verb);
 
   if (!valid) {
@@ -27,36 +23,12 @@ export const runParallel = async (
 
   const requests = Array.from({ length: iterations }).map(async (_v, index) => {
     try {
-      const startTime = new Date().valueOf();
-      const res = await api.http[verb](url, { headers });
-      const endTime = new Date().valueOf();
-      const duration = endTime - startTime;
-      const metas = getResponseMetas(res, duration, index);
-      const logItem = {
-        url,
-        verb,
-        headers,
-        formatted: `${metas.number}: ${metas.duration} ${metas.status} ${metas.size}`,
-        metas
-      };
-
+      const { duration, logItem } = await handleApiCall(index, settings);
       results.push(duration);
       logs.push(logItem);
       eventCallback(EVENTS.RESPONSE_OK, logItem);
     } catch (error) {
-      const logItem = {
-        url,
-        verb,
-        headers,
-        metas: {
-          number: getNumberMeta(index),
-          ...getFailedMessage(index, error),
-          index
-        },
-        formatted: `${getNumberMeta(index)}: Failed`,
-        failed: true,
-        error
-      };
+      const { logItem } = handleApiCallError(settings, error, index);
       logs.push(logItem);
       eventCallback(EVENTS.RESPONSE_FAILED, logItem);
     }
