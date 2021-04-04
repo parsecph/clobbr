@@ -1,5 +1,3 @@
-
-
 <p align="center">
   <img witdh="150px" height="150px" alt="clobbr grid logo" src="https://user-images.githubusercontent.com/1515742/80861783-dcfcc400-8c70-11ea-89c6-671dbdff6f33.png" /> <br/><br/>
   
@@ -7,6 +5,8 @@
 </p>
 
 # Clobbr - api speed testing
+[![Tests](https://github.com/parsecph/clobbr/actions/workflows/nodejs.yml/badge.svg)](https://github.com/parsecph/clobbr/actions/workflows/nodejs.yml)
+
 Test your api endpoints to check how well they perform under multiple requests (clobber those APIs!)
 
 Send requests in parallel or in sequence to determine the reponse times of your API endpoints.
