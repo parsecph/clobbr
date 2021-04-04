@@ -1,4 +1,5 @@
 import { AxiosError } from 'axios';
+import { ENV } from './settings';
 
 const sizeof = require('object-sizeof');
 
@@ -12,7 +13,9 @@ export const getFailedMessage = (index: number, error: AxiosError) => {
   try {
     const { status, statusText } = error.response;
 
-    console.log(error);
+    if (ENV.VERBOSE) {
+      console.log(error);
+    }
 
     return {
       formatted: `${baseError} ${status} (${statusText})`,
@@ -31,7 +34,8 @@ export const getResponseMetas = (response, duration, index) => {
     statusCode: response.status,
     index,
     duration: `${duration}ms`,
-    size: `${sizeof(response.data) / 1000} KB`
+    size: `${sizeof(response.data) / 1000} KB`,
+    data: response.data
   };
 
   return metas;

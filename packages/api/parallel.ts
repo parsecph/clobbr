@@ -36,7 +36,10 @@ export const runParallel = async (
       eventCallback(EVENTS.RESPONSE_OK, logItem);
     } catch (error) {
       logs.push({
-        index,
+        url,
+        verb,
+        headers,
+        metas: { index },
         formatted: getFailedMessage(index, error),
         failed: true,
         error

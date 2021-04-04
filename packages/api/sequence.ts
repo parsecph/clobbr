@@ -27,6 +27,9 @@ export const runSequence = async (
       const duration = endTime - startTime;
       const metas = getResponseMetas(res, duration, index);
       const logItem = {
+        url,
+        verb,
+        headers,
         formatted: `${metas.number}: ${metas.duration} ${metas.status} ${metas.size}`,
         metas
       };
@@ -36,7 +39,10 @@ export const runSequence = async (
       eventCallback(EVENTS.RESPONSE_OK, logItem);
     } catch (error) {
       logs.push({
-        index,
+        url,
+        verb,
+        headers,
+        metas: { index },
         formatted: getFailedMessage(index, error),
         failed: true,
         error
