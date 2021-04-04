@@ -1,14 +1,20 @@
 import api from './api';
-import { ClobbrRunSettings } from './models/ClobbrRunSettings';
+import { ClobbrRequestSettings } from './models/ClobbrRequestSettings';
 import { getFailedMessage, getNumberMeta, getResponseMetas } from './util';
 import { AxiosError } from 'axios';
 
 export const handleApiCall = async (
   index: number,
-  { url, verb, headers }: ClobbrRunSettings
+  { url, verb, headers, data }: ClobbrRequestSettings
 ) => {
   const startTime = new Date().valueOf();
-  const res = await api.http[verb](url, { headers });
+  const res = await api.http({
+    url,
+    method: verb,
+    headers,
+    data
+  });
+
   const endTime = new Date().valueOf();
   const duration = endTime - startTime;
   const metas = getResponseMetas(res, duration, index);
@@ -24,7 +30,7 @@ export const handleApiCall = async (
 };
 
 export const handleApiCallError = (
-  { url, verb, headers }: ClobbrRunSettings,
+  { url, verb, headers }: ClobbrRequestSettings,
   error: AxiosError,
   index: number
 ) => {

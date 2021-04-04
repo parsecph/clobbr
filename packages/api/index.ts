@@ -1,10 +1,10 @@
 import { Everbs } from './src/enums/http';
 import { ClobbrEventCallback } from './src/models/ClobbrEvent';
-import { ClobbrRunSettings } from './src/models/ClobbrRunSettings';
+import { ClobbrRequestSettings } from './src/models/ClobbrRequestSettings';
 import { runParallel } from './src/parallel';
 import { runSequence } from './src/sequence';
 
-export const parseOptions = (options?: ClobbrRunSettings) => {
+export const parseOptions = (options?: ClobbrRequestSettings) => {
   return {
     ...options,
     verb: options.verb.toLowerCase() as Everbs,
@@ -14,7 +14,7 @@ export const parseOptions = (options?: ClobbrRunSettings) => {
 
 export const run = (
   parallel: boolean,
-  options: ClobbrRunSettings,
+  options: ClobbrRequestSettings,
   eventCallback: ClobbrEventCallback = () => null
 ) => {
   const parsedOptions = parseOptions(options);

@@ -2,13 +2,13 @@ import { EVENTS } from './enums/events';
 import { Everbs } from './enums/http';
 import { ClobbrLogItem } from './models/ClobbrLog';
 import { ClobbrEventCallback } from './models/ClobbrEvent';
-import { ClobbrRunSettings } from './models/ClobbrRunSettings';
+import { ClobbrRequestSettings } from './models/ClobbrRequestSettings';
 import { getTimeAverage } from './util';
 import { validate } from './validate';
 import { handleApiCall, handleApiCallError } from './common';
 
 export const runParallel = async (
-  settings: ClobbrRunSettings,
+  settings: ClobbrRequestSettings,
   eventCallback: ClobbrEventCallback = () => null
 ) => {
   const { iterations, url, verb = Everbs.GET } = settings;
