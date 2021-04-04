@@ -24,7 +24,8 @@ jobs:
           cd ./packages/api
           npm -v
           node -v
-          npm install
+          npm i -g yarn
+          yarn
           npm run test
         env:
           CI: true

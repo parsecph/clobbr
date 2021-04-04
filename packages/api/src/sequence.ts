@@ -1,9 +1,15 @@
 import api from './api';
 import { EVENTS } from './enums/events';
 import { Everbs } from './enums/http';
+import { ClobbrLogItem } from './models/ClobbrLog';
 import { ClobbrEventCallback } from './models/ClobbrEvent';
 import { ClobbrRunSettings } from './models/ClobbrRunSettings';
-import { getFailedMessage, getResponseMetas, getTimeAverage } from './util';
+import {
+  getFailedMessage,
+  getNumberMeta,
+  getResponseMetas,
+  getTimeAverage
+} from './util';
 import { validate } from './validate';
 
 export const runSequence = async (
@@ -17,7 +23,7 @@ export const runSequence = async (
   }
 
   const results = [];
-  const logs = [];
+  const logs = [] as Array<ClobbrLogItem>;
 
   for (let index = 0; index < iterations; index++) {
     try {
@@ -38,16 +44,21 @@ export const runSequence = async (
       logs.push(logItem);
       eventCallback(EVENTS.RESPONSE_OK, logItem);
     } catch (error) {
-      logs.push({
+      const logItem = {
         url,
         verb,
         headers,
-        metas: { index },
-        formatted: getFailedMessage(index, error),
+        metas: {
+          number: getNumberMeta(index),
+          ...getFailedMessage(index, error),
+          index
+        },
+        formatted: `${getNumberMeta(index)}: Failed`,
         failed: true,
         error
-      });
-      eventCallback(EVENTS.RESPONSE_FAILED, { index, error });
+      };
+      logs.push(logItem);
+      eventCallback(EVENTS.RESPONSE_FAILED, logItem);
     }
   }
 

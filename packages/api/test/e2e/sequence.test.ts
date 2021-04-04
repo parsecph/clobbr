@@ -30,6 +30,8 @@ test('GET multiple in sequence', (t) => {
   }).then(({ results, logs, average }) => {
     const expectedIndexes = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
+    t.true(Array.isArray(results));
+
     t.true(results.length > 1);
     t.true(Number.isInteger(results[0]));
 

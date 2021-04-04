@@ -1,12 +1,20 @@
 import { oneLine } from 'common-tags';
 import { merge } from 'lodash';
-import { run } from '@clobbr/api';
-import { errorMessage } from './src/output';
 import { Command } from 'commander';
-import { EEvents } from '@clobbr/api/src/enums/events';
 import ora from 'ora';
 import asciichart from 'asciichart';
 import chalk from 'chalk';
+import { table } from 'table';
+
+import { run } from '@clobbr/api';
+import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
+import {
+  errorMessage,
+  highlightError,
+  highlightInfo,
+  highlightSuccess
+} from './src/output';
+import { EEvents } from '@clobbr/api/src/enums/events';
 
 const DEFAULTS = {
   verb: 'get',
@@ -25,10 +33,49 @@ export const getDurationColor = (duration) => {
 };
 
 const runEventCallback = (spinner) => (event: EEvents, payload) => {
-  const { index, statusCode } = payload.metas;
+  const { index, statusCode } = payload.metas || {};
   spinner.text = `#${index + 1}`;
   spinner.color = statusCode === 200 ? 'green' : 'red';
   // TODO show avg
+};
+
+const getLogItemTableRow = (logItem: ClobbrLogItem) => {
+  const { metas, url, verb, error } = logItem;
+  const status = error
+    ? chalk.bold.red(error.code ? error.code : metas.status)
+    : chalk.bold.green(metas.status);
+  const duration = error ? '-' : metas.duration;
+
+  return [verb.toUpperCase(), url, metas.number, status, duration];
+};
+
+const renderTable = (
+  failed: Array<ClobbrLogItem>,
+  ok: Array<ClobbrLogItem>
+) => {
+  if (ok.length) {
+    highlightSuccess(`\n\nCompleted iterations: ${ok.length}`);
+    console.log(
+      table([
+        ['Method', 'URL', 'Number', 'Status', 'Duration'].map((t) =>
+          chalk.bold(t)
+        ),
+        ...ok.map(getLogItemTableRow)
+      ])
+    );
+  }
+
+  if (failed.length) {
+    highlightError(`\n\nFailed iterations: ${failed.length}`);
+    console.log(
+      table([
+        ['Method', 'URL', 'Number', 'Status', 'Duration'].map((t) =>
+          chalk.bold(t)
+        ),
+        ...failed.map(getLogItemTableRow)
+      ])
+    );
+  }
 };
 
 const program = new Command();
@@ -71,36 +118,69 @@ program
         headers: {}
       });
 
-      const { results, average } = await run(
+      const { results, logs, average } = await run(
         parallel,
         options,
         runEventCallback(spinner)
       );
       spinner.stop();
 
-      // TODO autoresize?
-      console.log('\n');
-      console.log(
-        asciichart.plot(results, {
-          height: 15,
-          colors: [asciichart.green, asciichart.blue]
-        })
-      );
-      console.log('\n');
+      const allFailed = results.length === 0;
+      const failedRequests = logs.filter(({ failed }) => failed);
+      const okRequests = logs.filter(({ failed }) => !failed);
 
-      console.log(`\n Finished run of ${iterations} iterations ✅`);
-      console.log(
-        ` Average response time: ${chalk[getDurationColor(average)](
-          `${average}ms`
-        )}`
-      );
+      if (allFailed) {
+        console.log('\n');
+
+        highlightInfo(` ${verb}`);
+        highlightInfo(` ${url}`);
+        highlightError(
+          `\n All of the ${iterations} iterations have failed ❌ `
+        );
+        console.log(
+          `\n Is the url & verb correct, or are you missing some data/headers/cookies?`
+        );
+
+        renderTable(failedRequests, []);
+      } else {
+        // TODO autoresize?
+        if (results.length) {
+          console.log('\n');
+          console.log(
+            asciichart.plot(results, {
+              height: 15,
+              colors: [asciichart.green, asciichart.blue]
+            })
+          );
+          console.log('\n');
+        }
+
+        highlightSuccess(`\n Finished run of ${results.length} iterations ✅ `);
+
+        if (failedRequests.length) {
+          highlightError(
+            `\n ${failedRequests.length} iterations have failed ❌ `
+          );
+        }
+
+        console.log(
+          ` Average response time: ${chalk[getDurationColor(average)](
+            `${average}ms`
+          )}`
+        );
+
+        // todo only verbose should show each req as a table?
+        renderTable(failedRequests, okRequests);
+      }
     } catch (errorMessages) {
       spinner.stop();
 
       console.error(errorMessages);
 
-      for (const message of errorMessages) {
-        errorMessage(message, { url, verb });
+      if (Array.isArray(errorMessages)) {
+        for (const message of errorMessages) {
+          errorMessage(message, { url, verb });
+        }
       }
     }
   });

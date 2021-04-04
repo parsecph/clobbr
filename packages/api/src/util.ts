@@ -1,4 +1,8 @@
-import { AxiosError } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
+import {
+  ClobbrLogItemFailedMessage,
+  ClobbrLogItemMeta
+} from './models/ClobbrLog';
 import { ENV } from './settings';
 
 const sizeof = require('object-sizeof');
@@ -7,7 +11,10 @@ export const getNumberMeta = (index: number) => {
   return `#${(index + 1).toString().padStart(3, '0')}`;
 };
 
-export const getFailedMessage = (index: number, error: AxiosError) => {
+export const getFailedMessage = (
+  index: number,
+  error: AxiosError
+): ClobbrLogItemFailedMessage => {
   const baseError = `${getNumberMeta(index)}: Failed`;
 
   try {
@@ -19,15 +26,19 @@ export const getFailedMessage = (index: number, error: AxiosError) => {
 
     return {
       formatted: `${baseError} ${status} (${statusText})`,
-      status,
+      status: status.toString(),
       statusText
     };
   } catch {}
 
-  return baseError;
+  return { formatted: baseError };
 };
 
-export const getResponseMetas = (response, duration, index) => {
+export const getResponseMetas = (
+  response: AxiosResponse,
+  duration: number,
+  index: number
+): ClobbrLogItemMeta => {
   const metas = {
     number: getNumberMeta(index),
     status: `${response.status} (${response.statusText})`,
@@ -43,6 +54,6 @@ export const getResponseMetas = (response, duration, index) => {
 
 export const getTimeAverage = (durations) => {
   return Math.round(
-    durations.reduce((acc, cur) => acc + cur, 0) / durations.length
+    durations.reduce((acc, cur) => acc + cur, 0) / durations.length || 0
   );
 };

@@ -1,9 +1,15 @@
 import api from './api';
 import { EVENTS } from './enums/events';
 import { Everbs } from './enums/http';
+import { ClobbrLogItem } from './models/ClobbrLog';
 import { ClobbrEventCallback } from './models/ClobbrEvent';
 import { ClobbrRunSettings } from './models/ClobbrRunSettings';
-import { getFailedMessage, getResponseMetas, getTimeAverage } from './util';
+import {
+  getFailedMessage,
+  getNumberMeta,
+  getResponseMetas,
+  getTimeAverage
+} from './util';
 import { validate } from './validate';
 
 export const runParallel = async (
@@ -17,7 +23,7 @@ export const runParallel = async (
   }
 
   const results = [];
-  const logs = [];
+  const logs = [] as Array<ClobbrLogItem>;
 
   const requests = Array.from({ length: iterations }).map(async (_v, index) => {
     try {
@@ -27,6 +33,9 @@ export const runParallel = async (
       const duration = endTime - startTime;
       const metas = getResponseMetas(res, duration, index);
       const logItem = {
+        url,
+        verb,
+        headers,
         formatted: `${metas.number}: ${metas.duration} ${metas.status} ${metas.size}`,
         metas
       };
@@ -35,16 +44,21 @@ export const runParallel = async (
       logs.push(logItem);
       eventCallback(EVENTS.RESPONSE_OK, logItem);
     } catch (error) {
-      logs.push({
+      const logItem = {
         url,
         verb,
         headers,
-        metas: { index },
-        formatted: getFailedMessage(index, error),
+        metas: {
+          number: getNumberMeta(index),
+          ...getFailedMessage(index, error),
+          index
+        },
+        formatted: `${getNumberMeta(index)}: Failed`,
         failed: true,
         error
-      });
-      eventCallback(EVENTS.RESPONSE_FAILED, { index, error });
+      };
+      logs.push(logItem);
+      eventCallback(EVENTS.RESPONSE_FAILED, logItem);
     }
   });
 

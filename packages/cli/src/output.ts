@@ -11,6 +11,8 @@ export const error = (text: string) => log(chalk.red(text));
 export const success = (text: string) => log(chalk.green(text));
 export const highlightInfo = (text: string) => log(chalk.white.bgGray(text));
 export const highlightError = (text: string) => log(chalk.white.bgRed(text));
+export const highlightSuccess = (text: string) =>
+  log(chalk.white.bgGreen(text));
 
 export const errorMessage = (
   errorCode: EErrors,
@@ -49,4 +51,12 @@ export const errorMessage = (
   }
 };
 
-export default { info, warn, error, success, highlightInfo, highlightError };
+export default {
+  info,
+  warn,
+  error,
+  success,
+  highlightInfo,
+  highlightError,
+  highlightSuccess
+};
