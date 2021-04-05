@@ -40,6 +40,11 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.37.tgz#a3dd8da4eb84a996c36e331df98d82abd76b516e"
   integrity sha512-XYmBiy+ohOR4Lh5jE379fV2IU+6Jn4g5qASinhitfyO71b/sCo6MKsMLF5tc7Zf2CE8hViVQyYSobJNke8OvUw==
 
+"@vercel/ncc@^0.27.0":
+  version "0.27.0"
+  resolved "https://registry.yarnpkg.com/@vercel/ncc/-/ncc-0.27.0.tgz#c0cfeebb0bebb56052719efa4a0ecc090a932c76"
+  integrity sha512-DllIJQapnU2YwewIhh/4dYesmMQw3h2cFtabECc/zSJHqUbNa0eJuEkRa6DXbZvh1YPWBtYQoPV17NlDpBw1Vw==
+
 ajv@^6.12.3:
   version "6.12.6"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.12.6.tgz#baf5a62e802b07d977034586f8c3baf5adf26df4"
@@ -982,7 +987,7 @@ pkg-fetch@2.6.9:
     semver "^6.3.0"
     unique-temp-dir "^1.0.0"
 
-pkg@^4.5.1:
+pkg@^4.4.9:
   version "4.5.1"
   resolved "https://registry.yarnpkg.com/pkg/-/pkg-4.5.1.tgz#0f915110d726b17a7e66a76e5406ff9d393bccc8"
   integrity sha512-UXKL88jGQ+FD4//PyrFeRcqurVQ3BVIfUNaEU9cXY24EJz08JyBj85qrGh0CFGvyzNb1jpwHOnns5Sw0M5H92Q==
