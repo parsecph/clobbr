@@ -15,7 +15,7 @@ export const parseOptions = (options?: ClobbrRequestSettings) => {
 export const run = (
   parallel: boolean,
   options: ClobbrRequestSettings,
-  eventCallback: ClobbrEventCallback = () => null
+  eventCallback?: ClobbrEventCallback
 ) => {
   const parsedOptions = parseOptions(options);
 

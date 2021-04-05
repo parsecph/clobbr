@@ -2,7 +2,7 @@
   "name": "@clobbr/cli",
   "version": "1.0.0",
   "description": "Clobbr CLI",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "dev": "ts-node ./index.ts",
     "build": "ncc build index.ts -o dist && node ./scripts/build-binaries.js"

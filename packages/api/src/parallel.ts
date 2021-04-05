@@ -9,7 +9,7 @@ import { handleApiCall, handleApiCallError } from './common';
 
 export const runParallel = async (
   settings: ClobbrRequestSettings,
-  eventCallback: ClobbrEventCallback = () => null
+  eventCallback?: ClobbrEventCallback
 ) => {
   const { iterations, url, verb = Everbs.GET } = settings;
   const { valid, errors } = validate(url, verb);
@@ -26,11 +26,17 @@ export const runParallel = async (
       const { duration, logItem } = await handleApiCall(index, settings);
       results.push(duration);
       logs.push(logItem);
-      eventCallback(EVENTS.RESPONSE_OK, logItem);
+
+      if (eventCallback) {
+        eventCallback(EVENTS.RESPONSE_OK, logItem);
+      }
     } catch (error) {
       const { logItem } = handleApiCallError(settings, error, index);
       logs.push(logItem);
-      eventCallback(EVENTS.RESPONSE_FAILED, logItem);
+
+      if (eventCallback) {
+        eventCallback(EVENTS.RESPONSE_FAILED, logItem);
+      }
     }
   });
 
