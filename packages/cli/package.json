@@ -3,9 +3,7 @@
   "version": "1.0.1",
   "description": "Clobbr CLI",
   "main": "dist/index.js",
-  "bin": {
-    "clobbr": "dist/index.js"
-  },
+  "bin": "dist/index.js",
   "scripts": {
     "dev": "ts-node ./index.ts",
     "build": "ncc build index.ts -o dist && node ./scripts/build-binaries.js"

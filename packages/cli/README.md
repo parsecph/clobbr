@@ -1,4 +1,5 @@
 ## @clobbr/cli
+[![npm (scoped)](https://img.shields.io/npm/v/@clobbr/cli?label=cli&style=flat)](https://github.com/parsecph/clobbr/tree/master/packages/cli)
 
 ```
 Options:
@@ -27,3 +28,4 @@ Options:
   -h, --help                                display help for command
 ```
 
+[See how to get started and other docs here](../../README.md)
