@@ -6,7 +6,7 @@
 
 # Clobbr - api speed testing
 
-Test your api endpoints to check how well they perform under multiple requests (clobber those APIs!)
+Test your api endpoints to see how well they perform under multiple requests (clobber your apis!), in sequence or parallel.
 
 [![npm (scoped)](https://img.shields.io/npm/v/@clobbr/cli?label=cli&style=flat)](https://github.com/parsecph/clobbr/tree/master/packages/cli) [![npm (scoped)](https://img.shields.io/npm/v/@clobbr/api?label=api&style=flat)](https://github.com/parsecph/clobbr/tree/master/packages/api) [![Tests](https://github.com/parsecph/clobbr/actions/workflows/nodejs.yml/badge.svg)](https://github.com/parsecph/clobbr/actions/workflows/nodejs.yml)
 
@@ -21,14 +21,15 @@ npx @clobbr/cli run --url "https://github.com"
 Run `npx @clobbr/cli` to see all options or
 head over to [@clobbr/cli docs](./packages/cli/README.md).
 
-> Not a fan of npx, get the binaries for your favorite OS [here ⬇️ 💿](https://github.com/parsecph/clobbr/releases).
+> Not a fan of npx? Get binaries for your favorite OS [here ⬇️ 💿](https://github.com/parsecph/clobbr/releases).
 >
 > Available for linux, macos and windows.
 
 ### What the cli can do
 
-This package can clobbr your API endpoints in various ways to stress-test how they do in either parallel or in sequence.
-After all iterations are complete, you'll be able to analyze reponse times of your API endpoints in a fasionable ascii chart or eye-catching ascii table.
+This package can stress-test your API endpoints in various ways so you can get a better idea on how your app would work under a (closer to) real world scenario.
+
+Configure requests, set iterations and analyze response times of your API endpoints in a fashionable ascii chart or jaw-dropping table.
 
 #### Basic examples
 
