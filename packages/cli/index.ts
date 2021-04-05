@@ -112,7 +112,9 @@ const renderTable = (
 
 const program = new Command();
 
-program.version(require('./package.json').version);
+program
+ .name('clobbr')
+ .version(require('./package.json').version);
 
 // program.command('interactive', { isDefault: true });
 
