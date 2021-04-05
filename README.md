@@ -5,15 +5,14 @@
 </p>
 
 # Clobbr - api speed testing
+Test your api endpoints to check how well they perform under multiple requests (clobber those APIs!)
+
 [![npm (scoped)](https://img.shields.io/npm/v/@clobbr/cli?label=cli&style=flat)](https://github.com/parsecph/clobbr/tree/master/packages/cli) [![npm (scoped)](https://img.shields.io/npm/v/@clobbr/api?label=api&style=flat)](https://github.com/parsecph/clobbr/tree/master/packages/api) [![Tests](https://github.com/parsecph/clobbr/actions/workflows/nodejs.yml/badge.svg)](https://github.com/parsecph/clobbr/actions/workflows/nodejs.yml)
 
 ![Clobbr api endpoint performance and speed test demo](https://user-images.githubusercontent.com/1515742/113618284-be106a00-9657-11eb-9709-04b911e7ccd5.gif)
 
 
-### Getting started
-Test your api endpoints to check how well they perform under multiple requests (clobber those APIs!)
-
-**Quick start**
+### Quick start
 
 ```bash
 npx @clobbr/cli run --url "https://github.com"
@@ -23,7 +22,8 @@ Run `npx @clobbr/cli` to see all options or
 head over to [@clobbr/cli docs](./packages/cli/README.md).
 
 > Not a fan of npx, get the binaries for your favorite OS [here ⬇️ 💿](https://github.com/danmindru/cncnet-map-downloader.js/releases).
-> Available on linux, macos and windows.
+>
+> Available for linux, macos and windows.
 
 
 ### What the cli can do
