@@ -24,10 +24,10 @@ jobs:
           npm -v
           node -v
           npm i -g yarn
+          npm run bootstrap
           npm run build
 
           cd ./packages/api
-          yarn
           npm run test
         env:
           CI: true
