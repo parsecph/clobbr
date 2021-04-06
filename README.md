@@ -4,7 +4,7 @@
   <img witdh="20px" height="20px" alt="clobbr typeface logo" src="https://user-images.githubusercontent.com/1515742/80861788-de2df100-8c70-11ea-8a56-155eef6691e8.png" />
 </p>
 
-# Clobbr - api speed testing
+# Clobbr - test your api's response times
 
 Test your api endpoints to see how well they perform under multiple requests (clobber your apis!), in sequence or parallel.
 
