@@ -7,7 +7,6 @@ The core functionality of clobbr, used by clients to build CLIs, UIs, etc.
 
 ### Coming soon
 
-- [ ] image payload?
 - [ ] easier get params (axios.params - althought they can be part of the URL anyway)
 - [ ] basic auth (axios.auth)
 - [ ] easier cookies? (axios.withCredentials? / headers { Cookie: ...})
