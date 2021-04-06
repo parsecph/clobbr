@@ -48,7 +48,7 @@ npx @clobbr/cli run \
 ```bash
 npx @clobbr/cli run \
   --url "https://github.com" \     # or `-u <url>`
-  --iterations 30                  # or `-i 30`
+  --iterations 30 \                 # or `-i 30`
   --parallel                       # or `-p`
 ```
 
@@ -59,7 +59,7 @@ npx @clobbr/cli run \
 ```bash
 npx @clobbr/cli run \
   --url "https://github.com" \     # or `-u <url>`
-  --iterations 30                  # or `-i 30`
+  --iterations 30 \                 # or `-i 30`
   --table "full"                   # or `-t "full"`
 ```
 
@@ -70,7 +70,7 @@ npx @clobbr/cli run \
 ```bash
 npx @clobbr/cli run \
   --url "https://github.com" \     # or `-u <url>`
-  --iterations 30                  # or `-i 30`
+  --iterations 30 \                 # or `-i 30`
   --table "compact"                # or `-t "compact"`
 ```
 
