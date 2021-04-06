@@ -1,4 +1,4 @@
-## @clobbr/cli
+## @clobbr/api
 
 [![npm (scoped)](https://img.shields.io/npm/v/@clobbr/api?label=api&style=flat)](https://github.com/parsecph/clobbr/tree/master/packages/api)
 

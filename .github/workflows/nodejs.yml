@@ -56,6 +56,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: packages/cli/binaries/*
+          files: packages/cli/binaries/@clobbr/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
