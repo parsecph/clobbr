@@ -19,12 +19,14 @@ jobs:
         with:
           node-version: ${{ matrix.node_version }}
 
-      - name: npm install & test
+      - name: install & test
         run: |
-          cd ./packages/api
           npm -v
           node -v
           npm i -g yarn
+          npm run build
+
+          cd ./packages/api
           yarn
           npm run test
         env:

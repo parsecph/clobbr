@@ -48,7 +48,7 @@ npx @clobbr/cli run \
 ```bash
 npx @clobbr/cli run \
   --url "https://github.com" \     # or `-u <url>`
-  --iterations 30 \                 # or `-i 30`
+  --iterations 30 \                # or `-i 30`
   --parallel                       # or `-p`
 ```
 
@@ -59,7 +59,7 @@ npx @clobbr/cli run \
 ```bash
 npx @clobbr/cli run \
   --url "https://github.com" \     # or `-u <url>`
-  --iterations 30 \                 # or `-i 30`
+  --iterations 30 \                # or `-i 30`
   --table "full"                   # or `-t "full"`
 ```
 
@@ -70,11 +70,74 @@ npx @clobbr/cli run \
 ```bash
 npx @clobbr/cli run \
   --url "https://github.com" \     # or `-u <url>`
-  --iterations 30 \                 # or `-i 30`
+  --iterations 30 \                # or `-i 30`
   --table "compact"                # or `-t "compact"`
 ```
 
 <img width="375px" alt="clobbr show minimal api response summary table" src="https://user-images.githubusercontent.com/1515742/113619304-1a27be00-9659-11eb-92f8-1cea2e32399c.jpg" />
+
+
+##### Customize Request Method
+`GET` is used as the default request method, but you can pass an optional request method, such as `POST`, `PUT`, `PATCH`, `DELETE` etc.
+
+##### Send Headers
+Arbitrary request headers are accepted as a JSON file.
+
+> Tip 💡
+> Passing { Cookie: "val" } adds a cookie to the request.
+
+```json
+// headers.json
+{
+  "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.Et9HFtf9R3",
+  "User-Agent": "Mozilla/5.0"
+}
+```
+
+```bash
+npx @clobbr/cli run \
+  --url "https://github.com" \    # or `-u <url>`
+  --iterations 20 \               # or `-i 30`
+  --headerPath "headers.json"     # or `-h "headers.json"
+```
+
+##### Send Data
+Arbitrary request data is accepted as a JSON file.
+
+```json
+// data.json
+{
+  "id": "17b",
+  "user": {
+    "firstName": "Jane",
+    "lastName": "Doe"
+  },
+  "visits": 50
+}
+```
+
+```bash
+npx @clobbr/cli run \
+  --url "https://github.com" \    # or `-u <url>`
+  --iterations 20 \               # or `-i 30`
+  --method "POST" \               # or `-m "POST"`
+  --dataPath "data.json"          # or `-d "data.json"
+```
+
+##### Analyze failed request iterations
+By default, details on failed iterations are neatly displayed via the table option.
+
+```bash
+npx @clobbr/cli run \
+  --url "https://github.com" \    # or `-u <url>`
+  --iterations 20 \               # or `-i 30`
+  --method "POST" \                 # or `-m "POST"`
+  --headerPath "headers.json" \   # or `-h "headers.json"
+  --dataPath "data.json" \        # or `-d "data.json"
+  --table "compact"               # or `-t "compact`
+```
+
+<img width="375px" alt="clobbr show minimal api response summary table" src="https://user-images.githubusercontent.com/1515742/113765840-13627f00-971d-11eb-8c45-5f4f39ef7db6.jpg" />
 
 ### Coming soon
 
