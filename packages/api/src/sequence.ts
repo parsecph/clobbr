@@ -18,7 +18,7 @@ export const runSequence = async (
     return Promise.reject(errors);
   }
 
-  const results = [];
+  const results = [] as Array<number>;
   const logs = [] as Array<ClobbrLogItem>;
 
   for (let index = 0; index < iterations; index++) {
@@ -28,14 +28,14 @@ export const runSequence = async (
       logs.push(logItem);
 
       if (eventCallback) {
-        eventCallback(EVENTS.RESPONSE_OK, logItem);
+        eventCallback(EVENTS.RESPONSE_OK, logItem, logs);
       }
     } catch (error) {
       const { logItem } = handleApiCallError(settings, error, index);
       logs.push(logItem);
 
       if (eventCallback) {
-        eventCallback(EVENTS.RESPONSE_FAILED, logItem);
+        eventCallback(EVENTS.RESPONSE_FAILED, logItem, logs);
       }
     }
   }

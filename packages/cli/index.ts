@@ -4,31 +4,16 @@ import { Command } from 'commander';
 import ora from 'ora';
 import asciichart from 'asciichart';
 import chalk from 'chalk';
-import { table } from 'table';
 
-import { run } from '@clobbr/api';
 import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
-import {
-  error,
-  errorMessage,
-  highlightError,
-  highlightInfo,
-  highlightSuccess,
-  success
-} from './src/output';
 import { EEvents } from '@clobbr/api/src/enums/events';
+import { getTimeAverage } from '@clobbr/api/src/util';
+import { run } from '@clobbr/api';
 
-enum ETableTypes {
-  NONE = 'none',
-  COMPACT = 'compact',
-  FULL = 'full'
-}
-
-const TABLE_TYPES = {
-  none: ETableTypes.NONE,
-  compact: ETableTypes.COMPACT,
-  full: ETableTypes.FULL
-};
+import { error, errorMessage, highlightInfo, success } from './src/output/log';
+import { renderTable } from './src/output/table';
+import { TABLE_TYPES } from './src/enums/table';
+import { getDurationColor } from './src/util';
 
 const DEFAULTS = {
   verb: 'get',
@@ -38,85 +23,30 @@ const DEFAULTS = {
   chart: true
 };
 
-const COLOR_MAP = {
-  0: 'green',
-  1: 'yellow',
-  2: 'orange',
-  3: 'redBright'
-};
-
-export const getDurationColor = (duration) => {
-  return COLOR_MAP[Math.round(duration / 1000)] || 'red';
-};
-
-const runEventCallback = (spinner) => (event: EEvents, payload) => {
-  // TODO show avg on a rolling basis
-  const { index, statusCode } = payload.metas || {};
-  spinner.text = `#${index + 1}`;
-  spinner.color = statusCode === 200 ? 'green' : 'red';
-};
-
-const getLogItemTableRow = (logItem: ClobbrLogItem) => {
-  const { metas, error } = logItem;
-
-  const status = error
-    ? chalk.bold.red(metas.status)
-    : chalk.bold.green(metas.status);
-  const duration = error
-    ? '-'
-    : chalk.keyword(getDurationColor(metas.duration))(
-        `${metas.duration} ${metas.durationUnit}`
-      );
-  const size = error ? '-' : metas.size;
-
-  return [metas.number, status, duration, size];
-};
-
-const renderTable = (
-  failed: Array<ClobbrLogItem>,
-  ok: Array<ClobbrLogItem>,
-  tableType: ETableTypes
+const runEventCallback = (spinner) => (
+  _event: EEvents,
+  log: ClobbrLogItem,
+  logs: Array<ClobbrLogItem>
 ) => {
-  if (tableType === TABLE_TYPES.none) {
-    return;
-  }
-
-  const tableHeader = ['Number', 'Status', 'Duration', 'Size'].map((t) =>
-    chalk.bold(t)
+  const { index, statusCode, duration } = log.metas || {};
+  const rollingAverage = getTimeAverage(
+    logs.filter((l) => !l.failed).map((l) => l.metas.duration)
   );
-
-  const tableOptions = {
-    drawHorizontalLine: (index: number, size: number) => {
-      if (index === 0 || index === size || tableType === TABLE_TYPES.full) {
-        return true;
-      }
-
-      return false;
-    }
-  };
-
-  if (ok.length) {
-    highlightSuccess(`\n\nCompleted iterations: ${ok.length}`);
-    console.log(
-      table([tableHeader, ...ok.map(getLogItemTableRow)], tableOptions)
-    );
-  }
-
-  if (failed.length) {
-    highlightError(`\n\nFailed iterations: ${failed.length}`);
-    console.log(
-      table([tableHeader, ...failed.map(getLogItemTableRow)], tableOptions)
-    );
-  }
+  spinner.text = oneLine`
+    #${index + 1}
+    ${chalk.keyword(getDurationColor(duration))(`${duration}ms`)}
+    ${chalk.bold.keyword(getDurationColor(rollingAverage))(
+      `[${rollingAverage}ms ${chalk.white('μ')}]`
+    )}
+  `;
+  spinner.color = statusCode === 200 ? 'green' : 'red';
 };
 
 const program = new Command();
 
-program
- .name('clobbr')
- .version(require('./package.json').version);
+program.name('clobbr').version(require('./package.json').version);
 
-// program.command('interactive', { isDefault: true });
+// TODO: program.command('interactive', { isDefault: true });
 
 program
   .command('run')
@@ -205,9 +135,9 @@ program
         }
 
         console.log(
-          ` Average response time: ${chalk.keyword(getDurationColor(average))(
-            `${average}ms`
-          )}`
+          ` Average response time (μ): ${chalk.keyword(
+            getDurationColor(average)
+          )(`${average}ms`)}`
         );
 
         renderTable(failedRequests, okRequests, table);

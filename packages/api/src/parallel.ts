@@ -28,14 +28,14 @@ export const runParallel = async (
       logs.push(logItem);
 
       if (eventCallback) {
-        eventCallback(EVENTS.RESPONSE_OK, logItem);
+        eventCallback(EVENTS.RESPONSE_OK, logItem, logs);
       }
     } catch (error) {
       const { logItem } = handleApiCallError(settings, error, index);
       logs.push(logItem);
 
       if (eventCallback) {
-        eventCallback(EVENTS.RESPONSE_FAILED, logItem);
+        eventCallback(EVENTS.RESPONSE_FAILED, logItem, logs);
       }
     }
   });
