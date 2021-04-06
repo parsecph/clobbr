@@ -24,6 +24,7 @@ jobs:
           npm -v
           node -v
           npm i -g yarn
+          yarn
           npm run bootstrap
           npm run build
 
