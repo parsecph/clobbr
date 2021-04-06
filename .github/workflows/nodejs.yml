@@ -32,3 +32,11 @@ jobs:
           npm run test
         env:
           CI: true
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: packages/cli/binaries/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
