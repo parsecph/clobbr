@@ -34,10 +34,14 @@ jobs:
           CI: true
 
   publish:
-    name: Release
-    uses: softprops/action-gh-release@v1
-    if: startsWith(github.ref, 'refs/tags/')
-    with:
-      files: packages/cli/binaries/*
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: packages/cli/binaries/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
