@@ -78,11 +78,6 @@ npx @clobbr/cli run \
 
 ### Coming soon
 
-Support for passing headers and payload data:
-
-- [x] @clobbr/api support
-- [ ] @clobbr/cli support
-
 The CLI is meant to be the 1st UI built on top of @clobbr/api.
 A slick UI that you can either run locally or on the web is also in the works, so stay tuned for that!
 

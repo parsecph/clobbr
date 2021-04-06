@@ -18,7 +18,7 @@ export const errorMessage = (
   errorCode: EErrors,
   meta: { [key: string]: string | number }
 ) => {
-  const { url, verb } = meta;
+  const { url, method } = meta;
 
   switch (errorCode) {
     case ERRORS.E0001: {
@@ -34,7 +34,7 @@ export const errorMessage = (
     }
 
     case ERRORS.E0002: {
-      highlightError(`${verb}`);
+      highlightError(`${method}`);
       error(
         stripIndent`
           Invalid http verb. Accepted verbs:
