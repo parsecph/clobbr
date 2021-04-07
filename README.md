@@ -84,6 +84,7 @@ npx @clobbr/cli run \
 Arbitrary request headers are accepted as a JSON file.
 
 > Tip 💡
+> 
 > Passing { Cookie: "val" } adds a cookie to the request.
 
 ```json
