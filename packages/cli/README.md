@@ -2,6 +2,17 @@
 
 [![@clobbr/cli on npm](https://img.shields.io/npm/v/@clobbr/cli?label=npm&style=flat)](https://www.npmjs.com/package/@clobbr/cli)
 
+### Basic usage
+
+```bash
+npx @clobbr/cli run --url "https://github.com"
+```
+
+[👉 See how to get started and examples here](https://github.com/parsecph/clobbr/blob/master/README.md)
+
+
+### Options
+
 ```
 Options:
   -V, --version   output the version number
@@ -31,8 +42,6 @@ Options:
                                    "none")
   --help                           display help for command
 ```
-
-[See how to get started and examples here](https://github.com/parsecph/clobbr/blob/master/README.md)
 
 ![Clobbr icon](https://user-images.githubusercontent.com/1515742/80861773-da9a6a00-8c70-11ea-9671-77e1bb2dea04.png)
 
