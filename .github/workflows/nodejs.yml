@@ -1,4 +1,4 @@
-name: Test & Release (if tagged)
+name: Test & Release
 
 on: [push]
 
