@@ -15,5 +15,5 @@
     "jsx": "react-jsx",
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["./index.ts", "src/*", "../api/index.ts", "../api/src/"]
+  "include": ["./index.ts", "src/*", "../api/index.ts", "../api/src/*"]
 }
