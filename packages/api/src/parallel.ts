@@ -6,6 +6,7 @@ import { ClobbrRequestSettings } from './models/ClobbrRequestSettings';
 import { getTimeAverage } from './util';
 import { validate } from './validate';
 import { handleApiCall, handleApiCallError } from './common';
+import { AxiosError } from 'axios';
 
 export const runParallel = async (
   settings: ClobbrRequestSettings,
@@ -18,10 +19,12 @@ export const runParallel = async (
     return Promise.reject(errors);
   }
 
-  const results = [];
+  const results = [] as Array<number>;
   const logs = [] as Array<ClobbrLogItem>;
 
   const requests = Array.from({ length: iterations }).map(async (_v, index) => {
+    const runStartTime = new Date().valueOf(); // Only used for fails.
+
     try {
       const { duration, logItem } = await handleApiCall(index, settings);
       results.push(duration);
@@ -31,7 +34,12 @@ export const runParallel = async (
         eventCallback(EVENTS.RESPONSE_OK, logItem, logs);
       }
     } catch (error) {
-      const { logItem } = handleApiCallError(settings, error, index);
+      const { logItem } = handleApiCallError(
+        settings,
+        error as AxiosError,
+        index,
+        runStartTime
+      );
       logs.push(logItem);
 
       if (eventCallback) {

@@ -6,6 +6,7 @@ import { ClobbrRequestSettings } from './models/ClobbrRequestSettings';
 import { getTimeAverage } from './util';
 import { validate } from './validate';
 import { handleApiCall, handleApiCallError } from './common';
+import { AxiosError } from 'axios';
 
 export const runSequence = async (
   settings: ClobbrRequestSettings,
@@ -22,6 +23,8 @@ export const runSequence = async (
   const logs = [] as Array<ClobbrLogItem>;
 
   for (let index = 0; index < iterations; index++) {
+    const runStartTime = new Date().valueOf(); // Only used for fails.
+
     try {
       const { duration, logItem } = await handleApiCall(index, settings);
       results.push(duration);
@@ -31,7 +34,12 @@ export const runSequence = async (
         eventCallback(EVENTS.RESPONSE_OK, logItem, logs);
       }
     } catch (error) {
-      const { logItem } = handleApiCallError(settings, error, index);
+      const { logItem } = handleApiCallError(
+        settings,
+        error as AxiosError,
+        index,
+        runStartTime
+      );
       logs.push(logItem);
 
       if (eventCallback) {

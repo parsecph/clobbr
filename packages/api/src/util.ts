@@ -18,7 +18,7 @@ export const getFailedMessage = (
   const baseError = `${getNumberMeta(index)}: Failed`;
 
   try {
-    const { status, statusText } = error.response;
+    const { status, statusText } = error.response as AxiosResponse;
 
     if (ENV.VERBOSE) {
       console.log(error);
@@ -41,22 +41,26 @@ export const getResponseMetas = (
 ): ClobbrLogItemMeta => {
   const { status, statusText, data } = response;
 
+  const statusOk = status ? !!status.toString().match(/^2.*/g) : false;
+
   const metas = {
     number: getNumberMeta(index),
     status: `${status} (${statusText})`,
     statusCode: status,
+    statusOk,
     index,
     duration,
     durationUnit: 'ms',
     size: `${sizeof(data) / 1000} KB`,
-    data: data
+    data
   };
 
   return metas;
 };
 
-export const getTimeAverage = (durations) => {
+export const getTimeAverage = (durations: Array<number>) => {
   return Math.round(
-    durations.reduce((acc, cur) => acc + cur, 0) / durations.length || 0
+    durations.reduce((acc: number, cur: number) => acc + cur, 0) /
+      durations.length || 0
   );
 };

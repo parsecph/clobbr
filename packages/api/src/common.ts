@@ -32,8 +32,12 @@ export const handleApiCall = async (
 export const handleApiCallError = (
   { url, verb, headers }: ClobbrRequestSettings,
   error: AxiosError,
-  index: number
+  index: number,
+  runStartTime: number
 ) => {
+  const endTime = new Date().valueOf();
+  const duration = endTime - runStartTime;
+
   const numberMeta = getNumberMeta(index);
   const logItem = {
     url,
@@ -42,7 +46,8 @@ export const handleApiCallError = (
     metas: {
       number: numberMeta,
       ...getFailedMessage(index, error),
-      index
+      index,
+      duration
     },
     formatted: `${numberMeta}: Failed`,
     failed: true,
