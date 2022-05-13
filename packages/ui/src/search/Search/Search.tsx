@@ -162,14 +162,12 @@ const Search = () => {
           };
 
         try {
-          const { results, logs, average } = await run(
+          await run(
             globalStore.search.parallel,
             options,
             runEventCallback(runingItemId)
           );
 
-          console.info({ results, logs, average }); // TODO: anything else to update?
-          globalStore.results.updateItemEndDate({ itemId: runingItemId });
           setRequestsInProgress(false);
         } catch (error) {
           // TODO dan: toast

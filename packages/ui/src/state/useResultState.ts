@@ -1,10 +1,13 @@
 import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { formatISO } from 'date-fns';
 import { ClobbrUIResult } from 'models/ClobbrUIResult';
 import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
 import { Everbs } from 'shared/enums/http';
+import { EDbStores } from 'storage/EDbStores';
+import { getDb } from 'storage/storage';
+import { SK } from 'storage/storageKeys';
 
 export const useResultState = ({ initialState }: { [key: string]: any }) => {
   const [list, setList] = useState<Array<ClobbrUIResultListItem>>(
@@ -91,6 +94,8 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     logs: Array<ClobbrLogItem>;
   }) => {
     const existingListItem = list.find((i) => i.id === itemId);
+    const isComplete = existingListItem?.iterations === logs.length;
+    const endDate = isComplete ? formatISO(new Date()) : undefined;
 
     if (!existingListItem) {
       console.warn(`Could not find item with id ${itemId}`);
@@ -112,6 +117,7 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
 
     const nextResult: ClobbrUIResult = {
       ...existingListItem.latestResult,
+      endDate,
       logs,
       resultDurations,
       averageDuration
@@ -127,37 +133,17 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     setList([...list.slice(0, index), nextItem, ...list.slice(index + 1)]);
   };
 
-  /**
-   * Updates the end date of an item.
-   */
-  const updateItemEndDate = ({
-    itemId,
-    endDate
-  }: {
-    itemId: string;
-    endDate?: string;
-  }) => {
-    // const existingListItem = list.find((i) => i.id === itemId);
-    // if (existingListItem) {
-    //   const index = list.findIndex((i) => i.id === itemId);
-    //   const nextItem = {
-    //     ...existingListItem,
-    //     latestResult: {
-    //       ...existingListItem.latestResult,
-    //       endDate
-    //     }
-    //   };
-    //   setList([...list.slice(0, index), nextItem, ...list.slice(index + 1)]);
-    //   return { id: existingListItem.id };
-    // }
-  };
+  useEffect(() => {
+    const resultDb = getDb(EDbStores.RESULT_STORE_NAME);
+    resultDb.setItem(SK.RESULT.LIST, list);
+  }, [list]);
 
   const resultState = {
     list,
+    setList,
 
     addItem,
-    updateLatestResult,
-    updateItemEndDate
+    updateLatestResult
   };
 
   return {

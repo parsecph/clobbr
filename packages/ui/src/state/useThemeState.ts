@@ -11,8 +11,13 @@ export const useThemeState = ({ initialState }: { [key: string]: any }) => {
     }
   };
 
+  const setTheme = (mode: string) => {
+    setThemeMode(mode);
+  };
+
   const themeState = {
     toggleTheme,
+    setTheme,
     themeMode
   };
 

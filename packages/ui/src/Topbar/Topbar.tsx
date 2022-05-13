@@ -6,7 +6,7 @@ const Topbar = () => {
   return (
     <GlobalStore.Consumer>
       {({ themeMode }) => (
-        <header className="flex justify-between w-full px-4 py-6 sticky top-0 z-10 bg-gray-100/70 dark:bg-black/30 backdrop-blur-sm">
+        <header className="flex justify-between w-full px-4 py-6 sticky top-0 z-10 bg-gray-100/70 dark:bg-black/30 backdrop-blur-sm transition-all">
           <img
             src={themeMode === 'dark' ? Logo : LogoSecondary}
             alt="Clobbr Logo Symbol (the letter C on a grid)"

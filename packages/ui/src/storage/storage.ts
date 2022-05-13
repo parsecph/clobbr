@@ -17,12 +17,6 @@ const mainDb = localforage.createInstance({
   description: 'Holds global, generic data'
 });
 
-const requestDb = localforage.createInstance({
-  name: DB_NAME,
-  storeName: EDbStores.REQUEST_STORE_NAME,
-  description: 'Holds request data'
-});
-
 const resultDb = localforage.createInstance({
   name: DB_NAME,
   storeName: EDbStores.RESULT_STORE_NAME,
@@ -34,8 +28,6 @@ export const getDb = (type: EDbStores) => {
     switch (type) {
       case EDbStores.MAIN_STORE_NAME:
         return mainDb;
-      case EDbStores.REQUEST_STORE_NAME:
-        return requestDb;
       case EDbStores.RESULT_STORE_NAME:
         return resultDb;
       default:

@@ -1,4 +1,6 @@
 import clsx from 'clsx';
+import { css } from '@emotion/css';
+import { motion, usePresence } from 'framer-motion';
 import { useInterval } from 'react-use';
 import { formatDistanceToNow } from 'date-fns';
 import Tooltip from '@mui/material/Tooltip';
@@ -14,8 +16,7 @@ import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
 import { ReactComponent as ParallelIcon } from 'shared/icons/Parallel.svg';
 import { ReactComponent as SequenceIcon } from 'shared/icons/Sequence.svg';
 import { useMemo, useState } from 'react';
-import { Typography } from '@mui/material';
-import { css } from '@emotion/css';
+import { CircularProgress, Typography } from '@mui/material';
 
 const xIconCss = css`
   && {
@@ -47,6 +48,30 @@ export const getDurationColorClass = (duration: number): string => {
 };
 
 const Result = ({ item }: { item: ClobbrUIResultListItem }) => {
+  const [isPresent, safeToRemove] = usePresence();
+
+  const transition = { type: 'spring', stiffness: 500, damping: 50, mass: 1 };
+
+  const animations = {
+    layout: true,
+    initial: 'out',
+    style: {
+      position: (isPresent ? 'static' : 'absolute') as unknown as any
+    },
+    animate: isPresent ? 'in' : 'out',
+    whileTap: 'tapped',
+    variants: {
+      in: { scaleY: 1, opacity: 1 },
+      out: { scaleY: 0, opacity: 0, zIndex: -1 },
+      tapped: { scale: 0.98, opacity: 0.5, transition: { duration: 0.1 } }
+    },
+    onAnimationComplete: () => !isPresent && safeToRemove(),
+    transition
+  };
+
+  const isInProgress =
+    item.latestResult.resultDurations.length !== item.iterations;
+
   const [formattedDate, setFormattedDate] = useState('');
   const durationColor = useMemo(
     () => getDurationColorClass(item.latestResult.averageDuration),
@@ -65,53 +90,64 @@ const Result = ({ item }: { item: ClobbrUIResultListItem }) => {
   }, 5000);
 
   return (
-    <ListItem className="odd:bg-gray-200 dark:odd:bg-gray-800">
-      <ListItemAvatar>
-        <Tooltip title={item.parallel ? 'Parallel' : 'Sequence'}>
-          <Avatar className="dark:!bg-black dark:!text-gray-300">
-            {item.parallel ? <ParallelIcon /> : <SequenceIcon />}
-          </Avatar>
-        </Tooltip>
-      </ListItemAvatar>
-      <ListItemText
-        primary={
-          <span className="flex gap-2">
-            <small
-              className={clsx(
-                'px-2 py-0.5',
-                'rounded-sm text-black',
-                VERB_COLOR_CLASS_MAP[item.verb] || 'bg-gray-300'
-              )}
+    <motion.div
+      className="odd:bg-gray-200 dark:odd:bg-gray-800"
+      {...animations}
+    >
+      <ListItem>
+        <ListItemAvatar>
+          <Tooltip title={item.parallel ? 'Parallel' : 'Sequence'}>
+            {!isInProgress ? (
+              <Avatar className="dark:!bg-black dark:!text-gray-300">
+                {item.parallel ? <ParallelIcon /> : <SequenceIcon />}
+              </Avatar>
+            ) : (
+              <div className="flex items-center">
+                <CircularProgress size={30} />
+              </div>
+            )}
+          </Tooltip>
+        </ListItemAvatar>
+        <ListItemText
+          primary={
+            <span className="flex gap-2">
+              <small
+                className={clsx(
+                  'px-2 py-0.5',
+                  'rounded-sm text-black',
+                  VERB_COLOR_CLASS_MAP[item.verb] || 'bg-gray-300'
+                )}
+              >
+                {item.verb}
+              </small>
+              {item.url.replace(/^https?:\/\//, '')}
+            </span>
+          }
+          secondary={formattedDate ? `${formattedDate} ago` : '...'}
+        />
+
+        <div className="flex flex-col items-end">
+          <Tooltip title="Average response time">
+            <Typography
+              variant="body2"
+              className={clsx(durationColor, '!font-semibold')}
             >
-              {item.verb}
-            </small>
-            {item.url.replace(/^https?:\/\//, '')}
-          </span>
-        }
-        secondary={formattedDate ? `${formattedDate} ago` : '...'}
-      />
+              {item.latestResult.averageDuration} ms
+            </Typography>
+          </Tooltip>
 
-      <div className="flex flex-col items-end">
-        <Tooltip title="Average response time">
-          <Typography
-            variant="body2"
-            className={clsx(durationColor, '!font-semibold')}
-          >
-            {item.latestResult.averageDuration} ms
-          </Typography>
-        </Tooltip>
-
-        <Tooltip title="Iteration number">
-          <Typography
-            variant="caption"
-            className="flex items-center justify-center opacity-50"
-          >
-            {item.iterations}
-            <CloseIcon className={xIconCss} />
-          </Typography>
-        </Tooltip>
-      </div>
-    </ListItem>
+          <Tooltip title="Iteration number">
+            <Typography
+              variant="caption"
+              className="flex items-center justify-center opacity-50"
+            >
+              {item.iterations}
+              <CloseIcon className={xIconCss} />
+            </Typography>
+          </Tooltip>
+        </div>
+      </ListItem>
+    </motion.div>
   );
 };
 

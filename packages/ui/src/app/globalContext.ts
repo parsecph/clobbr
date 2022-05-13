@@ -9,8 +9,8 @@ export const DEFAULT_GLOBAL_STORE = {
     ssl: true,
     parallel: true,
     url: {
-      displayText: '',
-      requestUrl: ''
+      displayText: 'mindrudan.com',
+      requestUrl: 'http://mindrudan.com'
     },
     isUrlValid: false,
 
@@ -50,19 +50,12 @@ export const DEFAULT_GLOBAL_STORE = {
     }: {
       itemId: string;
       logs: Array<ClobbrLogItem>;
-    }) {},
-
-    updateItemEndDate({
-      itemId,
-      endDate
-    }: {
-      itemId: string;
-      endDate?: string;
     }) {}
   },
 
   themeMode: 'dark',
-  toggleTheme() {}
+  toggleTheme() {},
+  setTheme(mode: string) {}
 };
 
 export const GlobalStore = React.createContext(DEFAULT_GLOBAL_STORE);
