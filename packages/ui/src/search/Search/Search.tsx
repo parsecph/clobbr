@@ -120,6 +120,7 @@ const Search = () => {
 
     setRunning(true);
     setRuningItemId(id);
+    globalStore.results.updateExpandedResults([id]);
   };
 
   /**

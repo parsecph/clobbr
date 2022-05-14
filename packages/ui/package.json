@@ -33,7 +33,8 @@
     "react-use": "^17.3.2",
     "react-use-measure": "^2.1.1",
     "three": "^0.139.2",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "victory": "^36.4.0"
   },
   "scripts": {
     "start": "react-scripts start",

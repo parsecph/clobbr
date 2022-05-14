@@ -2,15 +2,17 @@ import { css } from '@emotion/css';
 
 export default function ActivityIndicator({
   animationIterations,
+  startDelay,
   keepGridAtTheEnd
 }: {
   animationIterations?: number | string;
+  startDelay?: number;
   keepGridAtTheEnd?: boolean;
 }) {
   const strokeColor = 'rgba(170, 170, 170, 0.3)';
   const size = '120px';
   const totalAnim = 6;
-  const delay = 1;
+  const delay = startDelay || 1;
   const svgSize = 60;
   const squareLen = 240;
   const lineLen = svgSize;
@@ -125,8 +127,12 @@ export default function ActivityIndicator({
       43% {
         stroke-dashoffset: 0;
       }
+      99% {
+        opacity: 1;
+      }
       100% {
         stroke-dashoffset: 0;
+        opacity: 0;
       }
     }
 

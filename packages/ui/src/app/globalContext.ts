@@ -22,7 +22,10 @@ export const DEFAULT_GLOBAL_STORE = {
   },
 
   results: {
+    expandedResults: [] as Array<string>,
     list: [],
+
+    updateExpandedResults(expandedResults: Array<string>) {},
 
     addItem(result: {
       url: string;

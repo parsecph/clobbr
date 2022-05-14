@@ -10,7 +10,6 @@ import { getDb } from 'storage/storage';
 import { EDbStores } from 'storage/EDbStores';
 import { SK } from 'storage/storageKeys';
 
-import ActivityIndicator from 'ActivityIndicator/ActivityIndicator';
 import Search from 'search/Search/Search';
 import ResultList from 'results/ResultList/ResultList';
 import Intro from 'Intro/Intro';
@@ -34,6 +33,7 @@ const App = () => {
     return existingResultList;
   });
 
+  // Result state
   useEffect(() => {
     if (resultStorageLoaded || storedResultState.loading) {
       return;
@@ -45,6 +45,17 @@ const App = () => {
 
     setResultStorageLoaded(true);
   }, [resultStorageLoaded, storedResultState, state]);
+
+  // Result updates
+
+  useEffect(() => {
+    if (!resultStorageLoaded) {
+      return;
+    }
+
+    const resultDb = getDb(EDbStores.RESULT_STORE_NAME);
+    resultDb.setItem(SK.RESULT.LIST, state.results.list);
+  }, [resultStorageLoaded, state.results.list]);
 
   // Theme state
   useEffect(() => {
@@ -80,10 +91,7 @@ const App = () => {
           {resultStorageLoaded ? (
             <section className="w-full">
               <ResultList list={state.results.list} />
-              {/* <ActivityIndicator />
-
-
-            <Intro /> */}
+              {/* <Intro /> */}
             </section>
           ) : (
             ''

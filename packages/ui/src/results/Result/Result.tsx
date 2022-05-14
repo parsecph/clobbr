@@ -1,8 +1,13 @@
+import { useContext, useMemo, useState } from 'react';
 import clsx from 'clsx';
 import { css } from '@emotion/css';
 import { motion, usePresence } from 'framer-motion';
 import { useInterval } from 'react-use';
 import { formatDistanceToNow } from 'date-fns';
+
+import { GlobalStore } from 'App/globalContext';
+
+import { CircularProgress, Typography } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -15,8 +20,8 @@ import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
 
 import { ReactComponent as ParallelIcon } from 'shared/icons/Parallel.svg';
 import { ReactComponent as SequenceIcon } from 'shared/icons/Sequence.svg';
-import { useMemo, useState } from 'react';
-import { CircularProgress, Typography } from '@mui/material';
+import { ResultChart } from 'results/ResultChart/ResultChart';
+import ActivityIndicator from 'ActivityIndicator/ActivityIndicator';
 
 const xIconCss = css`
   && {
@@ -47,8 +52,17 @@ export const getDurationColorClass = (duration: number): string => {
     : 'text-red-400';
 };
 
-const Result = ({ item }: { item: ClobbrUIResultListItem }) => {
+const Result = ({
+  item,
+  expanded
+}: {
+  item: ClobbrUIResultListItem;
+  expanded: boolean;
+}) => {
+  const globalStore = useContext(GlobalStore);
   const [isPresent, safeToRemove] = usePresence();
+  const isInProgress =
+    item.latestResult.resultDurations.length !== item.iterations;
 
   const transition = { type: 'spring', stiffness: 500, damping: 50, mass: 1 };
 
@@ -69,9 +83,11 @@ const Result = ({ item }: { item: ClobbrUIResultListItem }) => {
     transition
   };
 
-  const isInProgress =
-    item.latestResult.resultDurations.length !== item.iterations;
+  const onResultPressed = () => {
+    globalStore.results.updateExpandedResults([item.id]);
+  };
 
+  // Date formatting
   const [formattedDate, setFormattedDate] = useState('');
   const durationColor = useMemo(
     () => getDurationColorClass(item.latestResult.averageDuration),
@@ -87,12 +103,13 @@ const Result = ({ item }: { item: ClobbrUIResultListItem }) => {
     );
 
     setFormattedDate(date);
-  }, 5000);
+  }, 3000);
 
   return (
-    <motion.div
-      className="odd:bg-gray-200 dark:odd:bg-gray-800"
+    <motion.button
+      className="odd:bg-gray-200 dark:odd:bg-gray-800 w-full"
       {...animations}
+      onClick={onResultPressed}
     >
       <ListItem>
         <ListItemAvatar>
@@ -147,7 +164,28 @@ const Result = ({ item }: { item: ClobbrUIResultListItem }) => {
           </Tooltip>
         </div>
       </ListItem>
-    </motion.div>
+      {expanded && item.iterations > 1 ? (
+        <div className="relative">
+          {isInProgress ? (
+            <div className="h-80 flex flex-col items-center justify-center gap-8">
+              <ActivityIndicator
+                animationIterations="infinite"
+                startDelay={0}
+              />
+              <Typography variant="caption">
+                {item.latestResult.resultDurations.length < item.iterations / 2
+                  ? 'Getting results'
+                  : 'Almost there'}
+              </Typography>
+            </div>
+          ) : (
+            <ResultChart item={item} />
+          )}
+        </div>
+      ) : (
+        ''
+      )}
+    </motion.button>
   );
 };
 

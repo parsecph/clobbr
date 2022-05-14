@@ -1,18 +1,23 @@
 import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { formatISO } from 'date-fns';
 import { ClobbrUIResult } from 'models/ClobbrUIResult';
 import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
 import { Everbs } from 'shared/enums/http';
-import { EDbStores } from 'storage/EDbStores';
-import { getDb } from 'storage/storage';
-import { SK } from 'storage/storageKeys';
 
 export const useResultState = ({ initialState }: { [key: string]: any }) => {
   const [list, setList] = useState<Array<ClobbrUIResultListItem>>(
     initialState.results.list
   );
+
+  const [expandedResults, setExpandedResults] = useState<Array<string>>(
+    initialState.results.expandedResults
+  );
+
+  const updateExpandedResults = (expandedResults: Array<string>) => {
+    setExpandedResults(expandedResults);
+  };
 
   /**
    * Adds a new item to the result list.
@@ -133,17 +138,15 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     setList([...list.slice(0, index), nextItem, ...list.slice(index + 1)]);
   };
 
-  useEffect(() => {
-    const resultDb = getDb(EDbStores.RESULT_STORE_NAME);
-    resultDb.setItem(SK.RESULT.LIST, list);
-  }, [list]);
-
   const resultState = {
     list,
     setList,
 
     addItem,
-    updateLatestResult
+    updateLatestResult,
+
+    expandedResults,
+    updateExpandedResults
   };
 
   return {
