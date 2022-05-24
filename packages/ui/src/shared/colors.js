@@ -1,4 +1,4 @@
-export const colors = {
+const colors = {
   primary: {
     light: '#9EFFC8',
     main: '#88FFB8',
@@ -10,3 +10,5 @@ export const colors = {
     dark: '#202020'
   }
 };
+
+module.exports = { colors };

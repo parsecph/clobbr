@@ -63,6 +63,9 @@ const Result = ({
   const [isPresent, safeToRemove] = usePresence();
   const isInProgress =
     item.latestResult.resultDurations.length !== item.iterations;
+  const percentageOfCompleteness = Math.round(
+    (item.latestResult.resultDurations.length * 100) / item.iterations
+  );
 
   const transition = { type: 'spring', stiffness: 500, damping: 50, mass: 1 };
 
@@ -168,6 +171,12 @@ const Result = ({
         <div className="relative">
           {isInProgress ? (
             <div className="h-80 flex flex-col items-center justify-center gap-8">
+              <div
+                className="absolute transition-all bottom-0 left-0 h-1 bg-gradient-to-r from-primary-300 to-primary-700"
+                style={{ width: percentageOfCompleteness + '%' }}
+                aria-hidden="true"
+              ></div>
+
               <ActivityIndicator
                 animationIterations="infinite"
                 startDelay={0}
