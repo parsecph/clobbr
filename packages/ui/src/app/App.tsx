@@ -98,8 +98,8 @@ const App = () => {
           )}
         </main>
 
-        {themeMode}
-        <ThemeToggle />
+        {/* {themeMode}
+        <ThemeToggle /> */}
       </ThemeProvider>
     </GlobalStore.Provider>
   );

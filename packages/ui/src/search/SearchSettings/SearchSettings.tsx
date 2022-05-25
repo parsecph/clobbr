@@ -4,7 +4,7 @@ import { Settings } from '@mui/icons-material';
 const SearchSettings = () => {
   return (
     <>
-      <ButtonBase
+      {/* <ButtonBase
         disableRipple
         className="opacity-50 hover:opacity-100 transition-all flex gap-1"
       >
@@ -13,7 +13,7 @@ const SearchSettings = () => {
         </Typography>
 
         <Settings />
-      </ButtonBase>
+      </ButtonBase> */}
     </>
   );
 };
