@@ -1,5 +1,6 @@
 {
   "name": "@clobbr/ui",
+  "homepage": "./",
   "version": "1.1.6",
   "description": "Clobbr UI",
   "private": true,
