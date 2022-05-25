@@ -163,11 +163,38 @@ const Search = () => {
           };
 
         try {
-          await run(
-            globalStore.search.parallel,
-            options,
-            runEventCallback(runingItemId)
-          );
+          const electronAPI = (window as any).electronAPI;
+
+          if (electronAPI) {
+            electronAPI.onRunCallback(
+              runingItemId,
+              (
+                _electronEvent: any,
+                event: EEvents,
+                log: ClobbrLogItem,
+                logs: Array<ClobbrLogItem>
+              ) => {
+                if (logs.length === configuredOptions.iterations) {
+                  electronAPI.offRunCallback(runingItemId);
+                }
+
+                return runEventCallback(runingItemId)(event, log, logs);
+              }
+            );
+
+            await electronAPI.run(
+              runingItemId,
+              globalStore.search.parallel,
+              options,
+              runEventCallback(runingItemId)
+            );
+          } else {
+            await run(
+              globalStore.search.parallel,
+              options,
+              runEventCallback(runingItemId)
+            );
+          }
 
           setRequestsInProgress(false);
         } catch (error) {
