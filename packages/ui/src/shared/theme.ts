@@ -2,6 +2,17 @@ import { PaletteMode } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import { colors } from './colors.js';
 
+const globalColors: { [key: string]: string | { [key: string]: string } } =
+  colors;
+
+// Set css vars
+Object.keys(globalColors).forEach((variant) => {
+  Object.keys(globalColors[variant]).forEach((color) => {
+    const value = (globalColors[variant] as { [key: string]: string })[color];
+    document.body.style.setProperty(`--${variant}-${color}`, value);
+  });
+});
+
 export const getTheme = (mode: string = 'dark') => {
   const baseTheme = createTheme({
     palette: { ...colors, mode: mode as PaletteMode },

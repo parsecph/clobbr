@@ -96,6 +96,12 @@ const Search = () => {
       const numericValue = parseInt(event.target.value, 10);
       if (!event.target.value || isNaN(numericValue) || numericValue < 0) {
         updateIterations(1);
+      } else if (
+        !event.target.value ||
+        isNaN(numericValue) ||
+        numericValue > 1000
+      ) {
+        updateIterations(1000);
       } else {
         updateIterations(numericValue);
       }
@@ -223,15 +229,15 @@ const Search = () => {
   return (
     <GlobalStore.Consumer>
       {({ search, themeMode }) => (
-        <section className="sticky top-4 z-20 flex flex-col items-center justify-center mt-12 mb-6 w-full max-w-xl">
+        <section className="sm:sticky top-4 z-20 flex flex-col items-center justify-center mt-12 mb-6 w-full max-w-xl lg:max-w-2xl xl:max-w-3xl">
           <motion.div
             animate={{
               scale: [1, 0.9, 1]
             }}
             transition={{ duration: 0.3, times: [0, 0.7, 1] }}
-            className="flex items-center justify-center w-full"
+            className="flex flex-col items-stretch justify-center w-full px-12 sm:p-0 sm:flex-row sm:items-center"
           >
-            <div className="flex-shrink-0 mr-2">
+            <div className="flex-shrink-0 mr-2 hidden sm:inline-block">
               <Tooltip title={!search.ssl ? 'http' : 'https'}>
                 <IconButton
                   aria-label="Toggle ssl (https)"
@@ -325,7 +331,7 @@ const Search = () => {
               onChange={handleIterationChange(search.updateIterations)}
               className={clsx(
                 'flex-shrink-0',
-                'w-16',
+                'sm:w-16',
                 leftInputSeparatorCss,
                 iterationInputCss
               )}
@@ -337,7 +343,7 @@ const Search = () => {
                 size="large"
                 classes={{ root: buttonCss }}
                 className={clsx(
-                  'flex-shrink-0 w-24',
+                  'flex-shrink-0 sm:w-24',
                   requestsInProgress ? '!bg-gray-600' : ''
                 )}
                 style={{ height: '3.5rem' }}

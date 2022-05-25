@@ -3,11 +3,11 @@ import clsx from 'clsx';
 import { css } from '@emotion/css';
 import { motion, usePresence } from 'framer-motion';
 import { useInterval } from 'react-use';
-import { formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNow, differenceInMinutes } from 'date-fns';
 
 import { GlobalStore } from 'App/globalContext';
 
-import { CircularProgress, Typography } from '@mui/material';
+import { Alert, CircularProgress, Typography } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -18,9 +18,12 @@ import CloseIcon from '@mui/icons-material/Close';
 import { VERBS } from 'shared/enums/http';
 import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
 
+import { ReactComponent as AllFailed } from 'shared/images/search/AllFailed.svg';
+import { ReactComponent as Timeout } from 'shared/images/search/Timeout.svg';
 import { ReactComponent as ParallelIcon } from 'shared/icons/Parallel.svg';
 import { ReactComponent as SequenceIcon } from 'shared/icons/Sequence.svg';
 import { ResultChart } from 'results/ResultChart/ResultChart';
+import { CommonlyFailedItem } from 'results/CommonlyFailedItem/CommonlyFailedItem';
 import ActivityIndicator from 'ActivityIndicator/ActivityIndicator';
 
 const xIconCss = css`
@@ -52,6 +55,8 @@ export const getDurationColorClass = (duration: number): string => {
     : 'text-red-400';
 };
 
+const TIMEOUT_WAIT_IN_MINUTES = 3;
+
 const Result = ({
   item,
   expanded
@@ -61,11 +66,28 @@ const Result = ({
 }) => {
   const globalStore = useContext(GlobalStore);
   const [isPresent, safeToRemove] = usePresence();
+
+  const timedOut = useMemo(() => {
+    const startDate = item.latestResult.startDate as string;
+    const endDate = item.latestResult.endDate;
+
+    return (
+      startDate &&
+      !endDate &&
+      differenceInMinutes(new Date(), new Date(startDate)) >
+        TIMEOUT_WAIT_IN_MINUTES
+    );
+  }, [item.latestResult.startDate, item.latestResult.endDate]);
+
   const isInProgress =
-    item.latestResult.resultDurations.length !== item.iterations;
+    !timedOut && item.latestResult.resultDurations.length !== item.iterations;
+
   const percentageOfCompleteness = Math.round(
     (item.latestResult.resultDurations.length * 100) / item.iterations
   );
+
+  const failedItems = item.latestResult.logs.filter((log) => log.failed);
+  const allFailed = failedItems.length === item.iterations;
 
   const transition = { type: 'spring', stiffness: 500, damping: 50, mass: 1 };
 
@@ -114,7 +136,7 @@ const Result = ({
       {...animations}
       onClick={onResultPressed}
     >
-      <ListItem>
+      <ListItem className="flex-wrap">
         <ListItemAvatar>
           <Tooltip title={item.parallel ? 'Parallel' : 'Sequence'}>
             {!isInProgress ? (
@@ -130,7 +152,7 @@ const Result = ({
         </ListItemAvatar>
         <ListItemText
           primary={
-            <span className="flex gap-2">
+            <span className="flex gap-2 truncate">
               <small
                 className={clsx(
                   'px-2 py-0.5',
@@ -167,7 +189,54 @@ const Result = ({
           </Tooltip>
         </div>
       </ListItem>
-      {expanded && item.iterations > 1 ? (
+
+      {allFailed && expanded ? (
+        <div className="flex flex-col  gap-4 mb-12 items-center">
+          <AllFailed className="w-full max-w-xs p-6" />
+          <Typography variant="body1">
+            <strong className="font-semibold">All requests failed</strong>
+          </Typography>
+          <hr />
+          <ul>
+            <li>
+              <Typography variant="body2">
+                Did you by chance use the incorrect verb?
+              </Typography>
+            </li>
+            <li>
+              <Typography variant="body2">
+                Does your server require authentication?
+              </Typography>
+            </li>
+            <li>
+              <Typography variant="body2">
+                Do you need to include custom headers?
+              </Typography>
+            </li>
+          </ul>
+
+          <CommonlyFailedItem item={item} />
+        </div>
+      ) : (
+        ''
+      )}
+
+      {timedOut && expanded ? (
+        <div className="flex flex-col  gap-4 mb-12 items-center">
+          <Timeout className="w-full max-w-xs p-6" />
+          <Typography variant="body1">
+            <strong className="font-semibold">Requests timed out</strong>
+          </Typography>
+
+          <Typography variant="body2">
+            Would you care to give it another try?
+          </Typography>
+        </div>
+      ) : (
+        ''
+      )}
+
+      {!allFailed && !timedOut && expanded && item.iterations > 1 ? (
         <div className="relative">
           {isInProgress ? (
             <div className="h-80 flex flex-col items-center justify-center gap-8">
@@ -188,7 +257,20 @@ const Result = ({
               </Typography>
             </div>
           ) : (
-            <ResultChart item={item} />
+            <>
+              <ResultChart item={item} />
+
+              {failedItems.length ? (
+                <div className="flex flex-col items-center mb-2">
+                  <Alert severity="error">
+                    {failedItems.length} failed. Showing results only for
+                    successful requests.
+                  </Alert>
+                </div>
+              ) : (
+                ''
+              )}
+            </>
           )}
         </div>
       ) : (

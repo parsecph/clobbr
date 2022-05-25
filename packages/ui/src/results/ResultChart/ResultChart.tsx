@@ -24,18 +24,20 @@ export const ResultChart = ({ item }: { item: ClobbrUIResultListItem }) => {
     return acc > cur ? acc : cur;
   }, 0);
 
+  const qualifiedDurations = item.latestResult.logs
+    .filter((log) => !log.failed)
+    .map((log) => log.metas.duration);
+
   const chartData =
-    item.latestResult.resultDurations.length > MAX_CHART_DATA_POINTS
+    qualifiedDurations.length > MAX_CHART_DATA_POINTS
       ? chunk(
-          item.latestResult.resultDurations,
-          Math.round(
-            item.latestResult.resultDurations.length / MAX_CHART_DATA_POINTS
-          )
+          qualifiedDurations,
+          Math.round(qualifiedDurations.length / MAX_CHART_DATA_POINTS)
         ).reduce((acc, cur) => {
           acc.push(mean(cur));
           return acc;
         }, [])
-      : item.latestResult.resultDurations;
+      : qualifiedDurations;
 
   return (
     <div>
@@ -50,6 +52,7 @@ export const ResultChart = ({ item }: { item: ClobbrUIResultListItem }) => {
           </linearGradient>
         </defs>
       </svg>
+
       <VictoryChart
         padding={0}
         height={130}

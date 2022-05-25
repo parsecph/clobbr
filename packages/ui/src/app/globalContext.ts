@@ -9,8 +9,8 @@ export const DEFAULT_GLOBAL_STORE = {
     ssl: true,
     parallel: true,
     url: {
-      displayText: 'mindrudan.com',
-      requestUrl: 'http://mindrudan.com'
+      displayText: 'https://60698fbde1c2a10017544a73.mockapi.io/test',
+      requestUrl: 'https://60698fbde1c2a10017544a73.mockapi.io/test'
     },
     isUrlValid: false,
 
