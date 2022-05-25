@@ -8,6 +8,8 @@ import { GlobalStore } from 'App/globalContext';
 import List from '@mui/material/List';
 import Result from 'results/Result/Result';
 
+const MAX_RESULTS = 100;
+
 const ResultList = ({ list }: { list: Array<ClobbrUIResultListItem> }) => {
   return (
     <GlobalStore.Consumer>
@@ -20,8 +22,9 @@ const ResultList = ({ list }: { list: Array<ClobbrUIResultListItem> }) => {
             layout
           >
             <List className="w-full">
-              {orderBy(list, ['latestResult.startDate'], ['desc']).map(
-                (item) => {
+              {orderBy(list, ['latestResult.startDate'], ['desc'])
+                .slice(0, MAX_RESULTS)
+                .map((item) => {
                   return (
                     <Result
                       item={item}
@@ -29,8 +32,7 @@ const ResultList = ({ list }: { list: Array<ClobbrUIResultListItem> }) => {
                       expanded={results.expandedResults.includes(item.id)}
                     />
                   );
-                }
-              )}
+                })}
             </List>
           </motion.div>
         </AnimatePresence>
