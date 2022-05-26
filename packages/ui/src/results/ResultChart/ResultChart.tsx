@@ -1,4 +1,5 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { useMount } from 'react-use';
 import { chunk, mean } from 'lodash-es';
 
 import { GlobalStore } from 'App/globalContext';
@@ -17,8 +18,11 @@ import { colors } from 'shared/colors';
 
 const MAX_CHART_DATA_POINTS = 100;
 
+const ENTER_ANIMATION_DURATION_MS = 2000;
+
 export const ResultChart = ({ item }: { item: ClobbrUIResultListItem }) => {
   const globalStore = useContext(GlobalStore);
+  const [isInteractive, setIsInteractive] = useState(false);
 
   const maxDuration = item.latestResult.resultDurations.reduce((acc, cur) => {
     return acc > cur ? acc : cur;
@@ -39,8 +43,18 @@ export const ResultChart = ({ item }: { item: ClobbrUIResultListItem }) => {
         }, [])
       : qualifiedDurations;
 
+  useMount(() => {
+    setIsInteractive(false);
+  });
+
+  useEffect(() => {
+    if (!isInteractive) {
+      setTimeout(() => setIsInteractive(true), ENTER_ANIMATION_DURATION_MS);
+    }
+  }, [isInteractive]);
+
   return (
-    <div>
+    <div className="relative">
       <svg style={{ height: 0 }}>
         <defs>
           <linearGradient id="myGradient">
@@ -58,7 +72,11 @@ export const ResultChart = ({ item }: { item: ClobbrUIResultListItem }) => {
         height={130}
         minDomain={{ y: 0 }}
         maxDomain={{ y: maxDuration + (maxDuration * 30) / 100 }}
-        containerComponent={<VictoryVoronoiContainer />}
+        containerComponent={
+          <VictoryVoronoiContainer
+            className={!isInteractive ? '!pointer-events-auto' : ''}
+          />
+        }
       >
         <VictoryAxis
           orientation="right"
@@ -93,9 +111,10 @@ export const ResultChart = ({ item }: { item: ClobbrUIResultListItem }) => {
             parent: { border: '1px solid #ccc' }
           }}
           animate={{
+            easing: 'cubic',
             duration: 300,
             onEnter: {
-              duration: 2000
+              duration: ENTER_ANIMATION_DURATION_MS
             }
           }}
           data={chartData.map((duration, index) => {

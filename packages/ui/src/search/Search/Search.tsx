@@ -31,13 +31,6 @@ const DEFAULTS = {
   data: {}
 };
 
-const buttonCss = css`
-  && {
-    border-bottom-left-radius: 0;
-    border-top-left-radius: 0;
-  }
-`;
-
 const leftInputSeparatorCss = css`
   position: relative;
 
@@ -293,66 +286,75 @@ const Search = () => {
               }}
             />
 
-            <FormControl
-              variant="filled"
-              className={clsx(
-                'flex-shrink-0',
-                leftInputSeparatorCss,
-                verbInputCss
-              )}
-            >
-              <InputLabel id="search-verb-label">Verb</InputLabel>
-              <Select
+            <div className="flex sm:contents">
+              <FormControl
                 variant="filled"
-                labelId="search-verb-label"
-                id="search-verb"
-                value={search.verb}
-                label="Verb"
-                onChange={handleVerbChange(search.updateVerb)}
-              >
-                {Object.keys(VERBS).map((verb: string) => (
-                  <MenuItem
-                    key={verb}
-                    value={(VERBS as { [key: string]: string })[verb]}
-                  >
-                    <span className="capitalize">{verb.toLowerCase()}</span>
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
-            <TextField
-              variant="filled"
-              label="Times"
-              placeholder="10"
-              id="iterations"
-              inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
-              value={search.iterations}
-              onChange={handleIterationChange(search.updateIterations)}
-              className={clsx(
-                'flex-shrink-0',
-                'sm:w-16',
-                leftInputSeparatorCss,
-                iterationInputCss
-              )}
-            />
-
-            <Tooltip title={!search.isUrlValid ? 'Type a URL first :-)' : ''}>
-              <Button
-                variant="contained"
-                size="large"
-                classes={{ root: buttonCss }}
                 className={clsx(
-                  'flex-shrink-0 sm:w-24',
-                  requestsInProgress ? '!bg-gray-600' : ''
+                  'flex-shrink-0',
+                  'flex-grow',
+                  leftInputSeparatorCss,
+                  verbInputCss
                 )}
-                style={{ height: '3.5rem' }}
-                onClick={search.isUrlValid ? startRun : () => toggleUrlError()}
-                disabled={requestsInProgress}
               >
-                {requestsInProgress ? <CircularProgress size={20} /> : 'Start'}
-              </Button>
-            </Tooltip>
+                <InputLabel id="search-verb-label">Verb</InputLabel>
+                <Select
+                  variant="filled"
+                  labelId="search-verb-label"
+                  id="search-verb"
+                  value={search.verb}
+                  label="Verb"
+                  onChange={handleVerbChange(search.updateVerb)}
+                >
+                  {Object.keys(VERBS).map((verb: string) => (
+                    <MenuItem
+                      key={verb}
+                      value={(VERBS as { [key: string]: string })[verb]}
+                    >
+                      <span className="capitalize">{verb.toLowerCase()}</span>
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <TextField
+                variant="filled"
+                label="Times"
+                placeholder="10"
+                id="iterations"
+                inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+                value={search.iterations}
+                onChange={handleIterationChange(search.updateIterations)}
+                className={clsx(
+                  'flex-shrink-0',
+                  'flex-grow',
+                  'sm:w-16',
+                  leftInputSeparatorCss,
+                  iterationInputCss
+                )}
+              />
+
+              <Tooltip title={!search.isUrlValid ? 'Type a URL first :-)' : ''}>
+                <Button
+                  variant="contained"
+                  size="large"
+                  className={clsx(
+                    'flex-shrink-0 flex-grow !rounded-none sm:!rounded-tr-md sm:!rounded-br-md sm:w-24',
+                    requestsInProgress ? '!bg-gray-600' : ''
+                  )}
+                  style={{ height: '3.5rem' }}
+                  onClick={
+                    search.isUrlValid ? startRun : () => toggleUrlError()
+                  }
+                  disabled={requestsInProgress}
+                >
+                  {requestsInProgress ? (
+                    <CircularProgress size={20} />
+                  ) : (
+                    'Start'
+                  )}
+                </Button>
+              </Tooltip>
+            </div>
           </motion.div>
 
           <div className="w-full flex justify-center mt-12">

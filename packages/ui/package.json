@@ -36,7 +36,7 @@
     "react-use-measure": "^2.1.1",
     "three": "^0.139.2",
     "uuid": "^8.3.2",
-    "victory": "^36.4.0"
+    "victory": "^36.4.1"
   },
   "scripts": {
     "start": "react-app-rewired start",
@@ -68,6 +68,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^13.0.1",
     "@types/jest": "^27.4.1",
+    "@types/tailwindcss": "^3.0.10",
     "autoprefixer": "^10.4.4",
     "localforage": "^1.10.0",
     "postcss": "^8.4.12",

@@ -86,8 +86,18 @@ const Result = ({
     (item.latestResult.resultDurations.length * 100) / item.iterations
   );
 
+  const successfulItems = item.latestResult.logs.filter((log) => !log.failed);
+
   const failedItems = item.latestResult.logs.filter((log) => log.failed);
+
   const allFailed = failedItems.length === item.iterations;
+
+  const shouldShowChart =
+    !allFailed &&
+    !timedOut &&
+    expanded &&
+    item.iterations > 1 &&
+    successfulItems.length > 1;
 
   const transition = { type: 'spring', stiffness: 500, damping: 50, mass: 1 };
 
@@ -236,7 +246,7 @@ const Result = ({
         ''
       )}
 
-      {!allFailed && !timedOut && expanded && item.iterations > 1 ? (
+      {shouldShowChart ? (
         <div className="relative">
           {isInProgress ? (
             <div className="h-80 flex flex-col items-center justify-center gap-8">
