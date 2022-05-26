@@ -1,23 +1,15 @@
 import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
-
+import { useCommonlyFailedMessage } from 'results/CommonlyFailedItem/useCommonlyFailedMessage';
 export const CommonlyFailedItem = ({
   item
 }: {
   item: ClobbrUIResultListItem;
 }) => {
   const logs = item.latestResult.logs;
-  const mostCommonError = [...logs]
-    .sort(
-      (a, b) =>
-        logs.filter(({ error }) => error?.message === a.error?.message).length -
-        logs.filter(({ error }) => error?.message === b.error?.message).length
-    )
-    .pop();
+  const { message } = useCommonlyFailedMessage({ logs });
 
-  return mostCommonError ? (
-    <pre className="whitespace-pre-line text-sm">
-      {mostCommonError.error?.message}
-    </pre>
+  return message ? (
+    <pre className="whitespace-pre-line text-sm">{message}</pre>
   ) : (
     <></>
   );

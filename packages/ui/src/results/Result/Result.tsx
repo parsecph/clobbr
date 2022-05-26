@@ -24,6 +24,8 @@ import { ReactComponent as ParallelIcon } from 'shared/icons/Parallel.svg';
 import { ReactComponent as SequenceIcon } from 'shared/icons/Sequence.svg';
 import { ResultChart } from 'results/ResultChart/ResultChart';
 import { CommonlyFailedItem } from 'results/CommonlyFailedItem/CommonlyFailedItem';
+import { useCommonlyFailedMessage } from 'results/CommonlyFailedItem/useCommonlyFailedMessage';
+
 import ActivityIndicator from 'ActivityIndicator/ActivityIndicator';
 
 const xIconCss = css`
@@ -91,6 +93,10 @@ const Result = ({
   const failedItems = item.latestResult.logs.filter((log) => log.failed);
 
   const allFailed = failedItems.length === item.iterations;
+
+  const { message } = useCommonlyFailedMessage({
+    logs: item.latestResult.logs
+  });
 
   const shouldShowChart =
     !allFailed &&
@@ -271,12 +277,14 @@ const Result = ({
               <ResultChart item={item} />
 
               {failedItems.length ? (
-                <div className="flex flex-col items-center mb-2">
-                  <Alert severity="error">
-                    {failedItems.length} failed. Showing results only for
-                    successful requests.
-                  </Alert>
-                </div>
+                <Tooltip title={message || ''}>
+                  <div className="flex flex-col items-center mb-2">
+                    <Alert severity="error">
+                      {failedItems.length} failed. Showing results only for
+                      successful requests.
+                    </Alert>
+                  </div>
+                </Tooltip>
               ) : (
                 ''
               )}
