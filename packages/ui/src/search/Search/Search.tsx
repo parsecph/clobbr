@@ -12,6 +12,7 @@ import {
   Select,
   MenuItem,
   SelectChangeEvent,
+  Typography,
   CircularProgress
 } from '@mui/material';
 import { Lock, LockOpen } from '@mui/icons-material';
@@ -19,6 +20,8 @@ import { GlobalStore } from 'App/globalContext';
 
 import { ReactComponent as ParallelIcon } from 'shared/icons/Parallel.svg';
 import { ReactComponent as SequenceIcon } from 'shared/icons/Sequence.svg';
+import { ReactComponent as Start } from 'shared/images/search/Start.svg';
+
 import SearchSettings from 'search/SearchSettings/SearchSettings';
 
 import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
@@ -70,7 +73,28 @@ const Search = () => {
 
   const [runingItemId, setRuningItemId] = useState('');
   const [urlErrorShown, setUrlErrorShown] = useState(false);
+  const [inputFocused, setInputFocused] = useState(false);
   const [autoFocusUrlInput, setAutoFocusUrlInput] = useState(true);
+
+  const settingsAnimations = {
+    animate:
+      inputFocused || globalStore.search.url.requestUrl ? 'shown' : 'hidden',
+    whileTap: 'tapped',
+    variants: {
+      shown: { opacity: 1, transition: { delay: 1 } },
+      hidden: { opacity: 0, zIndex: -1 },
+      tapped: {
+        scale: 0.98,
+        opacity: 0.5,
+        transition: { duration: 0.1 }
+      }
+    }
+  };
+
+  const onUrlFieldBlur = () => {
+    setInputFocused(false);
+    toggleUrlError(false);
+  };
 
   const toggleUrlError = (nextValue: boolean = true) => {
     setUrlErrorShown(nextValue);
@@ -221,14 +245,14 @@ const Search = () => {
 
   return (
     <GlobalStore.Consumer>
-      {({ search, themeMode }) => (
-        <section className="sm:sticky top-4 z-20 flex flex-col items-center justify-center mt-12 mb-6 w-full max-w-xl lg:max-w-2xl xl:max-w-3xl">
+      {({ search, themeMode, results }) => (
+        <section className="sm:sticky top-4 z-20 flex flex-grow flex-shrink flex-col items-center justify-center mt-12 mb-6 w-full max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-3xl">
           <motion.div
             animate={{
               scale: [1, 0.9, 1]
             }}
             transition={{ duration: 0.3, times: [0, 0.7, 1] }}
-            className="flex flex-col items-stretch justify-center w-full px-12 sm:p-0 sm:flex-row sm:items-center"
+            className="flex flex-col flex-shrink-0 items-stretch justify-center w-full px-6 sm:px-4 md:p-0 sm:flex-row sm:items-center"
           >
             <div className="flex-shrink-0 mr-2 hidden sm:inline-block">
               <Tooltip title={!search.ssl ? 'http' : 'https'}>
@@ -252,7 +276,8 @@ const Search = () => {
               inputRef={(input) =>
                 input && autoFocusUrlInput ? input.focus() : null
               }
-              onBlur={() => toggleUrlError(false)}
+              onFocus={() => setInputFocused(true)}
+              onBlur={onUrlFieldBlur}
               onKeyUp={(event) => {
                 if (event.key === 'Enter') {
                   startRun();
@@ -292,6 +317,7 @@ const Search = () => {
                 className={clsx(
                   'flex-shrink-0',
                   'flex-grow',
+                  'md:flex-grow-0',
                   leftInputSeparatorCss,
                   verbInputCss
                 )}
@@ -325,9 +351,10 @@ const Search = () => {
                 value={search.iterations}
                 onChange={handleIterationChange(search.updateIterations)}
                 className={clsx(
-                  'flex-shrink-0',
                   'flex-grow',
+                  'sm:flex-shrink-0',
                   'sm:w-16',
+                  'md:flex-grow-0',
                   leftInputSeparatorCss,
                   iterationInputCss
                 )}
@@ -338,7 +365,7 @@ const Search = () => {
                   variant="contained"
                   size="large"
                   className={clsx(
-                    'flex-shrink-0 flex-grow !rounded-none sm:!rounded-tr-md sm:!rounded-br-md sm:w-24',
+                    'flex-shrink-0 flex-grow md:flex-grow-0 !rounded-none sm:!rounded-tr-md sm:!rounded-br-md sm:w-28',
                     requestsInProgress ? '!bg-gray-600' : ''
                   )}
                   style={{ height: '3.5rem' }}
@@ -357,9 +384,35 @@ const Search = () => {
             </div>
           </motion.div>
 
-          <div className="w-full flex justify-center mt-12">
+          <motion.div
+            {...settingsAnimations}
+            className="self-start mt-4 px-6 sm:ml-8 sm:p-1"
+          >
             <SearchSettings />
-          </div>
+          </motion.div>
+
+          {results.list.length === 0 ? (
+            <motion.div
+              className="flex flex-col items-center gap-2 opacity-0"
+              animate={{
+                opacity: [0, 0.9, 1]
+              }}
+              transition={{ duration: 2, delay: 5, times: [0, 0.7, 1] }}
+            >
+              <Start className="w-full flex-grow-0 flex-shrink-0 max-w-xs py-6 px-12" />
+
+              <Typography variant="body1">
+                <strong className="font-semibold">No results yet</strong>
+              </Typography>
+
+              <Typography variant="body2" className="text-center opacity-50">
+                Results will appear here after <br /> you add an endpoint URL
+                and press 'Start'.
+              </Typography>
+            </motion.div>
+          ) : (
+            ''
+          )}
         </section>
       )}
     </GlobalStore.Consumer>

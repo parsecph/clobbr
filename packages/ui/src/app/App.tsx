@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import { useAsync } from 'react-use';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,10 +13,9 @@ import { SK } from 'storage/storageKeys';
 
 import Search from 'search/Search/Search';
 import ResultList from 'results/ResultList/ResultList';
-import Intro from 'Intro/Intro';
-import ThemeToggle from 'ThemeToggle/ThemeToggle';
 import ThemeLoader from 'shared/components/ThemeLoader/ThemeLoader';
 import Topbar from 'Topbar/Topbar';
+
 import { useStoredPreferences } from 'shared/hooks/useStoredPreferences';
 
 const App = () => {
@@ -47,7 +47,6 @@ const App = () => {
   }, [resultStorageLoaded, storedResultState, state]);
 
   // Result updates
-
   useEffect(() => {
     if (!resultStorageLoaded) {
       return;
@@ -85,21 +84,22 @@ const App = () => {
 
         <Topbar />
 
-        <main className="flex flex-col items-center justify-center h-full transition-all">
+        <main
+          className={clsx(
+            'flex flex-col items-center justify-center h-full transition-all overflow-x-hidden',
+            state.results.list.length === 0 ? ' flex-grow' : 'flex-grow-0'
+          )}
+        >
           <Search />
 
-          {resultStorageLoaded ? (
-            <section className="w-full">
+          {resultStorageLoaded && state.results.list.length > 0 ? (
+            <section className="w-full flex-grow-1 flex-shrink-0">
               <ResultList list={state.results.list} />
-              {/* <Intro /> */}
             </section>
           ) : (
             ''
           )}
         </main>
-
-        {/* {themeMode}
-        <ThemeToggle /> */}
       </ThemeProvider>
     </GlobalStore.Provider>
   );

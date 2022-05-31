@@ -1,0 +1,73 @@
+import { Dialog } from '@headlessui/react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect } from 'react';
+import { rootContainer } from 'rootContainer';
+
+const WrappedDialog = Dialog as unknown as React.ElementType<any>;
+
+const rootOpenClasses = ['scale-95', 'origin-top'];
+
+export const Modal = ({
+  open = false,
+  onClose,
+  children
+}: {
+  open?: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+}) => {
+  useEffect(() => {
+    if (open) {
+      rootContainer.classList.add(...rootOpenClasses);
+    } else {
+      rootContainer.classList.remove(...rootOpenClasses);
+    }
+
+    return () => rootContainer.classList.remove(...rootOpenClasses);
+  }, [open]);
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <WrappedDialog
+          className="fixed inset-0 z-50 transform-"
+          onClose={onClose}
+          open={open}
+        >
+          <div className="fixed inset-0 bg-gray-900/30" aria-hidden="true" />
+
+          <div className="flex h-full flex-col items-center mt-auto pt-6 px-4">
+            <Dialog.Overlay
+              as={motion.div}
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: 1,
+                transition: { duration: 0.4, ease: [0.36, 0.66, 0.04, 1] }
+              }}
+              exit={{
+                opacity: 0,
+                transition: { duration: 0.3, ease: [0.36, 0.66, 0.04, 1] }
+              }}
+              className="fixed inset-0 bg-black/40"
+            />
+
+            <motion.div
+              initial={{ y: '100%' }}
+              animate={{
+                y: 0,
+                transition: { duration: 0.4, ease: [0.36, 0.66, 0.04, 1] }
+              }}
+              exit={{
+                y: '100%',
+                transition: { duration: 0.3, ease: [0.36, 0.66, 0.04, 1] }
+              }}
+              className="z-0 flex flex-col w-full h-full max-w-xl bg-gray-100/70 dark:bg-gray-900/70 backdrop-blur-sm rounded-t-lg shadow-xl overflow-auto"
+            >
+              {children}
+            </motion.div>
+          </div>
+        </WrappedDialog>
+      )}
+    </AnimatePresence>
+  );
+};

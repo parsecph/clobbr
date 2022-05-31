@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { Switch, SwitchProps } from '@mui/material';
+import { colors } from 'shared/colors';
 
 const AppleSwitch = styled((props: SwitchProps) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
@@ -8,6 +9,7 @@ const AppleSwitch = styled((props: SwitchProps) => (
   height: 26,
   padding: 0,
   marginRight: 6,
+  marginLeft: 11,
   '& .MuiSwitch-switchBase': {
     padding: 0,
     margin: 2,
@@ -16,7 +18,10 @@ const AppleSwitch = styled((props: SwitchProps) => (
       transform: 'translateX(16px)',
       color: '#fff',
       '& + .MuiSwitch-track': {
-        backgroundColor: theme.palette.mode === 'dark' ? '#2ECA45' : '#65C466',
+        backgroundColor:
+          theme.palette.mode === 'dark'
+            ? colors.primary.dark
+            : colors.primary.light,
         opacity: 1,
         border: 0
       },
@@ -25,7 +30,7 @@ const AppleSwitch = styled((props: SwitchProps) => (
       }
     },
     '&.Mui-focusVisible .MuiSwitch-thumb': {
-      color: '#33cf4d',
+      color: colors.primary.main,
       border: '6px solid #fff'
     },
     '&.Mui-disabled .MuiSwitch-thumb': {

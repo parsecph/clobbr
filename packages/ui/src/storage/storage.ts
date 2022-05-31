@@ -46,10 +46,13 @@ export const getDb = (type: EDbStores) => {
 
   const getKeys = (): Promise<string[]> => _getDb().keys();
 
+  const clear = (): Promise<void> => _getDb().clear();
+
   return {
     getKeys,
     getItem,
     setItem,
-    removeItem
+    removeItem,
+    clear
   };
 };

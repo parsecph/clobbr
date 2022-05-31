@@ -1,7 +1,12 @@
 import { useContext, useMemo, useState } from 'react';
 import clsx from 'clsx';
 import { css } from '@emotion/css';
-import { motion, usePresence } from 'framer-motion';
+import {
+  AnimatePresence,
+  motion,
+  MotionValue,
+  usePresence
+} from 'framer-motion';
 import { useInterval } from 'react-use';
 import { formatDistanceToNow, differenceInMinutes } from 'date-fns';
 
@@ -111,7 +116,9 @@ const Result = ({
     layout: true,
     initial: 'out',
     style: {
-      position: (isPresent ? 'static' : 'absolute') as unknown as any
+      position: (isPresent
+        ? 'static'
+        : 'absolute') as unknown as MotionValue<string>
     },
     animate: isPresent ? 'in' : 'out',
     whileTap: 'tapped',
@@ -125,7 +132,11 @@ const Result = ({
   };
 
   const onResultPressed = () => {
-    globalStore.results.updateExpandedResults([item.id]);
+    if (expanded) {
+      globalStore.results.updateExpandedResults([]);
+    } else {
+      globalStore.results.updateExpandedResults([item.id]);
+    }
   };
 
   // Date formatting
@@ -185,14 +196,20 @@ const Result = ({
         />
 
         <div className="flex flex-col items-end">
-          <Tooltip title="Average response time">
-            <Typography
-              variant="body2"
-              className={clsx(durationColor, '!font-semibold')}
-            >
-              {item.latestResult.averageDuration} ms
+          {!allFailed ? (
+            <Tooltip title="Average response time">
+              <Typography
+                variant="body2"
+                className={clsx(durationColor, '!font-semibold')}
+              >
+                {item.latestResult.averageDuration} ms
+              </Typography>
+            </Tooltip>
+          ) : (
+            <Typography variant="body2" className="opacity-50">
+              Failed
             </Typography>
-          </Tooltip>
+          )}
 
           <Tooltip title="Iteration number">
             <Typography
@@ -244,56 +261,60 @@ const Result = ({
             <strong className="font-semibold">Requests timed out</strong>
           </Typography>
 
-          <Typography variant="body2">
-            Would you care to give it another try?
+          <Typography variant="body2" className="opacity-50">
+            Perhaps give it another try? <br />
+            Maybe it'll work this time...
           </Typography>
         </div>
       ) : (
         ''
       )}
 
-      {shouldShowChart ? (
-        <div className="relative">
-          {isInProgress ? (
-            <div className="h-80 flex flex-col items-center justify-center gap-8">
-              <div
-                className="absolute transition-all bottom-0 left-0 h-1 bg-gradient-to-r from-primary-300 to-primary-700"
-                style={{ width: percentageOfCompleteness + '%' }}
-                aria-hidden="true"
-              ></div>
+      <AnimatePresence>
+        {shouldShowChart ? (
+          <div className="relative">
+            {isInProgress ? (
+              <div className="h-80 flex flex-col items-center justify-center gap-8">
+                <div
+                  className="absolute transition-all bottom-0 left-0 h-1 bg-gradient-to-r from-primary-300 to-primary-700"
+                  style={{ width: percentageOfCompleteness + '%' }}
+                  aria-hidden="true"
+                ></div>
 
-              <ActivityIndicator
-                animationIterations="infinite"
-                startDelay={0}
-              />
-              <Typography variant="caption">
-                {item.latestResult.resultDurations.length < item.iterations / 2
-                  ? 'Getting results'
-                  : 'Almost there'}
-              </Typography>
-            </div>
-          ) : (
-            <>
-              <ResultChart item={item} />
+                <ActivityIndicator
+                  animationIterations="infinite"
+                  startDelay={0}
+                />
+                <Typography variant="caption">
+                  {item.latestResult.resultDurations.length <
+                  item.iterations / 2
+                    ? 'Getting results'
+                    : 'Almost there'}
+                </Typography>
+              </div>
+            ) : (
+              <>
+                <ResultChart item={item} />
 
-              {failedItems.length ? (
-                <Tooltip title={message || ''}>
-                  <div className="flex flex-col items-center mb-2">
-                    <Alert severity="error">
-                      {failedItems.length} failed. Showing results only for
-                      successful requests.
-                    </Alert>
-                  </div>
-                </Tooltip>
-              ) : (
-                ''
-              )}
-            </>
-          )}
-        </div>
-      ) : (
-        ''
-      )}
+                {failedItems.length ? (
+                  <Tooltip title={message || ''}>
+                    <div className="flex flex-col items-center mb-2">
+                      <Alert severity="error">
+                        {failedItems.length} failed. Showing results only for
+                        successful requests.
+                      </Alert>
+                    </div>
+                  </Tooltip>
+                ) : (
+                  ''
+                )}
+              </>
+            )}
+          </div>
+        ) : (
+          ''
+        )}
+      </AnimatePresence>
     </motion.button>
   );
 };

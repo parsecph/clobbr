@@ -1,6 +1,7 @@
 import { VERBS, Everbs } from 'shared/enums/http';
 import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
 import React from 'react';
+import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
 
 export const DEFAULT_GLOBAL_STORE = {
   search: {
@@ -24,6 +25,7 @@ export const DEFAULT_GLOBAL_STORE = {
   results: {
     expandedResults: [] as Array<string>,
     list: [],
+    setList: (list: Array<ClobbrUIResultListItem>) => {},
 
     updateExpandedResults(expandedResults: Array<string>) {},
 
