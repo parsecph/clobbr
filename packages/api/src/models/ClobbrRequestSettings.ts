@@ -6,4 +6,5 @@ export interface ClobbrRequestSettings {
   verb: Everbs;
   headers: { [key: string]: string };
   data?: { [key: string]: any };
+  timeout?: number; // Optional timeout in milliseconds
 }

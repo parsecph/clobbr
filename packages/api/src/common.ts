@@ -1,18 +1,20 @@
+import { AxiosError } from 'axios';
+import { DEFAULT_HTTP_TIMEOUT_IN_MS } from './consts/http';
 import api from './api';
 import { ClobbrRequestSettings } from './models/ClobbrRequestSettings';
 import { getFailedMessage, getNumberMeta, getResponseMetas } from './util';
-import { AxiosError } from 'axios';
 
 export const handleApiCall = async (
   index: number,
-  { url, verb, headers, data }: ClobbrRequestSettings
+  { url, verb, headers, data, timeout }: ClobbrRequestSettings
 ) => {
   const startTime = new Date().valueOf();
   const res = await api.http({
     url,
     method: verb,
     headers,
-    data
+    data,
+    timeout: timeout || DEFAULT_HTTP_TIMEOUT_IN_MS
   });
 
   const endTime = new Date().valueOf();
