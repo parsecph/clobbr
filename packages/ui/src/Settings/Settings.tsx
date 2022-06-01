@@ -113,7 +113,7 @@ export const Settings = () => {
           ) : (
             <Button
               onClick={() => setConfirmedClearing(true)}
-              color="secondary"
+              color="error"
               disabled={databaseCleared}
             >
               Clear result data

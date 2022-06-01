@@ -10,6 +10,9 @@ export const useSearchState = ({ initialState }: { [key: string]: any }) => {
   const [url, setUrl] = useState(initialState.search.url);
   const [iterations, setIterations] = useState(initialState.search.iterations);
   const [verb, setVerb] = useState<Everbs>(initialState.search.verb);
+  const [requestTimeout, setRequestTimeout] = useState(
+    initialState.search.timeout
+  );
   const [isUrlValid, setIsUrlValid] = useState(false);
 
   const checkUrlValidity = (url: string) =>
@@ -60,6 +63,10 @@ export const useSearchState = ({ initialState }: { [key: string]: any }) => {
     setVerb(verb);
   };
 
+  const updateTimeout = (timeout: number) => {
+    setRequestTimeout(timeout);
+  };
+
   useEffect(() => {
     setIsUrlValid(checkUrlValidity(url.requestUrl));
   }, [url.requestUrl]);
@@ -79,7 +86,10 @@ export const useSearchState = ({ initialState }: { [key: string]: any }) => {
     updateIterations,
 
     verb,
-    updateVerb
+    updateVerb,
+
+    timeout: requestTimeout,
+    updateTimeout
   };
 
   return {

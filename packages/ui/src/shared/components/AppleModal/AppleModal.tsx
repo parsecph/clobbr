@@ -3,6 +3,8 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect } from 'react';
 import { rootContainer } from 'rootContainer';
 
+import { Button } from '@mui/material';
+
 const WrappedDialog = Dialog as unknown as React.ElementType<any>;
 
 const rootOpenClasses = ['scale-95', 'origin-top'];
@@ -64,6 +66,12 @@ export const Modal = ({
               className="z-0 flex flex-col w-full h-full max-w-xl bg-gray-100/70 dark:bg-gray-900/70 backdrop-blur-sm rounded-t-lg shadow-xl overflow-auto"
             >
               {children}
+
+              <div className="mt-auto text-center p-4">
+                <Button onClick={onClose} color="secondary" size="small">
+                  Done
+                </Button>
+              </div>
             </motion.div>
           </div>
         </WrappedDialog>

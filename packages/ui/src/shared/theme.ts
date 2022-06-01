@@ -95,23 +95,38 @@ export const getTheme = (mode: string = 'dark') => {
       MuiTabs: {
         styleOverrides: {
           root: {
-            marginLeft: baseTheme.spacing(1)
+            background: 'rgba(100,100,100,0.1)'
           },
           indicator: {
             height: 3,
-            borderTopLeftRadius: 3,
-            borderTopRightRadius: 3,
-            backgroundColor: baseTheme.palette.common.white
+            borderTopLeftRadius: 0,
+            borderTopRightRadius: 0
           }
         }
       },
       MuiTab: {
+        variants: [
+          {
+            props: {}, // match any props combination
+            style: ({ theme }: any) => {
+              if (theme.palette.mode === 'light') {
+                return {
+                  '&.Mui-selected': {
+                    color: 'black'
+                  }
+                };
+              }
+
+              return {};
+            }
+          }
+        ],
         styleOverrides: {
           root: {
             textTransform: 'none',
-            margin: '0 16px',
+            marginRight: '1em',
+            padding: '1em 1.75em',
             minWidth: 0,
-            padding: 0,
             [baseTheme.breakpoints.up('md')]: {
               padding: 0,
               minWidth: 0

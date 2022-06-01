@@ -6,20 +6,22 @@ import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
 export const DEFAULT_GLOBAL_STORE = {
   search: {
     iterations: 10,
-    verb: VERBS.GET,
+    verb: VERBS.GET as Everbs,
     ssl: true,
     parallel: true,
+    timeout: 10000,
     url: {
       displayText: 'https://60698fbde1c2a10017544a73.mockapi.io/test',
       requestUrl: 'https://60698fbde1c2a10017544a73.mockapi.io/test'
     },
     isUrlValid: false,
 
-    updateUrl() {},
+    updateUrl(url: string) {},
     toggleSsl() {},
     toggleParallel() {},
     updateIterations(iterations: number) {},
-    updateVerb(verb: Everbs) {}
+    updateVerb(verb: Everbs) {},
+    updateTimeout(timeout: number) {}
   },
 
   results: {

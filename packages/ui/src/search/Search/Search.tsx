@@ -7,10 +7,6 @@ import {
   TextField,
   IconButton,
   Tooltip,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   SelectChangeEvent,
   Typography,
   CircularProgress
@@ -23,11 +19,12 @@ import { ReactComponent as SequenceIcon } from 'shared/icons/Sequence.svg';
 import { ReactComponent as Start } from 'shared/images/search/Start.svg';
 
 import SearchSettings from 'search/SearchSettings/SearchSettings';
+import VerbSelect from 'search/Search/VerbSelect';
 
 import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
 import { EEvents } from '@clobbr/api/src/enums/events';
 import { run } from '@clobbr/api';
-import { VERBS, Everbs } from 'shared/enums/http';
+import { Everbs } from 'shared/enums/http';
 
 const DEFAULTS = {
   headers: {},
@@ -168,7 +165,8 @@ const Search = () => {
         const configuredOptions = {
           url: globalStore.search.url.requestUrl,
           iterations: globalStore.search.iterations,
-          verb: globalStore.search.verb
+          verb: globalStore.search.verb,
+          timeout: globalStore.search.timeout
         };
 
         const options = { ...DEFAULTS, ...configuredOptions };
@@ -312,35 +310,17 @@ const Search = () => {
             />
 
             <div className="flex sm:contents">
-              <FormControl
-                variant="filled"
-                className={clsx(
+              <VerbSelect
+                value={search.verb}
+                onVerbChange={handleVerbChange(search.updateVerb)}
+                customContainerClasses={clsx(
                   'flex-shrink-0',
                   'flex-grow',
                   'md:flex-grow-0',
                   leftInputSeparatorCss,
                   verbInputCss
                 )}
-              >
-                <InputLabel id="search-verb-label">Verb</InputLabel>
-                <Select
-                  variant="filled"
-                  labelId="search-verb-label"
-                  id="search-verb"
-                  value={search.verb}
-                  label="Verb"
-                  onChange={handleVerbChange(search.updateVerb)}
-                >
-                  {Object.keys(VERBS).map((verb: string) => (
-                    <MenuItem
-                      key={verb}
-                      value={(VERBS as { [key: string]: string })[verb]}
-                    >
-                      <span className="capitalize">{verb.toLowerCase()}</span>
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              />
 
               <TextField
                 variant="filled"
