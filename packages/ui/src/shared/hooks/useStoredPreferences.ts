@@ -8,6 +8,7 @@ import { getDb } from 'storage/storage';
 export type Preferences = {
   themeMode?: string;
   stickySearch?: boolean;
+  maxIterations?: number;
 };
 
 export const useStoredPreferences = () => {
@@ -18,8 +19,9 @@ export const useStoredPreferences = () => {
     const resultDb = getDb(EDbStores.MAIN_STORE_NAME);
     const theme = await resultDb.getItem(SK.PREFERENCES.THEME);
     const stickySearch = await resultDb.getItem(SK.PREFERENCES.STICKY_SEARCH);
+    const maxIterations = await resultDb.getItem(SK.PREFERENCES.MAX_ITERATIONS);
 
-    return { theme, stickySearch };
+    return { theme, stickySearch, maxIterations };
   });
 
   useEffect(() => {
@@ -30,7 +32,8 @@ export const useStoredPreferences = () => {
     if (storedPreferences.value) {
       setPreferences({
         themeMode: storedPreferences.value.theme,
-        stickySearch: storedPreferences.value.stickySearch
+        stickySearch: storedPreferences.value.stickySearch,
+        maxIterations: storedPreferences.value.maxIterations
       });
     }
 

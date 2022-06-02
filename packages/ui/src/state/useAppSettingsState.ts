@@ -25,10 +25,20 @@ export const useAppSettingsState = ({
     setSettings(nextSettings);
   };
 
+  const setMaxIterations = (maxIterations: number) => {
+    const nextSettings = {
+      ...settings,
+      maxIterations
+    };
+
+    setSettings(nextSettings);
+  };
+
   const appSettingsState = {
     ...settings,
     setStickySearch,
-    toggleStickySearch
+    toggleStickySearch,
+    setMaxIterations
   };
 
   return {

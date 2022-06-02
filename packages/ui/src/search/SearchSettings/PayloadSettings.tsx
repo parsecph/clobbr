@@ -8,7 +8,7 @@ export const PayloadSettings = () => {
         Set request payload (data)
       </Typography>
 
-      <div className="flex flex-col gap-6 h-full mt-6"></div>
+      <div className="flex flex-col gap-6 mt-6"></div>
     </>
   );
 };

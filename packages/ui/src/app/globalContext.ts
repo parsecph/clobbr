@@ -45,6 +45,7 @@ export const DEFAULT_GLOBAL_STORE = {
       parallel: boolean;
       iterations: number;
       verb: Everbs;
+      ssl: boolean;
     }): { id: string } {
       return { id: '' };
     },
@@ -73,7 +74,10 @@ export const DEFAULT_GLOBAL_STORE = {
   appSettings: {
     stickySearch: false,
     setStickySearch: (stickySearch: boolean) => {},
-    toggleStickySearch() {}
+    toggleStickySearch() {},
+
+    maxIterations: 100,
+    setMaxIterations(maxIterations: number) {}
   }
 };
 

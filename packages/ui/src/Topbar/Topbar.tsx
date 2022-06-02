@@ -11,6 +11,7 @@ import { ButtonBase, Typography } from '@mui/material';
 import { Settings as SettingsIcon } from '@mui/icons-material';
 
 import { Modal } from 'shared/components/AppleModal/AppleModal';
+import { VersionNumber } from 'shared/components/VersionNumber/VersionNumber';
 import { Settings } from 'Settings/Settings';
 
 const Topbar = () => {
@@ -57,6 +58,7 @@ const Topbar = () => {
           <Modal
             onClose={() => setSettingsModalOpen(false)}
             open={settingsModalOpen}
+            footerComponent={<VersionNumber />}
           >
             <Settings />
           </Modal>

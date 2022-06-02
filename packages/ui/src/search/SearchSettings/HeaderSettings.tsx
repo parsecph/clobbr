@@ -60,7 +60,7 @@ export const HeaderSettings = () => {
             Set request headers
           </Typography>
 
-          <div className="flex flex-col gap-3 h-full mt-6">
+          <div className="flex flex-col gap-3 mt-6">
             {search.headerItems.map((header: ClobbrUIHeaderItem) => (
               <FormGroup key={header.id} className="!grid gap-1 grid-cols-12">
                 <Autocomplete

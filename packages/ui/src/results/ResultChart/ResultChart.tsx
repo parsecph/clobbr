@@ -16,7 +16,7 @@ import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
 
 import { colors } from 'shared/colors';
 
-const MAX_CHART_DATA_POINTS = 100;
+const MAX_CHART_DATA_POINTS = 101;
 
 const ENTER_ANIMATION_DURATION_MS = 2000;
 

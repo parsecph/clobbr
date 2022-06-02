@@ -16,9 +16,8 @@ import { Alert, CircularProgress, Typography } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
 import CloseIcon from '@mui/icons-material/Close';
+import { Lock, LockOpen } from '@mui/icons-material';
 
 import { VERBS } from 'shared/enums/http';
 import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
@@ -27,6 +26,7 @@ import { ReactComponent as AllFailed } from 'shared/images/search/AllFailed.svg'
 import { ReactComponent as Timeout } from 'shared/images/search/Timeout.svg';
 import { ReactComponent as ParallelIcon } from 'shared/icons/Parallel.svg';
 import { ReactComponent as SequenceIcon } from 'shared/icons/Sequence.svg';
+
 import { ResultChart } from 'results/ResultChart/ResultChart';
 import { CommonlyFailedItem } from 'results/CommonlyFailedItem/CommonlyFailedItem';
 import { useCommonlyFailedMessage } from 'results/CommonlyFailedItem/useCommonlyFailedMessage';
@@ -164,22 +164,23 @@ const Result = ({
       onClick={onResultPressed}
     >
       <ListItem className="flex-wrap">
-        <ListItemAvatar>
-          <Tooltip title={item.parallel ? 'Parallel' : 'Sequence'}>
-            {!isInProgress ? (
-              <Avatar className="dark:!bg-black dark:!text-gray-300">
-                {item.parallel ? <ParallelIcon /> : <SequenceIcon />}
-              </Avatar>
-            ) : (
-              <div className="flex items-center">
-                <CircularProgress size={30} />
-              </div>
-            )}
-          </Tooltip>
-        </ListItemAvatar>
         <ListItemText
           primary={
-            <span className="flex gap-2 truncate">
+            <span className="flex items-center gap-2 truncate mb-1">
+              <span className="flex items-center gap-1">
+                <Tooltip
+                  title={!item.ssl ? 'http (Secure)' : 'https (Insecure)'}
+                >
+                  {item.ssl ? (
+                    <Lock fontSize="small" />
+                  ) : (
+                    <LockOpen fontSize="small" />
+                  )}
+                </Tooltip>
+
+                {item.url.replace(/^https?:\/\//, '')}
+              </span>
+
               <small
                 className={clsx(
                   'px-2 py-0.5',
@@ -189,13 +190,26 @@ const Result = ({
               >
                 {item.verb}
               </small>
-              {item.url.replace(/^https?:\/\//, '')}
+
+              {isInProgress ? (
+                <div className="flex items-center">
+                  <CircularProgress size={14} />
+                </div>
+              ) : (
+                <></>
+              )}
             </span>
           }
-          secondary={formattedDate ? `${formattedDate} ago` : '...'}
+          secondary={
+            <>
+              <Typography variant="caption" className="opacity-50">
+                {formattedDate ? `${formattedDate} ago` : '...'}
+              </Typography>
+            </>
+          }
         />
 
-        <div className="flex flex-col items-end">
+        <div className="flex flex-col gap-1 items-end justify-between">
           {!allFailed ? (
             <Tooltip title="Average response time">
               <Typography
@@ -211,20 +225,32 @@ const Result = ({
             </Typography>
           )}
 
-          <Tooltip title="Iteration number">
-            <Typography
-              variant="caption"
-              className="flex items-center justify-center opacity-50"
-            >
-              {item.iterations}
-              <CloseIcon className={xIconCss} />
-            </Typography>
-          </Tooltip>
+          <Typography
+            variant="caption"
+            className="flex items-center gap-1 justify-center opacity-50"
+          >
+            <Tooltip title={item.parallel ? 'Parallel' : 'Sequence'}>
+              <div className="dark:!text-gray-300 w-4 h-4">
+                {item.parallel ? (
+                  <ParallelIcon className="w-full h-full" />
+                ) : (
+                  <SequenceIcon className="w-full h-full" />
+                )}
+              </div>
+            </Tooltip>
+
+            <Tooltip title="Number of calls">
+              <span>
+                {item.iterations}
+                <CloseIcon className={xIconCss} />
+              </span>
+            </Tooltip>
+          </Typography>
         </div>
       </ListItem>
 
       {allFailed && expanded ? (
-        <div className="flex flex-col  gap-4 mb-12 items-center">
+        <div className="flex flex-col gap-4 mb-12 items-center">
           <AllFailed className="w-full max-w-xs p-6" />
           <Typography variant="body1">
             <strong className="font-semibold">All requests failed</strong>

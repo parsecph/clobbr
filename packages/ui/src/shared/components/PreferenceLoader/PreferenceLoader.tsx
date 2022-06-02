@@ -2,7 +2,7 @@ import { useEffect, useContext, useState } from 'react';
 
 import { GlobalStore } from 'App/globalContext';
 import { useStoredPreferences } from 'shared/hooks/useStoredPreferences';
-import { isBoolean } from 'lodash-es';
+import { isBoolean, isNumber } from 'lodash-es';
 
 const PreferenceLoader = () => {
   const globalStore = useContext(GlobalStore);
@@ -28,6 +28,10 @@ const PreferenceLoader = () => {
 
       if (isBoolean(preferences.stickySearch)) {
         globalStore.appSettings.setStickySearch(preferences.stickySearch);
+      }
+
+      if (isNumber(preferences.maxIterations)) {
+        globalStore.appSettings.setMaxIterations(preferences.maxIterations);
       }
     }
 

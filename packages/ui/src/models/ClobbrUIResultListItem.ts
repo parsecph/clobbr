@@ -9,4 +9,5 @@ export interface ClobbrUIResultListItem {
   verb: Everbs;
   iterations: number;
   historicalResults: Array<ClobbrUIResult>;
+  ssl: boolean;
 }

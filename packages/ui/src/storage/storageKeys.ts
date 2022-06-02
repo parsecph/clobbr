@@ -4,6 +4,7 @@ export const SK = {
   },
   PREFERENCES: {
     THEME: 'preferences.theme',
-    STICKY_SEARCH: 'preferences.stickySearch'
+    STICKY_SEARCH: 'preferences.stickySearch',
+    MAX_ITERATIONS: 'preferences.maxIterations'
   }
 };

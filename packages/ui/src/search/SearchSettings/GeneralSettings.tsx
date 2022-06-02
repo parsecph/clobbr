@@ -13,7 +13,7 @@ import AppleSwitch from 'shared/components/AppleSwitch/AppleSwitch';
 
 export const GeneralSettings = () => {
   const handleTimeoutChange =
-    (updateTimeout: (iterations: number) => void) =>
+    (updateTimeout: (timeout: number) => void) =>
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const numericValue = parseInt(event.target.value, 10);
       if (!event.target.value || isNaN(numericValue) || numericValue < 0) {
@@ -31,7 +31,7 @@ export const GeneralSettings = () => {
             General request settings
           </Typography>
 
-          <div className="flex flex-col gap-6 h-full mt-6">
+          <div className="flex flex-col gap-6 mt-6">
             <FormGroup>
               <FormControlLabel
                 control={

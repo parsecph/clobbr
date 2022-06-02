@@ -31,7 +31,8 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     averageDuration,
     parallel,
     iterations,
-    verb
+    verb,
+    ssl
   }: {
     url: string;
     resultDurations: Array<number>;
@@ -40,6 +41,7 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     parallel: boolean;
     iterations: number;
     verb: Everbs;
+    ssl: boolean;
   }) => {
     const runId = uuidv4();
 
@@ -78,6 +80,7 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
         parallel,
         iterations,
         verb,
+        ssl,
         latestResult: result,
         historicalResults: []
       };
