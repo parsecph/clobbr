@@ -166,7 +166,17 @@ const Search = () => {
           url: globalStore.search.url.requestUrl,
           iterations: globalStore.search.iterations,
           verb: globalStore.search.verb,
-          timeout: globalStore.search.timeout
+          timeout: globalStore.search.timeout,
+          headers: globalStore.search.headerItems.reduce((acc, header) => {
+            const { value, key } = header;
+
+            if (!key) {
+              return acc;
+            }
+
+            acc[key] = value || '';
+            return acc;
+          }, {})
         };
 
         const options = { ...DEFAULTS, ...configuredOptions };
@@ -236,6 +246,8 @@ const Search = () => {
     globalStore.search.iterations,
     globalStore.search.parallel,
     globalStore.search.verb,
+    globalStore.search.timeout,
+    globalStore.search.headerItems,
     running,
     runingItemId,
     requestsInProgress
@@ -243,8 +255,13 @@ const Search = () => {
 
   return (
     <GlobalStore.Consumer>
-      {({ search, themeMode, results }) => (
-        <section className="sm:sticky top-4 z-20 flex flex-grow flex-shrink flex-col items-center justify-center mt-12 mb-6 w-full max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-3xl">
+      {({ search, themeMode, results, appSettings }) => (
+        <section
+          className={clsx(
+            'flex flex-grow flex-shrink flex-col items-center justify-center mt-12 mb-6 w-full max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-3xl',
+            appSettings.stickySearch ? 'sm:sticky top-4 z-20' : ''
+          )}
+        >
           <motion.div
             animate={{
               scale: [1, 0.9, 1]
@@ -366,7 +383,7 @@ const Search = () => {
 
           <motion.div
             {...settingsAnimations}
-            className="self-start mt-4 px-6 sm:ml-8 sm:p-1"
+            className="self-start mt-2 px-6 sm:ml-8 sm:p-0"
           >
             <SearchSettings />
           </motion.div>

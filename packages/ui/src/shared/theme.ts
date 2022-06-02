@@ -48,6 +48,13 @@ export const getTheme = (mode: string = 'dark') => {
     ...baseTheme,
 
     components: {
+      MuiOutlinedInput: {
+        styleOverrides: {
+          root: {
+            fontSize: '0.9rem'
+          }
+        }
+      },
       MuiInputLabel: {
         variants: [
           {
@@ -125,10 +132,9 @@ export const getTheme = (mode: string = 'dark') => {
           root: {
             textTransform: 'none',
             marginRight: '1em',
-            padding: '1em 1.75em',
+            padding: '1em 1.5em',
             minWidth: 0,
             [baseTheme.breakpoints.up('md')]: {
-              padding: 0,
               minWidth: 0
             }
           }

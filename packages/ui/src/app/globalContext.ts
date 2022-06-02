@@ -2,11 +2,14 @@ import { VERBS, Everbs } from 'shared/enums/http';
 import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
 import React from 'react';
 import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
+import { ClobbrUIHeaderItem } from 'models/ClobbrUIHeaderItem';
 
 export const DEFAULT_GLOBAL_STORE = {
   search: {
     iterations: 10,
     verb: VERBS.GET as Everbs,
+    headerItems: [],
+    payloadItems: [],
     ssl: true,
     parallel: true,
     timeout: 10000,
@@ -17,6 +20,9 @@ export const DEFAULT_GLOBAL_STORE = {
     isUrlValid: false,
 
     updateUrl(url: string) {},
+    addHeaderItem(header: ClobbrUIHeaderItem) {},
+    updateHeaderItem(header: ClobbrUIHeaderItem) {},
+    removeHeaderItem(headerItemId: string) {},
     toggleSsl() {},
     toggleParallel() {},
     updateIterations(iterations: number) {},
@@ -62,7 +68,13 @@ export const DEFAULT_GLOBAL_STORE = {
 
   themeMode: 'dark',
   toggleTheme() {},
-  setTheme(mode: string) {}
+  setTheme(mode: string) {},
+
+  appSettings: {
+    stickySearch: false,
+    setStickySearch: (stickySearch: boolean) => {},
+    toggleStickySearch() {}
+  }
 };
 
 export const GlobalStore = React.createContext(DEFAULT_GLOBAL_STORE);

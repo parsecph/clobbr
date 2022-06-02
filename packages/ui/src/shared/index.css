@@ -5,10 +5,15 @@
 html {
   font-family: 'Inter', sans-serif;
 }
+
 @supports (font-variation-settings: normal) {
   html {
     font-family: 'Inter var', sans-serif;
   }
+}
+
+body {
+  overflow-x: hidden;
 }
 
 ::-webkit-scrollbar {
@@ -20,17 +25,28 @@ html {
   background-color: rgba(255, 255, 255, 0.01);
 }
 
+::-webkit-scrollbar-corner {
+  background: rgba(255, 255, 255, 0.01);
+}
+
 ::-webkit-scrollbar-thumb {
-  background-color: rgb(50, 50, 50);
+  background-color: rgb(200, 200, 200);
   border-radius: 20px;
   border: 6px solid transparent;
   background-clip: content-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: rgb(70, 70, 70);
+  background-color: rgb(230, 230, 230);
 }
 
-::-webkit-scrollbar-corner {
-  background: rgba(255, 255, 255, 0.01);
+.dark::-webkit-scrollbar-thumb {
+  background-color: rgb(50, 50, 50);
+  border-radius: 20px;
+  border: 6px solid transparent;
+  background-clip: content-box;
+}
+
+.dark::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(70, 70, 70);
 }

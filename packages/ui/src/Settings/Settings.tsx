@@ -16,7 +16,8 @@ import {
 } from '@mui/material';
 import { Close } from '@mui/icons-material';
 
-import ThemeToggle from 'ThemeToggle/ThemeToggle';
+import ThemeToggle from 'Settings/ThemeToggle/ThemeToggle';
+import StickySearchToggle from 'Settings/StickySearchToggle/StickySearchToggle';
 
 const version = require('../../package.json').version;
 
@@ -78,6 +79,7 @@ export const Settings = () => {
         </Typography>
 
         <ThemeToggle />
+        <StickySearchToggle />
       </FormControl>
 
       <FormControl
@@ -133,7 +135,7 @@ export const Settings = () => {
 
       <Typography
         variant="caption"
-        className={'opacity-50 flex-shrink-0 py-2 !mt-auto'}
+        className={'opacity-50 flex-shrink-0 py-2 text-center !mt-auto'}
       >
         Clobbr version {version}
       </Typography>

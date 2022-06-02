@@ -1,8 +1,11 @@
 import { isNumber } from 'lodash-es';
-import { useContext } from 'react';
 
-import { Typography, TextField } from '@mui/material';
-import { FormControlLabel, FormGroup } from '@mui/material';
+import {
+  Typography,
+  TextField,
+  FormControlLabel,
+  FormGroup
+} from '@mui/material';
 
 import { GlobalStore } from 'App/globalContext';
 
@@ -24,11 +27,11 @@ export const GeneralSettings = () => {
     <GlobalStore.Consumer>
       {({ search }) => (
         <>
-          <div className="flex flex-col gap-6 h-full">
-            <Typography variant="overline" className={'opacity-50'}>
-              General request settings
-            </Typography>
+          <Typography variant="overline" className={'opacity-50'}>
+            General request settings
+          </Typography>
 
+          <div className="flex flex-col gap-6 h-full mt-6">
             <FormGroup>
               <FormControlLabel
                 control={

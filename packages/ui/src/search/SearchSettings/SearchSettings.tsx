@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { ButtonBase, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import BuildCircleRoundedIcon from '@mui/icons-material/BuildCircleRounded';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -22,18 +22,22 @@ const SearchSettings = () => {
 
   return (
     <>
-      <ButtonBase
-        disableRipple
-        className="opacity-50 hover:opacity-100 transition-all flex gap-1"
+      <Button
+        size="small"
+        variant="text"
+        className="opacity-50 hover:opacity-100 transition-all "
         onClick={() => setSettingsModalOpen(true)}
       >
-        <BuildCircleRoundedIcon />
-        <Typography variant="body2">Configure</Typography>
-      </ButtonBase>
+        <span className="flex gap-1 items-center text-black dark:text-white ">
+          <BuildCircleRoundedIcon />
+          <Typography variant="body2">Configure</Typography>
+        </span>
+      </Button>
 
       <Modal
         onClose={() => setSettingsModalOpen(false)}
         open={settingsModalOpen}
+        maxWidth="3xl"
       >
         <Tabs
           value={activeTabIndex}

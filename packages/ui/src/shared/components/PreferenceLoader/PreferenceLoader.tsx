@@ -1,12 +1,10 @@
 import { useEffect, useContext, useState } from 'react';
 
 import { GlobalStore } from 'App/globalContext';
-import { EDbStores } from 'storage/EDbStores';
-import { SK } from 'storage/storageKeys';
-import { getDb } from 'storage/storage';
 import { useStoredPreferences } from 'shared/hooks/useStoredPreferences';
+import { isBoolean } from 'lodash-es';
 
-const ThemeToggle = () => {
+const PreferenceLoader = () => {
   const globalStore = useContext(GlobalStore);
 
   const [preferencesApplied, setPreferencesApplied] = useState(false);
@@ -19,11 +17,6 @@ const ThemeToggle = () => {
   }, [globalStore.themeMode]);
 
   useEffect(() => {
-    const resultDb = getDb(EDbStores.MAIN_STORE_NAME);
-    resultDb.setItem(SK.PREFERENCES.THEME, globalStore.themeMode);
-  }, [globalStore.themeMode]);
-
-  useEffect(() => {
     if (preferencesApplied || !preferencesLoaded) {
       return;
     }
@@ -31,6 +24,10 @@ const ThemeToggle = () => {
     if (preferences) {
       if (preferences.themeMode) {
         globalStore.setTheme(preferences.themeMode);
+      }
+
+      if (isBoolean(preferences.stickySearch)) {
+        globalStore.appSettings.setStickySearch(preferences.stickySearch);
       }
     }
 
@@ -40,4 +37,4 @@ const ThemeToggle = () => {
   return <></>;
 };
 
-export default ThemeToggle;
+export default PreferenceLoader;

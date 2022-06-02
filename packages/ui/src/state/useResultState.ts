@@ -103,7 +103,7 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     const endDate = isComplete ? formatISO(new Date()) : undefined;
 
     if (!existingListItem) {
-      console.warn(`Could not find item with id ${itemId}`);
+      console.warn(`Could not find result item with id ${itemId}`);
       return false;
     }
 

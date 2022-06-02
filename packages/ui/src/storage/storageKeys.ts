@@ -3,6 +3,7 @@ export const SK = {
     LIST: 'result.resultList'
   },
   PREFERENCES: {
-    THEME: 'preferences.theme'
+    THEME: 'preferences.theme',
+    STICKY_SEARCH: 'preferences.stickySearch'
   }
 };

@@ -13,7 +13,7 @@ import { SK } from 'storage/storageKeys';
 
 import Search from 'search/Search/Search';
 import ResultList from 'results/ResultList/ResultList';
-import ThemeLoader from 'shared/components/ThemeLoader/ThemeLoader';
+import PreferenceLoader from 'shared/components/PreferenceLoader/PreferenceLoader';
 import Topbar from 'Topbar/Topbar';
 
 import { useStoredPreferences } from 'shared/hooks/useStoredPreferences';
@@ -77,16 +77,15 @@ const App = () => {
 
   return (
     <GlobalStore.Provider value={state}>
-      <ThemeLoader />
+      <PreferenceLoader />
       <ThemeProvider theme={getTheme(themeMode)}>
-        {/* NB: needed to set theme. might want to break this into ThemeLoader & Toggle */}
         <CssBaseline />
 
         <Topbar />
 
         <main
           className={clsx(
-            'flex flex-col items-center justify-center h-full transition-all overflow-x-hidden',
+            'flex flex-col items-center justify-center h-full transition-all',
             state.results.list.length === 0 ? ' flex-grow' : 'flex-grow-0'
           )}
         >

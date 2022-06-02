@@ -7,6 +7,7 @@ import { getDb } from 'storage/storage';
 
 export type Preferences = {
   themeMode?: string;
+  stickySearch?: boolean;
 };
 
 export const useStoredPreferences = () => {
@@ -15,9 +16,10 @@ export const useStoredPreferences = () => {
 
   const storedPreferences = useAsync(async () => {
     const resultDb = getDb(EDbStores.MAIN_STORE_NAME);
-    const existingResultList = await resultDb.getItem(SK.PREFERENCES.THEME);
+    const theme = await resultDb.getItem(SK.PREFERENCES.THEME);
+    const stickySearch = await resultDb.getItem(SK.PREFERENCES.STICKY_SEARCH);
 
-    return existingResultList;
+    return { theme, stickySearch };
   });
 
   useEffect(() => {
@@ -27,7 +29,8 @@ export const useStoredPreferences = () => {
 
     if (storedPreferences.value) {
       setPreferences({
-        themeMode: storedPreferences.value
+        themeMode: storedPreferences.value.theme,
+        stickySearch: storedPreferences.value.stickySearch
       });
     }
 

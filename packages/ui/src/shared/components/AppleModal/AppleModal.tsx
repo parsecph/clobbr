@@ -1,6 +1,8 @@
+import clsx from 'clsx';
+import { useEffect } from 'react';
+
 import { Dialog } from '@headlessui/react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect } from 'react';
 import { rootContainer } from 'rootContainer';
 
 import { Button } from '@mui/material';
@@ -11,10 +13,12 @@ const rootOpenClasses = ['scale-95', 'origin-top'];
 
 export const Modal = ({
   open = false,
+  maxWidth = 'xl',
   onClose,
   children
 }: {
   open?: boolean;
+  maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl';
   onClose: () => void;
   children: React.ReactNode;
 }) => {
@@ -36,9 +40,12 @@ export const Modal = ({
           onClose={onClose}
           open={open}
         >
-          <div className="fixed inset-0 bg-gray-900/30" aria-hidden="true" />
+          <div
+            className="fixed inset-0 bg-gray-100/30 dark:bg-gray-900/30"
+            aria-hidden="true"
+          />
 
-          <div className="flex h-full flex-col items-center mt-auto pt-6 px-4">
+          <div className="flex h-full flex-col items-center mt-auto pt-6 lg:pt-12 px-4">
             <Dialog.Overlay
               as={motion.div}
               initial={{ opacity: 0 }}
@@ -63,7 +70,10 @@ export const Modal = ({
                 y: '100%',
                 transition: { duration: 0.3, ease: [0.36, 0.66, 0.04, 1] }
               }}
-              className="z-0 flex flex-col w-full h-full max-w-xl bg-gray-100/70 dark:bg-gray-900/70 backdrop-blur-sm rounded-t-lg shadow-xl overflow-auto"
+              className={clsx(
+                'z-0 flex flex-col w-full h-full bg-white/80 dark:bg-gray-900/70 backdrop-blur-sm rounded-t-lg shadow-xl overflow-auto',
+                maxWidth && `max-w-${maxWidth}`
+              )}
             >
               {children}
 

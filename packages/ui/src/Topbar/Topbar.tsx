@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 
@@ -17,7 +18,7 @@ const Topbar = () => {
 
   return (
     <GlobalStore.Consumer>
-      {({ themeMode }) => (
+      {({ themeMode, appSettings }) => (
         <motion.div
           initial={{ y: '-100%' }}
           animate={{
@@ -28,7 +29,10 @@ const Topbar = () => {
               ease: [0.36, 0.66, 0.04, 1]
             }
           }}
-          className="sm:sticky top-0 z-10 bg-gray-100/70 dark:bg-black/70 backdrop-blur-sm transition-all"
+          className={clsx(
+            'bg-gray-100/70 dark:bg-black/70 backdrop-blur-sm transition-all',
+            appSettings.stickySearch ? 'sm:sticky top-0 z-10 py-3' : ''
+          )}
         >
           <header className="flex justify-between items-center w-full px-4 py-6 ">
             <img

@@ -19,5 +19,10 @@ module.exports = {
       }
     }
   },
+  safelist: [
+    {
+      pattern: /max-w-./
+    }
+  ],
   plugins: []
 };

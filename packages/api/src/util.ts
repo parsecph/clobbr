@@ -21,7 +21,7 @@ export const getFailedMessage = (
     const { status, statusText } = error.response as AxiosResponse;
 
     if (ENV.VERBOSE) {
-      console.log(error);
+      console.error(error);
     }
 
     return {
