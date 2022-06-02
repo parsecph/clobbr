@@ -16,8 +16,8 @@ const ResultList = ({ list }: { list: Array<ClobbrUIResultListItem> }) => {
       {({ results }) => (
         <AnimatePresence>
           <motion.div
-            initial={{ opacity: 0, y: 200 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0, transition: { delay: 0.2 } }}
             exit={{ opacity: 0 }}
             layout
           >

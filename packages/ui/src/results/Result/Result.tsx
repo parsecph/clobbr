@@ -1,10 +1,10 @@
-import { useContext, useMemo, useState } from 'react';
+import { useContext, useMemo, useRef, useState } from 'react';
 import clsx from 'clsx';
 import { css } from '@emotion/css';
 import {
   AnimatePresence,
-  motion,
   MotionValue,
+  motion,
   usePresence
 } from 'framer-motion';
 import { useInterval } from 'react-use';
@@ -71,6 +71,7 @@ const Result = ({
   item: ClobbrUIResultListItem;
   expanded: boolean;
 }) => {
+  const resultDom = useRef(null);
   const globalStore = useContext(GlobalStore);
   const [isPresent, safeToRemove] = usePresence();
 
@@ -113,7 +114,6 @@ const Result = ({
   const transition = { type: 'spring', stiffness: 500, damping: 50, mass: 1 };
 
   const animations = {
-    layout: true,
     initial: 'out',
     style: {
       position: (isPresent
@@ -123,11 +123,22 @@ const Result = ({
     animate: isPresent ? 'in' : 'out',
     whileTap: 'tapped',
     variants: {
-      in: { scaleY: 1, opacity: 1 },
+      in: { scaleY: 1, opacity: 1, transition: { delay: 0.3 } },
       out: { scaleY: 0, opacity: 0, zIndex: -1 },
       tapped: { scale: 0.98, opacity: 0.5, transition: { duration: 0.1 } }
     },
-    onAnimationComplete: () => !isPresent && safeToRemove(),
+    onAnimationComplete: () => {
+      if (expanded && resultDom?.current) {
+        (resultDom.current as HTMLElement).scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+      }
+
+      if (!isPresent) {
+        safeToRemove();
+      }
+    },
     transition
   };
 
@@ -162,6 +173,7 @@ const Result = ({
       className="odd:bg-gray-200 dark:odd:bg-gray-800 w-full"
       {...animations}
       onClick={onResultPressed}
+      ref={resultDom}
     >
       <ListItem className="flex-wrap">
         <ListItemText
@@ -249,54 +261,54 @@ const Result = ({
         </div>
       </ListItem>
 
-      {allFailed && expanded ? (
-        <div className="flex flex-col gap-4 mb-12 items-center">
-          <AllFailed className="w-full max-w-xs p-6" />
-          <Typography variant="body1">
-            <strong className="font-semibold">All requests failed</strong>
-          </Typography>
-          <hr />
-          <ul>
-            <li>
-              <Typography variant="body2">
-                Did you by chance use the incorrect verb?
-              </Typography>
-            </li>
-            <li>
-              <Typography variant="body2">
-                Does your server require authentication?
-              </Typography>
-            </li>
-            <li>
-              <Typography variant="body2">
-                Do you need to include custom headers?
-              </Typography>
-            </li>
-          </ul>
-
-          <CommonlyFailedItem item={item} />
-        </div>
-      ) : (
-        ''
-      )}
-
-      {timedOut && expanded ? (
-        <div className="flex flex-col  gap-4 mb-12 items-center">
-          <Timeout className="w-full max-w-xs p-6" />
-          <Typography variant="body1">
-            <strong className="font-semibold">Requests timed out</strong>
-          </Typography>
-
-          <Typography variant="body2" className="opacity-50">
-            Perhaps give it another try? <br />
-            Maybe it'll work this time...
-          </Typography>
-        </div>
-      ) : (
-        ''
-      )}
-
       <AnimatePresence>
+        {allFailed && expanded ? (
+          <div className="flex flex-col gap-4 pb-12 items-center">
+            <AllFailed className="w-full max-w-xs p-6" />
+            <Typography variant="body1">
+              <strong className="font-semibold">All requests failed</strong>
+            </Typography>
+            <hr />
+            <ul>
+              <li>
+                <Typography variant="body2">
+                  Did you by chance use the incorrect verb?
+                </Typography>
+              </li>
+              <li>
+                <Typography variant="body2">
+                  Does your server require authentication?
+                </Typography>
+              </li>
+              <li>
+                <Typography variant="body2">
+                  Do you need to include custom headers?
+                </Typography>
+              </li>
+            </ul>
+
+            <CommonlyFailedItem item={item} />
+          </div>
+        ) : (
+          ''
+        )}
+
+        {timedOut && expanded ? (
+          <div className="flex flex-col gap-4 pb-12 items-center">
+            <Timeout className="w-full max-w-xs p-6" />
+            <Typography variant="body1">
+              <strong className="font-semibold">Requests timed out</strong>
+            </Typography>
+
+            <Typography variant="body2" className="opacity-50">
+              Perhaps give it another try? <br />
+              Maybe it'll work this time...
+            </Typography>
+          </div>
+        ) : (
+          ''
+        )}
+
         {shouldShowChart ? (
           <div className="relative">
             {isInProgress ? (
