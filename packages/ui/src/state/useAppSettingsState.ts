@@ -5,39 +5,20 @@ export const useAppSettingsState = ({
 }: {
   [key: string]: any;
 }) => {
-  const [settings, setSettings] = useState(initialState.appSettings);
+  const [stickySearch, setStickySearch] = useState(initialState.stickySearch);
+  const [maxIterations, setMaxIterations] = useState(
+    initialState.maxIterations
+  );
 
   const toggleStickySearch = () => {
-    const nextSettings = {
-      ...settings,
-      stickySearch: !settings.stickySearch
-    };
-
-    setSettings(nextSettings);
-  };
-
-  const setStickySearch = (stickySearch: boolean) => {
-    const nextSettings = {
-      ...settings,
-      stickySearch
-    };
-
-    setSettings(nextSettings);
-  };
-
-  const setMaxIterations = (maxIterations: number) => {
-    const nextSettings = {
-      ...settings,
-      maxIterations
-    };
-
-    setSettings(nextSettings);
+    setStickySearch(!stickySearch);
   };
 
   const appSettingsState = {
-    ...settings,
+    stickySearch,
     setStickySearch,
     toggleStickySearch,
+    maxIterations,
     setMaxIterations
   };
 
