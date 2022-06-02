@@ -205,7 +205,7 @@ export const Settings = () => {
             open={databaseCleared}
             autoHideDuration={6000}
             onClose={dismissToast}
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           >
             <Alert
               onClose={dismissToast}
