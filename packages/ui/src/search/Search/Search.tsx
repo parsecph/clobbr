@@ -142,7 +142,9 @@ const Search = () => {
       parallel: globalStore.search.parallel,
       iterations: globalStore.search.iterations,
       verb: globalStore.search.verb,
-      ssl: globalStore.search.ssl
+      ssl: globalStore.search.ssl,
+      data: globalStore.search.data.json,
+      headers: globalStore.search.headerItems
     });
 
     setRunning(true);
@@ -174,6 +176,9 @@ const Search = () => {
           iterations: globalStore.search.iterations,
           verb: globalStore.search.verb,
           timeout: globalStore.search.timeout,
+          data: globalStore.search.data.json
+            ? globalStore.search.data.json
+            : undefined,
           headers: globalStore.search.headerItems.reduce((acc, header) => {
             const { value, key } = header;
 
@@ -255,6 +260,7 @@ const Search = () => {
     globalStore.search.verb,
     globalStore.search.timeout,
     globalStore.search.headerItems,
+    globalStore.search.data.json,
     running,
     runingItemId,
     requestsInProgress

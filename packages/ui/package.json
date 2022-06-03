@@ -1,81 +1,83 @@
 {
-  "name": "@clobbr/ui",
-  "homepage": "./",
-  "version": "1.1.6",
-  "description": "Clobbr UI",
-  "private": true,
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/parsecph/clobbr/blob/master/packages/ui"
-  },
-  "author": "Dan Mindru <mindrudan@gmail.com>",
-  "license": "MIT",
-  "dependencies": {
-    "@emotion/css": "^11.9.0",
-    "@emotion/react": "^11.9.0",
-    "@headlessui/react": "^1.6.4",
-    "byte-size": "^8.1.0",
-    "localforage": "^1.10.0",
-    "tailwindcss": "^3.0.23",
-    "@clobbr/api": "^1.1.6",
-    "@emotion/styled": "^11.8.1",
-    "@mui/icons-material": "^5.6.1",
-    "@mui/material": "^5.6.1",
-    "@react-three/drei": "^9.4.2",
-    "@react-three/fiber": "^8.0.11",
-    "@types/lodash-es": "^4.17.6",
-    "@types/uuid": "^8.3.4",
-    "axios": "^0.26.1",
-    "clsx": "^1.1.1",
-    "cra-template-typescript": "1.1.3",
-    "date-fns": "^2.28.0",
-    "framer-motion": "^6.2.10",
-    "framer-motion-3d": "^6.2.10",
-    "is-absolute-url": "^4.0.1",
-    "lodash-es": "^4.17.21",
-    "react": "^18.0.0",
-    "react-app-rewired": "^2.2.1",
-    "react-dom": "^18.0.0",
-    "react-scripts": "5.0.0",
-    "react-use": "^17.3.2",
-    "react-use-measure": "^2.1.1",
-    "three": "^0.139.2",
-    "uuid": "^8.3.2",
-    "victory": "^36.4.1"
-  },
-  "scripts": {
-    "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
-    "test": "react-app-rewired test --transformIgnorePatterns \"node_modules/(?!(lodash-es|is-absolute-url))/\"",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^13.0.1",
-    "@types/byte-size": "^8.1.0",
-    "@types/jest": "^27.4.1",
-    "@types/tailwindcss": "^3.0.10",
-    "autoprefixer": "^10.4.4",
-    "postcss": "^8.4.12",
-    "prettier": "^2.6.2",
-    "typescript": "^4.6.3"
-  }
+	"name": "@clobbr/ui",
+	"homepage": "./",
+	"version": "1.1.6",
+	"description": "Clobbr UI",
+	"private": true,
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/parsecph/clobbr/blob/master/packages/ui"
+	},
+	"author": "Dan Mindru <mindrudan@gmail.com>",
+	"license": "MIT",
+	"dependencies": {
+		"@clobbr/api": "^1.1.6",
+		"@emotion/css": "^11.9.0",
+		"@emotion/react": "^11.9.0",
+		"@emotion/styled": "^11.8.1",
+		"@headlessui/react": "^1.6.4",
+		"@mui/icons-material": "^5.6.1",
+		"@mui/material": "^5.6.1",
+		"@react-three/drei": "^9.4.2",
+		"@react-three/fiber": "^8.0.11",
+		"@types/lodash-es": "^4.17.6",
+		"@types/uuid": "^8.3.4",
+		"axios": "^0.26.1",
+		"byte-size": "^8.1.0",
+		"clsx": "^1.1.1",
+		"cra-template-typescript": "1.1.3",
+		"date-fns": "^2.28.0",
+		"framer-motion": "^6.2.10",
+		"framer-motion-3d": "^6.2.10",
+		"is-absolute-url": "^4.0.1",
+		"localforage": "^1.10.0",
+		"lodash-es": "^4.17.21",
+		"@uiw/react-monacoeditor": "^3.5.3",
+		"react": "^18.0.0",
+		"react-app-rewired": "^2.2.1",
+		"react-dom": "^18.0.0",
+		"react-scripts": "5.0.0",
+		"react-use": "^17.3.2",
+		"react-use-measure": "^2.1.1",
+		"tailwindcss": "^3.0.23",
+		"three": "^0.139.2",
+		"uuid": "^8.3.2",
+		"victory": "^36.4.1"
+	},
+	"scripts": {
+		"start": "react-app-rewired start",
+		"build": "react-app-rewired build",
+		"test": "react-app-rewired test --transformIgnorePatterns \"node_modules/(?!(lodash-es|is-absolute-url))/\"",
+		"eject": "react-scripts eject"
+	},
+	"eslintConfig": {
+		"extends": [
+			"react-app",
+			"react-app/jest"
+		]
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	},
+	"devDependencies": {
+		"@testing-library/jest-dom": "^4.2.4",
+		"@testing-library/react": "^13.0.1",
+		"@types/byte-size": "^8.1.0",
+		"@types/jest": "^27.4.1",
+		"@types/tailwindcss": "^3.0.10",
+		"autoprefixer": "^10.4.4",
+		"monaco-editor-webpack-plugin": "^7.0.1",
+		"postcss": "^8.4.12",
+		"prettier": "^2.6.2",
+		"typescript": "^4.6.3"
+	}
 }

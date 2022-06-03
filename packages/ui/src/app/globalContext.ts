@@ -9,6 +9,11 @@ export const DEFAULT_GLOBAL_STORE = {
     iterations: 10,
     verb: VERBS.GET as Everbs,
     headerItems: [],
+    data: {
+      json: {} as { [key: string]: any },
+      text: '{}',
+      valid: true
+    },
     payloadItems: [],
     ssl: true,
     parallel: true,
@@ -27,7 +32,8 @@ export const DEFAULT_GLOBAL_STORE = {
     toggleParallel() {},
     updateIterations(iterations: number) {},
     updateVerb(verb: Everbs) {},
-    updateTimeout(timeout: number) {}
+    updateTimeout(timeout: number) {},
+    updateData(jsonString: string) {}
   },
 
   results: {
@@ -46,6 +52,8 @@ export const DEFAULT_GLOBAL_STORE = {
       iterations: number;
       verb: Everbs;
       ssl: boolean;
+      headers: Array<ClobbrUIHeaderItem>;
+      data: { [key: string]: any };
     }): { id: string } {
       return { id: '' };
     },

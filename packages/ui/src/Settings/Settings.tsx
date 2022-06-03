@@ -205,9 +205,11 @@ export const Settings = () => {
             open={databaseCleared}
             autoHideDuration={6000}
             onClose={dismissToast}
-            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            className="pointer-events-none"
           >
             <Alert
+              className="bg-green-200/80 dark:bg-emerald-900/80 backdrop-blur-sm mb-10 pointer-events-auto"
               onClose={dismissToast}
               severity="success"
               icon={false}

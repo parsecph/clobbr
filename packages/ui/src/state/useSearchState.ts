@@ -11,6 +11,7 @@ export const useSearchState = ({ initialState }: { [key: string]: any }) => {
   const [url, setUrl] = useState(initialState.search.url);
   const [iterations, setIterations] = useState(initialState.search.iterations);
   const [verb, setVerb] = useState<Everbs>(initialState.search.verb);
+  const [payloadData, setPayloadData] = useState(initialState.search.data);
   const [headerItems, setHeaderItems] = useState<Array<ClobbrUIHeaderItem>>(
     initialState.search.headerItems
   );
@@ -96,6 +97,28 @@ export const useSearchState = ({ initialState }: { [key: string]: any }) => {
     setRequestTimeout(timeout);
   };
 
+  const updateData = (jsonString: string) => {
+    try {
+      const parsedJson = JSON.parse(jsonString);
+
+      if (parsedJson) {
+        setPayloadData({
+          json: parsedJson,
+          text: jsonString,
+          valid: true
+        });
+      }
+    } catch (error) {
+      console.warn('Bailed saving payload, JSON invalid');
+
+      setPayloadData({
+        json: null,
+        text: jsonString,
+        valid: false
+      });
+    }
+  };
+
   useEffect(() => {
     setIsUrlValid(checkUrlValidity(url.requestUrl));
   }, [url.requestUrl]);
@@ -116,6 +139,9 @@ export const useSearchState = ({ initialState }: { [key: string]: any }) => {
 
     verb,
     updateVerb,
+
+    data: payloadData,
+    updateData,
 
     headerItems,
     addHeaderItem,

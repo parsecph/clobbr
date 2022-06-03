@@ -5,6 +5,7 @@ import { formatISO } from 'date-fns';
 import { ClobbrUIResult } from 'models/ClobbrUIResult';
 import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
 import { Everbs } from 'shared/enums/http';
+import { ClobbrUIHeaderItem } from 'models/ClobbrUIHeaderItem';
 
 export const useResultState = ({ initialState }: { [key: string]: any }) => {
   const [list, setList] = useState<Array<ClobbrUIResultListItem>>(
@@ -32,7 +33,9 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     parallel,
     iterations,
     verb,
-    ssl
+    ssl,
+    headers,
+    data
   }: {
     url: string;
     resultDurations: Array<number>;
@@ -42,6 +45,8 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     iterations: number;
     verb: Everbs;
     ssl: boolean;
+    headers: Array<ClobbrUIHeaderItem>;
+    data: { [key: string]: any };
   }) => {
     const runId = uuidv4();
 
@@ -64,6 +69,8 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
         parallel,
         iterations,
         verb,
+        headers,
+        data,
         latestResult: result,
         historicalResults: [...existingListItem.historicalResults, result]
       };
@@ -81,6 +88,8 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
         iterations,
         verb,
         ssl,
+        headers,
+        data,
         latestResult: result,
         historicalResults: []
       };

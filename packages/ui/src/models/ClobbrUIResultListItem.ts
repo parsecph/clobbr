@@ -1,4 +1,5 @@
 import { Everbs } from 'shared/enums/http';
+import { ClobbrUIHeaderItem } from './ClobbrUIHeaderItem';
 import { ClobbrUIResult } from './ClobbrUIResult';
 
 export interface ClobbrUIResultListItem {
@@ -10,4 +11,6 @@ export interface ClobbrUIResultListItem {
   iterations: number;
   historicalResults: Array<ClobbrUIResult>;
   ssl: boolean;
+  headers: Array<ClobbrUIHeaderItem>;
+  data: { [key: string]: any };
 }

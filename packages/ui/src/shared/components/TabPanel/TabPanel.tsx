@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import clsx from 'clsx';
 
 export const TabPanel = (props: {
   children?: React.ReactNode;
@@ -9,13 +9,14 @@ export const TabPanel = (props: {
 
   return (
     <div
+      className={clsx(value === index ? 'flex flex-col h-full p-5' : 'hidden')}
       role="tabpanel"
       hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
+      id={`tabpanel-${index}`}
+      aria-labelledby={`tab-${index}`}
       {...other}
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {value === index ? children : null}
     </div>
   );
 };
