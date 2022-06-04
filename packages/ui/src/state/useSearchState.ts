@@ -12,8 +12,14 @@ export const useSearchState = ({ initialState }: { [key: string]: any }) => {
   const [iterations, setIterations] = useState(initialState.search.iterations);
   const [verb, setVerb] = useState<Everbs>(initialState.search.verb);
   const [payloadData, setPayloadData] = useState(initialState.search.data);
+  const [headerInputMode, setHeaderInputMode] = useState(
+    initialState.search.headerInputMode
+  );
   const [headerItems, setHeaderItems] = useState<Array<ClobbrUIHeaderItem>>(
     initialState.search.headerItems
+  );
+  const [headerShellCmd, setHeaderShellCmd] = useState(
+    initialState.search.headerShellCmd
   );
   const [requestTimeout, setRequestTimeout] = useState(
     initialState.search.timeout
@@ -89,6 +95,14 @@ export const useSearchState = ({ initialState }: { [key: string]: any }) => {
     ]);
   };
 
+  const updateHeaderInputMode = (headerInputMode: string) => {
+    setHeaderInputMode(headerInputMode);
+  };
+
+  const updateHeaderShellCmd = (shellCmd: string) => {
+    setHeaderShellCmd(shellCmd);
+  };
+
   const removeHeaderItem = (headerItemId: string) => {
     setHeaderItems(headerItems.filter((item) => item.id !== headerItemId));
   };
@@ -143,6 +157,10 @@ export const useSearchState = ({ initialState }: { [key: string]: any }) => {
     data: payloadData,
     updateData,
 
+    headerInputMode,
+    updateHeaderInputMode,
+    headerShellCmd,
+    updateHeaderShellCmd,
     headerItems,
     addHeaderItem,
     updateHeaderItem,

@@ -10,9 +10,12 @@ import {
   Tooltip,
   SelectChangeEvent,
   Typography,
-  CircularProgress
+  CircularProgress,
+  Alert,
+  Snackbar
 } from '@mui/material';
 import { Lock, LockOpen } from '@mui/icons-material';
+import { Close } from '@mui/icons-material';
 import { GlobalStore } from 'App/globalContext';
 
 import { ReactComponent as ParallelIcon } from 'shared/icons/Parallel.svg';
@@ -27,6 +30,7 @@ import { EEvents } from '@clobbr/api/src/enums/events';
 import { run } from '@clobbr/api';
 import { Everbs } from 'shared/enums/http';
 import { MAX_ITERATIONS } from 'shared/consts/settings';
+import { HEADER_MODES } from 'search/SearchSettings/HeaderSettings';
 
 const DEFAULTS = {
   headers: {},
@@ -74,6 +78,10 @@ const Search = () => {
   const [urlErrorShown, setUrlErrorShown] = useState(false);
   const [inputFocused, setInputFocused] = useState(false);
   const [autoFocusUrlInput, setAutoFocusUrlInput] = useState(true);
+
+  const [headerErrorToastShown, setHeaderErrorToastShown] = useState(false);
+
+  const dismissHeaderErrorToast = () => setHeaderErrorToastShown(false);
 
   const maxIterationCount = isNumber(globalStore.appSettings.maxIterations)
     ? globalStore.appSettings.maxIterations
@@ -225,6 +233,27 @@ const Search = () => {
               }
             );
 
+            if (
+              globalStore.search.headerInputMode === HEADER_MODES.SHELL &&
+              globalStore.search.headerShellCmd
+            ) {
+              const output = await electronAPI.runShellCmd(
+                globalStore.search.headerShellCmd
+              );
+
+              if (output) {
+                try {
+                  const parsedJson = JSON.parse(output);
+
+                  if (parsedJson) {
+                    options.headers = parsedJson;
+                  }
+                } catch (error) {
+                  setHeaderErrorToastShown(true);
+                }
+              }
+            }
+
             await electronAPI.run(
               runingItemId,
               globalStore.search.parallel,
@@ -261,6 +290,8 @@ const Search = () => {
     globalStore.search.timeout,
     globalStore.search.headerItems,
     globalStore.search.data.json,
+    globalStore.search.headerInputMode,
+    globalStore.search.headerShellCmd,
     running,
     runingItemId,
     requestsInProgress
@@ -425,6 +456,36 @@ const Search = () => {
           ) : (
             ''
           )}
+
+          <Snackbar
+            open={headerErrorToastShown}
+            autoHideDuration={6000}
+            onClose={dismissHeaderErrorToast}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            className="pointer-events-none"
+          >
+            <Alert
+              className="bg-red-200/80 dark:bg-red-900/80 backdrop-blur-sm mb-10 pointer-events-auto"
+              onClose={dismissHeaderErrorToast}
+              severity="error"
+              icon={false}
+              sx={{ width: '100%' }}
+              action={
+                <IconButton
+                  aria-label="Dismiss"
+                  onClick={dismissHeaderErrorToast}
+                  color="inherit"
+                  className="!mb-1"
+                >
+                  <Close />
+                </IconButton>
+              }
+            >
+              <p className="flex h-full items-center">
+                Header shell script failed. Using default headers.
+              </p>
+            </Alert>
+          </Snackbar>
         </section>
       )}
     </GlobalStore.Consumer>

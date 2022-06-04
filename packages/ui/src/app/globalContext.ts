@@ -3,11 +3,14 @@ import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
 import React from 'react';
 import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
 import { ClobbrUIHeaderItem } from 'models/ClobbrUIHeaderItem';
+import { HEADER_MODES } from 'search/SearchSettings/HeaderSettings';
 
 export const DEFAULT_GLOBAL_STORE = {
   search: {
     iterations: 10,
     verb: VERBS.GET as Everbs,
+    headerInputMode: HEADER_MODES.INPUT,
+    headerShellCmd: '',
     headerItems: [],
     data: {
       json: {} as { [key: string]: any },
@@ -25,6 +28,8 @@ export const DEFAULT_GLOBAL_STORE = {
     isUrlValid: false,
 
     updateUrl(url: string) {},
+    updateHeaderInputMode(headerInputMode: string) {},
+    updateHeaderShellCmd(headerShellCmd: string) {},
     addHeaderItem(header: ClobbrUIHeaderItem) {},
     updateHeaderItem(header: ClobbrUIHeaderItem) {},
     removeHeaderItem(headerItemId: string) {},

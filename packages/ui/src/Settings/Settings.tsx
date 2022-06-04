@@ -49,7 +49,6 @@ export const Settings = () => {
 
     setDatabaseCleared(true);
     setConfirmedClearing(false);
-    setTimeout(() => setDatabaseCleared(false), 3000);
   };
 
   const [storedDataSize, calculateStoredDataSize] = useAsyncFn(async () => {
