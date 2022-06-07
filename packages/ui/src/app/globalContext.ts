@@ -58,7 +58,10 @@ export const DEFAULT_GLOBAL_STORE = {
       verb: Everbs;
       ssl: boolean;
       headers: Array<ClobbrUIHeaderItem>;
+      headerInputMode: string;
+      headerShellCmd: string;
       data: { [key: string]: any };
+      timeout: number;
     }): { id: string } {
       return { id: '' };
     },

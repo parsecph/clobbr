@@ -35,7 +35,10 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     verb,
     ssl,
     headers,
-    data
+    headerInputMode,
+    headerShellCmd,
+    data,
+    timeout
   }: {
     url: string;
     resultDurations: Array<number>;
@@ -46,7 +49,10 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     verb: Everbs;
     ssl: boolean;
     headers: Array<ClobbrUIHeaderItem>;
+    headerInputMode: string;
+    headerShellCmd: string;
     data: { [key: string]: any };
+    timeout: number;
   }) => {
     const runId = uuidv4();
 
@@ -70,7 +76,10 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
         iterations,
         verb,
         headers,
+        headerInputMode,
+        headerShellCmd,
         data,
+        timeout,
         latestResult: result,
         historicalResults: [...existingListItem.historicalResults, result]
       };
@@ -89,6 +98,9 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
         verb,
         ssl,
         headers,
+        headerInputMode,
+        headerShellCmd,
+        timeout,
         data,
         latestResult: result,
         historicalResults: []

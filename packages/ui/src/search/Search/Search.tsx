@@ -25,17 +25,10 @@ import { ReactComponent as Start } from 'shared/images/search/Start.svg';
 import SearchSettings from 'search/SearchSettings/SearchSettings';
 import VerbSelect from 'search/Search/VerbSelect';
 
-import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
-import { EEvents } from '@clobbr/api/src/enums/events';
-import { run } from '@clobbr/api';
 import { Everbs } from 'shared/enums/http';
 import { MAX_ITERATIONS } from 'shared/consts/settings';
-import { HEADER_MODES } from 'search/SearchSettings/HeaderSettings';
 
-const DEFAULTS = {
-  headers: {},
-  data: {}
-};
+import { useResultRunner } from 'results/useResultRunner';
 
 const leftInputSeparatorCss = css`
   position: relative;
@@ -71,17 +64,25 @@ const verbInputCss = css`
 const Search = () => {
   const globalStore = useContext(GlobalStore);
 
-  const [running, setRunning] = useState(false);
-  const [requestsInProgress, setRequestsInProgress] = useState(false);
+  const { startRun, requestsInProgress, headerError, setHeaderError } =
+    useResultRunner({
+      requestUrl: globalStore.search.url.requestUrl,
+      parallel: globalStore.search.parallel,
+      iterations: globalStore.search.iterations,
+      verb: globalStore.search.verb,
+      ssl: globalStore.search.ssl,
+      dataJson: globalStore.search.data.json,
+      headerItems: globalStore.search.headerItems,
+      headerInputMode: globalStore.search.headerInputMode,
+      headerShellCmd: globalStore.search.headerShellCmd,
+      timeout: globalStore.search.timeout
+    });
 
-  const [runingItemId, setRuningItemId] = useState('');
   const [urlErrorShown, setUrlErrorShown] = useState(false);
   const [inputFocused, setInputFocused] = useState(false);
   const [autoFocusUrlInput, setAutoFocusUrlInput] = useState(true);
 
-  const [headerErrorToastShown, setHeaderErrorToastShown] = useState(false);
-
-  const dismissHeaderErrorToast = () => setHeaderErrorToastShown(false);
+  const dismissHeaderErrorToast = () => setHeaderError(false);
 
   const maxIterationCount = isNumber(globalStore.appSettings.maxIterations)
     ? globalStore.appSettings.maxIterations
@@ -141,25 +142,6 @@ const Search = () => {
       updateVerb(event.target.value as Everbs);
     };
 
-  const startRun = async () => {
-    const { id } = globalStore.results.addItem({
-      url: globalStore.search.url.requestUrl,
-      resultDurations: [],
-      logs: [],
-      averageDuration: 0,
-      parallel: globalStore.search.parallel,
-      iterations: globalStore.search.iterations,
-      verb: globalStore.search.verb,
-      ssl: globalStore.search.ssl,
-      data: globalStore.search.data.json,
-      headers: globalStore.search.headerItems
-    });
-
-    setRunning(true);
-    setRuningItemId(id);
-    globalStore.results.updateExpandedResults([id]);
-  };
-
   /**
    * Validation effect.
    */
@@ -168,134 +150,6 @@ const Search = () => {
       toggleUrlError(false);
     }
   }, [globalStore.search.isUrlValid]);
-
-  /**
-   * Run effect.
-   */
-  useEffect(() => {
-    if (requestsInProgress) {
-      return;
-    }
-
-    if (running) {
-      const fireRequests = async () => {
-        const configuredOptions = {
-          url: globalStore.search.url.requestUrl,
-          iterations: globalStore.search.iterations,
-          verb: globalStore.search.verb,
-          timeout: globalStore.search.timeout,
-          data: globalStore.search.data.json
-            ? globalStore.search.data.json
-            : undefined,
-          headers: globalStore.search.headerItems.reduce((acc, header) => {
-            const { value, key } = header;
-
-            if (!key) {
-              return acc;
-            }
-
-            acc[key] = value || '';
-            return acc;
-          }, {})
-        };
-
-        const options = { ...DEFAULTS, ...configuredOptions };
-
-        const runEventCallback =
-          (itemId: string) =>
-          (_event: EEvents, log: ClobbrLogItem, logs: Array<ClobbrLogItem>) => {
-            if (!log.metas) {
-              console.warn(
-                `Skipped log for item [${itemId}] because it has no metas`
-              );
-            }
-
-            globalStore.results.updateLatestResult({ itemId, logs });
-          };
-
-        try {
-          const electronAPI = (window as any).electronAPI;
-
-          if (electronAPI) {
-            electronAPI.onRunCallback(
-              runingItemId,
-              (
-                _electronEvent: any,
-                event: EEvents,
-                log: ClobbrLogItem,
-                logs: Array<ClobbrLogItem>
-              ) => {
-                if (logs.length === configuredOptions.iterations) {
-                  electronAPI.offRunCallback(runingItemId);
-                }
-
-                return runEventCallback(runingItemId)(event, log, logs);
-              }
-            );
-
-            if (
-              globalStore.search.headerInputMode === HEADER_MODES.SHELL &&
-              globalStore.search.headerShellCmd
-            ) {
-              const output = await electronAPI.runShellCmd(
-                globalStore.search.headerShellCmd
-              );
-
-              if (output) {
-                try {
-                  const parsedJson = JSON.parse(output);
-
-                  if (parsedJson) {
-                    options.headers = parsedJson;
-                  }
-                } catch (error) {
-                  setHeaderErrorToastShown(true);
-                }
-              }
-            }
-
-            await electronAPI.run(
-              runingItemId,
-              globalStore.search.parallel,
-              options,
-              runEventCallback(runingItemId)
-            );
-          } else {
-            await run(
-              globalStore.search.parallel,
-              options,
-              runEventCallback(runingItemId)
-            );
-          }
-
-          setRequestsInProgress(false);
-        } catch (error) {
-          // TODO dan: toast
-          console.error(error);
-          setRequestsInProgress(false);
-        }
-      };
-
-      setRequestsInProgress(true);
-      fireRequests();
-
-      setRunning(false);
-    }
-  }, [
-    globalStore.results,
-    globalStore.search.url.requestUrl,
-    globalStore.search.iterations,
-    globalStore.search.parallel,
-    globalStore.search.verb,
-    globalStore.search.timeout,
-    globalStore.search.headerItems,
-    globalStore.search.data.json,
-    globalStore.search.headerInputMode,
-    globalStore.search.headerShellCmd,
-    running,
-    runingItemId,
-    requestsInProgress
-  ]);
 
   return (
     <GlobalStore.Consumer>
@@ -458,7 +312,7 @@ const Search = () => {
           )}
 
           <Snackbar
-            open={headerErrorToastShown}
+            open={headerError}
             autoHideDuration={6000}
             onClose={dismissHeaderErrorToast}
             anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}

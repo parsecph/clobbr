@@ -12,5 +12,8 @@ export interface ClobbrUIResultListItem {
   historicalResults: Array<ClobbrUIResult>;
   ssl: boolean;
   headers: Array<ClobbrUIHeaderItem>;
+  headerInputMode: string;
+  headerShellCmd: string;
   data: { [key: string]: any };
+  timeout: number;
 }

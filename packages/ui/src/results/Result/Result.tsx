@@ -28,6 +28,7 @@ import { ReactComponent as ParallelIcon } from 'shared/icons/Parallel.svg';
 import { ReactComponent as SequenceIcon } from 'shared/icons/Sequence.svg';
 
 import { ResultChart } from 'results/ResultChart/ResultChart';
+import { ReRunResultButton } from 'results/ReRunResultButton/ReRunResultButton';
 import { CommonlyFailedItem } from 'results/CommonlyFailedItem/CommonlyFailedItem';
 import { useCommonlyFailedMessage } from 'results/CommonlyFailedItem/useCommonlyFailedMessage';
 
@@ -288,6 +289,7 @@ const Result = ({
             </ul>
 
             <CommonlyFailedItem item={item} />
+            <ReRunResultButton item={item} />
           </div>
         ) : (
           ''
@@ -302,8 +304,8 @@ const Result = ({
 
             <Typography variant="body2" className="opacity-50">
               Perhaps give it another try? <br />
-              Maybe it'll work this time...
             </Typography>
+            <ReRunResultButton item={item} />
           </div>
         ) : (
           ''
@@ -334,18 +336,22 @@ const Result = ({
               <>
                 <ResultChart item={item} />
 
-                {failedItems.length ? (
-                  <Tooltip title={message || ''}>
-                    <div className="flex flex-col items-center mb-2">
-                      <Alert severity="error">
-                        {failedItems.length} failed. Showing results only for
-                        successful requests.
-                      </Alert>
-                    </div>
-                  </Tooltip>
-                ) : (
-                  ''
-                )}
+                <footer className="flex items-center justify-center gap-2 mb-2">
+                  {failedItems.length ? (
+                    <Tooltip title={message || ''}>
+                      <div className="flex flex-col items-center ">
+                        <Alert severity="error">
+                          {failedItems.length} failed. Showing results only for
+                          successful requests.
+                        </Alert>
+                      </div>
+                    </Tooltip>
+                  ) : (
+                    ''
+                  )}
+
+                  <ReRunResultButton item={item} />
+                </footer>
               </>
             )}
           </div>

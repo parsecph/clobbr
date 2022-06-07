@@ -181,11 +181,15 @@ export const Settings = () => {
 
             <TextField
               variant="outlined"
-              label="Request timeout (ms)"
-              placeholder="100"
+              label="Maximum allowed iterations"
+              placeholder="i.e. 100"
               id="timeout"
               inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
-              value={appSettings.maxIterations}
+              value={
+                isNumber(appSettings.maxIterations)
+                  ? appSettings.maxIterations
+                  : MAX_ITERATIONS
+              }
               onChange={handleMaxIterationCHange(appSettings.setMaxIterations)}
             />
             {appSettings.maxIterations > 100 ? (
