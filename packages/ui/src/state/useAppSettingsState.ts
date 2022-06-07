@@ -7,7 +7,7 @@ export const useAppSettingsState = ({
 }) => {
   const [stickySearch, setStickySearch] = useState(initialState.stickySearch);
   const [maxIterations, setMaxIterations] = useState(
-    initialState.maxIterations
+    initialState.appSettings.maxIterations
   );
 
   const toggleStickySearch = () => {

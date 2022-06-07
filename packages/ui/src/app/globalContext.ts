@@ -93,7 +93,7 @@ export const DEFAULT_GLOBAL_STORE = {
     toggleStickySearch() {},
 
     maxIterations: 100,
-    setMaxIterations(maxIterations: number) {}
+    setMaxIterations(maxIterations?: number | '') {}
   }
 };
 

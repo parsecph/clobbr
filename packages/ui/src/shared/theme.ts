@@ -50,7 +50,7 @@ export const getTheme = (mode: string = 'dark') => {
     components: {
       MuiOutlinedInput: {
         styleOverrides: {
-          root: {
+          input: {
             fontSize: '0.9rem'
           }
         }

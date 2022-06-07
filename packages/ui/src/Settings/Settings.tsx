@@ -30,11 +30,11 @@ export const Settings = () => {
   const [databaseCleared, setDatabaseCleared] = useState(false);
 
   const handleMaxIterationCHange =
-    (updateMaxIterations: (iterations: number) => void) =>
+    (updateMaxIterations: (iterations: number | '') => void) =>
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const numericValue = parseInt(event.target.value, 10);
       if (!event.target.value || isNaN(numericValue) || numericValue < 0) {
-        updateMaxIterations(0);
+        updateMaxIterations('');
       } else if (isNumber(numericValue)) {
         updateMaxIterations(numericValue);
       }
@@ -183,16 +183,13 @@ export const Settings = () => {
               variant="outlined"
               label="Maximum allowed iterations"
               placeholder="i.e. 100"
-              id="timeout"
+              id="maxIterations"
               inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
-              value={
-                isNumber(appSettings.maxIterations)
-                  ? appSettings.maxIterations
-                  : MAX_ITERATIONS
-              }
+              value={appSettings.maxIterations}
+              helperText={`Defaults to ${MAX_ITERATIONS}`}
               onChange={handleMaxIterationCHange(appSettings.setMaxIterations)}
             />
-            {appSettings.maxIterations > 100 ? (
+            {appSettings.maxIterations && appSettings.maxIterations > 100 ? (
               <Alert severity="warning">
                 Keep in mind that your operating system might throttle sending
                 these many requests in parallel. <br />
