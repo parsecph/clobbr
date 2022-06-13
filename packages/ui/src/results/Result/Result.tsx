@@ -314,7 +314,7 @@ const Result = ({
         {shouldShowChart ? (
           <div className="relative">
             {isInProgress ? (
-              <div className="h-80 flex flex-col items-center justify-center gap-8">
+              <div className="h-72 flex flex-col items-center justify-center gap-8">
                 <div
                   className="absolute transition-all bottom-0 left-0 h-1 bg-gradient-to-r from-primary-300 to-primary-700"
                   style={{ width: percentageOfCompleteness + '%' }}

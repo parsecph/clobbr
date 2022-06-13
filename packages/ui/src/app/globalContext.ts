@@ -5,6 +5,8 @@ import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
 import { ClobbrUIHeaderItem } from 'models/ClobbrUIHeaderItem';
 import { HEADER_MODES } from 'search/SearchSettings/HeaderSettings';
 
+// const TEST_URL = 'https://60698fbde1c2a10017544a73.mockapi.io/test';
+
 export const DEFAULT_GLOBAL_STORE = {
   search: {
     iterations: 10,
@@ -22,8 +24,8 @@ export const DEFAULT_GLOBAL_STORE = {
     parallel: true,
     timeout: 10000,
     url: {
-      displayText: 'https://60698fbde1c2a10017544a73.mockapi.io/test',
-      requestUrl: 'https://60698fbde1c2a10017544a73.mockapi.io/test'
+      displayText: '',
+      requestUrl: ''
     },
     isUrlValid: false,
 

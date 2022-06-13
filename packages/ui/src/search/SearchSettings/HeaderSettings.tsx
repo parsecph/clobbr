@@ -213,8 +213,8 @@ export const HeaderSettings = () => {
                   </small>
                 </pre>
                 <br />
-                The shell command could be an executable or script that runs on
-                your system, for example a node or python script.
+                The shell command could be any executable or script that runs on
+                your system.
               </Alert>
             </div>
           )}
