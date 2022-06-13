@@ -1,7 +1,7 @@
 {
 	"name": "@clobbr/ui",
 	"homepage": "./",
-	"version": "1.1.6",
+	"version": "1.1.7",
 	"description": "Clobbr UI",
 	"private": true,
 	"repository": {
@@ -11,7 +11,7 @@
 	"author": "Dan Mindru <mindrudan@gmail.com>",
 	"license": "MIT",
 	"dependencies": {
-		"@clobbr/api": "^1.1.6",
+		"@clobbr/api": "^1.1.7",
 		"@emotion/css": "^11.9.0",
 		"@emotion/react": "^11.9.0",
 		"@emotion/styled": "^11.8.1",
@@ -22,6 +22,7 @@
 		"@react-three/fiber": "^8.0.11",
 		"@types/lodash-es": "^4.17.6",
 		"@types/uuid": "^8.3.4",
+		"@uiw/react-monacoeditor": "^3.5.3",
 		"axios": "^0.26.1",
 		"byte-size": "^8.1.0",
 		"clsx": "^1.1.1",
@@ -32,7 +33,6 @@
 		"is-absolute-url": "^4.0.1",
 		"localforage": "^1.10.0",
 		"lodash-es": "^4.17.21",
-		"@uiw/react-monacoeditor": "^3.5.3",
 		"react": "^18.0.0",
 		"react-app-rewired": "^2.2.1",
 		"react-dom": "^18.0.0",
