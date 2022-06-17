@@ -2,6 +2,8 @@
 
 [![@clobbr/cli on npm](https://img.shields.io/npm/v/@clobbr/cli?label=npm&style=flat)](https://www.npmjs.com/package/@clobbr/cli)
 
+Use this cli tool to test your api endpoints to see how well they perform under multiple requests in sequence or parallel.
+
 ### Basic usage
 
 ```bash
