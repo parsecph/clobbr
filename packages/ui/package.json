@@ -1,7 +1,7 @@
 {
 	"name": "@clobbr/ui",
 	"homepage": "./",
-	"version": "1.1.7",
+	"version": "1.2.0",
 	"description": "Clobbr UI",
 	"private": true,
 	"repository": {
@@ -11,7 +11,7 @@
 	"author": "Dan Mindru <mindrudan@gmail.com>",
 	"license": "MIT",
 	"dependencies": {
-		"@clobbr/api": "^1.1.7",
+		"@clobbr/api": "^1.2.0",
 		"@emotion/css": "^11.9.0",
 		"@emotion/react": "^11.9.0",
 		"@emotion/styled": "^11.8.1",

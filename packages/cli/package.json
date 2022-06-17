@@ -1,6 +1,6 @@
 {
   "name": "@clobbr/cli",
-  "version": "1.1.7",
+  "version": "1.2.0",
   "description": "Clobbr CLI",
   "main": "dist/index.js",
   "bin": "dist/index.js",
@@ -15,7 +15,7 @@
   "author": "Dan Mindru <mindrudan@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@clobbr/api": "^1.1.7",
+    "@clobbr/api": "^1.2.0",
     "asciichart": "^1.5.25",
     "chalk": "^4.1.0",
     "commander": "^7.2.0",
