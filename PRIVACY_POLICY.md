@@ -63,3 +63,4 @@ You are advised to review this Privacy Policy periodically for any changes. Chan
 If you have any questions about this Privacy Policy, You can contact us:
 
 - By visiting this page on our website: [https://github.com/parsecph/clobbr/issues](https://github.com/parsecph/clobbr/issues)
+- Or feel free to get in touch with Parse at [04.scale.emus@icloud.com](04.scale.emus@icloud.com)
