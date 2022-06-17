@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import { Clear, Delete } from '@mui/icons-material';
 
-import { KNOWN_HEADERS } from 'enums/EKnownHeaders';
+import { KNOWN_HEADERS } from 'shared/enums/EKnownHeaders';
 
 import { GlobalStore } from 'App/globalContext';
 import { ClobbrUIHeaderItem } from 'models/ClobbrUIHeaderItem';
@@ -25,6 +25,8 @@ export const HEADER_MODES = {
 };
 
 export const HeaderSettings = () => {
+  const isShellDisabled = !!process.env.REACT_APP_NO_SHELL_EXEC;
+
   const globalStore = useContext(GlobalStore);
   const [lastShellOutput, setLastShellOutput] = useState('');
 
@@ -92,7 +94,6 @@ export const HeaderSettings = () => {
                 newMode: string
               ) => search.updateHeaderInputMode(newMode)}
               size="small"
-              // className="bg-gray-800 dark:bg-gray-200"
             >
               <ToggleButton
                 value={HEADER_MODES.INPUT}
@@ -169,6 +170,10 @@ export const HeaderSettings = () => {
               ))}
             </div>
           ) : (
+            ''
+          )}
+
+          {search.headerInputMode === HEADER_MODES.SHELL && !isShellDisabled ? (
             <div className="flex flex-col gap-3 mt-6">
               <TextField
                 multiline
@@ -217,6 +222,20 @@ export const HeaderSettings = () => {
                 your system.
               </Alert>
             </div>
+          ) : (
+            ''
+          )}
+
+          {search.headerInputMode === HEADER_MODES.SHELL && isShellDisabled ? (
+            <div className="flex flex-col gap-3 mt-6">
+              <Alert severity="warning">
+                Shell access is prohibited due to application security. To
+                enable this functionality, you need to get the app outside of
+                the AppStore.
+              </Alert>
+            </div>
+          ) : (
+            ''
           )}
         </>
       )}

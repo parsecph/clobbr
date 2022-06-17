@@ -94,7 +94,7 @@ const Search = () => {
     whileTap: 'tapped',
     variants: {
       shown: { opacity: 1, transition: { delay: 1 } },
-      hidden: { opacity: 0, zIndex: -1 },
+      hidden: { opacity: 0, zIndex: -1, transition: { delay: 3 } },
       tapped: {
         scale: 0.98,
         opacity: 0.5,
