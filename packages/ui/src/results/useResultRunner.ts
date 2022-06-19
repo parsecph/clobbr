@@ -6,7 +6,7 @@ import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
 import { EEvents } from '@clobbr/api/src/enums/events';
 import { Everbs } from 'shared/enums/http';
 import { ClobbrUIHeaderItem } from 'models/ClobbrUIHeaderItem';
-import { HEADER_MODES } from 'search/SearchSettings/HeaderSettings';
+import { HEADER_MODES } from 'search/SearchSettings/HeaderSettings/HeaderSettings';
 
 import { run } from '@clobbr/api';
 
@@ -25,6 +25,7 @@ export const useResultRunner = ({
   headerItems,
   headerInputMode,
   headerShellCmd,
+  headerNodeScriptData,
   timeout
 }: {
   requestUrl: string;
@@ -36,6 +37,7 @@ export const useResultRunner = ({
   headerItems: Array<ClobbrUIHeaderItem>;
   headerInputMode: string;
   headerShellCmd: string;
+  headerNodeScriptData: { text?: string; valid: boolean };
   timeout: number;
 }) => {
   const globalStore = useContext(GlobalStore);
@@ -44,7 +46,7 @@ export const useResultRunner = ({
   const [requestsInProgress, setRequestsInProgress] = useState(false);
 
   const [runingItemId, setRuningItemId] = useState('');
-  const [headerError, setHeaderError] = useState(false);
+  const [headerError, setHeaderError] = useState<string>('');
 
   const startRun = async () => {
     const { id } = globalStore.results.addItem({
@@ -60,6 +62,7 @@ export const useResultRunner = ({
       headers: headerItems,
       headerInputMode,
       headerShellCmd,
+      headerNodeScriptData,
       timeout
     });
 
@@ -141,8 +144,33 @@ export const useResultRunner = ({
                     options.headers = parsedJson;
                   }
                 } catch (error) {
-                  setHeaderError(true);
+                  setHeaderError(
+                    'Header shell script failed. Using default headers.'
+                  );
                 }
+              }
+            }
+
+            if (
+              headerInputMode === HEADER_MODES.NODE_JS &&
+              headerNodeScriptData?.text
+            ) {
+              try {
+                const { result, isSuccess } = await electronAPI.runNodeCmd(
+                  headerNodeScriptData?.text
+                );
+
+                if (!isSuccess) {
+                  throw new Error('Node script failed.');
+                }
+
+                const parsedJson = JSON.parse(result);
+                options.headers = parsedJson;
+              } catch (error) {
+                console.error(error);
+                setHeaderError(
+                  'Header node.js script failed to run. Using default headers.'
+                );
               }
             }
 
@@ -182,7 +210,8 @@ export const useResultRunner = ({
     headerShellCmd,
     running,
     runingItemId,
-    requestsInProgress
+    requestsInProgress,
+    headerNodeScriptData
   ]);
 
   return {

@@ -18,10 +18,12 @@ import { KNOWN_HEADERS } from 'shared/enums/EKnownHeaders';
 
 import { GlobalStore } from 'App/globalContext';
 import { ClobbrUIHeaderItem } from 'models/ClobbrUIHeaderItem';
+import { HeaderNodeMode } from './HeaderNodeMode';
 
 export const HEADER_MODES = {
   INPUT: 'INPUT',
-  SHELL: 'SHELL'
+  SHELL: 'SHELL',
+  NODE_JS: 'NODE'
 };
 
 export const HeaderSettings = () => {
@@ -101,6 +103,14 @@ export const HeaderSettings = () => {
               >
                 Input
               </ToggleButton>
+
+              <ToggleButton
+                value={HEADER_MODES.NODE_JS}
+                sx={{ textTransform: 'none', padding: '0.25rem 1rem' }}
+              >
+                Node.js
+              </ToggleButton>
+
               <ToggleButton
                 value={HEADER_MODES.SHELL}
                 sx={{ textTransform: 'none', padding: '0.25rem 1rem' }}
@@ -234,6 +244,12 @@ export const HeaderSettings = () => {
                 the AppStore.
               </Alert>
             </div>
+          ) : (
+            ''
+          )}
+
+          {search.headerInputMode === HEADER_MODES.NODE_JS ? (
+            <HeaderNodeMode />
           ) : (
             ''
           )}

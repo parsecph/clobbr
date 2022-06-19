@@ -21,6 +21,9 @@ export const useSearchState = ({ initialState }: { [key: string]: any }) => {
   const [headerShellCmd, setHeaderShellCmd] = useState(
     initialState.search.headerShellCmd
   );
+  const [headerNodeScriptData, setHeaderNodeScriptData] = useState(
+    initialState.search.headerNodeScriptData
+  );
   const [requestTimeout, setRequestTimeout] = useState(
     initialState.search.timeout
   );
@@ -133,6 +136,27 @@ export const useSearchState = ({ initialState }: { [key: string]: any }) => {
     }
   };
 
+  const updateHeaderNodeScriptData = (scriptString: string) => {
+    try {
+      // TODO validate?
+      const valid = true;
+
+      if (valid) {
+        setHeaderNodeScriptData({
+          text: scriptString,
+          valid: true
+        });
+      }
+    } catch (error) {
+      console.warn('Bailed saving node script, invalid js');
+
+      setHeaderNodeScriptData({
+        text: scriptString,
+        valid: false
+      });
+    }
+  };
+
   useEffect(() => {
     setIsUrlValid(checkUrlValidity(url.requestUrl));
   }, [url.requestUrl]);
@@ -161,6 +185,8 @@ export const useSearchState = ({ initialState }: { [key: string]: any }) => {
     updateHeaderInputMode,
     headerShellCmd,
     updateHeaderShellCmd,
+    headerNodeScriptData,
+    updateHeaderNodeScriptData,
     headerItems,
     addHeaderItem,
     updateHeaderItem,

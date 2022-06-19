@@ -75,6 +75,7 @@ const Search = () => {
       headerItems: globalStore.search.headerItems,
       headerInputMode: globalStore.search.headerInputMode,
       headerShellCmd: globalStore.search.headerShellCmd,
+      headerNodeScriptData: globalStore.search.headerNodeScriptData,
       timeout: globalStore.search.timeout
     });
 
@@ -82,7 +83,7 @@ const Search = () => {
   const [inputFocused, setInputFocused] = useState(false);
   const [autoFocusUrlInput, setAutoFocusUrlInput] = useState(true);
 
-  const dismissHeaderErrorToast = () => setHeaderError(false);
+  const dismissHeaderErrorToast = () => setHeaderError('');
 
   const maxIterationCount = isNumber(globalStore.appSettings.maxIterations)
     ? globalStore.appSettings.maxIterations
@@ -312,7 +313,7 @@ const Search = () => {
           )}
 
           <Snackbar
-            open={headerError}
+            open={!!headerError}
             autoHideDuration={6000}
             onClose={dismissHeaderErrorToast}
             anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
@@ -335,9 +336,7 @@ const Search = () => {
                 </IconButton>
               }
             >
-              <p className="flex h-full items-center">
-                Header shell script failed. Using default headers.
-              </p>
+              <p className="flex h-full items-center">{headerError}</p>
             </Alert>
           </Snackbar>
         </section>

@@ -14,6 +14,10 @@ export interface ClobbrUIResultListItem {
   headers: Array<ClobbrUIHeaderItem>;
   headerInputMode: string;
   headerShellCmd: string;
+  headerNodeScriptData: {
+    text?: string;
+    valid: boolean;
+  };
   data: { [key: string]: any };
   timeout: number;
 }

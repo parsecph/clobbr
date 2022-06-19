@@ -3,7 +3,7 @@ import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
 import React from 'react';
 import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
 import { ClobbrUIHeaderItem } from 'models/ClobbrUIHeaderItem';
-import { HEADER_MODES } from 'search/SearchSettings/HeaderSettings';
+import { HEADER_MODES } from 'search/SearchSettings/HeaderSettings/HeaderSettings';
 
 // const TEST_URL = 'https://60698fbde1c2a10017544a73.mockapi.io/test';
 
@@ -14,6 +14,10 @@ export const DEFAULT_GLOBAL_STORE = {
     headerInputMode: HEADER_MODES.INPUT,
     headerShellCmd: '',
     headerItems: [],
+    headerNodeScriptData: {
+      text: '',
+      valid: true
+    },
     data: {
       json: {} as { [key: string]: any },
       text: '{}',
@@ -40,7 +44,8 @@ export const DEFAULT_GLOBAL_STORE = {
     updateIterations(iterations: number) {},
     updateVerb(verb: Everbs) {},
     updateTimeout(timeout: number) {},
-    updateData(jsonString: string) {}
+    updateData(jsonString: string) {},
+    updateHeaderNodeScriptData(scriptString: string) {}
   },
 
   results: {
@@ -62,6 +67,10 @@ export const DEFAULT_GLOBAL_STORE = {
       headers: Array<ClobbrUIHeaderItem>;
       headerInputMode: string;
       headerShellCmd: string;
+      headerNodeScriptData: {
+        text?: string;
+        valid: boolean;
+      };
       data: { [key: string]: any };
       timeout: number;
     }): { id: string } {

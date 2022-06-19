@@ -19,6 +19,7 @@ export const ReRunResultButton = ({
     headerItems: item.headers,
     headerInputMode: item.headerInputMode,
     headerShellCmd: item.headerShellCmd,
+    headerNodeScriptData: item.headerNodeScriptData,
     timeout: item.timeout
   });
 

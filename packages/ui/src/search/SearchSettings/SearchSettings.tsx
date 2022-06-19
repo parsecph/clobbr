@@ -9,7 +9,7 @@ import { Modal } from 'shared/components/AppleModal/AppleModal';
 import { a11yProps, TabPanel } from 'shared/components/TabPanel/TabPanel';
 
 import { GeneralSettings } from './GeneralSettings';
-import { HeaderSettings } from './HeaderSettings';
+import { HeaderSettings } from './HeaderSettings/HeaderSettings';
 import { PayloadSettings } from './PayloadSettings';
 
 const SearchSettings = () => {

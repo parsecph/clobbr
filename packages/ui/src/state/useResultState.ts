@@ -37,6 +37,7 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     headers,
     headerInputMode,
     headerShellCmd,
+    headerNodeScriptData,
     data,
     timeout
   }: {
@@ -51,6 +52,10 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     headers: Array<ClobbrUIHeaderItem>;
     headerInputMode: string;
     headerShellCmd: string;
+    headerNodeScriptData: {
+      text?: string;
+      valid: boolean;
+    };
     data: { [key: string]: any };
     timeout: number;
   }) => {
@@ -78,6 +83,7 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
         headers,
         headerInputMode,
         headerShellCmd,
+        headerNodeScriptData,
         data,
         timeout,
         latestResult: result,
@@ -100,6 +106,7 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
         headers,
         headerInputMode,
         headerShellCmd,
+        headerNodeScriptData,
         timeout,
         data,
         latestResult: result,
