@@ -45,7 +45,9 @@ export const DEFAULT_GLOBAL_STORE = {
     updateVerb(verb: Everbs) {},
     updateTimeout(timeout: number) {},
     updateData(jsonString: string) {},
-    updateHeaderNodeScriptData(scriptString: string) {}
+    updateHeaderNodeScriptData(scriptString: string) {},
+    setSettings(item: ClobbrUIResultListItem) {},
+    resetSettingsToDefault() {}
   },
 
   results: {

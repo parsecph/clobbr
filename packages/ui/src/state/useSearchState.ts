@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Everbs } from 'shared/enums/http';
 import { ClobbrUIHeaderItem } from 'models/ClobbrUIHeaderItem';
+import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
 
 const swapUrlSsl = (url: string, ssl: boolean) =>
   ssl ? url.replace('http://', 'https://') : url.replace('https://', 'http://');
@@ -157,6 +158,50 @@ export const useSearchState = ({ initialState }: { [key: string]: any }) => {
     }
   };
 
+  const setSettings = (item: ClobbrUIResultListItem) => {
+    const getPayloadJson = (data: { [key: string]: any }) => {
+      try {
+        return {
+          json: data,
+          text: JSON.stringify(initialState.search.data, null, 2),
+          valid: true
+        };
+      } catch {
+        return {
+          json: {},
+          text: '{}',
+          valid: true
+        };
+      }
+    };
+
+    setUrl({
+      displayText: item.url.replace(/^https?:\/\//, ''),
+      requestUrl: item.url
+    });
+    setParallel(item.parallel);
+    setSsl(item.ssl);
+    setIterations(item.iterations);
+    setVerb(item.verb);
+    setPayloadData(getPayloadJson(item.data));
+    setHeaderInputMode(item.headerInputMode);
+    setHeaderItems(item.headers);
+    setHeaderShellCmd(item.headerShellCmd);
+    setHeaderNodeScriptData(item.headerNodeScriptData);
+    setRequestTimeout(item.timeout);
+  };
+
+  const resetSettingsToDefault = () => {
+    setParallel(initialState.search.parallel);
+    setSsl(initialState.search.ssl);
+    setPayloadData(initialState.search.data);
+    setHeaderInputMode(initialState.search.headerInputMode);
+    setHeaderItems(initialState.search.headerItems);
+    setHeaderShellCmd(initialState.search.headerShellCmd);
+    setHeaderNodeScriptData(initialState.search.headerNodeScriptData);
+    setRequestTimeout(initialState.search.timeout);
+  };
+
   useEffect(() => {
     setIsUrlValid(checkUrlValidity(url.requestUrl));
   }, [url.requestUrl]);
@@ -193,7 +238,10 @@ export const useSearchState = ({ initialState }: { [key: string]: any }) => {
     removeHeaderItem,
 
     timeout: requestTimeout,
-    updateTimeout
+    updateTimeout,
+
+    setSettings,
+    resetSettingsToDefault
   };
 
   return {

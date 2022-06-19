@@ -29,6 +29,7 @@ import { ReactComponent as SequenceIcon } from 'shared/icons/Sequence.svg';
 
 import { ResultChart } from 'results/ResultChart/ResultChart';
 import { ReRunResultButton } from 'results/ReRunResultButton/ReRunResultButton';
+import { SetAsSearchButton } from 'results/SetAsSearchButton/SetAsSearchButton';
 import { CommonlyFailedItem } from 'results/CommonlyFailedItem/CommonlyFailedItem';
 import { useCommonlyFailedMessage } from 'results/CommonlyFailedItem/useCommonlyFailedMessage';
 
@@ -263,7 +264,7 @@ const Result = ({
       </ListItem>
 
       <AnimatePresence>
-        {allFailed && expanded ? (
+        {expanded && allFailed ? (
           <div className="flex flex-col gap-4 pb-12 items-center">
             <AllFailed className="w-full max-w-xs p-6" />
             <Typography variant="body1">
@@ -289,13 +290,17 @@ const Result = ({
             </ul>
 
             <CommonlyFailedItem item={item} />
-            <ReRunResultButton item={item} />
+
+            <div className="flex gap-2 mt-4">
+              <ReRunResultButton item={item} />
+              <SetAsSearchButton item={item} />
+            </div>
           </div>
         ) : (
           ''
         )}
 
-        {timedOut && expanded ? (
+        {expanded && timedOut ? (
           <div className="flex flex-col gap-4 pb-12 items-center">
             <Timeout className="w-full max-w-xs p-6" />
             <Typography variant="body1">
@@ -305,8 +310,31 @@ const Result = ({
             <Typography variant="body2" className="opacity-50">
               Perhaps give it another try? <br />
             </Typography>
-            <ReRunResultButton item={item} />
+
+            <div className="flex gap-2 mt-4">
+              <ReRunResultButton item={item} />
+              <SetAsSearchButton item={item} />
+            </div>
           </div>
+        ) : (
+          ''
+        )}
+
+        {expanded &&
+        !isInProgress &&
+        !shouldShowChart &&
+        !timedOut &&
+        !allFailed ? (
+          <>
+            <Typography variant="body2" className="opacity-50">
+              Increase the number of itetations to see a response time chart.
+            </Typography>
+
+            <div className="flex justify-center gap-2 px-2 py-6">
+              <ReRunResultButton item={item} />
+              <SetAsSearchButton item={item} />
+            </div>
+          </>
         ) : (
           ''
         )}
@@ -350,7 +378,10 @@ const Result = ({
                     ''
                   )}
 
-                  <ReRunResultButton item={item} />
+                  <div className="flex gap-2 mt-4">
+                    <ReRunResultButton item={item} />
+                    <SetAsSearchButton item={item} />
+                  </div>
                 </footer>
               </>
             )}

@@ -141,9 +141,12 @@ export const Settings = () => {
                     <Button
                       onClick={() => setConfirmedClearing(false)}
                       color="secondary"
+                      variant="text"
                       disabled={databaseCleared}
                     >
-                      Cancel
+                      <span className="text-gray-900 dark:text-gray-100">
+                        Cancel
+                      </span>
                     </Button>
                   </div>
                 </div>
