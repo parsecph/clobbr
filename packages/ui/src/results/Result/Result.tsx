@@ -12,7 +12,7 @@ import { formatDistanceToNow, differenceInMinutes } from 'date-fns';
 
 import { GlobalStore } from 'App/globalContext';
 
-import { Alert, CircularProgress, Typography } from '@mui/material';
+import { Alert, ButtonBase, CircularProgress, Typography } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -171,97 +171,98 @@ const Result = ({
   }, 3000);
 
   return (
-    <motion.button
+    <motion.div
       className="odd:bg-gray-200 dark:odd:bg-gray-800 w-full"
       {...animations}
-      onClick={onResultPressed}
       ref={resultDom}
     >
-      <ListItem className="flex-wrap">
-        <ListItemText
-          primary={
-            <span className="flex items-center gap-2 truncate mb-1">
-              <span className="flex items-center gap-1">
-                <Tooltip
-                  title={!item.ssl ? 'http (Secure)' : 'https (Insecure)'}
-                >
-                  {item.ssl ? (
-                    <Lock fontSize="small" />
-                  ) : (
-                    <LockOpen fontSize="small" />
+      <ButtonBase onClick={onResultPressed} className="!contents">
+        <ListItem className="flex-wrap">
+          <ListItemText
+            primary={
+              <span className="flex items-center gap-2 truncate mb-1">
+                <span className="flex items-center gap-1">
+                  <Tooltip
+                    title={!item.ssl ? 'http (Secure)' : 'https (Insecure)'}
+                  >
+                    {item.ssl ? (
+                      <Lock fontSize="small" />
+                    ) : (
+                      <LockOpen fontSize="small" />
+                    )}
+                  </Tooltip>
+
+                  {item.url.replace(/^https?:\/\//, '')}
+                </span>
+
+                <small
+                  className={clsx(
+                    'px-2 py-0.5',
+                    'rounded-sm text-black',
+                    VERB_COLOR_CLASS_MAP[item.verb] || 'bg-gray-300'
                   )}
-                </Tooltip>
+                >
+                  {item.verb}
+                </small>
 
-                {item.url.replace(/^https?:\/\//, '')}
-              </span>
-
-              <small
-                className={clsx(
-                  'px-2 py-0.5',
-                  'rounded-sm text-black',
-                  VERB_COLOR_CLASS_MAP[item.verb] || 'bg-gray-300'
-                )}
-              >
-                {item.verb}
-              </small>
-
-              {isInProgress ? (
-                <div className="flex items-center">
-                  <CircularProgress size={14} />
-                </div>
-              ) : (
-                <></>
-              )}
-            </span>
-          }
-          secondary={
-            <>
-              <Typography variant="caption" className="opacity-50">
-                {formattedDate ? `${formattedDate} ago` : '...'}
-              </Typography>
-            </>
-          }
-        />
-
-        <div className="flex flex-col gap-1 items-end justify-between">
-          {!allFailed ? (
-            <Tooltip title="Average response time">
-              <Typography
-                variant="body2"
-                className={clsx(durationColor, '!font-semibold')}
-              >
-                {item.latestResult.averageDuration} ms
-              </Typography>
-            </Tooltip>
-          ) : (
-            <Typography variant="body2" className="opacity-50">
-              Failed
-            </Typography>
-          )}
-
-          <Typography
-            variant="caption"
-            className="flex items-center gap-1 justify-center opacity-50"
-          >
-            <Tooltip title={item.parallel ? 'Parallel' : 'Sequence'}>
-              <div className="dark:!text-gray-300 w-4 h-4">
-                {item.parallel ? (
-                  <ParallelIcon className="w-full h-full" />
+                {isInProgress ? (
+                  <div className="flex items-center">
+                    <CircularProgress size={14} />
+                  </div>
                 ) : (
-                  <SequenceIcon className="w-full h-full" />
+                  <></>
                 )}
-              </div>
-            </Tooltip>
-
-            <Tooltip title="Number of calls">
-              <span>
-                {item.iterations}
-                <CloseIcon className={xIconCss} />
               </span>
-            </Tooltip>
-          </Typography>
-        </div>
-      </ListItem>
+            }
+            secondary={
+              <>
+                <Typography variant="caption" className="opacity-50">
+                  {formattedDate ? `${formattedDate} ago` : '...'}
+                </Typography>
+              </>
+            }
+          />
+
+          <div className="flex flex-col gap-1 items-end justify-between">
+            {!allFailed ? (
+              <Tooltip title="Average response time">
+                <Typography
+                  variant="body2"
+                  className={clsx(durationColor, '!font-semibold')}
+                >
+                  {item.latestResult.averageDuration} ms
+                </Typography>
+              </Tooltip>
+            ) : (
+              <Typography variant="body2" className="opacity-50">
+                Failed
+              </Typography>
+            )}
+
+            <Typography
+              variant="caption"
+              className="flex items-center gap-1 justify-center opacity-50"
+            >
+              <Tooltip title={item.parallel ? 'Parallel' : 'Sequence'}>
+                <div className="dark:!text-gray-300 w-4 h-4">
+                  {item.parallel ? (
+                    <ParallelIcon className="w-full h-full" />
+                  ) : (
+                    <SequenceIcon className="w-full h-full" />
+                  )}
+                </div>
+              </Tooltip>
+
+              <Tooltip title="Number of calls">
+                <span>
+                  {item.iterations}
+                  <CloseIcon className={xIconCss} />
+                </span>
+              </Tooltip>
+            </Typography>
+          </div>
+        </ListItem>
+      </ButtonBase>
 
       <AnimatePresence>
         {expanded && allFailed ? (
@@ -390,7 +391,7 @@ const Result = ({
           ''
         )}
       </AnimatePresence>
-    </motion.button>
+    </motion.div>
   );
 };
 
