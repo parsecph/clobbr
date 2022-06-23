@@ -1,4 +1,4 @@
-export const INTERNAL_WSS_URL = 'ws://localhost:8923/ws';
+export const INTERNAL_WSS_URL = 'ws://localhost:2369/ws';
 
 export const WS_EVENTS = {
   API: {
