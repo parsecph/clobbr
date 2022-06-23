@@ -9,7 +9,7 @@ export const ReRunResultButton = ({
 }: {
   item: ClobbrUIResultListItem;
 }) => {
-  const { startRun, requestsInProgress } = useResultRunner({
+  const { startRun, requestsInProgress, wsReady } = useResultRunner({
     requestUrl: item.url,
     parallel: item.parallel,
     iterations: item.iterations,
@@ -31,7 +31,7 @@ export const ReRunResultButton = ({
       variant="outlined"
       href="#"
       className="!px-6 h-11"
-      disabled={requestsInProgress}
+      disabled={requestsInProgress || !wsReady}
     >
       {requestsInProgress ? (
         <CircularProgress size={20} />

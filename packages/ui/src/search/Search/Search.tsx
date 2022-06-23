@@ -64,7 +64,7 @@ const verbInputCss = css`
 const Search = () => {
   const globalStore = useContext(GlobalStore);
 
-  const { startRun, requestsInProgress, headerError, setHeaderError } =
+  const { startRun, requestsInProgress, headerError, setHeaderError, wsReady } =
     useResultRunner({
       requestUrl: globalStore.search.url.requestUrl,
       parallel: globalStore.search.parallel,
@@ -270,7 +270,7 @@ const Search = () => {
                   onClick={
                     search.isUrlValid ? startRun : () => toggleUrlError()
                   }
-                  disabled={requestsInProgress}
+                  disabled={requestsInProgress || !wsReady}
                 >
                   {requestsInProgress ? (
                     <CircularProgress size={20} />
