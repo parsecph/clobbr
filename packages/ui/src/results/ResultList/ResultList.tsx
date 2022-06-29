@@ -54,8 +54,8 @@ const ResultList = ({ list }: { list: Array<ClobbrUIResultListItem> }) => {
                   const result = resultsByUrl[key];
 
                   if (result.list.length > 1) {
-                    const expanded = list.some((item) =>
-                      results.expandedResults.includes(item.id)
+                    const expanded = result.list.some((item) =>
+                      results.expandedResultGroups.includes(item.url)
                     );
 
                     return (

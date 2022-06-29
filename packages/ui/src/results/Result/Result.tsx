@@ -68,10 +68,18 @@ const TIMEOUT_WAIT_IN_MINUTES = 3;
 
 const Result = ({
   item,
-  expanded
+  expanded,
+  showUrl = true,
+  showSsl = true,
+  className = '',
+  listItemClassName = ''
 }: {
   item: ClobbrUIResultListItem;
   expanded: boolean;
+  showUrl?: boolean;
+  showSsl?: boolean;
+  className?: string;
+  listItemClassName?: string;
 }) => {
   const resultDom = useRef(null);
   const globalStore = useContext(GlobalStore);
@@ -171,29 +179,37 @@ const Result = ({
   }, 3000);
 
   return (
-    <motion.div
-      className="odd:bg-gray-200 dark:odd:bg-gray-800 w-full"
+    <motion.ul
+      className={clsx(className, 'odd:bg-gray-200 dark:odd:bg-gray-800 w-full')}
       {...animations}
       ref={resultDom}
     >
       <ButtonBase onClick={onResultPressed} className="!contents">
-        <ListItem className="flex-wrap">
+        <ListItem className={clsx(listItemClassName, 'flex-wrap')}>
           <ListItemText
             primary={
               <span className="flex items-center gap-2 truncate mb-1">
-                <span className="flex items-center gap-1">
-                  <Tooltip
-                    title={!item.ssl ? 'http (Secure)' : 'https (Insecure)'}
-                  >
-                    {item.ssl ? (
-                      <Lock fontSize="small" />
+                {showSsl || showUrl ? (
+                  <span className="flex items-center gap-1">
+                    {showSsl ? (
+                      <Tooltip
+                        title={!item.ssl ? 'http (Secure)' : 'https (Insecure)'}
+                      >
+                        {item.ssl ? (
+                          <Lock fontSize="small" />
+                        ) : (
+                          <LockOpen fontSize="small" />
+                        )}
+                      </Tooltip>
                     ) : (
-                      <LockOpen fontSize="small" />
+                      ''
                     )}
-                  </Tooltip>
 
-                  {item.url.replace(/^https?:\/\//, '')}
-                </span>
+                    {showUrl ? item.url.replace(/^https?:\/\//, '') : ''}
+                  </span>
+                ) : (
+                  ''
+                )}
 
                 <small
                   className={clsx(
@@ -391,7 +407,7 @@ const Result = ({
           ''
         )}
       </AnimatePresence>
-    </motion.div>
+    </motion.ul>
   );
 };
 

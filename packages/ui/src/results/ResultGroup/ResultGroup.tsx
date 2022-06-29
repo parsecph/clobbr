@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useContext, useMemo, useRef, useState } from 'react';
 import {
   AnimatePresence,
   MotionValue,
@@ -11,6 +11,7 @@ import { formatDistanceToNow, differenceInMinutes } from 'date-fns';
 import { GlobalStore } from 'App/globalContext';
 
 import { ButtonBase, CircularProgress, Typography } from '@mui/material';
+import { Lock, LockOpen } from '@mui/icons-material';
 import Tooltip from '@mui/material/Tooltip';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -29,6 +30,8 @@ const ResultGroup = ({
   url: string;
   expanded: boolean;
 }) => {
+  const globalStore = useContext(GlobalStore);
+
   const resultDom = useRef(null);
   const [isPresent, safeToRemove] = usePresence();
 
@@ -51,6 +54,8 @@ const ResultGroup = ({
     items.some(
       (item) => item.latestResult.resultDurations.length !== item.iterations
     );
+
+  const isSsl = items.some((items) => items.ssl);
 
   const transition = { type: 'spring', stiffness: 500, damping: 50, mass: 1 };
 
@@ -84,7 +89,11 @@ const ResultGroup = ({
   };
 
   const onResultGroupPressed = () => {
-    console.log('pressed');
+    if (globalStore.results.expandedResultGroups.includes(url)) {
+      globalStore.results.updateExpandedResultGroups([]);
+    } else {
+      globalStore.results.updateExpandedResultGroups([url]);
+    }
   };
 
   // Date formatting
@@ -115,15 +124,15 @@ const ResultGroup = ({
                 primary={
                   <span className="flex items-center gap-2 truncate mb-1">
                     <span className="flex items-center gap-1">
-                      {/* <Tooltip
-                    title={!item.ssl ? 'http (Secure)' : 'https (Insecure)'}
-                  >
-                    {item.ssl ? (
-                      <Lock fontSize="small" />
-                    ) : (
-                      <LockOpen fontSize="small" />
-                    )}
-                  </Tooltip> */}
+                      <Tooltip
+                        title={!isSsl ? 'http (Secure)' : 'https (Insecure)'}
+                      >
+                        {isSsl ? (
+                          <Lock fontSize="small" />
+                        ) : (
+                          <LockOpen fontSize="small" />
+                        )}
+                      </Tooltip>
 
                       {url.replace(/^https?:\/\//, '')}
                     </span>
@@ -166,6 +175,10 @@ const ResultGroup = ({
                     item={item}
                     key={item.id}
                     expanded={results.expandedResults.includes(item.id)}
+                    showSsl={false}
+                    showUrl={false}
+                    className="border-t border-solid border-gray-500 border-opacity-30 bg-inherit dark:bg-inherit odd:bg-inherit dark:odd:bg-inherit"
+                    listItemClassName="!pl-10"
                   />
                 ))
               : ''}
