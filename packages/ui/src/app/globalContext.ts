@@ -52,10 +52,12 @@ export const DEFAULT_GLOBAL_STORE = {
 
   results: {
     expandedResults: [] as Array<string>,
+    expandedResultGroups: [] as Array<string>, // NB: ID'ed by url
     list: [],
     setList: (list: Array<ClobbrUIResultListItem>) => {},
 
     updateExpandedResults(expandedResults: Array<string>) {},
+    updateExpandedResultGroups(expandedResultGroups: Array<string>) {},
 
     addItem(result: {
       url: string;

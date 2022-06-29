@@ -1,3 +1,4 @@
+import { difference, uniq } from 'lodash-es';
 import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
@@ -16,8 +17,28 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     initialState.results.expandedResults
   );
 
-  const updateExpandedResults = (expandedResults: Array<string>) => {
-    setExpandedResults(expandedResults);
+  const [expandedResultGroups, setExpandedResultGroups] = useState<
+    Array<string>
+  >(initialState.results.expandedResultGroups);
+
+  const updateExpandedResults = (nextExpandedResults: Array<string>) => {
+    const added = difference(nextExpandedResults, expandedResults);
+
+    setExpandedResults(nextExpandedResults);
+
+    // Also expand containing groups for added items by default.
+    updateExpandedResultGroups(
+      uniq([
+        ...expandedResultGroups,
+        ...list.filter(({ id }) => added.includes(id)).map(({ url }) => url)
+      ])
+    );
+  };
+
+  const updateExpandedResultGroups = (
+    nextExpandedResultGroups: Array<string>
+  ) => {
+    setExpandedResultGroups(nextExpandedResultGroups);
   };
 
   /**
@@ -177,7 +198,10 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     updateLatestResult,
 
     expandedResults,
-    updateExpandedResults
+    updateExpandedResults,
+
+    expandedResultGroups,
+    updateExpandedResultGroups
   };
 
   return {
