@@ -18,6 +18,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Result from 'results/Result/Result';
 
 import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
+import clsx from 'clsx';
 
 const TIMEOUT_WAIT_IN_MINUTES = 3;
 
@@ -160,8 +161,10 @@ const ResultGroup = ({
                   variant="caption"
                   className="flex items-center gap-1 justify-center opacity-50"
                 >
-                  <Tooltip title="Number of requests in this group">
-                    <span>{items.length} requests</span>
+                  <Tooltip title="Number of results in this group">
+                    <span>
+                      {items.length} {items.length === 1 ? 'result' : 'results'}
+                    </span>
                   </Tooltip>
                 </Typography>
               </div>
@@ -169,19 +172,39 @@ const ResultGroup = ({
           </ButtonBase>
 
           <AnimatePresence>
-            {expanded
-              ? items.map((item) => (
-                  <Result
-                    item={item}
-                    key={item.id}
-                    expanded={results.expandedResults.includes(item.id)}
-                    showSsl={false}
-                    showUrl={false}
-                    className="border-t border-solid border-gray-500 border-opacity-30 bg-inherit dark:bg-inherit odd:bg-inherit dark:odd:bg-inherit"
-                    listItemClassName="!pl-10"
-                  />
-                ))
-              : ''}
+            {expanded ? (
+              <div className="border-t border-solid border-gray-500 border-opacity-30">
+                {items.map((item, index) => {
+                  const isExpanded = results.expandedResults.includes(item.id);
+                  const hasBorder = index !== items.length - 1;
+
+                  return (
+                    <Result
+                      item={item}
+                      key={item.id}
+                      expanded={isExpanded}
+                      showSsl={false}
+                      className={clsx(
+                        isExpanded ? 'pb-4' : '',
+                        isExpanded && hasBorder
+                          ? 'border-b border-solid border-gray-500 border-opacity-30'
+                          : '',
+                        'bg-inherit dark:bg-inherit odd:bg-inherit dark:odd:bg-inherit'
+                      )}
+                      showUrl={false}
+                      listItemClassName={clsx(
+                        isExpanded ? '!pl-10' : '!pl-0 !ml-10',
+                        !isExpanded && hasBorder
+                          ? 'border-b border-solid border-gray-500 border-opacity-30'
+                          : ''
+                      )}
+                    />
+                  );
+                })}
+              </div>
+            ) : (
+              ''
+            )}
           </AnimatePresence>
         </motion.div>
       )}

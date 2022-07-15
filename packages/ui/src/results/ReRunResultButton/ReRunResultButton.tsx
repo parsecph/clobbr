@@ -1,6 +1,7 @@
 import { Button, Typography, CircularProgress } from '@mui/material';
 
 import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
+import { GlobalStore } from 'App/globalContext';
 
 import { useResultRunner } from 'results/useResultRunner';
 
@@ -24,20 +25,24 @@ export const ReRunResultButton = ({
   });
 
   return (
-    <Button
-      onClick={startRun}
-      color="primary"
-      component="a"
-      variant="outlined"
-      href="#"
-      className="!px-6 h-11"
-      disabled={requestsInProgress || !wsReady}
-    >
-      {requestsInProgress ? (
-        <CircularProgress size={20} />
-      ) : (
-        <Typography variant="body2">Run again</Typography>
+    <GlobalStore.Consumer>
+      {({ themeMode }) => (
+        <Button
+          onClick={startRun}
+          color={themeMode === 'dark' ? 'primary' : 'secondary'}
+          component="a"
+          variant="outlined"
+          href="#"
+          className="!px-6 h-11"
+          disabled={requestsInProgress || !wsReady}
+        >
+          {requestsInProgress ? (
+            <CircularProgress size={20} />
+          ) : (
+            <Typography variant="body2">Run again</Typography>
+          )}
+        </Button>
       )}
-    </Button>
+    </GlobalStore.Consumer>
   );
 };
