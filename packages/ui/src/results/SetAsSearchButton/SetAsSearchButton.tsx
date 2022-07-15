@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Button, Typography, CircularProgress } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 
 import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
 
@@ -13,12 +13,14 @@ export const SetAsSearchButton = ({
   const globalStore = useContext(GlobalStore);
 
   const setAsSearch = () => {
+    globalStore.results.updateExpandedResults([]);
+    globalStore.results.updateExpandedResultGroups([]);
+
     globalStore.search.setSettings(item);
 
-    (document.body as HTMLElement).scrollIntoView({
-      behavior: 'smooth',
-      block: 'center'
-    });
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 0);
   };
 
   return (
