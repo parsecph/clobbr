@@ -361,7 +361,7 @@ const Result = ({
         !allFailed ? (
           <>
             <Typography variant="body2" className="opacity-50 text-center">
-              Increase the number of itetations to see a response time chart.
+              Increase the number of itetations to see more stats.
             </Typography>
 
             <div className="mt-4">
