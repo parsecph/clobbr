@@ -401,12 +401,9 @@ const Result = ({
             ) : (
               <>
                 <ResultChart item={item} />
+                <ResultStats result={item.latestResult} />
 
-                <div className="p-4 absolute left-0 w-full -translate-y-full ">
-                  <ResultStats result={item.latestResult} />
-                </div>
-
-                <footer className="flex items-center justify-center gap-2 pb-4">
+                <footer className="flex flex-col items-center justify-center gap-2 pb-4">
                   {failedItems.length ? (
                     <Tooltip title={message || ''}>
                       <div className="flex flex-col items-center">
