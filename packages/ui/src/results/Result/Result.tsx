@@ -7,7 +7,7 @@ import {
   motion,
   usePresence
 } from 'framer-motion';
-import { useInterval } from 'react-use';
+import { useInterval, useMount } from 'react-use';
 import { formatDistanceToNow, differenceInMinutes } from 'date-fns';
 
 import { GlobalStore } from 'App/globalContext';
@@ -46,6 +46,7 @@ const VERB_COLOR_CLASS_MAP = {
   [VERBS.GET]: 'bg-blue-200',
   [VERBS.POST]: 'bg-green-200',
   [VERBS.PUT]: 'bg-orange-200',
+  [VERBS.HEAD]: 'bg-purple-200',
   [VERBS.DELETE]: 'bg-red-200'
 };
 
@@ -178,14 +179,25 @@ const Result = ({
     setFormattedDate(date);
   }, 3000);
 
+  useMount(() => {
+    const date = formatDistanceToNow(
+      new Date(item.latestResult.startDate as string),
+      {
+        includeSeconds: true
+      }
+    );
+
+    setFormattedDate(date);
+  });
+
   return (
     <motion.ul
-      className={clsx(className, 'odd:bg-gray-200 dark:odd:bg-gray-800 w-full')}
+      className={clsx(className, 'odd:bg-gray-200 dark:odd:bg-gray-800')}
       {...animations}
       ref={resultDom}
     >
       <ButtonBase onClick={onResultPressed} className="!contents">
-        <ListItem className={clsx(listItemClassName, 'flex-wrap')}>
+        <ListItem className={clsx(listItemClassName, 'flex-wrap !w-auto')}>
           <ListItemText
             primary={
               <span className="flex items-center gap-2 truncate mb-1">
@@ -381,7 +393,7 @@ const Result = ({
               <>
                 <ResultChart item={item} />
 
-                <footer className="flex items-center justify-center gap-2 mb-2">
+                <footer className="flex items-center justify-center gap-2 pb-4">
                   {failedItems.length ? (
                     <Tooltip title={message || ''}>
                       <div className="flex flex-col items-center ">

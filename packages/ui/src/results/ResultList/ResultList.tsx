@@ -47,7 +47,7 @@ const ResultList = ({ list }: { list: Array<ClobbrUIResultListItem> }) => {
             exit={{ opacity: 0 }}
             layout
           >
-            <List className="w-full">
+            <List className="w-full !pb-0">
               {Object.keys(resultsByUrl)
                 .slice(0, MAX_RESULTS)
                 .map((key) => {
