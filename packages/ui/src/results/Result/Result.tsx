@@ -26,8 +26,10 @@ import { ReactComponent as AllFailed } from 'shared/images/search/AllFailed.svg'
 import { ReactComponent as Timeout } from 'shared/images/search/Timeout.svg';
 import { ReactComponent as ParallelIcon } from 'shared/icons/Parallel.svg';
 import { ReactComponent as SequenceIcon } from 'shared/icons/Sequence.svg';
+import { formatNumber } from 'shared/util/numberFormat';
 
 import { ResultChart } from 'results/ResultChart/ResultChart';
+import { ResultStats } from 'results/ResultStats/ResultStats';
 import { ReRunResultButton } from 'results/ReRunResultButton/ReRunResultButton';
 import { SetAsSearchButton } from 'results/SetAsSearchButton/SetAsSearchButton';
 import { CommonlyFailedItem } from 'results/CommonlyFailedItem/CommonlyFailedItem';
@@ -41,6 +43,8 @@ const xIconCss = css`
     height: 0.75rem;
   }
 `;
+
+const TIMEOUT_WAIT_IN_MINUTES = 3;
 
 const VERB_COLOR_CLASS_MAP = {
   [VERBS.GET]: 'bg-blue-200',
@@ -64,8 +68,6 @@ export const getDurationColorClass = (duration: number): string => {
     ? DURATION_COLOR_MAP[roundedDuration]
     : 'text-red-400';
 };
-
-const TIMEOUT_WAIT_IN_MINUTES = 3;
 
 const Result = ({
   item,
@@ -161,12 +163,13 @@ const Result = ({
     }
   };
 
-  // Date formatting
-  const [formattedDate, setFormattedDate] = useState('');
   const durationColor = useMemo(
     () => getDurationColorClass(item.latestResult.averageDuration),
     [item.latestResult.averageDuration]
   );
+
+  // Date formatting
+  const [formattedDate, setFormattedDate] = useState('');
 
   useInterval(() => {
     const date = formatDistanceToNow(
@@ -253,12 +256,12 @@ const Result = ({
 
           <div className="flex flex-col gap-1 items-end justify-between">
             {!allFailed ? (
-              <Tooltip title="Average response time">
+              <Tooltip title="Average response time (mean)">
                 <Typography
                   variant="body2"
                   className={clsx(durationColor, '!font-semibold')}
                 >
-                  {item.latestResult.averageDuration} ms
+                  {formatNumber(item.latestResult.averageDuration)} ms
                 </Typography>
               </Tooltip>
             ) : (
@@ -318,7 +321,9 @@ const Result = ({
               </li>
             </ul>
 
-            <CommonlyFailedItem item={item} />
+            <div className="px-4 py-2">
+              <CommonlyFailedItem item={item} />
+            </div>
 
             <div className="flex gap-2 mt-4">
               <ReRunResultButton item={item} />
@@ -355,9 +360,13 @@ const Result = ({
         !timedOut &&
         !allFailed ? (
           <>
-            <Typography variant="body2" className="opacity-50">
+            <Typography variant="body2" className="opacity-50 text-center">
               Increase the number of itetations to see a response time chart.
             </Typography>
+
+            <div className="mt-4">
+              <ResultStats result={item.latestResult} />
+            </div>
 
             <div className="flex justify-center gap-2 px-2 py-6">
               <ReRunResultButton item={item} />
@@ -393,10 +402,14 @@ const Result = ({
               <>
                 <ResultChart item={item} />
 
+                <div className="p-4 absolute left-0 w-full -translate-y-full ">
+                  <ResultStats result={item.latestResult} />
+                </div>
+
                 <footer className="flex items-center justify-center gap-2 pb-4">
                   {failedItems.length ? (
                     <Tooltip title={message || ''}>
-                      <div className="flex flex-col items-center ">
+                      <div className="flex flex-col items-center">
                         <Alert severity="error">
                           {failedItems.length} failed. Showing results only for
                           successful requests.

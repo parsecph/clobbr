@@ -1,4 +1,4 @@
-import { difference, uniq } from 'lodash-es';
+import { uniq } from 'lodash-es';
 import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
@@ -22,15 +22,15 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
   >(initialState.results.expandedResultGroups);
 
   const updateExpandedResults = (nextExpandedResults: Array<string>) => {
-    const added = difference(nextExpandedResults, expandedResults);
-
     setExpandedResults(nextExpandedResults);
 
     // Also expand containing groups for added items by default.
     updateExpandedResultGroups(
       uniq([
         ...expandedResultGroups,
-        ...list.filter(({ id }) => added.includes(id)).map(({ url }) => url)
+        ...list
+          .filter(({ id }) => nextExpandedResults.includes(id))
+          .map(({ url }) => url)
       ])
     );
   };
