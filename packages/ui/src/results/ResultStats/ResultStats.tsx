@@ -13,8 +13,6 @@ export const getResultStats = (result: ClobbrUIResult) => {
     .filter((log) => isNumber(log.metas.duration))
     .map((log) => log.metas.duration as number);
 
-  console.log(result);
-
   if (!qualifiedDurations.length || qualifiedDurations.length === 1) {
     return null;
   }
