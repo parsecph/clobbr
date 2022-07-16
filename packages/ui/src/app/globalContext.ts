@@ -63,7 +63,6 @@ export const DEFAULT_GLOBAL_STORE = {
       url: string;
       resultDurations: Array<number>;
       logs: Array<ClobbrLogItem>;
-      averageDuration: number;
       parallel: boolean;
       iterations: number;
       verb: Everbs;

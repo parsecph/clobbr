@@ -13,6 +13,8 @@ export const getResultStats = (result: ClobbrUIResult) => {
     .filter((log) => isNumber(log.metas.duration))
     .map((log) => log.metas.duration as number);
 
+  console.log(result);
+
   if (!qualifiedDurations.length || qualifiedDurations.length === 1) {
     return null;
   }
@@ -35,7 +37,6 @@ export const getResultStats = (result: ClobbrUIResult) => {
 };
 
 export const ResultStats = ({ result }: { result: ClobbrUIResult }) => {
-  // Stats
   const stats = useMemo(() => getResultStats(result), [result]);
 
   if (!stats) {

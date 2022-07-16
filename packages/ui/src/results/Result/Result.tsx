@@ -36,6 +36,8 @@ import { CommonlyFailedItem } from 'results/CommonlyFailedItem/CommonlyFailedIte
 import { useCommonlyFailedMessage } from 'results/CommonlyFailedItem/useCommonlyFailedMessage';
 
 import ActivityIndicator from 'ActivityIndicator/ActivityIndicator';
+import { mean } from 'shared/util/resultMath';
+import { isNumber } from 'lodash-es';
 
 const xIconCss = css`
   && {
@@ -163,9 +165,22 @@ const Result = ({
     }
   };
 
+  const averageDuration = useMemo(() => {
+    const qualifiedDurations = item.latestResult.logs
+      .filter((log) => !log.failed)
+      .filter((log) => isNumber(log.metas.duration))
+      .map((log) => log.metas.duration as number);
+
+    if (!qualifiedDurations.length || qualifiedDurations.length === 1) {
+      return 0;
+    }
+
+    return mean(qualifiedDurations);
+  }, [item.latestResult.logs]);
+
   const durationColor = useMemo(
-    () => getDurationColorClass(item.latestResult.averageDuration),
-    [item.latestResult.averageDuration]
+    () => getDurationColorClass(averageDuration),
+    [averageDuration]
   );
 
   // Date formatting
@@ -261,7 +276,7 @@ const Result = ({
                   variant="body2"
                   className={clsx(durationColor, '!font-semibold')}
                 >
-                  {formatNumber(item.latestResult.averageDuration)} ms
+                  {formatNumber(averageDuration, 0, 0)} ms
                 </Typography>
               </Tooltip>
             ) : (

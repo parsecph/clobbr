@@ -82,7 +82,6 @@ export const useResultRunner = ({
         url: requestUrl,
         resultDurations: [],
         logs: [],
-        averageDuration: 0,
         parallel,
         iterations,
         verb,

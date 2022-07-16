@@ -50,7 +50,6 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     url,
     resultDurations,
     logs,
-    averageDuration,
     parallel,
     iterations,
     verb,
@@ -65,7 +64,6 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     url: string;
     resultDurations: Array<number>;
     logs: Array<ClobbrLogItem>;
-    averageDuration: number;
     parallel: boolean;
     iterations: number;
     verb: Everbs;
@@ -87,8 +85,7 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
       startDate: formatISO(new Date()),
       endDate: undefined,
       resultDurations,
-      logs,
-      averageDuration
+      logs
     };
 
     const existingListItem = list.find((i) => i.url === url && i.verb === verb);
@@ -165,19 +162,11 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
         return l.metas.duration as number;
       });
 
-    const averageDuration = resultDurations?.length
-      ? Math.round(
-          resultDurations.reduce((acc: number, cur: number) => acc + cur, 0) /
-            resultDurations.length
-        )
-      : 0;
-
     const nextResult: ClobbrUIResult = {
       ...existingListItem.latestResult,
       endDate,
       logs,
-      resultDurations,
-      averageDuration
+      resultDurations
     };
 
     const nextItem = {

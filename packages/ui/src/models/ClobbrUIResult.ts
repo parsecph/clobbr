@@ -6,5 +6,4 @@ export interface ClobbrUIResult {
   endDate?: string;
   resultDurations: Array<number>;
   logs: Array<ClobbrLogItem>;
-  averageDuration: number;
 }

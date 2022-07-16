@@ -15,6 +15,7 @@ import {
 import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
 
 import { colors } from 'shared/colors';
+import { formatNumber } from 'shared/util/numberFormat';
 
 const MAX_CHART_DATA_POINTS = 101;
 
@@ -23,10 +24,6 @@ const ENTER_ANIMATION_DURATION_MS = 2000;
 export const ResultChart = ({ item }: { item: ClobbrUIResultListItem }) => {
   const globalStore = useContext(GlobalStore);
   const [isInteractive, setIsInteractive] = useState(false);
-
-  const maxDuration = item.latestResult.resultDurations.reduce((acc, cur) => {
-    return acc > cur ? acc : cur;
-  }, 0);
 
   const qualifiedDurations = item.latestResult.logs
     .filter((log) => !log.failed)
@@ -42,6 +39,10 @@ export const ResultChart = ({ item }: { item: ClobbrUIResultListItem }) => {
           return acc;
         }, [])
       : qualifiedDurations;
+
+  const maxDuration = chartData.reduce((acc, cur) => {
+    return (acc as number) > (cur as number) ? acc : cur;
+  }, 0) as number;
 
   useMount(() => {
     setIsInteractive(false);
@@ -70,7 +71,7 @@ export const ResultChart = ({ item }: { item: ClobbrUIResultListItem }) => {
       <VictoryChart
         padding={0}
         height={130}
-        minDomain={{ y: 0 }}
+        minDomain={{ y: -45 }}
         maxDomain={{ y: maxDuration + (maxDuration * 30) / 100 }}
         containerComponent={
           <VictoryVoronoiContainer
@@ -118,7 +119,11 @@ export const ResultChart = ({ item }: { item: ClobbrUIResultListItem }) => {
             }
           }}
           data={chartData.map((duration, index) => {
-            return { y: duration, x: index, label: `${duration}ms` };
+            return {
+              y: duration,
+              x: index,
+              label: `${formatNumber(duration as number)}ms`
+            };
           })}
           labelComponent={
             <VictoryTooltip

@@ -185,7 +185,7 @@ const ResultGroup = ({
                       expanded={isExpanded}
                       showSsl={false}
                       className={clsx(
-                        isExpanded ? 'pb-4' : '',
+                        isExpanded && !isInProgress ? 'pb-4' : '',
                         isExpanded && hasBorder
                           ? 'border-b border-solid border-gray-500 border-opacity-30'
                           : '',
