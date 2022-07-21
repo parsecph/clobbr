@@ -223,7 +223,7 @@ const Result = ({
                   <span className="flex items-center gap-1">
                     {showSsl ? (
                       <Tooltip
-                        title={!item.ssl ? 'http (Secure)' : 'https (Insecure)'}
+                        title={!item.ssl ? 'http (Insecure)' : 'https (Secure)'}
                       >
                         {item.ssl ? (
                           <Lock fontSize="small" />
@@ -248,7 +248,7 @@ const Result = ({
                     VERB_COLOR_CLASS_MAP[item.verb] || 'bg-gray-300'
                   )}
                 >
-                  {item.verb}
+                  {item.verb.toUpperCase()}
                 </small>
 
                 {isInProgress ? (
