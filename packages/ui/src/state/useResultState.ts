@@ -7,9 +7,10 @@ import { ClobbrUIResult } from 'models/ClobbrUIResult';
 import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
 import { Everbs } from 'shared/enums/http';
 import { ClobbrUIHeaderItem } from 'models/ClobbrUIHeaderItem';
+import useStateRef from 'react-usestateref';
 
 export const useResultState = ({ initialState }: { [key: string]: any }) => {
-  const [list, setList] = useState<Array<ClobbrUIResultListItem>>(
+  const [list, setList, listRef] = useStateRef<Array<ClobbrUIResultListItem>>(
     initialState.results.list
   );
 
@@ -22,13 +23,15 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
   >(initialState.results.expandedResultGroups);
 
   const updateExpandedResults = (nextExpandedResults: Array<string>) => {
+    const currentList = listRef.current;
+
     setExpandedResults(nextExpandedResults);
 
     // Also expand containing groups for added items by default.
     updateExpandedResultGroups(
       uniq([
         ...expandedResultGroups,
-        ...list
+        ...currentList
           .filter(({ id }) => nextExpandedResults.includes(id))
           .map(({ url }) => url)
       ])
@@ -79,6 +82,7 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     timeout: number;
   }) => {
     const runId = uuidv4();
+    const currentList = listRef.current;
 
     const result: ClobbrUIResult = {
       id: runId,
@@ -88,10 +92,14 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
       logs
     };
 
-    const existingListItem = list.find((i) => i.url === url && i.verb === verb);
+    const existingListItem = currentList.find(
+      (i) => i.url === url && i.verb === verb
+    );
 
     if (existingListItem) {
-      const index = list.findIndex((i) => i.url === url && i.verb === verb);
+      const index = currentList.findIndex(
+        (i) => i.url === url && i.verb === verb
+      );
 
       const nextItem = {
         ...existingListItem,
@@ -108,7 +116,11 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
         historicalResults: [...existingListItem.historicalResults, result]
       };
 
-      setList([...list.slice(0, index), nextItem, ...list.slice(index + 1)]);
+      setList([
+        ...currentList.slice(0, index),
+        nextItem,
+        ...currentList.slice(index + 1)
+      ]);
 
       return { id: existingListItem.id };
     } else {
@@ -131,7 +143,7 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
         historicalResults: []
       };
 
-      setList([...list, listItem]);
+      setList([...currentList, listItem]);
 
       return { id };
     }
@@ -147,7 +159,9 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     itemId: string;
     logs: Array<ClobbrLogItem>;
   }) => {
-    const existingListItem = list.find((i) => i.id === itemId);
+    const currentList = listRef.current;
+
+    const existingListItem = currentList.find((i) => i.id === itemId);
     const isComplete = existingListItem?.iterations === logs.length;
     const endDate = isComplete ? formatISO(new Date()) : undefined;
 
@@ -174,13 +188,18 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
       latestResult: nextResult
     };
 
-    const index = list.findIndex((i) => i.id === itemId);
+    const index = currentList.findIndex((i) => i.id === itemId);
 
-    setList([...list.slice(0, index), nextItem, ...list.slice(index + 1)]);
+    setList([
+      ...currentList.slice(0, index),
+      nextItem,
+      ...currentList.slice(index + 1)
+    ]);
   };
 
   const resultState = {
     list,
+    listRef,
     setList,
 
     addItem,

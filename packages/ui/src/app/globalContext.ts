@@ -66,6 +66,7 @@ export const DEFAULT_GLOBAL_STORE = {
     expandedResultGroups: [] as Array<string>, // NB: ID'ed by url
     list: [],
     setList: (list: Array<ClobbrUIResultListItem>) => {},
+    listRef: React.createRef<any>(),
 
     updateExpandedResults(expandedResults: Array<string>) {},
     updateExpandedResultGroups(expandedResultGroups: Array<string>) {},
