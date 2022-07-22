@@ -11,5 +11,6 @@ const api = {
 
 api.http.defaults.timeout = DEFAULT_HTTP_TIMEOUT_IN_MS;
 api.http.defaults.timeoutErrorMessage = 'Request timed out (10s)';
+api.http.defaults.maxRedirects = 99;
 
 export default api;
