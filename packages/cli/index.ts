@@ -87,10 +87,10 @@ program
     'path to data file (json), to add as request body.'
   )
   .option('-p, --parallel', 'run requests in parallel', DEFAULTS.parallel)
-  .option('-c, --chart', 'display results as chart', DEFAULTS.chart)
+  .option('-c, --chart', 'display results as a chart', DEFAULTS.chart)
   .option(
     '-t, --table <table>',
-    `display results as table (${Object.values(TABLE_TYPES).join(', ')})`,
+    `display results as a table (${Object.values(TABLE_TYPES).join(', ')})`,
     DEFAULTS.table
   )
 
