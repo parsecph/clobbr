@@ -13,7 +13,7 @@ export const ReRunResultButton = ({
 }) => {
   const globalStore = useContext(GlobalStore);
 
-  const { startRun, wsReady } = useResultRunner({
+  const { startRun } = useResultRunner({
     requestUrl: item.url,
     parallel: item.parallel,
     iterations: item.iterations,
@@ -41,7 +41,7 @@ export const ReRunResultButton = ({
           component="a"
           href="#"
           className="!px-6 h-11"
-          disabled={search.inProgress || !wsReady}
+          disabled={search.inProgress || !search.wsReady}
         >
           {search.inProgress ? (
             <CircularProgress size={20} />

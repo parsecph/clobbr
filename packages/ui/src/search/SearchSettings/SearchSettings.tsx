@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { useState, useContext } from 'react';
 
-import { Button, Typography } from '@mui/material';
+import { Button, Typography, CircularProgress } from '@mui/material';
 import BuildCircleRoundedIcon from '@mui/icons-material/BuildCircleRounded';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -22,7 +22,7 @@ const SearchSettings = () => {
 
   const globalStore = useContext(GlobalStore);
 
-  const { startRun, wsReady } = useResultRunner({
+  const { startRun } = useResultRunner({
     requestUrl: globalStore.search.url.requestUrl,
     parallel: globalStore.search.parallel,
     iterations: globalStore.search.iterations,
@@ -54,6 +54,7 @@ const SearchSettings = () => {
             variant="text"
             className="opacity-50 hover:opacity-100 transition-all "
             onClick={() => search.showSettingsModal()}
+            disabled={search.inProgress}
           >
             <span className="flex gap-1 items-center text-black dark:text-white ">
               <BuildCircleRoundedIcon />
@@ -76,31 +77,41 @@ const SearchSettings = () => {
                 size="small"
                 className={clsx(search.inProgress ? '!bg-gray-600' : '')}
                 onClick={runWithNewSettings}
-                disabled={!search.isUrlValid || search.inProgress || !wsReady}
+                disabled={
+                  !search.isUrlValid || search.inProgress || !search.wsReady
+                }
               >
                 Run
               </Button>
             }
           >
-            <Tabs
-              value={activeTabIndex}
-              onChange={onTabChange}
-              aria-label="basic tabs example"
-              indicatorColor="primary"
-            >
-              <Tab label="General" {...a11yProps(0)} />
-              <Tab label="Headers" {...a11yProps(1)} />
-              <Tab label="Payload" {...a11yProps(2)} />
-            </Tabs>
-            <TabPanel value={activeTabIndex} index={0}>
-              <GeneralSettings />
-            </TabPanel>
-            <TabPanel value={activeTabIndex} index={1}>
-              <HeaderSettings />
-            </TabPanel>
-            <TabPanel value={activeTabIndex} index={2}>
-              <PayloadSettings />
-            </TabPanel>
+            {search.inProgress ? (
+              <div className="p-6">
+                <CircularProgress size={20} />
+              </div>
+            ) : (
+              <>
+                <Tabs
+                  value={activeTabIndex}
+                  onChange={onTabChange}
+                  aria-label="basic tabs example"
+                  indicatorColor="primary"
+                >
+                  <Tab label="General" {...a11yProps(0)} />
+                  <Tab label="Headers" {...a11yProps(1)} />
+                  <Tab label="Payload" {...a11yProps(2)} />
+                </Tabs>
+                <TabPanel value={activeTabIndex} index={0}>
+                  <GeneralSettings />
+                </TabPanel>
+                <TabPanel value={activeTabIndex} index={1}>
+                  <HeaderSettings />
+                </TabPanel>
+                <TabPanel value={activeTabIndex} index={2}>
+                  <PayloadSettings />
+                </TabPanel>
+              </>
+            )}
           </Modal>
         </>
       )}

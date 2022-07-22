@@ -1,5 +1,6 @@
+import useWebSocket, { ReadyState } from 'react-use-websocket';
 import clsx from 'clsx';
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { css } from '@emotion/css';
 import {
@@ -25,6 +26,9 @@ import VerbSelect from 'search/Search/VerbSelect';
 import IterationsInput from 'search/Search/IterationsInput';
 
 import { Everbs } from 'shared/enums/http';
+import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
+import { EEvents } from '@clobbr/api/src/enums/events';
+import { INTERNAL_WSS_URL, WS_EVENTS } from 'shared/consts/wss';
 
 import { useResultRunner } from 'results/useResultRunner';
 
@@ -62,7 +66,13 @@ const verbInputCss = css`
 const Search = () => {
   const globalStore = useContext(GlobalStore);
 
-  const { startRun, headerError, setHeaderError, wsReady } = useResultRunner({
+  const { lastMessage, readyState } = useWebSocket(INTERNAL_WSS_URL, {
+    shouldReconnect: (closeEvent) => true
+  });
+
+  const wsReady = readyState === ReadyState.OPEN;
+
+  const { startRun, headerError, setHeaderError } = useResultRunner({
     requestUrl: globalStore.search.url.requestUrl,
     parallel: globalStore.search.parallel,
     iterations: globalStore.search.iterations,
@@ -79,6 +89,32 @@ const Search = () => {
   const [urlErrorShown, setUrlErrorShown] = useState(false);
   const [inputFocused, setInputFocused] = useState(false);
   const [autoFocusUrlInput, setAutoFocusUrlInput] = useState(true);
+
+  const runEventCallback = useCallback(
+    (itemId: string) => {
+      return (
+        _event: EEvents,
+        log: ClobbrLogItem,
+        logs: Array<ClobbrLogItem>
+      ) => {
+        if (!log.metas) {
+          console.warn(
+            `Skipped log for item [${itemId}] because it has no metas`
+          );
+        }
+
+        globalStore.results.updateLatestResult({ itemId, logs });
+
+        if (logs.length === globalStore.search.plannedIterations) {
+          globalStore.search.setInProgress(false);
+
+          // Update the expanded item yet again to bring the user to the latest results in case there has been navigation in the meantime.
+          globalStore.results.updateExpandedResults([itemId]);
+        }
+      };
+    },
+    [globalStore.search, globalStore.results]
+  );
 
   const dismissHeaderErrorToast = () => setHeaderError('');
 
@@ -127,6 +163,36 @@ const Search = () => {
       toggleUrlError(false);
     }
   }, [globalStore.search.isUrlValid]);
+
+  /**
+   * Ws effect - used to communicate if electron API is used.
+   */
+  useEffect(
+    () => {
+      if (lastMessage?.data) {
+        try {
+          const message = JSON.parse(lastMessage.data);
+          const { event, payload } = message;
+
+          if (event.includes(WS_EVENTS.API.RUN_CALLBACK)) {
+            runEventCallback(payload.runningItemId)(
+              payload.event,
+              payload.log,
+              payload.logs
+            );
+          }
+        } catch (error) {
+          console.warn('Skipped ws message, failed to parse JSON');
+        }
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [lastMessage]
+  );
+
+  useEffect(() => {
+    globalStore.search.setWsReady(wsReady);
+  }, [globalStore.search, wsReady]);
 
   return (
     <GlobalStore.Consumer>

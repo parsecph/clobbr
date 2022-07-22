@@ -13,6 +13,8 @@ import {
 
 export const DEFAULT_GLOBAL_STORE = {
   search: {
+    plannedIterations: 0,
+    wsReady: false,
     inProgress: false,
     settingsModalOpen: false,
     settingsMode: SEARCH_SETTINGS_MODE.INPUT as ESearchSettingsMode,
@@ -41,7 +43,9 @@ export const DEFAULT_GLOBAL_STORE = {
     },
     isUrlValid: false,
 
+    setWsReady: (wsReady: boolean) => {},
     setInProgress(inProgress: boolean) {},
+    setPlannedIterations: (iterations: number) => {},
     showSettingsModal(settingsMode?: ESearchSettingsMode) {},
     hideSettingsModal() {},
     updateUrl(url: string) {},

@@ -20,7 +20,7 @@ export const UpdateSettingsButton = ({
 
   return (
     <GlobalStore.Consumer>
-      {({ themeMode }) => (
+      {({ themeMode, search }) => (
         <Button
           onClick={updateSettings}
           color={themeMode === 'dark' ? 'primary' : 'secondary'}
@@ -28,6 +28,7 @@ export const UpdateSettingsButton = ({
           variant="outlined"
           href="#"
           className="!px-6 h-11"
+          disabled={search.inProgress}
         >
           <Typography variant="body2">Update Settings</Typography>
         </Button>

@@ -1,5 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
-import useWebSocket, { ReadyState } from 'react-use-websocket';
+import { useCallback, useContext, useState } from 'react';
 
 import { GlobalStore } from 'App/globalContext';
 
@@ -8,7 +7,6 @@ import { EEvents } from '@clobbr/api/src/enums/events';
 import { Everbs } from 'shared/enums/http';
 import { ClobbrUIHeaderItem } from 'models/ClobbrUIHeaderItem';
 import { HEADER_MODES } from 'search/SearchSettings/HeaderSettings/HeaderSettings';
-import { INTERNAL_WSS_URL, WS_EVENTS } from 'shared/consts/wss';
 
 import { run } from '@clobbr/api';
 
@@ -44,12 +42,6 @@ export const useResultRunner = ({
 }) => {
   const globalStore = useContext(GlobalStore);
 
-  const { lastMessage, readyState } = useWebSocket(INTERNAL_WSS_URL, {
-    shouldReconnect: (closeEvent) => true
-  });
-
-  const wsReady = readyState === ReadyState.OPEN;
-
   const [headerError, setHeaderError] = useState<string>('');
 
   const runEventCallback = useCallback(
@@ -67,12 +59,15 @@ export const useResultRunner = ({
 
         globalStore.results.updateLatestResult({ itemId, logs });
 
-        if (logs.length === iterations) {
+        if (logs.length === globalStore.search.plannedIterations) {
           globalStore.search.setInProgress(false);
+
+          // Update the expanded item yet again to bring the user to the latest results in case there has been navigation in the meantime.
+          globalStore.results.updateExpandedResults([itemId]);
         }
       };
     },
-    [iterations, globalStore.search, globalStore.results]
+    [globalStore.search, globalStore.results]
   );
 
   const startRun = useCallback(
@@ -95,6 +90,7 @@ export const useResultRunner = ({
 
       globalStore.results.updateExpandedResults([itemId]);
       globalStore.search.setInProgress(true);
+      globalStore.search.setPlannedIterations(iterations);
 
       const configuredOptions = {
         url: requestUrl,
@@ -161,6 +157,7 @@ export const useResultRunner = ({
             }
           }
 
+          // NB: results would be recieved via websocket and not handled in this hook anymore.
           await electronAPI.run(
             itemId,
             parallel,
@@ -193,38 +190,10 @@ export const useResultRunner = ({
     ]
   );
 
-  /**
-   * Ws effect - used if electron API is called.
-   */
-  useEffect(
-    () => {
-      if (lastMessage?.data) {
-        try {
-          const message = JSON.parse(lastMessage.data);
-          const { event, payload } = message;
-
-          if (event.includes(WS_EVENTS.API.RUN_CALLBACK)) {
-            runEventCallback(payload.runningItemId)(
-              payload.event,
-              payload.log,
-              payload.logs
-            );
-          }
-        } catch (error) {
-          console.warn('Skipped ws message, failed to parse JSON');
-        }
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [lastMessage]
-  );
-
   return {
     startRun,
 
     headerError,
-    setHeaderError,
-
-    wsReady
+    setHeaderError
   };
 };
