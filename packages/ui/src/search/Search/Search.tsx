@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import { isNumber } from 'lodash-es';
 import { useContext, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { css } from '@emotion/css';
@@ -14,7 +13,6 @@ import {
   Alert,
   Snackbar
 } from '@mui/material';
-import { Lock, LockOpen } from '@mui/icons-material';
 import { Close } from '@mui/icons-material';
 import { GlobalStore } from 'App/globalContext';
 
@@ -24,11 +22,17 @@ import { ReactComponent as Start } from 'shared/images/search/Start.svg';
 
 import SearchSettings from 'search/SearchSettings/SearchSettings';
 import VerbSelect from 'search/Search/VerbSelect';
+import IterationsInput from 'search/Search/IterationsInput';
 
 import { Everbs } from 'shared/enums/http';
-import { MAX_ITERATIONS } from 'shared/consts/settings';
 
 import { useResultRunner } from 'results/useResultRunner';
+
+const iterationInputCss = css`
+  .MuiInputBase-root {
+    border-radius: 0;
+  }
+`;
 
 const leftInputSeparatorCss = css`
   position: relative;
@@ -49,12 +53,6 @@ const urlInputCss = css`
   }
 `;
 
-const iterationInputCss = css`
-  .MuiInputBase-root {
-    border-radius: 0;
-  }
-`;
-
 const verbInputCss = css`
   .MuiInputBase-root {
     border-radius: 0;
@@ -64,30 +62,25 @@ const verbInputCss = css`
 const Search = () => {
   const globalStore = useContext(GlobalStore);
 
-  const { startRun, requestsInProgress, headerError, setHeaderError, wsReady } =
-    useResultRunner({
-      requestUrl: globalStore.search.url.requestUrl,
-      parallel: globalStore.search.parallel,
-      iterations: globalStore.search.iterations,
-      verb: globalStore.search.verb,
-      ssl: globalStore.search.ssl,
-      dataJson: globalStore.search.data.json,
-      headerItems: globalStore.search.headerItems,
-      headerInputMode: globalStore.search.headerInputMode,
-      headerShellCmd: globalStore.search.headerShellCmd,
-      headerNodeScriptData: globalStore.search.headerNodeScriptData,
-      timeout: globalStore.search.timeout
-    });
+  const { startRun, headerError, setHeaderError, wsReady } = useResultRunner({
+    requestUrl: globalStore.search.url.requestUrl,
+    parallel: globalStore.search.parallel,
+    iterations: globalStore.search.iterations,
+    verb: globalStore.search.verb,
+    ssl: globalStore.search.ssl,
+    dataJson: globalStore.search.data.json,
+    headerItems: globalStore.search.headerItems,
+    headerInputMode: globalStore.search.headerInputMode,
+    headerShellCmd: globalStore.search.headerShellCmd,
+    headerNodeScriptData: globalStore.search.headerNodeScriptData,
+    timeout: globalStore.search.timeout
+  });
 
   const [urlErrorShown, setUrlErrorShown] = useState(false);
   const [inputFocused, setInputFocused] = useState(false);
   const [autoFocusUrlInput, setAutoFocusUrlInput] = useState(true);
 
   const dismissHeaderErrorToast = () => setHeaderError('');
-
-  const maxIterationCount = isNumber(globalStore.appSettings.maxIterations)
-    ? globalStore.appSettings.maxIterations
-    : MAX_ITERATIONS;
 
   const settingsAnimations = {
     animate:
@@ -118,23 +111,6 @@ const Search = () => {
     (updateUrl: (url: string) => void) =>
     (event: React.ChangeEvent<HTMLInputElement>) => {
       updateUrl(event.target.value);
-    };
-
-  const handleIterationChange =
-    (updateIterations: (iterations: number) => void) =>
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const numericValue = parseInt(event.target.value, 10);
-      if (!event.target.value || isNaN(numericValue) || numericValue < 0) {
-        updateIterations(1);
-      } else if (
-        !event.target.value ||
-        isNaN(numericValue) ||
-        numericValue > maxIterationCount
-      ) {
-        updateIterations(maxIterationCount);
-      } else {
-        updateIterations(numericValue);
-      }
     };
 
   const handleVerbChange =
@@ -168,24 +144,6 @@ const Search = () => {
             transition={{ duration: 0.3, times: [0, 0.7, 1] }}
             className="flex flex-col flex-shrink-0 items-stretch justify-center w-full px-6 sm:px-4 md:p-0 sm:flex-row sm:items-center"
           >
-            <div className="flex-shrink-0 mr-2 hidden sm:inline-block">
-              <Tooltip
-                title={!search.ssl ? 'http (Secure)' : 'https (Insecure)'}
-              >
-                <IconButton
-                  aria-label="Toggle https"
-                  className="w-5 h-5"
-                  onClick={search.toggleSsl}
-                >
-                  {search.ssl ? (
-                    <Lock fontSize="small" />
-                  ) : (
-                    <LockOpen fontSize="small" />
-                  )}
-                </IconButton>
-              </Tooltip>
-            </div>
-
             <TextField
               error={urlErrorShown}
               variant="filled"
@@ -240,15 +198,10 @@ const Search = () => {
                 )}
               />
 
-              <TextField
-                variant="filled"
+              <IterationsInput
                 label="Times"
-                placeholder="10"
-                id="iterations"
-                inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
-                value={search.iterations}
-                onChange={handleIterationChange(search.updateIterations)}
-                className={clsx(
+                variant="filled"
+                customInputClasses={clsx(
                   'flex-grow',
                   'sm:flex-shrink-0',
                   'sm:w-16',
@@ -264,19 +217,15 @@ const Search = () => {
                   size="large"
                   className={clsx(
                     'flex-shrink-0 flex-grow md:flex-grow-0 !rounded-none sm:!rounded-tr-md sm:!rounded-br-md sm:w-28',
-                    requestsInProgress ? '!bg-gray-600' : ''
+                    search.inProgress ? '!bg-gray-600' : ''
                   )}
                   style={{ height: '3.5rem' }}
                   onClick={
                     search.isUrlValid ? startRun : () => toggleUrlError()
                   }
-                  disabled={requestsInProgress || !wsReady}
+                  disabled={search.inProgress || !wsReady}
                 >
-                  {requestsInProgress ? (
-                    <CircularProgress size={20} />
-                  ) : (
-                    'Start'
-                  )}
+                  {search.inProgress ? <CircularProgress size={20} /> : 'Start'}
                 </Button>
               </Tooltip>
             </div>
@@ -284,7 +233,7 @@ const Search = () => {
 
           <motion.div
             {...settingsAnimations}
-            className="self-start mt-2 px-6 sm:ml-12 md:ml-8 sm:p-0"
+            className="self-start mt-2 px-6 sm:ml-4 md:ml-0 sm:p-0"
           >
             <SearchSettings />
           </motion.div>

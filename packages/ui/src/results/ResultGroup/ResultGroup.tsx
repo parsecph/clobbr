@@ -11,7 +11,6 @@ import { formatDistanceToNow, differenceInMinutes } from 'date-fns';
 import { GlobalStore } from 'App/globalContext';
 
 import { ButtonBase, CircularProgress, Typography } from '@mui/material';
-import { Lock, LockOpen } from '@mui/icons-material';
 import Tooltip from '@mui/material/Tooltip';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -55,8 +54,6 @@ const ResultGroup = ({
     items.some(
       (item) => item.latestResult.resultDurations.length !== item.iterations
     );
-
-  const isSsl = items.some((items) => items.ssl);
 
   const transition = { type: 'spring', stiffness: 500, damping: 50, mass: 1 };
 
@@ -124,19 +121,9 @@ const ResultGroup = ({
               <ListItemText
                 primary={
                   <span className="flex items-center gap-2 truncate mb-1">
-                    <span className="flex items-center gap-1">
-                      <Tooltip
-                        title={!isSsl ? 'http (Secure)' : 'https (Insecure)'}
-                      >
-                        {isSsl ? (
-                          <Lock fontSize="small" />
-                        ) : (
-                          <LockOpen fontSize="small" />
-                        )}
-                      </Tooltip>
-
-                      {url.replace(/^https?:\/\//, '')}
-                    </span>
+                    <Tooltip title={url}>
+                      <span>{url.replace(/^https?:\/\//, '')}</span>
+                    </Tooltip>
 
                     {isInProgress ? (
                       <div className="flex items-center">
@@ -183,7 +170,6 @@ const ResultGroup = ({
                       item={item}
                       key={item.id}
                       expanded={isExpanded}
-                      showSsl={false}
                       className={clsx(
                         isExpanded && !isInProgress ? 'pb-4' : '',
                         isExpanded && hasBorder

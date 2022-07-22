@@ -2,11 +2,18 @@ import { useEffect, useState } from 'react';
 import { Everbs } from 'shared/enums/http';
 import { ClobbrUIHeaderItem } from 'models/ClobbrUIHeaderItem';
 import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
+import {
+  ESearchSettingsMode,
+  SEARCH_SETTINGS_MODE
+} from 'shared/enums/ESearchSettingsMode';
 
 const swapUrlSsl = (url: string, ssl: boolean) =>
   ssl ? url.replace('http://', 'https://') : url.replace('https://', 'http://');
 
 export const useSearchState = ({ initialState }: { [key: string]: any }) => {
+  const [searchInProgress, setSearchInProgress] = useState(false);
+  const [settingsModalOpen, setSettingsModalOpen] = useState(false);
+  const [settingsMode, setSettingsMode] = useState(SEARCH_SETTINGS_MODE.INPUT);
   const [parallel, setParallel] = useState(initialState.search.parallel);
   const [ssl, setSsl] = useState(initialState.search.ssl);
   const [url, setUrl] = useState(initialState.search.url);
@@ -32,6 +39,19 @@ export const useSearchState = ({ initialState }: { [key: string]: any }) => {
 
   const checkUrlValidity = (url: string) =>
     url.includes('http://') || url.includes('https://');
+
+  const showSettingsModal = (settingsMode: ESearchSettingsMode) => {
+    if (settingsMode) {
+      setSettingsMode(settingsMode);
+    } else {
+      setSettingsMode(SEARCH_SETTINGS_MODE.INPUT);
+    }
+    setSettingsModalOpen(true);
+  };
+  const hideSettingsModal = () => {
+    setSettingsModalOpen(false);
+    setSettingsMode(SEARCH_SETTINGS_MODE.INPUT);
+  };
 
   const toggleSsl = () => {
     const nextSslValue = !ssl;
@@ -207,6 +227,14 @@ export const useSearchState = ({ initialState }: { [key: string]: any }) => {
   }, [url.requestUrl]);
 
   const searchState = {
+    inProgress: searchInProgress,
+    setInProgress: setSearchInProgress,
+
+    settingsModalOpen,
+    hideSettingsModal,
+    showSettingsModal,
+    settingsMode,
+
     url,
     updateUrl,
     isUrlValid,

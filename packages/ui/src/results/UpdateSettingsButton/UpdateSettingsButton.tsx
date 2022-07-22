@@ -4,37 +4,32 @@ import { Button, Typography } from '@mui/material';
 import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
 
 import { GlobalStore } from 'App/globalContext';
+import { SEARCH_SETTINGS_MODE } from 'shared/enums/ESearchSettingsMode';
 
-export const SetAsSearchButton = ({
+export const UpdateSettingsButton = ({
   item
 }: {
   item: ClobbrUIResultListItem;
 }) => {
   const globalStore = useContext(GlobalStore);
 
-  const setAsSearch = () => {
-    globalStore.results.updateExpandedResults([]);
-    globalStore.results.updateExpandedResultGroups([]);
-
+  const updateSettings = () => {
     globalStore.search.setSettings(item);
-
-    setTimeout(() => {
-      window.scrollTo(0, 0);
-    }, 500);
+    globalStore.search.showSettingsModal(SEARCH_SETTINGS_MODE.EDIT);
   };
 
   return (
     <GlobalStore.Consumer>
       {({ themeMode }) => (
         <Button
-          onClick={setAsSearch}
+          onClick={updateSettings}
           color={themeMode === 'dark' ? 'primary' : 'secondary'}
           component="a"
           variant="outlined"
           href="#"
           className="!px-6 h-11"
         >
-          <Typography variant="body2">Set as search</Typography>
+          <Typography variant="body2">Update Settings</Typography>
         </Button>
       )}
     </GlobalStore.Consumer>

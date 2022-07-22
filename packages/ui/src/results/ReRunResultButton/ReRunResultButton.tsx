@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import { Button, Typography, CircularProgress } from '@mui/material';
 
 import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
@@ -10,7 +11,9 @@ export const ReRunResultButton = ({
 }: {
   item: ClobbrUIResultListItem;
 }) => {
-  const { startRun, requestsInProgress, wsReady } = useResultRunner({
+  const globalStore = useContext(GlobalStore);
+
+  const { startRun, wsReady } = useResultRunner({
     requestUrl: item.url,
     parallel: item.parallel,
     iterations: item.iterations,
@@ -24,19 +27,23 @@ export const ReRunResultButton = ({
     timeout: item.timeout
   });
 
+  const reRunResult = () => {
+    globalStore.search.setSettings(item);
+    startRun();
+  };
+
   return (
     <GlobalStore.Consumer>
-      {({ themeMode }) => (
+      {({ search }) => (
         <Button
-          onClick={startRun}
-          color={themeMode === 'dark' ? 'primary' : 'secondary'}
+          onClick={reRunResult}
+          color="primary"
           component="a"
-          variant="outlined"
           href="#"
           className="!px-6 h-11"
-          disabled={requestsInProgress || !wsReady}
+          disabled={search.inProgress || !wsReady}
         >
-          {requestsInProgress ? (
+          {search.inProgress ? (
             <CircularProgress size={20} />
           ) : (
             <Typography variant="body2">Run again</Typography>

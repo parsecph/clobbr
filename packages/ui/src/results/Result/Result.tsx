@@ -17,7 +17,6 @@ import Tooltip from '@mui/material/Tooltip';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import CloseIcon from '@mui/icons-material/Close';
-import { Lock, LockOpen } from '@mui/icons-material';
 
 import { VERBS } from 'shared/enums/http';
 import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
@@ -31,7 +30,7 @@ import { formatNumber } from 'shared/util/numberFormat';
 import { ResultChart } from 'results/ResultChart/ResultChart';
 import { ResultStats } from 'results/ResultStats/ResultStats';
 import { ReRunResultButton } from 'results/ReRunResultButton/ReRunResultButton';
-import { SetAsSearchButton } from 'results/SetAsSearchButton/SetAsSearchButton';
+import { UpdateSettingsButton } from 'results/UpdateSettingsButton/UpdateSettingsButton';
 import { CommonlyFailedItem } from 'results/CommonlyFailedItem/CommonlyFailedItem';
 import { useCommonlyFailedMessage } from 'results/CommonlyFailedItem/useCommonlyFailedMessage';
 
@@ -75,14 +74,14 @@ const Result = ({
   item,
   expanded,
   showUrl = true,
-  showSsl = true,
+  showParallelOrSequenceIcon = true,
   className = '',
   listItemClassName = ''
 }: {
   item: ClobbrUIResultListItem;
   expanded: boolean;
   showUrl?: boolean;
-  showSsl?: boolean;
+  showParallelOrSequenceIcon?: boolean;
   className?: string;
   listItemClassName?: string;
 }) => {
@@ -103,11 +102,7 @@ const Result = ({
   }, [item.latestResult.startDate, item.latestResult.endDate]);
 
   const isInProgress =
-    !timedOut && item.latestResult.resultDurations.length !== item.iterations;
-
-  const percentageOfCompleteness = Math.round(
-    (item.latestResult.resultDurations.length * 100) / item.iterations
-  );
+    !timedOut && item.latestResult.logs.length !== item.iterations;
 
   const successfulItems = item.latestResult.logs.filter((log) => !log.failed);
 
@@ -219,24 +214,10 @@ const Result = ({
           <ListItemText
             primary={
               <span className="flex items-center gap-2 truncate mb-1">
-                {showSsl || showUrl ? (
-                  <span className="flex items-center gap-1">
-                    {showSsl ? (
-                      <Tooltip
-                        title={!item.ssl ? 'http (Insecure)' : 'https (Secure)'}
-                      >
-                        {item.ssl ? (
-                          <Lock fontSize="small" />
-                        ) : (
-                          <LockOpen fontSize="small" />
-                        )}
-                      </Tooltip>
-                    ) : (
-                      ''
-                    )}
-
-                    {showUrl ? item.url.replace(/^https?:\/\//, '') : ''}
-                  </span>
+                {showUrl ? (
+                  <Tooltip title={item.url}>
+                    <span>{item.url.replace(/^https?:\/\//, '')}</span>
+                  </Tooltip>
                 ) : (
                   ''
                 )}
@@ -250,6 +231,31 @@ const Result = ({
                 >
                   {item.verb.toUpperCase()}
                 </small>
+
+                {showParallelOrSequenceIcon ? (
+                  <Tooltip title={item.parallel ? 'Parallel' : 'Sequence'}>
+                    <div
+                      className="flex items-center justify-center relative w-6 h-6 p-1 before:bg-gray-500 before:bg-opacity-10 before:flex before:w-full before:h-full before:absolute before:rounded-full"
+                      aria-label="Toggle between parallel / sequence"
+                    >
+                      <span
+                        className={
+                          globalStore.themeMode === 'light'
+                            ? 'text-black'
+                            : 'text-gray-300'
+                        }
+                      >
+                        {item.parallel ? (
+                          <ParallelIcon className="w-full h-full" />
+                        ) : (
+                          <SequenceIcon className="w-full h-full" />
+                        )}
+                      </span>
+                    </div>
+                  </Tooltip>
+                ) : (
+                  ''
+                )}
 
                 {isInProgress ? (
                   <div className="flex items-center">
@@ -270,7 +276,7 @@ const Result = ({
           />
 
           <div className="flex flex-col gap-1 items-end justify-between">
-            {!allFailed ? (
+            {!allFailed && !timedOut ? (
               <Tooltip title="Average response time (mean)">
                 <Typography
                   variant="body2"
@@ -280,9 +286,23 @@ const Result = ({
                 </Typography>
               </Tooltip>
             ) : (
+              ''
+            )}
+
+            {allFailed ? (
               <Typography variant="body2" className="opacity-50">
                 Failed
               </Typography>
+            ) : (
+              ''
+            )}
+
+            {timedOut ? (
+              <Typography variant="body2" className="opacity-50">
+                Timed out
+              </Typography>
+            ) : (
+              ''
             )}
 
             <Typography
@@ -342,7 +362,7 @@ const Result = ({
 
             <div className="flex gap-2 mt-4">
               <ReRunResultButton item={item} />
-              <SetAsSearchButton item={item} />
+              <UpdateSettingsButton item={item} />
             </div>
           </div>
         ) : (
@@ -362,7 +382,7 @@ const Result = ({
 
             <div className="flex gap-2 mt-4">
               <ReRunResultButton item={item} />
-              <SetAsSearchButton item={item} />
+              <UpdateSettingsButton item={item} />
             </div>
           </div>
         ) : (
@@ -385,7 +405,7 @@ const Result = ({
 
             <div className="flex justify-center gap-2 px-2 py-6">
               <ReRunResultButton item={item} />
-              <SetAsSearchButton item={item} />
+              <UpdateSettingsButton item={item} />
             </div>
           </>
         ) : (
@@ -396,12 +416,6 @@ const Result = ({
           <div className="relative">
             {isInProgress ? (
               <div className="h-72 flex flex-col items-center justify-center gap-8">
-                <div
-                  className="absolute transition-all bottom-0 left-0 h-1 bg-gradient-to-r from-primary-300 to-primary-700"
-                  style={{ width: percentageOfCompleteness + '%' }}
-                  aria-hidden="true"
-                ></div>
-
                 <ActivityIndicator
                   animationIterations="infinite"
                   startDelay={0}
@@ -434,7 +448,7 @@ const Result = ({
 
                   <div className="flex gap-2 mt-4">
                     <ReRunResultButton item={item} />
-                    <SetAsSearchButton item={item} />
+                    <UpdateSettingsButton item={item} />
                   </div>
                 </footer>
               </>

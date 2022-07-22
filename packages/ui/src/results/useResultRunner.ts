@@ -50,7 +50,6 @@ export const useResultRunner = ({
 
   const wsReady = readyState === ReadyState.OPEN;
 
-  const [requestsInProgress, setRequestsInProgress] = useState(false);
   const [headerError, setHeaderError] = useState<string>('');
 
   const runEventCallback = useCallback(
@@ -69,11 +68,11 @@ export const useResultRunner = ({
         globalStore.results.updateLatestResult({ itemId, logs });
 
         if (logs.length === iterations) {
-          setRequestsInProgress(false);
+          globalStore.search.setInProgress(false);
         }
       };
     },
-    [globalStore.results, iterations]
+    [iterations, globalStore.search, globalStore.results]
   );
 
   const startRun = useCallback(
@@ -95,8 +94,7 @@ export const useResultRunner = ({
       });
 
       globalStore.results.updateExpandedResults([itemId]);
-
-      setRequestsInProgress(true);
+      globalStore.search.setInProgress(true);
 
       const configuredOptions = {
         url: requestUrl,
@@ -176,8 +174,6 @@ export const useResultRunner = ({
         // TODO dan: toast
         console.error(error);
       }
-
-      globalStore.results.updateExpandedResults([itemId]);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
@@ -198,7 +194,7 @@ export const useResultRunner = ({
   );
 
   /**
-   * ws effect.
+   * Ws effect - used if electron API is called.
    */
   useEffect(
     () => {
@@ -225,7 +221,6 @@ export const useResultRunner = ({
 
   return {
     startRun,
-    requestsInProgress,
 
     headerError,
     setHeaderError,

@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import clsx from 'clsx';
+import { useState, useContext } from 'react';
 
 import { Button, Typography } from '@mui/material';
 import BuildCircleRoundedIcon from '@mui/icons-material/BuildCircleRounded';
@@ -7,60 +8,103 @@ import Tab from '@mui/material/Tab';
 
 import { Modal } from 'shared/components/AppleModal/AppleModal';
 import { a11yProps, TabPanel } from 'shared/components/TabPanel/TabPanel';
+import { GlobalStore } from 'App/globalContext';
 
 import { GeneralSettings } from './GeneralSettings';
 import { HeaderSettings } from './HeaderSettings/HeaderSettings';
 import { PayloadSettings } from './PayloadSettings';
 
+import { useResultRunner } from 'results/useResultRunner';
+import { SEARCH_SETTINGS_MODE } from 'shared/enums/ESearchSettingsMode';
+
 const SearchSettings = () => {
-  const [settingsModalOpen, setSettingsModalOpen] = useState(false);
   const [activeTabIndex, setActiveTabIndex] = useState(0);
+
+  const globalStore = useContext(GlobalStore);
+
+  const { startRun, wsReady } = useResultRunner({
+    requestUrl: globalStore.search.url.requestUrl,
+    parallel: globalStore.search.parallel,
+    iterations: globalStore.search.iterations,
+    verb: globalStore.search.verb,
+    ssl: globalStore.search.ssl,
+    dataJson: globalStore.search.data.json,
+    headerItems: globalStore.search.headerItems,
+    headerInputMode: globalStore.search.headerInputMode,
+    headerShellCmd: globalStore.search.headerShellCmd,
+    headerNodeScriptData: globalStore.search.headerNodeScriptData,
+    timeout: globalStore.search.timeout
+  });
+
+  const runWithNewSettings = () => {
+    startRun();
+    globalStore.search.hideSettingsModal();
+  };
 
   const onTabChange = (event: React.SyntheticEvent, newTabIndex: number) => {
     setActiveTabIndex(newTabIndex);
   };
 
   return (
-    <>
-      <Button
-        size="small"
-        variant="text"
-        className="opacity-50 hover:opacity-100 transition-all "
-        onClick={() => setSettingsModalOpen(true)}
-      >
-        <span className="flex gap-1 items-center text-black dark:text-white ">
-          <BuildCircleRoundedIcon />
-          <Typography variant="body2">Configure</Typography>
-        </span>
-      </Button>
+    <GlobalStore.Consumer>
+      {({ search }) => (
+        <>
+          <Button
+            size="small"
+            variant="text"
+            className="opacity-50 hover:opacity-100 transition-all "
+            onClick={() => search.showSettingsModal()}
+          >
+            <span className="flex gap-1 items-center text-black dark:text-white ">
+              <BuildCircleRoundedIcon />
+              <Typography variant="body2">Configure</Typography>
+            </span>
+          </Button>
 
-      <Modal
-        onClose={() => setSettingsModalOpen(false)}
-        open={settingsModalOpen}
-        maxWidth="3xl"
-      >
-        <Tabs
-          value={activeTabIndex}
-          onChange={onTabChange}
-          aria-label="basic tabs example"
-          indicatorColor="primary"
-        >
-          <Tab label="General" {...a11yProps(0)} />
-          <Tab label="Headers" {...a11yProps(1)} />
-          <Tab label="Payload" {...a11yProps(2)} />
-        </Tabs>
-
-        <TabPanel value={activeTabIndex} index={0}>
-          <GeneralSettings />
-        </TabPanel>
-        <TabPanel value={activeTabIndex} index={1}>
-          <HeaderSettings />
-        </TabPanel>
-        <TabPanel value={activeTabIndex} index={2}>
-          <PayloadSettings />
-        </TabPanel>
-      </Modal>
-    </>
+          <Modal
+            onClose={search.hideSettingsModal}
+            open={search.settingsModalOpen}
+            maxWidth="3xl"
+            closeButtonText={
+              search.settingsMode === SEARCH_SETTINGS_MODE.INPUT
+                ? 'Save'
+                : 'Cancel'
+            }
+            footerButtons={
+              <Button
+                variant="contained"
+                size="small"
+                className={clsx(search.inProgress ? '!bg-gray-600' : '')}
+                onClick={runWithNewSettings}
+                disabled={!search.isUrlValid || search.inProgress || !wsReady}
+              >
+                Run
+              </Button>
+            }
+          >
+            <Tabs
+              value={activeTabIndex}
+              onChange={onTabChange}
+              aria-label="basic tabs example"
+              indicatorColor="primary"
+            >
+              <Tab label="General" {...a11yProps(0)} />
+              <Tab label="Headers" {...a11yProps(1)} />
+              <Tab label="Payload" {...a11yProps(2)} />
+            </Tabs>
+            <TabPanel value={activeTabIndex} index={0}>
+              <GeneralSettings />
+            </TabPanel>
+            <TabPanel value={activeTabIndex} index={1}>
+              <HeaderSettings />
+            </TabPanel>
+            <TabPanel value={activeTabIndex} index={2}>
+              <PayloadSettings />
+            </TabPanel>
+          </Modal>
+        </>
+      )}
+    </GlobalStore.Consumer>
   );
 };
 

@@ -4,12 +4,20 @@ import React from 'react';
 import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
 import { ClobbrUIHeaderItem } from 'models/ClobbrUIHeaderItem';
 import { HEADER_MODES } from 'search/SearchSettings/HeaderSettings/HeaderSettings';
+import {
+  ESearchSettingsMode,
+  SEARCH_SETTINGS_MODE
+} from 'shared/enums/ESearchSettingsMode';
 
 // const TEST_URL = 'https://60698fbde1c2a10017544a73.mockapi.io/test';
 
 export const DEFAULT_GLOBAL_STORE = {
   search: {
-    iterations: 10,
+    inProgress: false,
+    settingsModalOpen: false,
+    settingsMode: SEARCH_SETTINGS_MODE.INPUT as ESearchSettingsMode,
+
+    iterations: 20,
     verb: VERBS.GET as Everbs,
     headerInputMode: HEADER_MODES.INPUT,
     headerShellCmd: '',
@@ -24,7 +32,7 @@ export const DEFAULT_GLOBAL_STORE = {
       valid: true
     },
     payloadItems: [],
-    ssl: true,
+    ssl: false,
     parallel: true,
     timeout: 10000,
     url: {
@@ -33,6 +41,9 @@ export const DEFAULT_GLOBAL_STORE = {
     },
     isUrlValid: false,
 
+    setInProgress(inProgress: boolean) {},
+    showSettingsModal(settingsMode?: ESearchSettingsMode) {},
+    hideSettingsModal() {},
     updateUrl(url: string) {},
     updateHeaderInputMode(headerInputMode: string) {},
     updateHeaderShellCmd(headerShellCmd: string) {},

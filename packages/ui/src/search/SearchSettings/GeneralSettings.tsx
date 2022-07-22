@@ -17,6 +17,7 @@ import { Close } from '@mui/icons-material';
 import { GlobalStore } from 'App/globalContext';
 
 import AppleSwitch from 'shared/components/AppleSwitch/AppleSwitch';
+import IterationsInput from 'search/Search/IterationsInput';
 
 export const GeneralSettings = () => {
   const globalStore = useContext(GlobalStore);
@@ -58,18 +59,6 @@ export const GeneralSettings = () => {
               <FormControlLabel
                 control={
                   <AppleSwitch
-                    onChange={search.toggleSsl}
-                    checked={search.ssl}
-                  />
-                }
-                label="Use SSL (https)"
-              />
-            </FormGroup>
-
-            <FormGroup>
-              <FormControlLabel
-                control={
-                  <AppleSwitch
                     onChange={search.toggleParallel}
                     checked={search.parallel}
                   />
@@ -77,6 +66,8 @@ export const GeneralSettings = () => {
                 label="Send requests in parallel"
               />
             </FormGroup>
+
+            <IterationsInput />
 
             <TextField
               variant="outlined"
