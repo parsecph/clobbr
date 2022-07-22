@@ -332,31 +332,38 @@ const Result = ({
 
       <AnimatePresence>
         {expanded && allFailed ? (
-          <div className="flex flex-col gap-4 pb-12 items-center">
-            <AllFailed className="w-full max-w-xs p-6" />
+          <div className="flex flex-col gap-2 pb-12 items-center">
+            <AllFailed className="w-full max-w-xs py-6 pt-6" />
             <Typography variant="body1">
-              <strong className="font-semibold">All requests failed</strong>
+              <strong className="font-semibold">
+                All requests failed. Some common issues could be:
+              </strong>
             </Typography>
             <hr />
-            <ul>
+            <ul className="list-disc pl-6">
               <li>
                 <Typography variant="body2">
-                  Did you by chance use the incorrect verb?
+                  Incorrect method (i.e. should use POST instead of GET)
                 </Typography>
               </li>
               <li>
                 <Typography variant="body2">
-                  Does your server require authentication?
+                  CORS issues; some custom headers might be needed
                 </Typography>
               </li>
               <li>
                 <Typography variant="body2">
-                  Do you need to include custom headers?
+                  Authorization failed; also might require headers
+                </Typography>
+              </li>
+              <li>
+                <Typography variant="body2">
+                  Used http instead of https to make the request
                 </Typography>
               </li>
             </ul>
 
-            <div className="px-4 py-2">
+            <div className="px-4 py-2 mt-6 mb-2">
               <CommonlyFailedItem item={item} />
             </div>
 
