@@ -16,13 +16,17 @@ export const Modal = ({
   maxWidth = 'xl',
   onClose,
   children,
-  footerComponent
+  footerComponent,
+  footerButtons,
+  closeButtonText
 }: {
   open?: boolean;
   maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl';
   onClose: () => void;
   children: React.ReactNode;
   footerComponent?: React.ReactNode;
+  footerButtons?: React.ReactNode;
+  closeButtonText?: string;
 }) => {
   useEffect(() => {
     if (open) {
@@ -82,9 +86,10 @@ export const Modal = ({
               <div className="mt-auto flex flex-col p-4">
                 {footerComponent ? footerComponent : ''}
 
-                <div className="flex justify-center">
+                <div className="flex justify-center gap-2">
+                  {footerButtons ? footerButtons : ''}
                   <Button onClick={onClose} color="secondary" size="small">
-                    Done
+                    {closeButtonText || 'Done'}
                   </Button>
                 </div>
               </div>
