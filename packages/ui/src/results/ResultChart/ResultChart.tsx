@@ -57,7 +57,7 @@ export const ResultChart = ({ item }: { item: ClobbrUIResultListItem }) => {
   }, [isInteractive]);
 
   return (
-    <div className="relative">
+    <div className="relative cursor-crosshair">
       <svg style={{ height: 0 }}>
         <defs>
           <linearGradient id="myGradient">
