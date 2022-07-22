@@ -43,7 +43,7 @@
 		"tailwindcss": "^3.0.23",
 		"three": "^0.139.2",
 		"uuid": "^8.3.2",
-		"victory": "^36.4.1"
+		"victory": "^36.5.3"
 	},
 	"scripts": {
 		"start": "react-app-rewired start",

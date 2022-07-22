@@ -21,6 +21,8 @@ const MAX_CHART_DATA_POINTS = 101;
 
 const ENTER_ANIMATION_DURATION_MS = 2000;
 
+const AugmentedLine = VictoryLine as any; // TODO: victory has type issues with style.
+
 export const ResultChart = ({ item }: { item: ClobbrUIResultListItem }) => {
   const globalStore = useContext(GlobalStore);
   const [isInteractive, setIsInteractive] = useState(false);
@@ -104,7 +106,7 @@ export const ResultChart = ({ item }: { item: ClobbrUIResultListItem }) => {
           }}
         />
 
-        <VictoryLine
+        <AugmentedLine
           interpolation="natural"
           style={{
             data: { stroke: 'url(#myGradient)' },
@@ -112,7 +114,7 @@ export const ResultChart = ({ item }: { item: ClobbrUIResultListItem }) => {
             parent: { border: '1px solid #ccc' }
           }}
           animate={{
-            easing: 'cubic',
+            easing: 'linear',
             duration: 300,
             onEnter: {
               duration: ENTER_ANIMATION_DURATION_MS
