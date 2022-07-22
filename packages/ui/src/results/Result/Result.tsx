@@ -17,6 +17,7 @@ import Tooltip from '@mui/material/Tooltip';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import CloseIcon from '@mui/icons-material/Close';
+import DoDisturbOnIcon from '@mui/icons-material/DoDisturbOn';
 
 import { VERBS } from 'shared/enums/http';
 import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
@@ -37,6 +38,7 @@ import { useCommonlyFailedMessage } from 'results/CommonlyFailedItem/useCommonly
 import ActivityIndicator from 'ActivityIndicator/ActivityIndicator';
 import { mean } from 'shared/util/resultMath';
 import { isNumber } from 'lodash-es';
+import { nextTick } from 'shared/util/nextTick';
 
 const xIconCss = css`
   && {
@@ -73,6 +75,7 @@ export const getDurationColorClass = (duration: number): string => {
 const Result = ({
   item,
   expanded,
+  animateOnTap = true,
   showUrl = true,
   showParallelOrSequenceIcon = true,
   className = '',
@@ -80,6 +83,7 @@ const Result = ({
 }: {
   item: ClobbrUIResultListItem;
   expanded: boolean;
+  animateOnTap?: boolean;
   showUrl?: boolean;
   showParallelOrSequenceIcon?: boolean;
   className?: string;
@@ -131,19 +135,22 @@ const Result = ({
         : 'absolute') as unknown as MotionValue<string>
     },
     animate: isPresent ? 'in' : 'out',
-    whileTap: 'tapped',
+    whileTap: animateOnTap ? 'tapped' : 'noop',
     variants: {
       in: { scaleY: 1, opacity: 1, transition: { delay: 0.3 } },
       out: { scaleY: 0, opacity: 0, zIndex: -1 },
       tapped: { scale: 0.98, opacity: 0.5, transition: { duration: 0.1 } }
     },
     onAnimationComplete: () => {
-      if (expanded && resultDom?.current) {
-        (resultDom.current as HTMLElement).scrollIntoView({
-          behavior: 'smooth',
-          block: 'center'
-        });
-      }
+      nextTick(() => {
+        if (isPresent && expanded && resultDom?.current) {
+          // The idea with next tick is to allow the result group animation to fire first, if any.
+          (resultDom.current as HTMLElement).scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+          });
+        }
+      });
 
       if (!isPresent) {
         safeToRemove();
@@ -158,6 +165,20 @@ const Result = ({
     } else {
       globalStore.results.updateExpandedResults([item.id]);
     }
+  };
+
+  const onDeletePressed = () => {
+    const currentScroll = document.documentElement.scrollTop;
+
+    const nextResultList = globalStore.results.listRef.current.filter(
+      (result: ClobbrUIResultListItem) => result.id !== item.id
+    );
+    globalStore.results.setList(nextResultList);
+
+    nextTick(() => {
+      // Hack: maintain scroll position after deleting an item.
+      window.scrollTo(0, currentScroll);
+    });
   };
 
   const averageDuration = useMemo(() => {
@@ -204,268 +225,299 @@ const Result = ({
   });
 
   return (
-    <motion.ul
-      className={clsx(className, 'odd:bg-gray-200 dark:odd:bg-gray-800')}
-      {...animations}
-      ref={resultDom}
-    >
-      <ButtonBase onClick={onResultPressed} className="!contents">
-        <ListItem className={clsx(listItemClassName, 'flex-wrap !w-auto')}>
-          <ListItemText
-            primary={
-              <span className="flex items-center gap-2 truncate mb-1">
-                {showUrl ? (
-                  <Tooltip title={item.url}>
-                    <span>{item.url.replace(/^https?:\/\//, '')}</span>
+    <GlobalStore.Consumer>
+      {({ results }) => (
+        <motion.ul
+          className={clsx(className, 'odd:bg-gray-200 dark:odd:bg-gray-800')}
+          {...animations}
+          ref={resultDom}
+        >
+          <ListItem className={clsx(listItemClassName, 'flex-wrap !w-auto')}>
+            <AnimatePresence>
+              {results.editing ? (
+                <motion.div
+                  animate={{
+                    scale: [1, 0.8, 1]
+                  }}
+                  className="scale-90"
+                  transition={{ duration: 0.3, times: [0, 0.7, 1] }}
+                >
+                  <ButtonBase
+                    onClick={onDeletePressed}
+                    color="primary"
+                    component="a"
+                    href="#"
+                    className="flex !mr-1 !p-2 shrink-0"
+                  >
+                    <DoDisturbOnIcon className="text-red-500" />
+                  </ButtonBase>
+                </motion.div>
+              ) : (
+                ''
+              )}
+            </AnimatePresence>
+
+            <ButtonBase onClick={onResultPressed} className="!contents">
+              <ListItemText
+                primary={
+                  <span className="flex items-center gap-2 truncate mb-1">
+                    {showUrl ? (
+                      <Tooltip title={item.url}>
+                        <span>{item.url.replace(/^https?:\/\//, '')}</span>
+                      </Tooltip>
+                    ) : (
+                      ''
+                    )}
+
+                    <small
+                      className={clsx(
+                        'px-2 py-0.5',
+                        'rounded-sm text-black',
+                        VERB_COLOR_CLASS_MAP[item.verb] || 'bg-gray-300'
+                      )}
+                    >
+                      {item.verb.toUpperCase()}
+                    </small>
+
+                    {showParallelOrSequenceIcon ? (
+                      <Tooltip title={item.parallel ? 'Parallel' : 'Sequence'}>
+                        <div
+                          className="flex items-center justify-center relative w-6 h-6 p-1 before:bg-gray-500 before:bg-opacity-10 before:flex before:w-full before:h-full before:absolute before:rounded-full"
+                          aria-label="Toggle between parallel / sequence"
+                        >
+                          <span
+                            className={
+                              globalStore.themeMode === 'light'
+                                ? 'text-black'
+                                : 'text-gray-300'
+                            }
+                          >
+                            {item.parallel ? (
+                              <ParallelIcon className="w-full h-full" />
+                            ) : (
+                              <SequenceIcon className="w-full h-full" />
+                            )}
+                          </span>
+                        </div>
+                      </Tooltip>
+                    ) : (
+                      ''
+                    )}
+
+                    {isInProgress ? (
+                      <div className="flex items-center">
+                        <CircularProgress size={14} />
+                      </div>
+                    ) : (
+                      <></>
+                    )}
+                  </span>
+                }
+                secondary={
+                  <>
+                    <Typography
+                      variant="caption"
+                      className="flex w-full text-left opacity-50"
+                    >
+                      {formattedDate ? `${formattedDate} ago` : '...'}
+                    </Typography>
+                  </>
+                }
+              />
+
+              <div className="flex flex-col gap-1 items-end justify-between">
+                {!allFailed && !timedOut ? (
+                  <Tooltip title="Average response time (mean)">
+                    <Typography
+                      variant="body2"
+                      className={clsx(durationColor, '!font-semibold')}
+                    >
+                      {formatNumber(averageDuration, 0, 0)} ms
+                    </Typography>
                   </Tooltip>
                 ) : (
                   ''
                 )}
 
-                <small
-                  className={clsx(
-                    'px-2 py-0.5',
-                    'rounded-sm text-black',
-                    VERB_COLOR_CLASS_MAP[item.verb] || 'bg-gray-300'
-                  )}
-                >
-                  {item.verb.toUpperCase()}
-                </small>
+                {allFailed ? (
+                  <Typography variant="body2" className="opacity-50">
+                    Failed
+                  </Typography>
+                ) : (
+                  ''
+                )}
 
-                {showParallelOrSequenceIcon ? (
+                {timedOut ? (
+                  <Typography variant="body2" className="opacity-50">
+                    Timed out
+                  </Typography>
+                ) : (
+                  ''
+                )}
+
+                <Typography
+                  variant="caption"
+                  className="flex items-center gap-1 justify-center opacity-50"
+                >
                   <Tooltip title={item.parallel ? 'Parallel' : 'Sequence'}>
-                    <div
-                      className="flex items-center justify-center relative w-6 h-6 p-1 before:bg-gray-500 before:bg-opacity-10 before:flex before:w-full before:h-full before:absolute before:rounded-full"
-                      aria-label="Toggle between parallel / sequence"
-                    >
-                      <span
-                        className={
-                          globalStore.themeMode === 'light'
-                            ? 'text-black'
-                            : 'text-gray-300'
-                        }
-                      >
-                        {item.parallel ? (
-                          <ParallelIcon className="w-full h-full" />
-                        ) : (
-                          <SequenceIcon className="w-full h-full" />
-                        )}
-                      </span>
+                    <div className="dark:!text-gray-300 w-4 h-4">
+                      {item.parallel ? (
+                        <ParallelIcon className="w-full h-full" />
+                      ) : (
+                        <SequenceIcon className="w-full h-full" />
+                      )}
                     </div>
                   </Tooltip>
-                ) : (
-                  ''
-                )}
 
-                {isInProgress ? (
-                  <div className="flex items-center">
-                    <CircularProgress size={14} />
-                  </div>
-                ) : (
-                  <></>
-                )}
-              </span>
-            }
-            secondary={
-              <>
-                <Typography variant="caption" className="opacity-50">
-                  {formattedDate ? `${formattedDate} ago` : '...'}
-                </Typography>
-              </>
-            }
-          />
-
-          <div className="flex flex-col gap-1 items-end justify-between">
-            {!allFailed && !timedOut ? (
-              <Tooltip title="Average response time (mean)">
-                <Typography
-                  variant="body2"
-                  className={clsx(durationColor, '!font-semibold')}
-                >
-                  {formatNumber(averageDuration, 0, 0)} ms
-                </Typography>
-              </Tooltip>
-            ) : (
-              ''
-            )}
-
-            {allFailed ? (
-              <Typography variant="body2" className="opacity-50">
-                Failed
-              </Typography>
-            ) : (
-              ''
-            )}
-
-            {timedOut ? (
-              <Typography variant="body2" className="opacity-50">
-                Timed out
-              </Typography>
-            ) : (
-              ''
-            )}
-
-            <Typography
-              variant="caption"
-              className="flex items-center gap-1 justify-center opacity-50"
-            >
-              <Tooltip title={item.parallel ? 'Parallel' : 'Sequence'}>
-                <div className="dark:!text-gray-300 w-4 h-4">
-                  {item.parallel ? (
-                    <ParallelIcon className="w-full h-full" />
-                  ) : (
-                    <SequenceIcon className="w-full h-full" />
-                  )}
-                </div>
-              </Tooltip>
-
-              <Tooltip title="Number of calls">
-                <span>
-                  {item.iterations}
-                  <CloseIcon className={xIconCss} />
-                </span>
-              </Tooltip>
-            </Typography>
-          </div>
-        </ListItem>
-      </ButtonBase>
-
-      <AnimatePresence>
-        {expanded && allFailed ? (
-          <div className="flex flex-col gap-2 pb-12 items-center">
-            <AllFailed className="w-full max-w-xs py-6 pt-6" />
-            <Typography variant="body1">
-              <strong className="font-semibold">
-                All requests failed. Some common issues could be:
-              </strong>
-            </Typography>
-            <hr />
-            <ul className="list-disc pl-6">
-              <li>
-                <Typography variant="body2">
-                  Incorrect method (i.e. should use POST instead of GET)
-                </Typography>
-              </li>
-              <li>
-                <Typography variant="body2">
-                  CORS issues; some custom headers might be needed
-                </Typography>
-              </li>
-              <li>
-                <Typography variant="body2">
-                  Authorization failed; also might require headers
-                </Typography>
-              </li>
-              <li>
-                <Typography variant="body2">
-                  Used http instead of https to make the request
-                </Typography>
-              </li>
-            </ul>
-
-            <div className="px-4 py-2 mt-6 mb-2">
-              <CommonlyFailedItem item={item} />
-            </div>
-
-            <div className="flex gap-2 mt-4">
-              <ReRunResultButton item={item} />
-              <UpdateSettingsButton item={item} />
-            </div>
-          </div>
-        ) : (
-          ''
-        )}
-
-        {expanded && timedOut ? (
-          <div className="flex flex-col gap-4 pb-12 items-center">
-            <Timeout className="w-full max-w-xs p-6" />
-            <Typography variant="body1">
-              <strong className="font-semibold">Requests timed out</strong>
-            </Typography>
-
-            <Typography variant="body2" className="opacity-50">
-              Perhaps give it another try? <br />
-            </Typography>
-
-            <div className="flex gap-2 mt-4">
-              <ReRunResultButton item={item} />
-              <UpdateSettingsButton item={item} />
-            </div>
-          </div>
-        ) : (
-          ''
-        )}
-
-        {expanded &&
-        !isInProgress &&
-        !shouldShowChart &&
-        !timedOut &&
-        !allFailed ? (
-          <>
-            <Typography variant="body2" className="opacity-50 text-center">
-              Increase the number of itetations to see more stats.
-            </Typography>
-
-            <div className="mt-4">
-              <ResultStats result={item.latestResult} />
-            </div>
-
-            <div className="flex justify-center gap-2 px-2 py-6">
-              <ReRunResultButton item={item} />
-              <UpdateSettingsButton item={item} />
-            </div>
-          </>
-        ) : (
-          ''
-        )}
-
-        {shouldShowChart ? (
-          <div className="relative">
-            {isInProgress ? (
-              <div className="h-72 flex flex-col items-center justify-center gap-8">
-                <ActivityIndicator
-                  animationIterations="infinite"
-                  startDelay={0}
-                />
-                <Typography variant="caption">
-                  {item.latestResult.resultDurations.length <
-                  item.iterations / 2
-                    ? 'Getting results'
-                    : 'Almost there'}
+                  <Tooltip title="Number of calls">
+                    <span>
+                      {item.iterations}
+                      <CloseIcon className={xIconCss} />
+                    </span>
+                  </Tooltip>
                 </Typography>
               </div>
+            </ButtonBase>
+          </ListItem>
+
+          <AnimatePresence>
+            {expanded && allFailed ? (
+              <div className="flex flex-col gap-2 pb-12 items-center">
+                <AllFailed className="w-full max-w-xs py-6 pt-6" />
+                <Typography variant="body1">
+                  <strong className="font-semibold">
+                    All requests failed. Some common issues could be:
+                  </strong>
+                </Typography>
+                <hr />
+                <ul className="list-disc pl-6">
+                  <li>
+                    <Typography variant="body2">
+                      Incorrect method (i.e. should use POST instead of GET)
+                    </Typography>
+                  </li>
+                  <li>
+                    <Typography variant="body2">
+                      CORS issues; some custom headers might be needed
+                    </Typography>
+                  </li>
+                  <li>
+                    <Typography variant="body2">
+                      Authorization failed; also might require headers
+                    </Typography>
+                  </li>
+                  <li>
+                    <Typography variant="body2">
+                      Used http instead of https to make the request
+                    </Typography>
+                  </li>
+                </ul>
+
+                <div className="px-4 py-2 mt-6 mb-2">
+                  <CommonlyFailedItem item={item} />
+                </div>
+
+                <div className="flex gap-2 mt-4">
+                  <ReRunResultButton item={item} />
+                  <UpdateSettingsButton item={item} />
+                </div>
+              </div>
             ) : (
-              <>
-                <ResultChart item={item} />
-                <ResultStats result={item.latestResult} />
-
-                <footer className="flex flex-col items-center justify-center gap-2 pb-4">
-                  {failedItems.length ? (
-                    <Tooltip title={message || ''}>
-                      <div className="flex flex-col items-center">
-                        <Alert severity="error">
-                          {failedItems.length} failed. Showing results only for
-                          successful requests.
-                        </Alert>
-                      </div>
-                    </Tooltip>
-                  ) : (
-                    ''
-                  )}
-
-                  <div className="flex gap-2 mt-4">
-                    <ReRunResultButton item={item} />
-                    <UpdateSettingsButton item={item} />
-                  </div>
-                </footer>
-              </>
+              ''
             )}
-          </div>
-        ) : (
-          ''
-        )}
-      </AnimatePresence>
-    </motion.ul>
+
+            {expanded && timedOut ? (
+              <div className="flex flex-col gap-4 pb-12 items-center">
+                <Timeout className="w-full max-w-xs p-6" />
+                <Typography variant="body1">
+                  <strong className="font-semibold">Requests timed out</strong>
+                </Typography>
+
+                <Typography variant="body2" className="opacity-50">
+                  Try reducing the number of iterations and run again? <br />
+                </Typography>
+
+                <div className="flex gap-2 mt-4">
+                  <ReRunResultButton item={item} />
+                  <UpdateSettingsButton item={item} />
+                </div>
+              </div>
+            ) : (
+              ''
+            )}
+
+            {expanded &&
+            !isInProgress &&
+            !shouldShowChart &&
+            !timedOut &&
+            !allFailed ? (
+              <>
+                <Typography variant="body2" className="opacity-50 text-center">
+                  Increase the number of itetations to see more stats.
+                </Typography>
+
+                <div className="mt-4">
+                  <ResultStats result={item.latestResult} />
+                </div>
+
+                <div className="flex justify-center gap-2 px-2 py-6">
+                  <ReRunResultButton item={item} />
+                  <UpdateSettingsButton item={item} />
+                </div>
+              </>
+            ) : (
+              ''
+            )}
+
+            {shouldShowChart ? (
+              <div className="relative">
+                {isInProgress ? (
+                  <div className="h-72 flex flex-col items-center justify-center gap-8">
+                    <ActivityIndicator
+                      animationIterations="infinite"
+                      startDelay={0}
+                    />
+                    <Typography variant="caption">
+                      {item.latestResult.resultDurations.length <
+                      item.iterations / 2
+                        ? 'Getting results'
+                        : 'Almost there'}
+                    </Typography>
+                  </div>
+                ) : (
+                  <>
+                    <ResultChart item={item} />
+                    <ResultStats result={item.latestResult} />
+
+                    <footer className="flex flex-col items-center justify-center gap-2 pb-4">
+                      {failedItems.length ? (
+                        <Tooltip title={message || ''}>
+                          <div className="flex flex-col items-center">
+                            <Alert severity="error">
+                              {failedItems.length} failed. Showing results only
+                              for successful requests.
+                            </Alert>
+                          </div>
+                        </Tooltip>
+                      ) : (
+                        ''
+                      )}
+
+                      <div className="flex gap-2 mt-4">
+                        <ReRunResultButton item={item} />
+                        <UpdateSettingsButton item={item} />
+                      </div>
+                    </footer>
+                  </>
+                )}
+              </div>
+            ) : (
+              ''
+            )}
+          </AnimatePresence>
+        </motion.ul>
+      )}
+    </GlobalStore.Consumer>
   );
 };
 

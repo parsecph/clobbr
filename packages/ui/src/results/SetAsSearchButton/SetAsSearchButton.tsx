@@ -19,7 +19,7 @@ export const SetAsSearchButton = ({
     globalStore.search.setSettings(item);
 
     setTimeout(() => {
-      window.scrollTo(0, 0);
+      document.documentElement.scrollTo(0, 0);
     }, 500);
   };
 

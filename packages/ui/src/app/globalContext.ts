@@ -66,12 +66,15 @@ export const DEFAULT_GLOBAL_STORE = {
   },
 
   results: {
+    editing: false,
+
     expandedResults: [] as Array<string>,
     expandedResultGroups: [] as Array<string>, // NB: ID'ed by url
     list: [],
     setList: (list: Array<ClobbrUIResultListItem>) => {},
     listRef: React.createRef<any>(),
 
+    toggleEdit() {},
     updateExpandedResults(expandedResults: Array<string>) {},
     updateExpandedResultGroups(expandedResultGroups: Array<string>) {},
 

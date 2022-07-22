@@ -10,6 +10,8 @@ import { ClobbrUIHeaderItem } from 'models/ClobbrUIHeaderItem';
 import useStateRef from 'react-usestateref';
 
 export const useResultState = ({ initialState }: { [key: string]: any }) => {
+  const [editing, setEditing] = useState(false);
+
   const [list, setList, listRef] = useStateRef<Array<ClobbrUIResultListItem>>(
     initialState.results.list
   );
@@ -42,6 +44,10 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     nextExpandedResultGroups: Array<string>
   ) => {
     setExpandedResultGroups(nextExpandedResultGroups);
+  };
+
+  const toggleEdit = () => {
+    setEditing(!editing);
   };
 
   /**
@@ -198,6 +204,9 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
   };
 
   const resultState = {
+    editing,
+    toggleEdit,
+
     list,
     listRef,
     setList,

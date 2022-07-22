@@ -8,6 +8,8 @@ import { GlobalStore } from 'App/globalContext';
 
 import List from '@mui/material/List';
 import Result from 'results/Result/Result';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 import ResultGroup from 'results/ResultGroup/ResultGroup';
 
 const MAX_RESULTS = 100;
@@ -47,6 +49,21 @@ const ResultList = ({ list }: { list: Array<ClobbrUIResultListItem> }) => {
             exit={{ opacity: 0 }}
             layout
           >
+            <div className="flex justify-end px-2">
+              <Button
+                size="small"
+                variant="text"
+                className="opacity-50 hover:opacity-100 transition-all !min-w-0"
+                onClick={() => results.toggleEdit()}
+              >
+                <span className="flex gap-1 items-center text-black dark:text-white ">
+                  <Typography variant="body2">
+                    {results.editing ? 'Done' : 'Edit'}
+                  </Typography>
+                </span>
+              </Button>
+            </div>
+
             <List className="w-full !pb-0">
               {Object.keys(resultsByUrl)
                 .slice(0, MAX_RESULTS)

@@ -72,7 +72,7 @@ const ResultGroup = ({
       tapped: { scale: 0.98, opacity: 0.5, transition: { duration: 0.1 } }
     },
     onAnimationComplete: () => {
-      if (expanded && resultDom?.current) {
+      if (isPresent && expanded && resultDom?.current) {
         (resultDom.current as HTMLElement).scrollIntoView({
           behavior: 'smooth',
           block: 'center'
@@ -170,6 +170,7 @@ const ResultGroup = ({
                       item={item}
                       key={item.id}
                       expanded={isExpanded}
+                      animateOnTap={false}
                       className={clsx(
                         isExpanded && !isInProgress ? 'pb-4' : '',
                         isExpanded && hasBorder
