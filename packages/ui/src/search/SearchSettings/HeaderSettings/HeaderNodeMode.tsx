@@ -83,10 +83,9 @@ export const HeaderNodeMode = () => {
           <Alert severity="info">
             This Node.js script will be executed before a run. Its output will
             be used as headers.
-            <br /> <br />
+            <br />
             The command return value should be in JSON format, i.e. one could
-            use a fetch request to authenticate before sending the request with
-            the following output:
+            use a fetch auth credentials before sending the request:
             <pre>
               <small>
                 return fetch('example.com').then(response =&gt;
