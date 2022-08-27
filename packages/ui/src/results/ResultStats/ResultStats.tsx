@@ -48,7 +48,7 @@ export const ResultStats = ({ result }: { result: ClobbrUIResult }) => {
           key={index}
           className="flex flex-col items-center border-l border-gray-500 border-opacity-20 last:border-0 first:border-0 p-2"
         >
-          <Typography variant="body1">{value} ms</Typography>
+          <Typography variant="body2">{value} ms</Typography>
           <Typography variant="caption" className="opacity-50">
             {label}
           </Typography>
