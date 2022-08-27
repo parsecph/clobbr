@@ -1,7 +1,7 @@
 {
 	"name": "@clobbr/ui",
 	"homepage": "./",
-	"version": "1.7.0",
+	"version": "1.7.1",
 	"description": "Clobbr UI",
 	"private": true,
 	"repository": {
