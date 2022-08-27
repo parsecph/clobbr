@@ -19,7 +19,6 @@ import ListItemText from '@mui/material/ListItemText';
 import CloseIcon from '@mui/icons-material/Close';
 import DoDisturbOnIcon from '@mui/icons-material/DoDisturbOn';
 
-import { VERBS } from 'shared/enums/http';
 import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
 
 import { ReactComponent as AllFailed } from 'shared/images/search/AllFailed.svg';
@@ -40,6 +39,8 @@ import { mean } from 'shared/util/resultMath';
 import { isNumber } from 'lodash-es';
 import { nextTick } from 'shared/util/nextTick';
 
+import { VERB_COLOR_CLASS_MAP } from 'shared/enums/VerbsToColorMap';
+
 const xIconCss = css`
   && {
     width: 0.75rem;
@@ -48,14 +49,6 @@ const xIconCss = css`
 `;
 
 const TIMEOUT_WAIT_IN_MINUTES = 3;
-
-const VERB_COLOR_CLASS_MAP = {
-  [VERBS.GET]: 'bg-blue-200',
-  [VERBS.POST]: 'bg-green-200',
-  [VERBS.PUT]: 'bg-orange-200',
-  [VERBS.HEAD]: 'bg-purple-200',
-  [VERBS.DELETE]: 'bg-red-200'
-};
 
 const DURATION_COLOR_MAP: { [key: number]: string } = {
   0: 'text-green-400',

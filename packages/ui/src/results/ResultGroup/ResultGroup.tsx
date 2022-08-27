@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { useContext, useMemo, useRef, useState } from 'react';
 import {
   AnimatePresence,
@@ -15,9 +16,9 @@ import Tooltip from '@mui/material/Tooltip';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Result from 'results/Result/Result';
+import { VERB_COLOR_CLASS_MAP } from 'shared/enums/VerbsToColorMap';
 
 import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
-import clsx from 'clsx';
 
 const TIMEOUT_WAIT_IN_MINUTES = 3;
 
@@ -132,6 +133,32 @@ const ResultGroup = ({
                     ) : (
                       <></>
                     )}
+
+                    <div className="flex gap-1 -mt-1">
+                      <AnimatePresence>
+                        {items.map((item) => (
+                          <motion.div
+                            key={item.verb}
+                            animate={{
+                              scale: [1, 0.8, 1]
+                            }}
+                            className="scale-90"
+                            transition={{ duration: 0.3, times: [0, 0.7, 1] }}
+                          >
+                            <small
+                              className={clsx(
+                                'inline-block px-1 py-0.5',
+                                'rounded-sm text-black',
+                                VERB_COLOR_CLASS_MAP[item.verb] || 'bg-gray-300'
+                              )}
+                              style={{ fontSize: '0.6rem' }}
+                            >
+                              {item.verb.toUpperCase()}
+                            </small>
+                          </motion.div>
+                        ))}
+                      </AnimatePresence>
+                    </div>
                   </span>
                 }
                 secondary={
