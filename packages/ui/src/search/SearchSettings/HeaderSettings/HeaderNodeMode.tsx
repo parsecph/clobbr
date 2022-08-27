@@ -41,7 +41,14 @@ export const HeaderNodeMode = () => {
 
     if (electronAPI) {
       const { result } = await electronAPI.runNodeCmd(cmd);
-      setLastNodeOutput(result);
+
+      if (!result) {
+        setLastNodeOutput(
+          'Script run produced no output. Remember to return a value at the end of the script.'
+        );
+      } else {
+        setLastNodeOutput(result);
+      }
     }
   };
 

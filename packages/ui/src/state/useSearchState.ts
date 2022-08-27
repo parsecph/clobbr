@@ -181,21 +181,13 @@ export const useSearchState = ({ initialState }: { [key: string]: any }) => {
   };
 
   const setSettings = (item: ClobbrUIResultListItem) => {
-    const getPayloadJson = (data: { [key: string]: any }) => {
-      try {
-        return {
-          json: data,
-          text: JSON.stringify(initialState.search.data, null, 2),
-          valid: true
-        };
-      } catch {
-        return {
-          json: {},
-          text: '{}',
-          valid: true
-        };
-      }
-    };
+    const payloadData = item.data
+      ? {
+          json: item.data,
+          text: JSON.stringify(item.data, null, 2),
+          valid: true // TODO validate again?
+        }
+      : null;
 
     setUrl({
       displayText: item.url.replace(/^https?:\/\//, ''),
@@ -205,7 +197,7 @@ export const useSearchState = ({ initialState }: { [key: string]: any }) => {
     setSsl(item.ssl);
     setIterations(item.iterations);
     setVerb(item.verb);
-    setPayloadData(getPayloadJson(item.data));
+    setPayloadData(payloadData);
     setHeaderInputMode(item.headerInputMode);
     setHeaderItems(item.headers);
     setHeaderShellCmd(item.headerShellCmd);

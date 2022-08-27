@@ -143,7 +143,7 @@ export const useResultRunner = ({
                 headerNodeScriptData?.text
               );
 
-              if (!isSuccess) {
+              if (!isSuccess || !result) {
                 throw new Error('Node script failed.');
               }
 
