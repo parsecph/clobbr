@@ -61,11 +61,18 @@ export const ResultChart = ({ item }: { item: ClobbrUIResultListItem }) => {
       <svg style={{ height: 0 }}>
         <defs>
           <linearGradient id="myGradient">
-            <stop offset="0%" stopColor={colors.primary.light} />
+            <stop
+              offset="0%"
+              stopColor={
+                globalStore.themeMode === 'dark'
+                  ? colors.primary.light
+                  : colors.primary.dark
+              }
+            />
             <stop offset="25%" stopColor={colors.primary.main} />
             <stop offset="50%" stopColor="#5FB280" />
             <stop offset="75%" stopColor="#3e8b5d" />
-            <stop offset="100%" stopColor="#144f2c" />
+            <stop offset="100%" stopColor="#136835" />
           </linearGradient>
         </defs>
       </svg>
