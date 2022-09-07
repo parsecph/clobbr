@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 
-import { GlobalStore } from 'App/globalContext';
+import { GlobalStore } from 'app/globalContext';
 import Logo from 'shared/brand/logo-primary.svg';
 import LogoSecondary from 'shared/brand/logo-secondary.svg';
 

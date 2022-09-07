@@ -10,7 +10,7 @@ import {
 import { useInterval, useMount } from 'react-use';
 import { formatDistanceToNow, differenceInMinutes } from 'date-fns';
 
-import { GlobalStore } from 'App/globalContext';
+import { GlobalStore } from 'app/globalContext';
 
 import { Alert, ButtonBase, CircularProgress, Typography } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';

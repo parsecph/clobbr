@@ -1,6 +1,6 @@
 import { useCallback, useContext, useState } from 'react';
 
-import { GlobalStore } from 'App/globalContext';
+import { GlobalStore } from 'app/globalContext';
 
 import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
 import { EEvents } from '@clobbr/api/src/enums/events';

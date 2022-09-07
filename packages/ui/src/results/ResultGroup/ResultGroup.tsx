@@ -9,7 +9,7 @@ import {
 import { useInterval } from 'react-use';
 import { formatDistanceToNow, differenceInMinutes } from 'date-fns';
 
-import { GlobalStore } from 'App/globalContext';
+import { GlobalStore } from 'app/globalContext';
 
 import { ButtonBase, CircularProgress, Typography } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';

@@ -8,7 +8,7 @@ import Tab from '@mui/material/Tab';
 
 import { Modal } from 'shared/components/AppleModal/AppleModal';
 import { a11yProps, TabPanel } from 'shared/components/TabPanel/TabPanel';
-import { GlobalStore } from 'App/globalContext';
+import { GlobalStore } from 'app/globalContext';
 
 import { GeneralSettings } from './GeneralSettings';
 import { HeaderSettings } from './HeaderSettings/HeaderSettings';

@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
 
-import { GlobalStore } from 'App/globalContext';
+import { GlobalStore } from 'app/globalContext';
 
 import List from '@mui/material/List';
 import Result from 'results/Result/Result';

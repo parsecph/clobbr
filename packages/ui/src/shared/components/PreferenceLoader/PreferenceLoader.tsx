@@ -1,6 +1,6 @@
 import { useEffect, useContext, useState } from 'react';
 
-import { GlobalStore } from 'App/globalContext';
+import { GlobalStore } from 'app/globalContext';
 import { useStoredPreferences } from 'shared/hooks/useStoredPreferences';
 import { isBoolean, isNumber } from 'lodash-es';
 

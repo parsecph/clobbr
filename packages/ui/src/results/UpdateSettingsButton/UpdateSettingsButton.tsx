@@ -3,7 +3,7 @@ import { Button, Typography } from '@mui/material';
 
 import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
 
-import { GlobalStore } from 'App/globalContext';
+import { GlobalStore } from 'app/globalContext';
 import { SEARCH_SETTINGS_MODE } from 'shared/enums/ESearchSettingsMode';
 
 export const UpdateSettingsButton = ({

@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { useMount } from 'react-use';
 import { chunk, mean } from 'lodash-es';
 
-import { GlobalStore } from 'App/globalContext';
+import { GlobalStore } from 'app/globalContext';
 
 import {
   VictoryChart,

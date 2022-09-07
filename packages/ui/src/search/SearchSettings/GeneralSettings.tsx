@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import { Close } from '@mui/icons-material';
 
-import { GlobalStore } from 'App/globalContext';
+import { GlobalStore } from 'app/globalContext';
 
 import AppleSwitch from 'shared/components/AppleSwitch/AppleSwitch';
 import IterationsInput from 'search/Search/IterationsInput';

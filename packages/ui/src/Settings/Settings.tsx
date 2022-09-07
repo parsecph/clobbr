@@ -5,7 +5,7 @@ import byteSize from 'byte-size';
 
 import { getDb } from 'storage/storage';
 import { EDbStores } from 'storage/EDbStores';
-import { GlobalStore } from 'App/globalContext';
+import { GlobalStore } from 'app/globalContext';
 import { SK } from 'storage/storageKeys';
 import { MAX_ITERATIONS } from 'shared/consts/settings';
 

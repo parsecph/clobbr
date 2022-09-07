@@ -2,7 +2,7 @@ import { useContext, useState } from 'react';
 import MonacoEditor from '@uiw/react-monacoeditor';
 import * as monaco from 'monaco-editor';
 
-import { GlobalStore } from 'App/globalContext';
+import { GlobalStore } from 'app/globalContext';
 
 import { Button, Alert } from '@mui/material';
 

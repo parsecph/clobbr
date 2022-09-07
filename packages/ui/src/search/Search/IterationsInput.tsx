@@ -5,7 +5,7 @@ import { TextField } from '@mui/material';
 
 import { MAX_ITERATIONS } from 'shared/consts/settings';
 
-import { GlobalStore } from 'App/globalContext';
+import { GlobalStore } from 'app/globalContext';
 
 export const IterationsInput = ({
   customInputClasses,

@@ -15,7 +15,7 @@ import {
   Snackbar
 } from '@mui/material';
 import { Close } from '@mui/icons-material';
-import { GlobalStore } from 'App/globalContext';
+import { GlobalStore } from 'app/globalContext';
 
 import { ReactComponent as ParallelIcon } from 'shared/icons/Parallel.svg';
 import { ReactComponent as SequenceIcon } from 'shared/icons/Sequence.svg';

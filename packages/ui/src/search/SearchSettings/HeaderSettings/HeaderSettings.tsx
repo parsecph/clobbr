@@ -16,7 +16,7 @@ import { Clear, Delete } from '@mui/icons-material';
 
 import { KNOWN_HEADERS } from 'shared/enums/EKnownHeaders';
 
-import { GlobalStore } from 'App/globalContext';
+import { GlobalStore } from 'app/globalContext';
 import { ClobbrUIHeaderItem } from 'models/ClobbrUIHeaderItem';
 import { HeaderNodeMode } from './HeaderNodeMode';
 
