@@ -3,6 +3,7 @@ import { ClobbrEventCallback } from './src/models/ClobbrEvent';
 import { ClobbrRequestSettings } from './src/models/ClobbrRequestSettings';
 import { runParallel } from './src/parallel';
 import { runSequence } from './src/sequence';
+import * as resultMath from './src/resultMath';
 
 export const parseOptions = (options?: ClobbrRequestSettings) => {
   return {
@@ -26,8 +27,11 @@ export const run = (
   return runSequence(parsedOptions, eventCallback);
 };
 
+export const mathUtils = resultMath;
+
 export default {
   run,
   runParallel,
-  runSequence
+  runSequence,
+  mathUtils
 };

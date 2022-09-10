@@ -4,8 +4,10 @@ import { Typography } from '@mui/material';
 
 import { ClobbrUIResult } from 'models/ClobbrUIResult';
 
-import { mean, q5, q95, q99, stdDev } from 'shared/util/resultMath';
+import { mathUtils } from '@clobbr/api';
 import { formatNumber } from 'shared/util/numberFormat';
+
+const { mean, q5, q95, q99, stdDev } = mathUtils;
 
 export const getResultStats = (result: ClobbrUIResult) => {
   const qualifiedDurations = result.logs

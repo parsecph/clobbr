@@ -35,7 +35,7 @@ import { CommonlyFailedItem } from 'results/CommonlyFailedItem/CommonlyFailedIte
 import { useCommonlyFailedMessage } from 'results/CommonlyFailedItem/useCommonlyFailedMessage';
 
 import ActivityIndicator from 'ActivityIndicator/ActivityIndicator';
-import { mean } from 'shared/util/resultMath';
+import { mathUtils } from '@clobbr/api';
 import { isNumber } from 'lodash-es';
 import { nextTick } from 'shared/util/nextTick';
 
@@ -184,7 +184,7 @@ const Result = ({
       return 0;
     }
 
-    return mean(qualifiedDurations);
+    return mathUtils.mean(qualifiedDurations);
   }, [item.latestResult.logs]);
 
   const durationColor = useMemo(

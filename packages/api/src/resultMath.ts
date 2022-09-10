@@ -2,6 +2,10 @@ const asc = (arr: Array<number>) => arr.sort((a, b) => a - b);
 const sum = (arr: Array<number>) => arr.reduce((a, b) => a + b, 0);
 
 const quantile = (arr: Array<number>, q: number) => {
+  if (!arr.length) {
+    return 0;
+  }
+
   const sorted = asc(arr);
   const pos = (sorted.length - 1) * q;
   const base = Math.floor(pos);
@@ -14,10 +18,15 @@ const quantile = (arr: Array<number>, q: number) => {
   }
 };
 
-export const mean = (arr: Array<number>) => sum(arr) / arr.length;
+export const mean = (arr: Array<number>) =>
+  arr.length ? sum(arr) / arr.length : 0;
 export const median = (arr: Array<number>) => q50(arr);
 
 export const stdDev = (arr: Array<number>) => {
+  if (!arr.length) {
+    return 0;
+  }
+
   const meanValue = mean(arr);
   const diffArr = arr.map((item) => (item - meanValue) ** 2);
   return Math.sqrt(sum(diffArr) / (arr.length - 1));
