@@ -11,8 +11,9 @@ import { getTimeAverage } from '@clobbr/api/src/util';
 import { run } from '@clobbr/api';
 
 import { error, errorMessage, highlightInfo, success } from './src/output/log';
-import { renderTable } from './src/output/table';
+import { renderStatsTable, renderTable } from './src/output/table';
 import { TABLE_TYPES } from './src/enums/table';
+import { OUTPUT_TYPES } from './src/enums/outputs';
 import { getDurationColor } from './src/util';
 import { getHeaders, getData } from './src/io/io';
 
@@ -21,6 +22,8 @@ const DEFAULTS = {
   iterations: '10',
   parallel: false,
   table: TABLE_TYPES.none,
+  output: OUTPUT_TYPES.table,
+  outputFile: false,
   chart: true,
   headers: {},
   data: {}
@@ -70,12 +73,12 @@ program
   .requiredOption('-u, --url <url>', 'url to test')
   .option(
     '-m, --method <method>',
-    'request method (verb) to use',
+    `request method (verb) to use.`,
     DEFAULTS.method
   )
   .option(
     '-i, --iterations <iterations>',
-    'number of requests to perform',
+    `number of requests to perform.`,
     DEFAULTS.iterations
   )
   .option(
@@ -86,12 +89,22 @@ program
     '-d, --dataPath <dataPath>',
     'path to data file (json), to add as request body.'
   )
-  .option('-p, --parallel', 'run requests in parallel', DEFAULTS.parallel)
-  .option('-c, --chart', 'display results as a chart', DEFAULTS.chart)
+  .option('-p, --parallel', `run requests in parallel.`, DEFAULTS.parallel)
+  .option('-c, --chart', `display results as a chart.`, DEFAULTS.chart)
   .option(
     '-t, --table <table>',
-    `display results as a table (${Object.values(TABLE_TYPES).join(', ')})`,
+    `display results as a table (${Object.values(TABLE_TYPES).join(', ')}).`,
     DEFAULTS.table
+  )
+  .option(
+    '-of, --outputFormat <outputFormat>',
+    `output format: (${Object.values(OUTPUT_TYPES).join(', ')}).`,
+    DEFAULTS.output
+  )
+  .option(
+    '-out, --outputFile <outputFormat>',
+    `if option set the result will be output as a file. Can optionally pass a filename to use with this option.`,
+    DEFAULTS.outputFile
   )
 
   .action(async (cliOptions: { [key: string]: any }) => {
@@ -152,25 +165,21 @@ program
           console.log('\n');
           console.log(
             asciichart.plot(results, {
-              height: 15,
-              width: 20,
+              height: 10,
+              width: 15,
               colors: [asciichart.green, asciichart.blue]
             })
           );
           console.log('\n');
         }
 
+        renderStatsTable(failedRequests, okRequests);
+
         success(`\n Finished run of ${results.length} iterations ✅ `);
 
         if (failedRequests.length) {
           error(`\n ${failedRequests.length} iterations have failed ❌ `);
         }
-
-        console.log(
-          ` Average response time (μ): ${chalk.keyword(
-            getDurationColor(average)
-          )(`${average}ms`)}`
-        );
 
         renderTable(failedRequests, okRequests, table);
       }

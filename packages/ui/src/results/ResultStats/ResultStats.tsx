@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { isNaN, isNumber } from 'lodash-es';
+import { isNumber } from 'lodash-es';
 import { Typography } from '@mui/material';
 
 import { ClobbrUIResult } from 'models/ClobbrUIResult';
@@ -19,15 +19,13 @@ export const getResultStats = (result: ClobbrUIResult) => {
     return null;
   }
 
-  const stdDevValue = stdDev(qualifiedDurations);
-
   return [
     {
       value: formatNumber(mean(qualifiedDurations)),
       label: 'Average (Mean)'
     },
     {
-      value: !isNaN(stdDevValue) ? formatNumber(stdDevValue) : '-',
+      value: formatNumber(stdDev(qualifiedDurations)),
       label: 'Standard Deviation'
     },
     { value: formatNumber(q5(qualifiedDurations)), label: '5th percentile' },

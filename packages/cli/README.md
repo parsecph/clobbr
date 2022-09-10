@@ -33,16 +33,23 @@ Usage: clobbr run [options]
 Test an api endpoint/url (<url>), Valid urls begin with http(s)://
 
 Options:
-  -u, --url <url>                  url to test
-  -m, --method <method>            request method (verb) to use (default: "get")
-  -i, --iterations <iterations>    number of requests to perform (default: "10")
-  -h, --headersPath <headersPath>  path to headers file (json), to add as request headers.
-  -d, --dataPath <dataPath>        path to data file (json), to add as request body.
-  -p, --parallel                   run requests in parallel (default: false)
-  -c, --chart                      display results as chart (default: true)
-  -t, --table <table>              display results as table (none, compact, full) (default:
-                                   "none")
-  --help                           display help for command
+Usage: clobbr run [options]
+
+Test an api endpoint/url (<url>), Valid urls begin with http(s)://
+
+Options:
+  -u, --url <url>                     url to test
+  -m, --method <method>               request method (verb) to use. (default: "get")
+  -i, --iterations <iterations>       number of requests to perform. (default: "10")
+  -h, --headersPath <headersPath>     path to headers file (json), to add as request headers.
+  -d, --dataPath <dataPath>           path to data file (json), to add as request body.
+  -p, --parallel                      run requests in parallel. (default: false)
+  -c, --chart                         display results as a chart. (default: true)
+  -t, --table <table>                 display results as a table (none, compact, full). (default: "none")
+  -of, --outputFormat <outputFormat>  output format: (table, csv, yaml, json). (default: "table")
+  -out, --outputFile <outputFormat>   if option set the result will be output as a file. Can optionally pass a filename to
+                                      use with this option. (default: false)
+  --help                              display help for command
 ```
 
 ![Clobbr icon](https://user-images.githubusercontent.com/1515742/80861773-da9a6a00-8c70-11ea-9671-77e1bb2dea04.png)

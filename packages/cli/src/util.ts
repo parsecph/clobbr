@@ -8,3 +8,14 @@ const COLOR_MAP = {
 export const getDurationColor = (duration) => {
   return COLOR_MAP[Math.round(duration / 1000)] || 'red';
 };
+
+export const formatNumber = (
+  num: number,
+  minDigits: number = 0,
+  maxDigits: number = 2
+) => {
+  return new Intl.NumberFormat('en', {
+    minimumFractionDigits: minDigits,
+    maximumFractionDigits: maxDigits
+  }).format(num);
+};
