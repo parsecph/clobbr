@@ -85,13 +85,17 @@ export const renderCheckResults = (
 
   success(` ✅  ${passedChecks.length} checks passed`);
 
-  for (const failedCheck of failedChecks) {
-    const failedMessage = ` ❌  ${chalk.bold(
-      failedCheck.type
-    )} check failed. Expected ${chalk.bold(
-      failedCheck.value
-    )} but got ${chalk.bold(failedCheck.actualValue)}`;
+  if (failedChecks.length) {
+    for (const failedCheck of failedChecks) {
+      const failedMessage = ` ❌  ${chalk.bold(
+        failedCheck.type
+      )} check failed. Expected ${chalk.bold(
+        failedCheck.value
+      )} but got ${chalk.bold(failedCheck.actualValue)}`;
 
-    error(failedMessage);
+      error(failedMessage);
+    }
+
+    process.exit(1);
   }
 };
