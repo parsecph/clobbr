@@ -1,7 +1,12 @@
+<p align="center">
+  <img witdh="150px" height="150px" alt="clobbr grid logo" src="https://user-images.githubusercontent.com/1515742/80861783-dcfcc400-8c70-11ea-89c6-671dbdff6f33.png" />
+  <h2 align="center">
+    <small><a href="https://clobbr.app">clobbr.app</a></small>
+  </h2>
+</p>
+
+-----------------
 ## @clobbr/ui
-
-[![@clobbr/ui on npm](https://img.shields.io/npm/v/@clobbr/ui?label=npm&style=flat)](https://www.npmjs.com/package/@clobbr/ui)
-
 ## Getting started
 
 1. Clone the repository
