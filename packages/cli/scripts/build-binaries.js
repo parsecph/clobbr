@@ -4,7 +4,7 @@ const { exec } = require('pkg');
 const { name, version } = require('../package.json');
 const packageDir = path.resolve(__dirname, '../binaries');
 const entry = path.resolve(__dirname, '../dist/index.js');
-const targets = ['node12-linux-x64', 'node12-macos-x64', 'node12-win-x64'];
+const targets = ['node14-linux-x64', 'node14-macos-x64', 'node14-win-x64'];
 const baseName = `${name}-${version}`.replace(/\./g, '-');
 
 if (!fs.existsSync(packageDir)) {
