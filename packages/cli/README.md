@@ -1,11 +1,12 @@
 <p align="center">
   <img witdh="150px" height="150px" alt="clobbr grid logo" src="https://user-images.githubusercontent.com/1515742/80861783-dcfcc400-8c70-11ea-89c6-671dbdff6f33.png" />
-  <h2 align="center">
+
+  <h3 align="center">
+    Clobbr - API speed test <br/>
     <small><a href="https://clobbr.app">clobbr.app</a></small>
-  </h2>
+  </h3>
 </p>
 
------------------
 ## @clobbr/cli
 
 [![@clobbr/cli on npm](https://img.shields.io/npm/v/@clobbr/cli?label=npm&style=flat)](https://www.npmjs.com/package/@clobbr/cli)
