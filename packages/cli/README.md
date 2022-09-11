@@ -45,10 +45,15 @@ Options:
   -d, --dataPath <dataPath>           path to data file (json), to add as request body.
   -p, --parallel                      run requests in parallel. (default: false)
   -c, --chart                         display results as a chart. (default: true)
-  -t, --table <table>                 display results as a table (none, compact, full). (default: "none")
-  -of, --outputFormat <outputFormat>  output format: (table, csv, yaml, json). (default: "table")
-  -out, --outputFile <outputFormat>   if option set the result will be output as a file. Can optionally pass a filename to
-                                      use with this option. (default: false)
+  -t, --table <table>                 type of table to display for the visual output format: (none, compact, full).
+                                      (default: "none")
+  -of, --outputFormat <outputFormat>  output format: (visual, csv, yaml, json). (default: "visual")
+  -out, --outputFile <outputFile>     if option set the result will be output as a file. Can optionally pass a filename to
+                                      use with this option. Outputs as json if no output format is specified. (default:
+                                      false)
+  -ck, --checks <checks...>           checks to be made on the results. Can have multiple values. Available checks: mean
+                                      (max ms), median (max ms), stdDev (max ms), q5 (max ms), q50 (max ms), q95 (max ms),
+                                      q99 (max ms), pctOfSuccess (0-100). (default: false)
   --help                              display help for command
 ```
 

@@ -1,12 +1,12 @@
 export enum EOutputTypes {
-  TABLE = 'table',
+  VISUAL = 'visual',
   CSV = 'csv',
   YAML = 'yaml',
   JSON = 'json'
 }
 
 export const OUTPUT_TYPES = {
-  table: EOutputTypes.TABLE,
+  visual: EOutputTypes.VISUAL,
   csv: EOutputTypes.CSV,
   yaml: EOutputTypes.YAML,
   json: EOutputTypes.JSON

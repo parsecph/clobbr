@@ -2,18 +2,20 @@ import { oneLine } from 'common-tags';
 import { merge } from 'lodash';
 import { Command } from 'commander';
 import ora from 'ora';
-import asciichart from 'asciichart';
 import chalk from 'chalk';
 
 import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
 import { EEvents } from '@clobbr/api/src/enums/events';
 import { getTimeAverage } from '@clobbr/api/src/util';
-import { run } from '@clobbr/api';
+import { run, mathUtils } from '@clobbr/api';
 
 import { error, errorMessage, highlightInfo, success } from './src/output/log';
 import { renderStatsTable, renderTable } from './src/output/table';
+import { renderChart } from './src/output/chart';
+import { renderFormattedOutput } from './src/output/output';
 import { TABLE_TYPES } from './src/enums/table';
 import { OUTPUT_TYPES } from './src/enums/outputs';
+import { PCT_OF_SUCCESS_KEY } from './src/consts/pctOfSuccess';
 import { getDurationColor } from './src/util';
 import { getHeaders, getData } from './src/io/io';
 
@@ -22,11 +24,16 @@ const DEFAULTS = {
   iterations: '10',
   parallel: false,
   table: TABLE_TYPES.none,
-  output: OUTPUT_TYPES.table,
+  output: OUTPUT_TYPES.visual,
   outputFile: false,
   chart: true,
   headers: {},
   data: {}
+};
+
+const getAvailableChecks = () => {
+  const mathChecks = Object.keys(mathUtils).map((key) => `${key} (max ms)`);
+  return `${[...mathChecks, `${PCT_OF_SUCCESS_KEY} (0-100)`].join(', ')}`;
 };
 
 const runEventCallback = (spinner) => (
@@ -69,7 +76,6 @@ program
       Valid urls begin with http(s)://
     `
   )
-
   .requiredOption('-u, --url <url>', 'url to test')
   .option(
     '-m, --method <method>',
@@ -93,7 +99,9 @@ program
   .option('-c, --chart', `display results as a chart.`, DEFAULTS.chart)
   .option(
     '-t, --table <table>',
-    `display results as a table (${Object.values(TABLE_TYPES).join(', ')}).`,
+    `type of table to display for the ${
+      OUTPUT_TYPES.visual
+    } output format: (${Object.values(TABLE_TYPES).join(', ')}).`,
     DEFAULTS.table
   )
   .option(
@@ -102,8 +110,13 @@ program
     DEFAULTS.output
   )
   .option(
-    '-out, --outputFile <outputFormat>',
-    `if option set the result will be output as a file. Can optionally pass a filename to use with this option.`,
+    '-out, --outputFile <outputFile>',
+    `if option set the result will be output as a file. Can optionally pass a filename to use with this option. Outputs as json if no output format is specified.`,
+    DEFAULTS.outputFile
+  )
+  .option(
+    '-ck, --checks <checks...>',
+    `checks to be made on the results. Can have multiple values. Available checks: ${getAvailableChecks()}.`,
     DEFAULTS.outputFile
   )
 
@@ -114,9 +127,11 @@ program
       method,
       url,
       chart,
-      table,
+      table: tableType,
       headersPath,
-      dataPath
+      dataPath,
+      outputFormat,
+      outputFile
     } = cliOptions;
 
     const spinner = ora({
@@ -137,7 +152,7 @@ program
         data
       });
 
-      const { results, logs, average } = await run(
+      const { results, logs } = await run(
         parallel,
         options,
         runEventCallback(spinner)
@@ -158,30 +173,39 @@ program
           `\n Is the url & method correct, or are you missing some data/headers/cookies?`
         );
 
-        renderTable(failedRequests, [], table);
-      } else {
-        // TODO autoresize?
-        if (results.length && chart) {
-          console.log('\n');
-          console.log(
-            asciichart.plot(results, {
-              height: 10,
-              width: 15,
-              colors: [asciichart.green, asciichart.blue]
-            })
+        if (outputFormat === OUTPUT_TYPES.visual) {
+          renderTable(failedRequests, [], tableType);
+        } else {
+          await renderFormattedOutput(
+            failedRequests,
+            [],
+            outputFormat,
+            outputFile
           );
-          console.log('\n');
         }
+      } else {
+        if (outputFormat === OUTPUT_TYPES.visual) {
+          if (chart) {
+            renderChart(results);
+          }
 
-        renderStatsTable(failedRequests, okRequests);
+          renderStatsTable(failedRequests, okRequests);
 
-        success(`\n Finished run of ${results.length} iterations ✅ `);
+          success(`\n Finished run of ${results.length} iterations ✅ `);
 
-        if (failedRequests.length) {
-          error(`\n ${failedRequests.length} iterations have failed ❌ `);
+          if (failedRequests.length) {
+            error(`\n ${failedRequests.length} iterations have failed ❌ `);
+          }
+
+          renderTable(failedRequests, okRequests, tableType);
+        } else {
+          await renderFormattedOutput(
+            failedRequests,
+            okRequests,
+            outputFormat,
+            outputFile
+          );
         }
-
-        renderTable(failedRequests, okRequests, table);
       }
     } catch (errorMessages) {
       spinner.stop();
