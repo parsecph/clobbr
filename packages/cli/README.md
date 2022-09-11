@@ -42,11 +42,6 @@ Usage: clobbr run [options]
 Test an api endpoint/url (<url>), Valid urls begin with http(s)://
 
 Options:
-Usage: clobbr run [options]
-
-Test an api endpoint/url (<url>), Valid urls begin with http(s)://
-
-Options:
   -u, --url <url>                     url to test
   -m, --method <method>               request method (verb) to use. (default: "get")
   -i, --iterations <iterations>       number of requests to perform. (default: "10")
