@@ -18,6 +18,7 @@ import { OUTPUT_TYPES } from './src/enums/outputs';
 import { PCT_OF_SUCCESS_KEY } from './src/consts/pctOfSuccess';
 import { getDurationColor } from './src/util';
 import { getHeaders, getData } from './src/io/io';
+import { runChecks, renderCheckResults } from './src/checks/runChecks';
 
 const DEFAULTS = {
   method: 'get',
@@ -131,7 +132,8 @@ program
       headersPath,
       dataPath,
       outputFormat,
-      outputFile
+      outputFile,
+      checks
     } = cliOptions;
 
     const spinner = ora({
@@ -206,6 +208,17 @@ program
             outputFile
           );
         }
+      }
+
+      if (checks.length) {
+        const checkResults = await runChecks(
+          checks,
+          failedRequests,
+          okRequests
+        );
+
+        console.log('\n');
+        renderCheckResults(checkResults);
       }
     } catch (errorMessages) {
       spinner.stop();
