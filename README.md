@@ -37,15 +37,15 @@ With all that, output to various file formats such as csv, json, yaml and more. 
 
 ### CI usage examples
 
-<a href="https://github.com/parsecph/clobbr-ci/blob/main/.circleci/config.yml">
+<a href="https://app.circleci.com/pipelines/github/parsecph/clobbr-ci?branch=main">
   <img width="200px" alt="CircleCI integration config" src="https://user-images.githubusercontent.com/1515742/189537171-4a064b0d-3db9-4016-9baf-f6b6ac49f45d.png">
 </a>
 
-<a href="https://github.com/parsecph/clobbr-ci/blob/main/.travis.yml">
+<a href="https://app.travis-ci.com/github/parsecph/clobbr-ci">
   <img width="200px" alt="Travis CI integration config" src="https://user-images.githubusercontent.com/1515742/189537172-c4e01aaf-16f2-499f-92d5-924c82a44540.png">
 </a>
 
-<a href="https://github.com/parsecph/clobbr-ci/blob/main/appveyor.yml">
+<a href="https://ci.appveyor.com/project/dandaniel/clobbr-ci">
   <img width="200px" alt="AppVeyor CI integration config" src="https://user-images.githubusercontent.com/1515742/189537169-1b6b812a-9830-4573-955d-b25ccec27e08.png">
 </a>
 
