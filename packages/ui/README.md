@@ -7,6 +7,20 @@
   </h3>
 </p>
 
+<div align="center">
+  <a href="https://apps.apple.com/us/app/clobbr-test-endpoint-speed/id1629096010?mt=12" target="_blank">
+    <img height="40px" src="https://user-images.githubusercontent.com/1515742/189620547-646b3682-708a-4378-9e40-b6ca8e67a077.svg" alt="Download Clobbr on the Apple App Store" />
+  </a>
+
+  <a href="https://apps.microsoft.com/store/detail/clobbr-api-speed-test/9P7CVP0HG5V9?hl=en-us&gl=us" target="_blank">
+    <img height="40px" src="https://user-images.githubusercontent.com/1515742/189620555-7bef1a55-f8a5-4d4b-8879-237e29b1dd04.svg" alt="Download Clobbr on the Microsoft Store" />
+  </a>
+
+  <a href="https://www.npmjs.com/package/@clobbr/cli" target="_blank">
+    <img height="40px" src="https://user-images.githubusercontent.com/1515742/189622786-30f2b136-1877-48a6-817d-49c9d0a97367.svg" alt="Download Clobbr on the Microsoft Store" />
+  </a>
+</div>
+
 ## @clobbr/ui
 ## Getting started
 

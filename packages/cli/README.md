@@ -3,13 +3,16 @@
 
   <h3 align="center">
     Clobbr - API speed test <br/>
-    <small><a href="https://clobbr.app">clobbr.app</a></small>
+    <small><a href="https://clobbr.app">clobbr.app</a></small> <br/>
+    <a href="https://www.npmjs.com/package/@clobbr/cli" target="_blank">
+      <img src="https://img.shields.io/npm/v/@clobbr/cli?label=npm&style=flat" alt="get @clobbr/cli on npm">
+    </a>
   </h3>
 </p>
 
 ## @clobbr/cli
 
-[![@clobbr/cli on npm](https://img.shields.io/npm/v/@clobbr/cli?label=npm&style=flat)](https://www.npmjs.com/package/@clobbr/cli)
+
 
 Use this cli tool to test your api endpoints to see how well they perform under multiple requests in sequence or parallel.
 
