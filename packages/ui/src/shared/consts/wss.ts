@@ -1,5 +1,3 @@
-export const INTERNAL_WSS_URL = 'ws://localhost:2369/ws';
-
 export const WS_EVENTS = {
   API: {
     RUN: 'clobbr-api:run',
@@ -10,5 +8,9 @@ export const WS_EVENTS = {
   },
   NODE: {
     RUN_NODE_CMD: 'clobbr-api:run-node-cmd'
+  },
+  CORE: {
+    WS_CONNECT: 'clobbr-core:ws-connect',
+    WS_URL_SWITCH: 'clobbr-core:ws-url-switch'
   }
 };

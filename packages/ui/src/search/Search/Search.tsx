@@ -28,9 +28,10 @@ import IterationsInput from 'search/Search/IterationsInput';
 import { Everbs } from 'shared/enums/http';
 import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
 import { EEvents } from '@clobbr/api/src/enums/events';
-import { INTERNAL_WSS_URL, WS_EVENTS } from 'shared/consts/wss';
+import { WS_EVENTS } from 'shared/consts/wss';
 
 import { useResultRunner } from 'results/useResultRunner';
+import { useMount } from 'react-use';
 
 const iterationInputCss = css`
   .MuiInputBase-root {
@@ -65,8 +66,15 @@ const verbInputCss = css`
 
 const Search = () => {
   const globalStore = useContext(GlobalStore);
+  const [wssUrl, setWssUrl] = useState<string>('ws://localhost');
 
-  const { lastMessage, readyState } = useWebSocket(INTERNAL_WSS_URL, {
+  const getSocketUrl = useCallback((): Promise<string> => {
+    return new Promise((resolve) => {
+      resolve(wssUrl);
+    });
+  }, [wssUrl]);
+
+  const { lastMessage, readyState } = useWebSocket(getSocketUrl, {
     shouldReconnect: (closeEvent) => true
   });
 
@@ -193,6 +201,21 @@ const Search = () => {
   useEffect(() => {
     globalStore.search.setWsReady(wsReady);
   }, [globalStore.search, wsReady]);
+
+  useMount(() => {
+    try {
+      const electronAPI = (window as any).electronAPI;
+
+      if (electronAPI) {
+        electronAPI.connectWss();
+
+        electronAPI.onWssUrlSwitch((_event: any, newWsUrl: string) => {
+          console.info(`Switching to new ws url: ${newWsUrl}`);
+          setWssUrl(newWsUrl);
+        });
+      }
+    } catch {}
+  });
 
   return (
     <GlobalStore.Consumer>
