@@ -7,7 +7,12 @@ import { getDb } from 'storage/storage';
 import { EDbStores } from 'storage/EDbStores';
 import { GlobalStore } from 'app/globalContext';
 import { SK } from 'storage/storageKeys';
-import { MAX_ITERATIONS } from 'shared/consts/settings';
+import {
+  BUG_REPORT_HREF,
+  FEATURE_REQUEST_HREF,
+  HELP_HREF,
+  MAX_ITERATIONS
+} from 'shared/consts/settings';
 
 import {
   Alert,
@@ -18,8 +23,7 @@ import {
   IconButton,
   TextField
 } from '@mui/material';
-import { Close } from '@mui/icons-material';
-
+import { Close, BugReport, AutoFixHigh, Help } from '@mui/icons-material';
 import ThemeToggle from 'Settings/ThemeToggle/ThemeToggle';
 import StickySearchToggle from 'Settings/StickySearchToggle/StickySearchToggle';
 
@@ -179,7 +183,7 @@ export const Settings = () => {
             className="flex flex-col gap-2"
           >
             <Typography variant="overline" className={'opacity-50'}>
-              Advanced settings
+              Other settings
             </Typography>
 
             <TextField
@@ -202,6 +206,38 @@ export const Settings = () => {
             ) : (
               <></>
             )}
+          </FormControl>
+
+          <FormControl
+            component="fieldset"
+            variant="standard"
+            className="flex flex-col gap-2"
+          >
+            <Typography variant="overline" className={'opacity-50'}>
+              Support & feature requests
+            </Typography>
+
+            <div className="flex gap-2">
+              <Button
+                variant="outlined"
+                startIcon={<BugReport />}
+                href={BUG_REPORT_HREF}
+              >
+                Bug report
+              </Button>
+
+              <Button
+                variant="outlined"
+                startIcon={<AutoFixHigh />}
+                href={FEATURE_REQUEST_HREF}
+              >
+                Feature request
+              </Button>
+
+              <Button variant="outlined" startIcon={<Help />} href={HELP_HREF}>
+                Get help
+              </Button>
+            </div>
           </FormControl>
 
           <Snackbar
