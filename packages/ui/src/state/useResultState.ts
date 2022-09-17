@@ -89,13 +89,17 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
   }) => {
     const runId = uuidv4();
     const currentList = listRef.current;
+    const logsWithoutMetaResponseData = logs.map((log) => {
+      delete log.metas.data;
+      return log;
+    });
 
     const result: ClobbrUIResult = {
       id: runId,
       startDate: formatISO(new Date()),
       endDate: undefined,
       resultDurations,
-      logs
+      logs: logsWithoutMetaResponseData
     };
 
     const existingListItem = currentList.find(
@@ -166,6 +170,10 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     logs: Array<ClobbrLogItem>;
   }) => {
     const currentList = listRef.current;
+    const logsWithoutMetaResponseData = logs.map((log) => {
+      delete log.metas.data;
+      return log;
+    });
 
     const existingListItem = currentList.find((i) => i.id === itemId);
     const isComplete = existingListItem?.iterations === logs.length;
@@ -176,7 +184,7 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
       return false;
     }
 
-    const resultDurations = logs
+    const resultDurations = logsWithoutMetaResponseData
       .filter((l) => typeof l.metas.duration === 'number')
       .map((l) => {
         return l.metas.duration as number;
@@ -185,7 +193,7 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     const nextResult: ClobbrUIResult = {
       ...existingListItem.latestResult,
       endDate,
-      logs,
+      logs: logsWithoutMetaResponseData,
       resultDurations
     };
 
