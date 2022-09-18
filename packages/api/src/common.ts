@@ -24,7 +24,7 @@ export const handleApiCall = async (
     url,
     verb,
     headers,
-    formatted: `${metas.number}: ${metas.duration} ${metas.status} ${metas.size}`,
+    formatted: `${metas.number}: ${metas.duration} ${metas.durationUnit} ${metas.status} ${metas.size}`,
     metas
   };
 
