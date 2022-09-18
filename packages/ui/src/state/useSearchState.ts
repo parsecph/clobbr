@@ -122,7 +122,9 @@ export const useSearchState = ({ initialState }: { [key: string]: any }) => {
   };
 
   const updateHeaderInputMode = (headerInputMode: string) => {
-    setHeaderInputMode(headerInputMode);
+    if (headerInputMode) {
+      setHeaderInputMode(headerInputMode);
+    }
   };
 
   const updateHeaderShellCmd = (shellCmd: string) => {
