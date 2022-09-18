@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { Dialog } from '@headlessui/react';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -28,9 +28,17 @@ export const Modal = ({
   footerButtons?: React.ReactNode;
   closeButtonText?: string;
 }) => {
+  const modalRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (open) {
       rootContainer.classList.add(...rootOpenClasses);
+
+      if (modalRef?.current) {
+        setTimeout(() => {
+          (modalRef.current as HTMLElement).scrollTop = 0;
+        }, 0);
+      }
     } else {
       rootContainer.classList.remove(...rootOpenClasses);
     }
@@ -80,6 +88,7 @@ export const Modal = ({
                 'z-0 flex flex-col w-full h-full bg-white/80 dark:bg-gray-900/70 backdrop-blur-sm rounded-t-lg shadow-xl overflow-auto',
                 maxWidth && `max-w-${maxWidth}`
               )}
+              ref={modalRef}
             >
               {children}
 
