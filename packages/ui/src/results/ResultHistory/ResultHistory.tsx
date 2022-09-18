@@ -27,29 +27,33 @@ export const ResultHistory = ({
     parallelResults,
     ['startDate'],
     ['desc']
-  ).reduce((acc: { [key: string]: Array<ClobbrUIResult> }, result) => {
-    const key = result.iterations.toString() as string;
-    if (!acc[key]) {
-      acc[key] = [result];
-    } else {
-      acc[key].push(result);
-    }
-    return acc;
-  }, {});
+  )
+    .filter(({ iterations }) => !!iterations)
+    .reduce((acc: { [key: string]: Array<ClobbrUIResult> }, result) => {
+      const key = result.iterations.toString() as string;
+      if (!acc[key]) {
+        acc[key] = [result];
+      } else {
+        acc[key].push(result);
+      }
+      return acc;
+    }, {});
 
   const sequentialResultsByIterations = orderBy(
     sequentialResults,
     ['startDate'],
     ['desc']
-  ).reduce((acc: { [key: string]: Array<ClobbrUIResult> }, result) => {
-    const key = result.iterations.toString() as string;
-    if (!acc[key]) {
-      acc[key] = [result];
-    } else {
-      acc[key].push(result);
-    }
-    return acc;
-  }, {});
+  )
+    .filter(({ iterations }) => !!iterations)
+    .reduce((acc: { [key: string]: Array<ClobbrUIResult> }, result) => {
+      const key = result.iterations.toString() as string;
+      if (!acc[key]) {
+        acc[key] = [result];
+      } else {
+        acc[key].push(result);
+      }
+      return acc;
+    }, {});
 
   return (
     <GlobalStore.Consumer>
@@ -137,6 +141,15 @@ export const ResultHistory = ({
                 ))}
               </div>
             </ul>
+          ) : (
+            <></>
+          )}
+
+          {!Object.keys(parallelResultsByIterations).length &&
+          !Object.keys(sequentialResultsByIterations).length ? (
+            <Typography variant="h6" className="p-4">
+              No history available. Run this again to see history.
+            </Typography>
           ) : (
             <></>
           )}
