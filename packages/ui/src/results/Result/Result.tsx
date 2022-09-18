@@ -30,6 +30,7 @@ import { formatNumber } from 'shared/util/numberFormat';
 import { ResultChart } from 'results/ResultChart/ResultChart';
 import { ResultStats } from 'results/ResultStats/ResultStats';
 import { ReRunResultButton } from 'results/ReRunResultButton/ReRunResultButton';
+import { ResultHistoryToggle } from 'results/ResultHistory/ResultHistoryToggle';
 import { UpdateSettingsButton } from 'results/UpdateSettingsButton/UpdateSettingsButton';
 import { CommonlyFailedItem } from 'results/CommonlyFailedItem/CommonlyFailedItem';
 import { useCommonlyFailedMessage } from 'results/CommonlyFailedItem/useCommonlyFailedMessage';
@@ -180,8 +181,12 @@ const Result = ({
       .filter((log) => isNumber(log.metas.duration))
       .map((log) => log.metas.duration as number);
 
-    if (!qualifiedDurations.length || qualifiedDurations.length === 1) {
+    if (!qualifiedDurations.length) {
       return 0;
+    }
+
+    if (qualifiedDurations.length === 1) {
+      return qualifiedDurations[0];
     }
 
     return mathUtils.mean(qualifiedDurations);
@@ -410,6 +415,8 @@ const Result = ({
                   <CommonlyFailedItem item={item} />
                 </div>
 
+                <ResultHistoryToggle item={item} />
+
                 <div className="flex gap-2 mt-4">
                   <ReRunResultButton item={item} />
                   <UpdateSettingsButton item={item} />
@@ -430,6 +437,8 @@ const Result = ({
                   Try reducing the number of iterations and run again? <br />
                 </Typography>
 
+                <ResultHistoryToggle item={item} />
+
                 <div className="flex gap-2 mt-4">
                   <ReRunResultButton item={item} />
                   <UpdateSettingsButton item={item} />
@@ -449,11 +458,13 @@ const Result = ({
                   Increase the number of itetations to see more stats.
                 </Typography>
 
+                <ResultHistoryToggle item={item} />
+
                 <div className="mt-4">
                   <ResultStats result={item.latestResult} />
                 </div>
 
-                <div className="flex justify-center gap-2 px-2 py-6">
+                <div className="flex justify-center gap-2 px-2 py-6 mt-8">
                   <ReRunResultButton item={item} />
                   <UpdateSettingsButton item={item} />
                 </div>
@@ -479,6 +490,7 @@ const Result = ({
                   </div>
                 ) : (
                   <>
+                    <ResultHistoryToggle item={item} />
                     <ResultChart item={item} />
                     <ResultStats result={item.latestResult} />
 

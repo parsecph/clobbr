@@ -6,4 +6,6 @@ export interface ClobbrUIResult {
   endDate?: string;
   resultDurations: Array<number>;
   logs: Array<ClobbrLogItem>;
+  parallel: boolean;
+  iterations: number;
 }

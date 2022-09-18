@@ -99,7 +99,9 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
       startDate: formatISO(new Date()),
       endDate: undefined,
       resultDurations,
-      logs: logsWithoutMetaResponseData
+      logs: logsWithoutMetaResponseData,
+      parallel,
+      iterations
     };
 
     const existingListItem = currentList.find(
@@ -123,7 +125,10 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
         data,
         timeout,
         latestResult: result,
-        historicalResults: [...existingListItem.historicalResults, result]
+        historicalResults: [
+          ...existingListItem.historicalResults,
+          existingListItem.latestResult
+        ]
       };
 
       setList([
