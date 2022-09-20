@@ -185,12 +185,12 @@ npx @clobbr/cli run \
 ```
 
 #### Run checks against results
-Set target values for percentage of success (pctOfSuccess), mean (average), median, standardDeviation (stdDev) and supported quantiles (q5, q50, q95, q99).
+Set target values for percentage of success (pctOfSuccess), mean (ms), median (ms), standardDeviation (stdDev in ms) and supported quantiles in ms (q5, q50, q95, q99).
 
 ```bash
 npx @clobbr/cli run \
   --url "https://api.github.com/zen"
-  --checks mean=200 median=200 stdDev=200 q5=200 q50=200 q95=200 q99=200 pctOfSuccess=95
+  --checks mean=200 median=200 stdDev=50 q5=150 q50=200 q95=250 q99=300 pctOfSuccess=95
 ```
 
 <img width="500px" alt="Run checks against results" src="https://user-images.githubusercontent.com/1515742/189538796-4d96f78f-0251-41e4-a549-bcb04eab2fb2.png">
