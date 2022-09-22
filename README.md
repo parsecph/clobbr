@@ -179,9 +179,9 @@ Results will be shown in a human-readable format by default, but you can also ge
 
 ```bash
 npx @clobbr/cli run \
-  --url "https://api.github.com/zen"
-  --outputFormat json                 # supported: json, csv, yaml
-  --outputFile                        # optionally, pass a file name
+  --url "https://api.github.com/zen" \
+  --outputFormat json                \ # supported: json, csv, yaml
+  --outputFile                       \ # optionally, pass a file name
 ```
 
 #### Run checks against results
@@ -189,7 +189,7 @@ Set target values for percentage of success (pctOfSuccess), mean (ms), median (m
 
 ```bash
 npx @clobbr/cli run \
-  --url "https://api.github.com/zen"
+  --url "https://api.github.com/zen" \
   --checks mean=200 median=200 stdDev=50 q5=150 q50=200 q95=250 q99=300 pctOfSuccess=95
 ```
 
@@ -199,7 +199,7 @@ Only include checks that you want to run. If you don't specify a check, it will 
 
 ```bash
 npx @clobbr/cli run \
-  --url "https://api.github.com/zen"
+  --url "https://api.github.com/zen" \
   --checks pctOfSuccess=90
 ```
 
