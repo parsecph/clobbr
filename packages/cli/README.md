@@ -14,7 +14,22 @@
 
 
 
-Use this cli tool to test your api endpoints to see how well they perform under multiple requests in sequence or parallel.
+Test your api endpoints to see how well they perform under multiple requests (clobber your apis!), in sequence or parallel.
+Use this cli tool from your favorite shell or integrate with your CI server:
+
+<a href="https://app.circleci.com/pipelines/github/parsecph/clobbr-ci?branch=main">
+  <img width="200px" alt="CircleCI integration config" src="https://user-images.githubusercontent.com/1515742/189537171-4a064b0d-3db9-4016-9baf-f6b6ac49f45d.png">
+</a>
+
+<a href="https://app.travis-ci.com/github/parsecph/clobbr-ci">
+  <img width="200px" alt="Travis CI integration config" src="https://user-images.githubusercontent.com/1515742/189537172-c4e01aaf-16f2-499f-92d5-924c82a44540.png">
+</a>
+
+<a href="https://ci.appveyor.com/project/dandaniel/clobbr-ci">
+  <img width="200px" alt="AppVeyor CI integration config" src="https://user-images.githubusercontent.com/1515742/189537169-1b6b812a-9830-4573-955d-b25ccec27e08.png">
+</a>
+
+[See more here ↗️](https://github.com/parsecph/clobbr-ci)
 
 ### Basic usage
 
