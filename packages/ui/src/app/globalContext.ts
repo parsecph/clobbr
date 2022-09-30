@@ -3,6 +3,7 @@ import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
 import React from 'react';
 import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
 import { ClobbrUIHeaderItem } from 'models/ClobbrUIHeaderItem';
+import { ClobbrUIProperties } from 'models/ClobbrUIProperties';
 import { HEADER_MODES } from 'search/SearchSettings/HeaderSettings/HeaderSettings';
 import {
   ESearchSettingsMode,
@@ -33,6 +34,7 @@ export const DEFAULT_GLOBAL_STORE = {
       text: '{}',
       valid: true
     },
+    properties: {} as ClobbrUIProperties,
     payloadItems: [],
     ssl: false,
     parallel: true,
@@ -94,6 +96,7 @@ export const DEFAULT_GLOBAL_STORE = {
         valid: boolean;
       };
       data: { [key: string]: any };
+      properties?: ClobbrUIProperties;
       timeout: number;
     }): { id: string } {
       return { id: '' };

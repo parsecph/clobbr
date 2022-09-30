@@ -6,6 +6,7 @@ import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
 import { EEvents } from '@clobbr/api/src/enums/events';
 import { Everbs } from 'shared/enums/http';
 import { ClobbrUIHeaderItem } from 'models/ClobbrUIHeaderItem';
+import { ClobbrUIProperties } from 'models/ClobbrUIProperties';
 import { HEADER_MODES } from 'search/SearchSettings/HeaderSettings/HeaderSettings';
 
 import { run } from '@clobbr/api';
@@ -22,6 +23,7 @@ export const useResultRunner = ({
   verb,
   ssl,
   dataJson,
+  properties,
   headerItems,
   headerInputMode,
   headerShellCmd,
@@ -34,6 +36,7 @@ export const useResultRunner = ({
   verb: Everbs;
   ssl: boolean;
   dataJson: { [key: string]: any };
+  properties?: ClobbrUIProperties;
   headerItems: Array<ClobbrUIHeaderItem>;
   headerInputMode: string;
   headerShellCmd: string;
@@ -81,6 +84,7 @@ export const useResultRunner = ({
         verb,
         ssl,
         data: dataJson,
+        properties,
         headers: headerItems,
         headerInputMode,
         headerShellCmd,

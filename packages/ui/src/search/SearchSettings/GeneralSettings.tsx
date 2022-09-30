@@ -10,7 +10,8 @@ import {
   Alert,
   Snackbar,
   IconButton,
-  FormControl
+  FormControl,
+  SelectChangeEvent
 } from '@mui/material';
 import { Close } from '@mui/icons-material';
 
@@ -18,6 +19,8 @@ import { GlobalStore } from 'app/globalContext';
 
 import AppleSwitch from 'shared/components/AppleSwitch/AppleSwitch';
 import IterationsInput from 'search/Search/IterationsInput';
+import VerbSelect from 'search/Search/VerbSelect';
+import { Everbs } from 'shared/enums/http';
 
 export const GeneralSettings = () => {
   const globalStore = useContext(GlobalStore);
@@ -46,6 +49,12 @@ export const GeneralSettings = () => {
       }
     };
 
+  const handleVerbChange =
+    (updateVerb: (verb: Everbs) => void) =>
+    (event: SelectChangeEvent<Everbs>) => {
+      updateVerb(event.target.value as Everbs);
+    };
+
   return (
     <GlobalStore.Consumer>
       {({ search }) => (
@@ -68,6 +77,19 @@ export const GeneralSettings = () => {
             </FormGroup>
 
             <IterationsInput />
+
+            <VerbSelect
+              value={search.verb}
+              onVerbChange={handleVerbChange(search.updateVerb)}
+            />
+
+            {search.properties?.gql?.isGql && search.verb === Everbs.GET ? (
+              <Alert severity="warning">
+                Graphql request detected. Should this be a POST request?
+              </Alert>
+            ) : (
+              ''
+            )}
 
             <TextField
               variant="outlined"

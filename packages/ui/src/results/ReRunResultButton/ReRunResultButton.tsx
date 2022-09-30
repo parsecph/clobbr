@@ -20,6 +20,7 @@ export const ReRunResultButton = ({
     verb: item.verb,
     ssl: item.ssl,
     dataJson: item.data,
+    properties: item.properties,
     headerItems: item.headers,
     headerInputMode: item.headerInputMode,
     headerShellCmd: item.headerShellCmd,

@@ -106,7 +106,7 @@ export const Settings = () => {
 
   return (
     <GlobalStore.Consumer>
-      {({ appSettings }) => (
+      {({ appSettings, themeMode }) => (
         <div className="flex flex-col gap-12 p-6">
           <FormControl
             component="fieldset"
@@ -219,23 +219,33 @@ export const Settings = () => {
 
             <div className="flex gap-2">
               <Button
+                className="!px-6 h-11"
+                color={themeMode === 'dark' ? 'primary' : 'secondary'}
                 variant="outlined"
                 startIcon={<BugReport />}
                 href={BUG_REPORT_HREF}
               >
-                Bug report
+                <Typography variant="body2">Bug report</Typography>
               </Button>
 
               <Button
+                className="!px-6 h-11"
+                color={themeMode === 'dark' ? 'primary' : 'secondary'}
                 variant="outlined"
                 startIcon={<AutoFixHigh />}
                 href={FEATURE_REQUEST_HREF}
               >
-                Feature request
+                <Typography variant="body2"> Feature request</Typography>
               </Button>
 
-              <Button variant="outlined" startIcon={<Help />} href={HELP_HREF}>
-                Get help
+              <Button
+                className="!px-6 h-11"
+                color={themeMode === 'dark' ? 'primary' : 'secondary'}
+                variant="outlined"
+                startIcon={<Help />}
+                href={HELP_HREF}
+              >
+                <Typography variant="body2"> Get help</Typography>
               </Button>
             </div>
           </FormControl>

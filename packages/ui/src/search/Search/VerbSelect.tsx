@@ -9,10 +9,17 @@ import { css } from '@emotion/css';
 
 import { VERBS, Everbs } from 'shared/enums/http';
 
-const selectCss = css`
+const selectCssFilled = css`
   .MuiSelect-icon {
     top: auto;
     bottom: 0.5rem;
+  }
+`;
+
+const selectCssOutlined = css`
+  .MuiSelect-icon {
+    top: auto;
+    bottom: 1rem;
   }
 `;
 
@@ -20,23 +27,25 @@ const selectCss = css`
 export const VerbSelect = ({
   customContainerClasses,
   onVerbChange,
-  value
+  value,
+  variant = 'outlined'
 }: {
   customContainerClasses?: string;
   onVerbChange: (event: SelectChangeEvent<Everbs>) => void;
   value: Everbs;
+  variant?: 'outlined' | 'filled';
 }) => {
   return (
-    <FormControl variant="filled" className={customContainerClasses}>
+    <FormControl className={customContainerClasses}>
       <InputLabel id="search-verb-label">Method</InputLabel>
       <Select
-        variant="filled"
+        variant={variant}
         labelId="search-verb-label"
         id="search-verb"
         value={value}
         label="Method"
         onChange={onVerbChange}
-        className={selectCss}
+        className={variant === 'filled' ? selectCssFilled : selectCssOutlined}
       >
         {Object.keys(VERBS).map((verb: string) => (
           <MenuItem

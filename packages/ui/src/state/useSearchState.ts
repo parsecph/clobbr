@@ -6,6 +6,7 @@ import {
   ESearchSettingsMode,
   SEARCH_SETTINGS_MODE
 } from 'shared/enums/ESearchSettingsMode';
+import { extractGqlDataFromPayload } from 'shared/gql/extractGqlFromPayload';
 
 const swapUrlSsl = (url: string, ssl: boolean) =>
   ssl ? url.replace('http://', 'https://') : url.replace('https://', 'http://');
@@ -22,6 +23,7 @@ export const useSearchState = ({ initialState }: { [key: string]: any }) => {
   const [iterations, setIterations] = useState(initialState.search.iterations);
   const [verb, setVerb] = useState<Everbs>(initialState.search.verb);
   const [payloadData, setPayloadData] = useState(initialState.search.data);
+  const [properties, setProperties] = useState(initialState.search.properties);
   const [headerInputMode, setHeaderInputMode] = useState(
     initialState.search.headerInputMode
   );
@@ -149,6 +151,17 @@ export const useSearchState = ({ initialState }: { [key: string]: any }) => {
           text: jsonString,
           valid: true
         });
+
+        const { isGql, gqlVariables, gqlName } =
+          extractGqlDataFromPayload(parsedJson);
+        setProperties({
+          ...properties,
+          gql: {
+            isGql,
+            gqlVariables,
+            gqlName
+          }
+        });
       }
     } catch (error) {
       console.warn('Bailed saving payload, JSON invalid');
@@ -157,6 +170,11 @@ export const useSearchState = ({ initialState }: { [key: string]: any }) => {
         json: null,
         text: jsonString,
         valid: false
+      });
+
+      setProperties({
+        ...properties,
+        gql: null
       });
     }
   };
@@ -255,6 +273,9 @@ export const useSearchState = ({ initialState }: { [key: string]: any }) => {
 
     data: payloadData,
     updateData,
+
+    properties,
+    updateProperties: setProperties,
 
     headerInputMode,
     updateHeaderInputMode,

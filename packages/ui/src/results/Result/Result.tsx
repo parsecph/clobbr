@@ -267,15 +267,27 @@ const Result = ({
                       ''
                     )}
 
-                    <small
-                      className={clsx(
-                        'px-2 py-0.5',
-                        'rounded-sm text-black',
-                        VERB_COLOR_CLASS_MAP[item.verb] || 'bg-gray-300'
-                      )}
-                    >
-                      {item.verb.toUpperCase()}
-                    </small>
+                    {item.properties?.gql?.isGql ? (
+                      <small
+                        className={clsx(
+                          'px-2 py-0.5',
+                          'rounded-sm text-black',
+                          'bg-fuchsia-300'
+                        )}
+                      >
+                        {item.properties?.gql.gqlName}
+                      </small>
+                    ) : (
+                      <small
+                        className={clsx(
+                          'px-2 py-0.5',
+                          'rounded-sm text-black',
+                          VERB_COLOR_CLASS_MAP[item.verb] || 'bg-gray-300'
+                        )}
+                      >
+                        {item.verb.toUpperCase()}
+                      </small>
+                    )}
 
                     {showParallelOrSequenceIcon ? (
                       <Tooltip title={item.parallel ? 'Parallel' : 'Sequence'}>

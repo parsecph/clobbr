@@ -87,6 +87,7 @@ const Search = () => {
     verb: globalStore.search.verb,
     ssl: globalStore.search.ssl,
     dataJson: globalStore.search.data.json,
+    properties: globalStore.search.properties,
     headerItems: globalStore.search.headerItems,
     headerInputMode: globalStore.search.headerInputMode,
     headerShellCmd: globalStore.search.headerShellCmd,
@@ -277,6 +278,7 @@ const Search = () => {
             <div className="flex sm:contents">
               <VerbSelect
                 value={search.verb}
+                variant="filled"
                 onVerbChange={handleVerbChange(search.updateVerb)}
                 customContainerClasses={clsx(
                   'flex-shrink-0',

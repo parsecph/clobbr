@@ -1,8 +1,10 @@
 import { Everbs } from 'shared/enums/http';
 import { ClobbrUIHeaderItem } from './ClobbrUIHeaderItem';
 import { ClobbrUIResult } from './ClobbrUIResult';
+import { ClobbrUIProperties } from './ClobbrUIProperties';
 
 export interface ClobbrUIResultListItem {
+  properties?: ClobbrUIProperties;
   id: string;
   url: string;
   latestResult: ClobbrUIResult;

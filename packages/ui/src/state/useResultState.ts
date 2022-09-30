@@ -8,6 +8,7 @@ import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
 import { Everbs } from 'shared/enums/http';
 import { ClobbrUIHeaderItem } from 'models/ClobbrUIHeaderItem';
 import useStateRef from 'react-usestateref';
+import { ClobbrUIProperties } from 'models/ClobbrUIProperties';
 
 export const useResultState = ({ initialState }: { [key: string]: any }) => {
   const [editing, setEditing] = useState(false);
@@ -68,7 +69,8 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     headerShellCmd,
     headerNodeScriptData,
     data,
-    timeout
+    timeout,
+    properties
   }: {
     url: string;
     resultDurations: Array<number>;
@@ -86,6 +88,7 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     };
     data: { [key: string]: any };
     timeout: number;
+    properties: ClobbrUIProperties;
   }) => {
     const runId = uuidv4();
     const currentList = listRef.current;
@@ -104,14 +107,21 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
       iterations
     };
 
-    const existingListItem = currentList.find(
-      (i) => i.url === url && i.verb === verb
-    );
+    const determineExistingItem = (i: ClobbrUIResultListItem) => {
+      if (i.properties?.gql?.isGql) {
+        return (
+          i.url === url &&
+          i.properties?.gql?.gqlName === properties?.gql?.gqlName
+        );
+      }
+
+      return i.url === url && i.verb === verb;
+    };
+
+    const existingListItem = currentList.find(determineExistingItem);
 
     if (existingListItem) {
-      const index = currentList.findIndex(
-        (i) => i.url === url && i.verb === verb
-      );
+      const index = currentList.findIndex(determineExistingItem);
 
       const nextItem = {
         ...existingListItem,
@@ -123,6 +133,7 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
         headerShellCmd,
         headerNodeScriptData,
         data,
+        properties,
         timeout,
         latestResult: result,
         historicalResults: [
@@ -152,8 +163,9 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
         headerInputMode,
         headerShellCmd,
         headerNodeScriptData,
-        timeout,
         data,
+        timeout,
+        properties,
         latestResult: result,
         historicalResults: []
       };

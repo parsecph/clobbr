@@ -23,10 +23,16 @@ const ResultList = ({ list }: { list: Array<ClobbrUIResultListItem> }) => {
     ['desc']
   ).reduce(
     (acc, cur: ClobbrUIResultListItem) => {
-      if (acc[cur.url]) {
-        acc[cur.url].list = acc[cur.url].list.concat(cur);
+      const isGql = cur.properties?.gql?.isGql;
+
+      const key = isGql
+        ? `${cur.properties?.gql?.gqlName}-${cur.url}`
+        : cur.url;
+
+      if (acc[key]) {
+        acc[key].list = acc[key].list.concat(cur);
       } else {
-        acc[cur.url] = {
+        acc[key] = {
           url: cur.url,
           list: [cur]
         };

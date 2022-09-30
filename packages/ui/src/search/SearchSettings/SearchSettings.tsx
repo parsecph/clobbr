@@ -29,6 +29,7 @@ const SearchSettings = () => {
     verb: globalStore.search.verb,
     ssl: globalStore.search.ssl,
     dataJson: globalStore.search.data.json,
+    properties: globalStore.search.properties,
     headerItems: globalStore.search.headerItems,
     headerInputMode: globalStore.search.headerInputMode,
     headerShellCmd: globalStore.search.headerShellCmd,
