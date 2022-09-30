@@ -268,15 +268,27 @@ const Result = ({
                     )}
 
                     {item.properties?.gql?.isGql ? (
-                      <small
-                        className={clsx(
-                          'px-2 py-0.5',
-                          'rounded-sm text-black',
-                          'bg-fuchsia-300'
-                        )}
-                      >
-                        {item.properties?.gql.gqlName}
-                      </small>
+                      <>
+                        <small
+                          className={clsx(
+                            'px-2 py-0.5',
+                            'rounded-sm text-black',
+                            'bg-fuchsia-300'
+                          )}
+                        >
+                          GQL
+                        </small>
+
+                        <small
+                          className={clsx(
+                            'px-2 py-0.5',
+                            'rounded-sm text-black',
+                            'bg-gray-300'
+                          )}
+                        >
+                          {item.properties?.gql.gqlName}
+                        </small>
+                      </>
                     ) : (
                       <small
                         className={clsx(
