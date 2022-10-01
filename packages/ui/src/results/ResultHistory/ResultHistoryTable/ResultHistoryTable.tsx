@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import { ClobbrUIResult } from 'models/ClobbrUIResult';
 
 import { Tooltip, Typography } from '@mui/material';
+import { ResultHistoryTableFailedItem } from 'results/ResultHistory/ResultHistoryTable/ResultHistoryTableFailedItem';
 
 import { formatNumber } from 'shared/util/numberFormat';
 import { getDurationColorClass } from 'results/Result/Result';
@@ -77,14 +78,7 @@ export const ResultHistoryTable = ({
                   )}
 
                   {!log.metas.statusOk ? (
-                    <Tooltip title={log.metas.status || 'Request failed'}>
-                      <Typography
-                        variant="caption"
-                        className="uppercase opacity-50"
-                      >
-                        Fail
-                      </Typography>
-                    </Tooltip>
+                    <ResultHistoryTableFailedItem log={log} />
                   ) : (
                     <></>
                   )}

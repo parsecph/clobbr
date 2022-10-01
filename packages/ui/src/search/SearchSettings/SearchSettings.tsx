@@ -1,8 +1,11 @@
 import clsx from 'clsx';
 import { useState, useContext } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 
 import { Button, Typography, CircularProgress } from '@mui/material';
 import BuildCircleRoundedIcon from '@mui/icons-material/BuildCircleRounded';
+import ClearIcon from '@mui/icons-material/Clear';
+
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
@@ -62,6 +65,37 @@ const SearchSettings = () => {
               <Typography variant="body2">Configure</Typography>
             </span>
           </Button>
+
+          {search.url.requestUrl ? (
+            <AnimatePresence>
+              <motion.div
+                animate={{
+                  opacity: [0, 0.9, 1]
+                }}
+                transition={{ duration: 2, delay: 3, times: [0, 0.7, 1] }}
+                className="opacity-0 inline-block"
+              >
+                <Button
+                  size="small"
+                  variant="text"
+                  className="ml-4 opacity-50 hover:opacity-100 transition-all "
+                  onClick={() => {
+                    search.resetSettingsToDefault();
+                    search.updateUrl('');
+                    search.updateIterations(20);
+                  }}
+                  disabled={search.inProgress}
+                >
+                  <span className="flex gap-1 items-center text-black dark:text-white ">
+                    <ClearIcon />
+                    <Typography variant="body2">Clear configuration</Typography>
+                  </span>
+                </Button>
+              </motion.div>
+            </AnimatePresence>
+          ) : (
+            <> </>
+          )}
 
           <Modal
             onClose={search.hideSettingsModal}

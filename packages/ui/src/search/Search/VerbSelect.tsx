@@ -36,7 +36,7 @@ export const VerbSelect = ({
   variant?: 'outlined' | 'filled';
 }) => {
   return (
-    <FormControl className={customContainerClasses}>
+    <FormControl variant={variant} className={customContainerClasses}>
       <InputLabel id="search-verb-label">Method</InputLabel>
       <Select
         variant={variant}
