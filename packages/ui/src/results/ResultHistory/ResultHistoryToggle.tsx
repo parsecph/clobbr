@@ -74,22 +74,51 @@ export const ResultHistoryToggle = ({
             maxWidth="3xl"
           >
             <div className="p-4 border-b border-solid border-gray-500 border-opacity-20 flex justify-between items-center">
-              <Typography className="flex gap-1">
-                <AssessmentIcon className="!w-6 !h-6" /> History of
+              <Typography className="flex gap-1" variant="body2">
+                <span className="flex shrink-0 items-center gap-1">
+                  <AssessmentIcon className="!w-6 !h-6" /> History of
+                </span>
+
                 <span className="flex items-center gap-2 truncate font-semibold">
                   <Tooltip title={item.url}>
-                    <span>{item.url.replace(/^https?:\/\//, '')}</span>
+                    <span className="truncate">
+                      {item.url.replace(/^https?:\/\//, '')}
+                    </span>
                   </Tooltip>
 
-                  <small
-                    className={clsx(
-                      'px-2 py-0.5',
-                      'rounded-sm text-black',
-                      VERB_COLOR_CLASS_MAP[item.verb] || 'bg-gray-300'
-                    )}
-                  >
-                    {item.verb.toUpperCase()}
-                  </small>
+                  {item.properties?.gql?.isGql ? (
+                    <>
+                      <small
+                        className={clsx(
+                          'px-2 py-0.5',
+                          'rounded-sm text-black',
+                          'bg-fuchsia-300'
+                        )}
+                      >
+                        GQL
+                      </small>
+
+                      <small
+                        className={clsx(
+                          'px-2 py-0.5',
+                          'rounded-sm text-black',
+                          'bg-gray-300'
+                        )}
+                      >
+                        {item.properties?.gql.gqlName}
+                      </small>
+                    </>
+                  ) : (
+                    <small
+                      className={clsx(
+                        'px-2 py-0.5',
+                        'rounded-sm text-black',
+                        VERB_COLOR_CLASS_MAP[item.verb] || 'bg-gray-300'
+                      )}
+                    >
+                      {item.verb.toUpperCase()}
+                    </small>
+                  )}
                 </span>
               </Typography>
 

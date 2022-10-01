@@ -413,9 +413,18 @@ const Result = ({
                 </Typography>
                 <hr />
                 <ul className="list-disc pl-6">
+                  {item.properties?.gql?.isGql ? (
+                    <li>
+                      <Typography variant="body2">
+                        GQL is valid & the server does not respond with errors
+                      </Typography>
+                    </li>
+                  ) : (
+                    ''
+                  )}
                   <li>
                     <Typography variant="body2">
-                      Incorrect method (i.e. should use POST instead of GET)
+                      Incorrect method (e.g. should use POST instead of GET)
                     </Typography>
                   </li>
                   <li>
@@ -425,7 +434,7 @@ const Result = ({
                   </li>
                   <li>
                     <Typography variant="body2">
-                      Authorization failed; also might require headers
+                      Authorization failed; also might need custom headers
                     </Typography>
                   </li>
                   <li>

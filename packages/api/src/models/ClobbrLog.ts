@@ -1,6 +1,10 @@
 import { AxiosError } from 'axios';
 import { Everbs } from '../enums/http';
 
+export interface ClobbrExtendedAxiosError extends AxiosError {
+  gqlErrors?: Array<any>;
+}
+
 export interface ClobbrLogItem {
   url: string;
   verb: Everbs;
@@ -8,7 +12,7 @@ export interface ClobbrLogItem {
   metas: ClobbrLogItemMeta;
   formatted: string;
   failed?: boolean;
-  error?: AxiosError;
+  error?: AxiosError | string;
 }
 
 export interface ClobbrLogItemMeta {

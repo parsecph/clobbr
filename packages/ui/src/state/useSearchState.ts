@@ -218,6 +218,7 @@ export const useSearchState = ({ initialState }: { [key: string]: any }) => {
     setIterations(item.iterations);
     setVerb(item.verb);
     setPayloadData(payloadData);
+    setProperties(item.properties);
     setHeaderInputMode(item.headerInputMode);
     setHeaderItems(item.headers);
     setHeaderShellCmd(item.headerShellCmd);
@@ -229,6 +230,7 @@ export const useSearchState = ({ initialState }: { [key: string]: any }) => {
     setParallel(initialState.search.parallel);
     setSsl(initialState.search.ssl);
     setPayloadData(initialState.search.data);
+    setProperties(initialState.search.properties);
     setHeaderInputMode(initialState.search.headerInputMode);
     setHeaderItems(initialState.search.headerItems);
     setHeaderShellCmd(initialState.search.headerShellCmd);

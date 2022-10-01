@@ -2,7 +2,13 @@ import { AxiosError } from 'axios';
 import { DEFAULT_HTTP_TIMEOUT_IN_MS } from './consts/http';
 import api from './api';
 import { ClobbrRequestSettings } from './models/ClobbrRequestSettings';
-import { getFailedMessage, getNumberMeta, getResponseMetas } from './util';
+import { ClobbrExtendedAxiosError } from './models/ClobbrLog';
+import {
+  getFailedMessage,
+  getGqlResponseMetas,
+  getNumberMeta,
+  getResponseMetas
+} from './util';
 
 export const handleApiCall = async (
   index: number,
@@ -19,13 +25,27 @@ export const handleApiCall = async (
 
   const endTime = new Date().valueOf();
   const duration = endTime - startTime;
-  const metas = getResponseMetas(res, duration, index);
+
+  const isGql = data && !!(data.query || data.mutation);
+
+  const { metas, errors } = isGql
+    ? getGqlResponseMetas(res, duration, index)
+    : getResponseMetas(res, duration, index);
+
   const logItem = {
     url,
     verb,
     headers,
     formatted: `${metas.number}: ${metas.duration} ${metas.durationUnit} ${metas.status} ${metas.size}`,
-    metas
+    metas,
+    failed: !metas.statusOk,
+    error: errors
+      ? ({
+          message: 'GQL inner error',
+          name: 'GQL error',
+          gqlErrors: errors
+        } as ClobbrExtendedAxiosError)
+      : undefined
   };
 
   return { logItem, duration };

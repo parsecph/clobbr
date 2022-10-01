@@ -38,7 +38,7 @@ export const getResponseMetas = (
   response: AxiosResponse,
   duration: number,
   index: number
-): ClobbrLogItemMeta => {
+): { metas: ClobbrLogItemMeta; errors: any } => {
   const { status, statusText, data } = response;
 
   const statusOk = status ? !!status.toString().match(/^2.*/g) : false;
@@ -55,7 +55,40 @@ export const getResponseMetas = (
     data
   };
 
-  return metas;
+  return {
+    metas,
+    errors: undefined
+  };
+};
+
+export const getGqlResponseMetas = (
+  response: AxiosResponse,
+  duration: number,
+  index: number
+): {
+  metas: ClobbrLogItemMeta;
+  errors: any;
+} => {
+  const { status, statusText, data } = response;
+
+  const { failed, errors } = hasGqlFailed(response);
+
+  const metas = {
+    number: getNumberMeta(index),
+    status: `${status} (${statusText})`,
+    statusCode: status,
+    statusOk: !failed,
+    index,
+    duration,
+    durationUnit: 'ms',
+    size: `${sizeof(data) / 1000} KB`,
+    data
+  };
+
+  return {
+    metas,
+    errors
+  };
 };
 
 export const getTimeAverage = (durations: Array<number>) => {
@@ -63,4 +96,30 @@ export const getTimeAverage = (durations: Array<number>) => {
     durations.reduce((acc: number, cur: number) => acc + cur, 0) /
       durations.length || 0
   );
+};
+
+export const hasGqlFailed = (response: AxiosResponse) => {
+  try {
+    const possibleErrorObjectLocations = [response, response.data];
+
+    for (const possibleErrorObjectLocation of possibleErrorObjectLocations) {
+      const { data } = possibleErrorObjectLocation;
+      const { errors } = data;
+
+      const firstKey = Object.keys(data)[0];
+
+      if (!!errors?.length) {
+        return { failed: true, errors };
+      }
+
+      if (!!data[firstKey].errors?.length) {
+        return { failed: true, errors: data[firstKey].errors };
+      }
+    }
+  } catch (error) {
+    console.error('Failed to get GQL error', error);
+    return { failed: false, errors: [] };
+  }
+
+  return { failed: false, errors: [] };
 };
