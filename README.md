@@ -78,8 +78,8 @@ With all that, output to various file formats such as csv, json, yaml and more. 
 
 ```bash
 npx @clobbr/cli run \
-  --url "https://api.github.com/zen" \     # or `-u <url>`
-  --iterations 30                          # or `-i 30`
+  --url "https://api.github.com/zen" \
+  --iterations 30
 ```
 
 <img width="375px" alt="clobbr send api requests in parallel" src="https://user-images.githubusercontent.com/1515742/113619315-1d22ae80-9659-11eb-996f-daa6c68bc682.jpg" />
@@ -88,9 +88,9 @@ npx @clobbr/cli run \
 
 ```bash
 npx @clobbr/cli run \
-  --url "https://api.github.com/zen" \    # or `-u <url>`
-  --iterations 30 \                       # or `-i 30`
-  --parallel                              # or `-p`
+  --url "https://api.github.com/zen" \
+  --iterations 30 \
+  --parallel
 ```
 
 <img width="375px" alt="clobbr send api requests in parallel" src="https://user-images.githubusercontent.com/1515742/113619313-1c8a1800-9659-11eb-84c1-af396ae305a6.jpg" />
@@ -99,9 +99,9 @@ npx @clobbr/cli run \
 
 ```bash
 npx @clobbr/cli run \
-  --url "https://api.github.com/zen" \    # or `-u <url>`
-  --iterations 30 \                       # or `-i 30`
-  --table "full"                          # or `-t "full"`
+  --url "https://api.github.com/zen" \
+  --iterations 30 \
+  --table "full"
 ```
 
 <img width="375px" alt="clobbr show detailed api response summary table" src="https://user-images.githubusercontent.com/1515742/113619310-1b58eb00-9659-11eb-921c-46702345499e.jpg" />
@@ -110,9 +110,9 @@ npx @clobbr/cli run \
 
 ```bash
 npx @clobbr/cli run \
-  --url "https://api.github.com/zen" \    # or `-u <url>`
-  --iterations 30 \                       # or `-i 30`
-  --table "compact"                       # or `-t "compact"`
+  --url "https://api.github.com/zen" \
+  --iterations 30 \
+  --table "compact"
 ```
 
 <img width="375px" alt="clobbr show minimal api response summary table" src="https://user-images.githubusercontent.com/1515742/113619304-1a27be00-9659-11eb-92f8-1cea2e32399c.jpg" />
@@ -138,9 +138,9 @@ Arbitrary request headers are accepted as a JSON file.
 
 ```bash
 npx @clobbr/cli run \
-  --url "https://api.github.com/zen" \    # or `-u <url>`
-  --iterations 20 \                       # or `-i 30`
-  --headerPath "headers.json"             # or `-h "headers.json"
+  --url "https://api.github.com/zen" \
+  --iterations 20 \
+  --headerPath "headers.json"
 ```
 
 #### Send Data
@@ -160,10 +160,10 @@ Arbitrary request data is accepted as a JSON file.
 
 ```bash
 npx @clobbr/cli run \
-  --url "https://api.github.com/zen" \    # or `-u <url>`
-  --iterations 20 \                       # or `-i 30`
-  --method "POST" \                       # or `-m "POST"`
-  --dataPath "data.json"                  # or `-d "data.json"
+  --url "https://api.github.com/zen" \
+  --iterations 20 \
+  --method "POST" \
+  --dataPath "data.json"
 ```
 
 #### Analyze failed request iterations
@@ -171,12 +171,12 @@ By default, details on failed iterations are neatly displayed via the table opti
 
 ```bash
 npx @clobbr/cli run \
-  --url "https://api.github.com/zen" \    # or `-u <url>`
-  --iterations 20 \                       # or `-i 30`
-  --method "POST" \                       # or `-m "POST"`
-  --headerPath "headers.json" \           # or `-h "headers.json"
-  --dataPath "data.json" \                # or `-d "data.json"
-  --table "compact"                       # or `-t "compact`
+  --url "https://api.github.com/zen" \
+  --iterations 20 \
+  --method "POST" \
+  --headerPath "headers.json" \
+  --dataPath "data.json" \
+  --table "compact"
 ```
 
 <img width="375px" alt="clobbr show minimal api response summary table" src="https://user-images.githubusercontent.com/1515742/113765840-13627f00-971d-11eb-8c45-5f4f39ef7db6.jpg" />
@@ -187,8 +187,8 @@ Results will be shown in a human-readable format by default, but you can also ge
 ```bash
 npx @clobbr/cli run \
   --url "https://api.github.com/zen" \
-  --outputFormat json                \ # supported: json, csv, yaml
-  --outputFile                       \ # optionally, pass a file name
+  --outputFormat json                \
+  --outputFile
 ```
 
 #### Run checks against results
