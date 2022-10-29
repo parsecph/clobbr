@@ -25,7 +25,7 @@ Test your api endpoints to see how well they perform under multiple requests (cl
 [![@clobbr/cli version](https://img.shields.io/npm/v/@clobbr/cli?label=cli&style=flat)](https://github.com/parsecph/clobbr/tree/master/packages/cli) [![@clobbr/api version](https://img.shields.io/npm/v/@clobbr/api?label=api&style=flat)](https://github.com/parsecph/clobbr/tree/master/packages/api) [![Tests](https://github.com/parsecph/clobbr/actions/workflows/nodejs.yml/badge.svg)](https://github.com/parsecph/clobbr/actions/workflows/nodejs.yml)
 
 
-| <img height="340px" src="https://user-images.githubusercontent.com/1515742/198825002-b4633117-d6a0-4025-821d-fb6605c209a2.gif" alt="Clobbr api endpoint performance and speed test Application demo" /> | <img height="340px" src="https://user-images.githubusercontent.com/1515742/113618284-be106a00-9657-11eb-9709-04b911e7ccd5.gif" alt="Clobbr api endpoint performance and speed test demo" /> |
+| <img width="310px" src="https://user-images.githubusercontent.com/1515742/198825002-b4633117-d6a0-4025-821d-fb6605c209a2.gif" alt="Clobbr api endpoint performance and speed test Application demo" /> | <img width="300px" src="https://user-images.githubusercontent.com/1515742/113618284-be106a00-9657-11eb-9709-04b911e7ccd5.gif" alt="Clobbr api endpoint performance and speed test demo" /> |
 |-|-|
 
 
