@@ -12,9 +12,11 @@
 
 ## @clobbr/cli
 
-
-
 Test your api endpoints to see how well they perform under multiple requests (clobber your apis!), in sequence or parallel.
+
+[👉 See cli usage examples here ↗️](https://github.com/parsecph/clobbr/blob/master/README.md#usage-examples-for-the-cli)
+
+
 Use this cli tool from your favorite shell or integrate with your CI server:
 
 <a href="https://app.circleci.com/pipelines/github/parsecph/clobbr-ci?branch=main">
@@ -29,7 +31,7 @@ Use this cli tool from your favorite shell or integrate with your CI server:
   <img width="200px" alt="AppVeyor CI integration config" src="https://user-images.githubusercontent.com/1515742/189537169-1b6b812a-9830-4573-955d-b25ccec27e08.png">
 </a>
 
-[See more here ↗️](https://github.com/parsecph/clobbr-ci)
+[See more ci samples ↗️](https://github.com/parsecph/clobbr-ci)
 
 ### Basic usage
 
@@ -37,7 +39,7 @@ Use this cli tool from your favorite shell or integrate with your CI server:
 npx @clobbr/cli run --url "https://github.com"
 ```
 
-[👉 See how to get started and examples here](https://github.com/parsecph/clobbr/blob/master/README.md)
+[See more examples here ↗️](https://github.com/parsecph/clobbr/blob/master/README.md#usage-examples-for-the-cli)
 
 
 ### Options

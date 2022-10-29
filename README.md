@@ -24,9 +24,18 @@ Test your api endpoints to see how well they perform under multiple requests (cl
 
 [![@clobbr/cli version](https://img.shields.io/npm/v/@clobbr/cli?label=cli&style=flat)](https://github.com/parsecph/clobbr/tree/master/packages/cli) [![@clobbr/api version](https://img.shields.io/npm/v/@clobbr/api?label=api&style=flat)](https://github.com/parsecph/clobbr/tree/master/packages/api) [![Tests](https://github.com/parsecph/clobbr/actions/workflows/nodejs.yml/badge.svg)](https://github.com/parsecph/clobbr/actions/workflows/nodejs.yml)
 
-![Clobbr api endpoint performance and speed test demo](https://user-images.githubusercontent.com/1515742/113618284-be106a00-9657-11eb-9709-04b911e7ccd5.gif)
+
+| <img height="340px" src="https://user-images.githubusercontent.com/1515742/198825002-b4633117-d6a0-4025-821d-fb6605c209a2.gif" alt="Clobbr api endpoint performance and speed test Application demo" /> | <img height="340px" src="https://user-images.githubusercontent.com/1515742/113618284-be106a00-9657-11eb-9709-04b911e7ccd5.gif" alt="Clobbr api endpoint performance and speed test demo" /> |
+|-|-|
+
+
 
 ## Quick start
+
+### Application
+Download on [the Mac App Store](https://apps.apple.com/us/app/clobbr-test-endpoint-speed/id1629096010?mt=12) or [the Microsoft Store](https://apps.microsoft.com/store/detail/clobbr-api-speed-test/9P7CVP0HG5V9?hl=en-us&gl=us) and start testing your api endpoints.
+
+### Command Line (cli)
 
 ```bash
 npx @clobbr/cli run --url "https://api.github.com/zen"
@@ -35,21 +44,11 @@ npx @clobbr/cli run --url "https://api.github.com/zen"
 Run `npx @clobbr/cli` to see all options or
 head over to [@clobbr/cli docs](./packages/cli/README.md).
 
-> Not a fan of npx? Get binaries for your favorite OS [here ⬇️ 💿](https://github.com/parsecph/clobbr/releases).
->
-> Available for linux, macos and windows.
+> Binaries are also available for your favorite OS [here ⬇️ 💿](https://github.com/parsecph/clobbr/releases).
 
-## What the cli can do
-
-This package can stress-test your API endpoints in various ways so you can get a better idea on how your app would work under a (closer to) real world scenario.
-
-Configure requests, set iterations and analyze response times of your API endpoints in a fashionable ascii chart or jaw-dropping table.
-
-On top of that, get stats on responses such as mean, standard deviation, 5th/95th/99th percentiles and more.
-
-With all that, output to various file formats such as csv, json, yaml and more. Use in your CI of choice or just run it locally.
-
-### CI usage examples
+#### CI
+The cli can be used in a CI context too.
+[See examples with popular CIs here ↗️](https://github.com/parsecph/clobbr-ci)
 
 <a href="https://app.circleci.com/pipelines/github/parsecph/clobbr-ci?branch=main">
   <img width="200px" alt="CircleCI integration config" src="https://user-images.githubusercontent.com/1515742/189537171-4a064b0d-3db9-4016-9baf-f6b6ac49f45d.png">
@@ -63,9 +62,17 @@ With all that, output to various file formats such as csv, json, yaml and more. 
   <img width="200px" alt="AppVeyor CI integration config" src="https://user-images.githubusercontent.com/1515742/189537169-1b6b812a-9830-4573-955d-b25ccec27e08.png">
 </a>
 
-[See more here ↗️](https://github.com/parsecph/clobbr-ci)
+## What the cli can do
 
-### Basic examples
+This package can stress-test your API endpoints in various ways so you can get a better idea on how your app would work under a (closer to) real world scenario.
+
+Configure requests, set iterations and analyze response times of your API endpoints in a fashionable ascii chart or jaw-dropping table.
+
+On top of that, get stats on responses such as mean, standard deviation, 5th/95th/99th percentiles and more.
+
+With all that, output to various file formats such as csv, json, yaml and more. Use in your CI of choice or just run it locally.
+
+### Usage examples for the cli
 
 #### Define iterations
 
