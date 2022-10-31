@@ -32,6 +32,11 @@ export const HeaderSettings = () => {
   const globalStore = useContext(GlobalStore);
   const [lastShellOutput, setLastShellOutput] = useState('');
 
+  const autoCompleteOptions = Object.values(KNOWN_HEADERS).filter(
+    (option) =>
+      !globalStore.search.headerItems.find(({ key }) => option === key)
+  );
+
   const handleHeaderItemKeyChange =
     (header: ClobbrUIHeaderItem) =>
     (_event: SyntheticEvent, newKey: string | null) => {
@@ -122,62 +127,79 @@ export const HeaderSettings = () => {
 
           {search.headerInputMode === HEADER_MODES.INPUT ? (
             <div className="flex flex-col gap-3 mt-6">
-              {search.headerItems.map((header: ClobbrUIHeaderItem) => (
-                <FormGroup key={header.id} className="!grid gap-1 grid-cols-12">
-                  <Autocomplete
-                    freeSolo
-                    forcePopupIcon={false}
-                    inputValue={header.key}
-                    onInputChange={handleHeaderItemKeyChange(header)}
-                    id={`${header.id}-header-autocomplete`}
-                    options={Object.values(KNOWN_HEADERS)}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Header Key" />
-                    )}
-                    className="col-span-5"
-                  />
+              {search.headerItems.map((header: ClobbrUIHeaderItem) => {
+                const isDuplicate: boolean =
+                  search.headerItems.filter(({ key }) => key === header.key)
+                    .length > 1;
 
-                  <div className="flex gap-2 col-span-7 items-center">
-                    <TextField
-                      variant="outlined"
-                      label="Value"
-                      placeholder=""
-                      id={`${header.id}-header-value`}
-                      value={header.value}
-                      onChange={handleHeaderValueChange(header)}
-                      className="w-full"
-                      InputProps={{
-                        endAdornment: header.value ? (
-                          <IconButton
-                            size="small"
-                            onClick={() => {
-                              search.updateHeaderItem({
-                                ...header,
-                                value: ''
-                              });
-                            }}
-                            className="!p-1 !-mr-2"
-                          >
-                            <Clear style={{ fontSize: '1.25rem' }} />
-                          </IconButton>
-                        ) : (
-                          ''
-                        )
-                      }}
+                return (
+                  <FormGroup
+                    key={header.id}
+                    className="!grid gap-1 grid-cols-12"
+                  >
+                    <Autocomplete
+                      freeSolo
+                      forcePopupIcon={false}
+                      inputValue={header.key}
+                      onInputChange={handleHeaderItemKeyChange(header)}
+                      id={`${header.id}-header-autocomplete`}
+                      options={autoCompleteOptions}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label={
+                            isDuplicate
+                              ? 'Header Key (Duplicate)'
+                              : 'Header Key'
+                          }
+                          error={isDuplicate}
+                        />
+                      )}
+                      className="col-span-5"
                     />
 
-                    <IconButton
-                      className="flex-grow-0 flex-shrink-0 !p-1"
-                      size="small"
-                      onClick={() => {
-                        search.removeHeaderItem(header.id);
-                      }}
-                    >
-                      <Delete className="!w-5 !h-5" />
-                    </IconButton>
-                  </div>
-                </FormGroup>
-              ))}
+                    <div className="flex gap-2 col-span-7 items-center">
+                      <TextField
+                        variant="outlined"
+                        label="Value"
+                        placeholder=""
+                        id={`${header.id}-header-value`}
+                        value={header.value}
+                        onChange={handleHeaderValueChange(header)}
+                        className="w-full"
+                        InputProps={{
+                          endAdornment: header.value ? (
+                            <IconButton
+                              size="small"
+                              onClick={() => {
+                                search.updateHeaderItem({
+                                  ...header,
+                                  value: ''
+                                });
+                              }}
+                              className="!p-1 !-mr-2"
+                            >
+                              <Clear style={{ fontSize: '1.25rem' }} />
+                            </IconButton>
+                          ) : (
+                            ''
+                          )
+                        }}
+                      />
+
+                      <IconButton
+                        className="flex-grow-0 flex-shrink-0 !p-1"
+                        size="small"
+                        onClick={() => {
+                          search.removeHeaderItem(header.id);
+                        }}
+                      >
+                        <Delete className="!w-5 !h-5" />
+                      </IconButton>
+                    </div>
+                  </FormGroup>
+                );
+              })}
             </div>
           ) : (
             ''
