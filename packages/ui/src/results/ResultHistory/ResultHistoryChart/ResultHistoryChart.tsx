@@ -29,12 +29,21 @@ export const ResultHistoryChart = ({
           const qualifiedLogs = result.logs.filter((log) => !log.failed);
 
           const data = {
-            labels: qualifiedLogs.map((log) => log.formatted),
+            labels: qualifiedLogs.map((log) => {
+              return {
+                x: log.formatted,
+                y: log.formatted
+              };
+            }),
             datasets: [
               {
-                data: qualifiedLogs.map((log) => log.metas.duration as number),
-                cubicInterpolationMode: 'monotone',
-                tension: 10,
+                data: qualifiedLogs.map((log, index) => {
+                  return {
+                    x: index,
+                    y: log.metas.duration as number
+                  };
+                }),
+                tension: 0.3,
                 elements: {
                   point: {
                     radius: 0
@@ -71,7 +80,12 @@ export const ResultHistoryChart = ({
 
               <ul className="flex gap-3 cursor-crosshair">
                 <li>
-                  <LineChart data={data} />
+                  <LineChart
+                    data={data}
+                    hideXAxis={true}
+                    downsampleThreshold={50}
+                    numberOfDownSamplePoints={30}
+                  />
                 </li>
               </ul>
             </div>

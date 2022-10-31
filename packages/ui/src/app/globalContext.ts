@@ -129,7 +129,14 @@ export const DEFAULT_GLOBAL_STORE = {
     toggleStickySearch() {},
 
     maxIterations: 100,
-    setMaxIterations(maxIterations?: number | '') {}
+    setMaxIterations(maxIterations?: number | '') {},
+
+    showTrendline: false,
+    setShowTrendline: (showTrendline: boolean) => {},
+    toggleShowTrendline() {},
+
+    chartDownSampleThreshold: 500,
+    setChartDownSampleThreshold: (chartDownSampleThreshold: number) => {}
   }
 };
 

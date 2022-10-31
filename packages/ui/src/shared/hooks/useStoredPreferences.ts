@@ -9,6 +9,7 @@ export type Preferences = {
   themeMode?: string;
   stickySearch?: boolean;
   maxIterations?: number;
+  showTrendline?: boolean;
 };
 
 export const useStoredPreferences = () => {
@@ -20,8 +21,9 @@ export const useStoredPreferences = () => {
     const theme = await resultDb.getItem(SK.PREFERENCES.THEME);
     const stickySearch = await resultDb.getItem(SK.PREFERENCES.STICKY_SEARCH);
     const maxIterations = await resultDb.getItem(SK.PREFERENCES.MAX_ITERATIONS);
+    const showTrendline = await resultDb.getItem(SK.PREFERENCES.SHOW_TRENDLINE);
 
-    return { theme, stickySearch, maxIterations };
+    return { theme, stickySearch, maxIterations, showTrendline };
   });
 
   useEffect(() => {
@@ -33,7 +35,8 @@ export const useStoredPreferences = () => {
       setPreferences({
         themeMode: storedPreferences.value.theme,
         stickySearch: storedPreferences.value.stickySearch,
-        maxIterations: storedPreferences.value.maxIterations
+        maxIterations: storedPreferences.value.maxIterations,
+        showTrendline: storedPreferences.value.showTrendline
       });
     }
 

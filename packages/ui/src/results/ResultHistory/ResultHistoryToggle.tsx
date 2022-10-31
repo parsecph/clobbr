@@ -23,9 +23,11 @@ import {
 } from 'shared/enums/EResultHistoryMode';
 
 export const ResultHistoryToggle = ({
-  item
+  item,
+  className
 }: {
   item: ClobbrUIResultListItem;
+  className?: string;
 }) => {
   const [showHistory, setShowHistory] = useState(false);
   const [historyMode, setHistoryMode] = useState(HISTORY_MODES.SUMMARY);
@@ -54,7 +56,12 @@ export const ResultHistoryToggle = ({
     <GlobalStore.Consumer>
       {({ themeMode }) => (
         <div className="contents">
-          <div className="w-full absolute z-40 flex justify-center -mt-2">
+          <div
+            className={clsx(
+              'w-full absolute z-40 flex justify-center -mt-2',
+              className
+            )}
+          >
             <ButtonBase
               onClick={onHistoryViewPressed}
               color="primary"
@@ -63,7 +70,7 @@ export const ResultHistoryToggle = ({
               className="!p-2 shrink-0"
             >
               <span className="flex items-center justify-center gap-1 text-gray-400 dark:text-gray-600 hover:text-black dark:hover:text-white transition-colors text-sm">
-                History <AssessmentIcon className="!w-5 !h-5" />
+                History & analysis <AssessmentIcon className="!w-5 !h-5" />
               </span>
             </ButtonBase>
           </div>

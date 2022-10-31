@@ -26,6 +26,7 @@ import {
 import { Close, BugReport, AutoFixHigh, Help } from '@mui/icons-material';
 import ThemeToggle from 'Settings/ThemeToggle/ThemeToggle';
 import StickySearchToggle from 'Settings/StickySearchToggle/StickySearchToggle';
+import TrendlineToggle from 'Settings/TrendlineToggle/TrendlineToggle';
 
 export const Settings = () => {
   const globalStore = useContext(GlobalStore);
@@ -114,6 +115,48 @@ export const Settings = () => {
             className="flex flex-col gap-2"
           >
             <Typography variant="overline" className={'opacity-50'}>
+              Support & feature requests
+            </Typography>
+
+            <div className="flex gap-2">
+              <Button
+                className="!px-6 h-11"
+                color={themeMode === 'dark' ? 'primary' : 'secondary'}
+                variant="outlined"
+                startIcon={<BugReport />}
+                href={BUG_REPORT_HREF}
+              >
+                <Typography variant="body2">Bug report</Typography>
+              </Button>
+
+              <Button
+                className="!px-6 h-11"
+                color={themeMode === 'dark' ? 'primary' : 'secondary'}
+                variant="outlined"
+                startIcon={<AutoFixHigh />}
+                href={FEATURE_REQUEST_HREF}
+              >
+                <Typography variant="body2"> Feature request</Typography>
+              </Button>
+
+              <Button
+                className="!px-6 h-11"
+                color={themeMode === 'dark' ? 'primary' : 'secondary'}
+                variant="outlined"
+                startIcon={<Help />}
+                href={HELP_HREF}
+              >
+                <Typography variant="body2"> Get help</Typography>
+              </Button>
+            </div>
+          </FormControl>
+
+          <FormControl
+            component="fieldset"
+            variant="standard"
+            className="flex flex-col gap-2"
+          >
+            <Typography variant="overline" className={'opacity-50'}>
               Appearance settings
             </Typography>
 
@@ -127,43 +170,20 @@ export const Settings = () => {
             className="flex flex-col gap-2"
           >
             <Typography variant="overline" className={'opacity-50'}>
-              Local data management
+              Chart visualization settings
             </Typography>
 
-            <div>
-              {confirmedClearing ? (
-                <div className="flex flex-col gap-2">
-                  <Typography variant="caption" className="inline-block w-full">
-                    Are you sure? There is no going back.
-                  </Typography>
+            <TrendlineToggle />
+          </FormControl>
 
-                  <div className="flex gap-2">
-                    <Button onClick={clearLocalData} color="error">
-                      Clear data
-                    </Button>
-
-                    <Button
-                      onClick={() => setConfirmedClearing(false)}
-                      color="secondary"
-                      variant="text"
-                      disabled={databaseCleared}
-                    >
-                      <span className="text-gray-900 dark:text-gray-100">
-                        Cancel
-                      </span>
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                <Button
-                  onClick={() => setConfirmedClearing(true)}
-                  color="error"
-                  disabled={databaseCleared}
-                >
-                  Clear result data
-                </Button>
-              )}
-            </div>
+          <FormControl
+            component="fieldset"
+            variant="standard"
+            className="flex flex-col gap-2"
+          >
+            <Typography variant="overline" className={'opacity-50'}>
+              Local data management
+            </Typography>
 
             {storedDataSize.value ? (
               <Typography variant="caption" className={'opacity-50'}>
@@ -208,47 +228,40 @@ export const Settings = () => {
             )}
           </FormControl>
 
-          <FormControl
-            component="fieldset"
-            variant="standard"
-            className="flex flex-col gap-2"
-          >
-            <Typography variant="overline" className={'opacity-50'}>
-              Support & feature requests
-            </Typography>
+          <div>
+            {confirmedClearing ? (
+              <div className="flex flex-col gap-2">
+                <Typography variant="caption" className="inline-block w-full">
+                  Are you sure? There is no going back.
+                </Typography>
 
-            <div className="flex gap-2">
-              <Button
-                className="!px-6 h-11"
-                color={themeMode === 'dark' ? 'primary' : 'secondary'}
-                variant="outlined"
-                startIcon={<BugReport />}
-                href={BUG_REPORT_HREF}
-              >
-                <Typography variant="body2">Bug report</Typography>
-              </Button>
+                <div className="flex gap-2">
+                  <Button onClick={clearLocalData} color="error">
+                    Clear data
+                  </Button>
 
+                  <Button
+                    onClick={() => setConfirmedClearing(false)}
+                    color="secondary"
+                    variant="text"
+                    disabled={databaseCleared}
+                  >
+                    <span className="text-gray-900 dark:text-gray-100">
+                      Cancel
+                    </span>
+                  </Button>
+                </div>
+              </div>
+            ) : (
               <Button
-                className="!px-6 h-11"
-                color={themeMode === 'dark' ? 'primary' : 'secondary'}
-                variant="outlined"
-                startIcon={<AutoFixHigh />}
-                href={FEATURE_REQUEST_HREF}
+                onClick={() => setConfirmedClearing(true)}
+                color="error"
+                disabled={databaseCleared}
               >
-                <Typography variant="body2"> Feature request</Typography>
+                Clear result data
               </Button>
-
-              <Button
-                className="!px-6 h-11"
-                color={themeMode === 'dark' ? 'primary' : 'secondary'}
-                variant="outlined"
-                startIcon={<Help />}
-                href={HELP_HREF}
-              >
-                <Typography variant="body2"> Get help</Typography>
-              </Button>
-            </div>
-          </FormControl>
+            )}
+          </div>
 
           <Snackbar
             open={databaseCleared}

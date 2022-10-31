@@ -31,7 +31,7 @@ const Topbar = () => {
             }
           }}
           className={clsx(
-            'bg-white/40 dark:bg-zinc-900/40 backdrop-blur-sm transition-all',
+            'bg-gray-100/40 dark:bg-zinc-900/40 backdrop-blur-sm transition-all',
             appSettings.stickySearch ? 'sm:sticky top-0 z-100 py-3' : ''
           )}
         >
@@ -50,7 +50,7 @@ const Topbar = () => {
               <SettingsIcon className="w-5 h-5" aria-label="General Settings" />
 
               <Typography variant="caption" className="opacity-50">
-                Settings
+                Options
               </Typography>
             </ButtonBase>
           </header>

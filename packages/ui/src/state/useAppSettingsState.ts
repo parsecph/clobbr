@@ -9,17 +9,35 @@ export const useAppSettingsState = ({
   const [maxIterations, setMaxIterations] = useState(
     initialState.appSettings.maxIterations
   );
+  const [showTrendline, setShowTrendline] = useState(
+    initialState.appSettings.showTrendline
+  );
+  const [chartDownSampleThreshold, setChartDownSampleThreshold] = useState(
+    initialState.appSettings.chartDownSampleThreshold
+  );
 
   const toggleStickySearch = () => {
     setStickySearch(!stickySearch);
+  };
+
+  const toggleShowTrendline = () => {
+    setShowTrendline(!showTrendline);
   };
 
   const appSettingsState = {
     stickySearch,
     setStickySearch,
     toggleStickySearch,
+
     maxIterations,
-    setMaxIterations
+    setMaxIterations,
+
+    showTrendline,
+    setShowTrendline,
+    toggleShowTrendline,
+
+    chartDownSampleThreshold,
+    setChartDownSampleThreshold
   };
 
   return {
