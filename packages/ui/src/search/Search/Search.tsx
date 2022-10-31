@@ -155,7 +155,7 @@ const Search = () => {
   const handleUrlChange =
     (updateUrl: (url: string) => void) =>
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      updateUrl(event.target.value);
+      updateUrl(event.target.value.trim());
     };
 
   const handleVerbChange =

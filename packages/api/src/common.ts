@@ -9,14 +9,16 @@ import {
   getNumberMeta,
   getResponseMetas
 } from './util';
+import { sanitizeUrl } from './sanitize';
 
 export const handleApiCall = async (
   index: number,
   { url, verb, headers, data, timeout }: ClobbrRequestSettings
 ) => {
+  const sanitizedUrl = sanitizeUrl(url);
   const startTime = new Date().valueOf();
   const res = await api.http({
-    url,
+    url: sanitizedUrl,
     method: verb,
     headers,
     data,
@@ -33,7 +35,7 @@ export const handleApiCall = async (
     : getResponseMetas(res, duration, index);
 
   const logItem = {
-    url,
+    url: sanitizedUrl,
     verb,
     headers,
     formatted: `${metas.number}: ${metas.duration} ${metas.durationUnit} ${metas.status} ${metas.size}`,
@@ -57,12 +59,13 @@ export const handleApiCallError = (
   index: number,
   runStartTime: number
 ) => {
+  const sanitizedUrl = sanitizeUrl(url);
   const endTime = new Date().valueOf();
   const duration = endTime - runStartTime;
 
   const numberMeta = getNumberMeta(index);
   const logItem = {
-    url,
+    url: sanitizedUrl,
     verb,
     headers,
     metas: {

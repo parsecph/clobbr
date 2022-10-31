@@ -7,13 +7,15 @@ import { getTimeAverage } from './util';
 import { validate } from './validate';
 import { handleApiCall, handleApiCallError } from './common';
 import { AxiosError } from 'axios';
+import { sanitizeUrl } from './sanitize';
 
 export const runParallel = async (
   settings: ClobbrRequestSettings,
   eventCallback?: ClobbrEventCallback
 ) => {
   const { iterations, url, verb = Everbs.GET } = settings;
-  const { valid, errors } = validate(url, verb);
+  const sanitizedUrl = sanitizeUrl(url);
+  const { valid, errors } = validate(sanitizedUrl, verb);
 
   if (!valid) {
     return Promise.reject(errors);
