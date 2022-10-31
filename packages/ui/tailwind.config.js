@@ -16,6 +16,14 @@ module.exports = {
           500: colors.secondary.main,
           700: colors.secondary.dark
         }
+      },
+
+      screens: {
+        'tall-sm': { raw: '(min-height: 640px)' },
+        'tall-md': { raw: '(min-height: 768px)' },
+        'tall-lg': { raw: '(min-height: 1024px)' },
+        'tall-xl': { raw: '(min-height: 1280px)' },
+        'tall-2xl': { raw: '(min-height: 1536px)' }
       }
     }
   },

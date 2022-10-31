@@ -50,7 +50,7 @@ export const Modal = ({
     <AnimatePresence>
       {open && (
         <WrappedDialog
-          className="fixed inset-0 z-50 transform-"
+          className="fixed inset-0 z-50"
           onClose={onClose}
           open={open}
         >
@@ -59,7 +59,7 @@ export const Modal = ({
             aria-hidden="true"
           />
 
-          <div className="flex h-full flex-col items-center mt-auto pt-6 lg:pt-12 px-4">
+          <div className="flex h-full flex-col items-center justify-center mt-auto pt-6 lg:pt-12 px-4 tall-lg:pt-6 ">
             <Dialog.Overlay
               as={motion.div}
               initial={{ opacity: 0 }}
@@ -82,10 +82,12 @@ export const Modal = ({
               }}
               exit={{
                 y: '100%',
+                opacity: 0,
                 transition: { duration: 0.3, ease: [0.36, 0.66, 0.04, 1] }
               }}
               className={clsx(
                 'z-0 flex flex-col w-full h-full bg-white/80 dark:bg-gray-900/70 backdrop-blur-sm rounded-t-lg shadow-xl overflow-auto',
+                'tall-lg:h-auto tall-lg:min-h-[840px]',
                 maxWidth && `max-w-${maxWidth}`
               )}
               ref={modalRef}
