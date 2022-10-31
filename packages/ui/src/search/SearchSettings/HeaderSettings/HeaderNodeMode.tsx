@@ -77,6 +77,33 @@ export const HeaderNodeMode = () => {
             >
               Test script
             </Button>
+
+            <Alert severity="info">
+              This Node.js script will be executed before a run. Its output will
+              be used as headers.
+              <br />
+              The command return value should be in JSON format, i.e. one could
+              fetch auth credentials before sending the request:
+              <br />
+              <br />
+              <pre>
+                <small>
+                  return fetch('https://example.com')
+                  <br />
+                  <span className="pl-4">
+                    .then(response =&gt;response.json())
+                  </span>
+                  <br />
+                  <span className="pl-4">.then(data =&gt; data);</span>
+                </small>
+              </pre>
+              <br />
+              Where the return value (data) should be an object such as:
+              <br />
+              <pre>
+                <small>&gt; &#123; "Authorization": "Bearer ..." &#125;</small>
+              </pre>
+            </Alert>
           </div>
 
           {lastNodeOutput ? (
@@ -86,22 +113,6 @@ export const HeaderNodeMode = () => {
           ) : (
             <></>
           )}
-
-          <Alert severity="info">
-            This Node.js script will be executed before a run. Its output will
-            be used as headers.
-            <br />
-            The command return value should be in JSON format, i.e. one could
-            use a fetch auth credentials before sending the request:
-            <pre>
-              <small>
-                return fetch('example.com').then(response =&gt;
-                response.json()).then(data =&gt; data);
-              </small>
-              <br />
-              <small>&gt; &#123; "Authorization": "Bearer ..." &#125;</small>
-            </pre>
-          </Alert>
         </div>
       )}
     </GlobalStore.Consumer>

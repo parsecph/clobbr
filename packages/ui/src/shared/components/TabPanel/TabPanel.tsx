@@ -9,7 +9,9 @@ export const TabPanel = (props: {
 
   return (
     <div
-      className={clsx(value === index ? 'flex flex-col h-full p-5' : 'hidden')}
+      className={clsx(
+        value === index ? 'flex flex-col h-full p-5 overflow-auto' : 'hidden'
+      )}
       role="tabpanel"
       hidden={value !== index}
       id={`tabpanel-${index}`}
