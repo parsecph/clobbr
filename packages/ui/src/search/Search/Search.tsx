@@ -64,6 +64,23 @@ const verbInputCss = css`
   }
 `;
 
+const stickySearchCss = css`
+  .sticky-search-settings {
+    transition: all 0.3s ease-out;
+    transition-delay: 1s;
+    opacity: 0 !important;
+    pointer-events: none;
+  }
+
+  &:hover {
+    .sticky-search-settings {
+      transition: all 0.3s ease-in-out;
+      opacity: 1 !important;
+      pointer-events: all;
+    }
+  }
+`;
+
 const Search = () => {
   const globalStore = useContext(GlobalStore);
   const [wssUrl, setWssUrl] = useState<string>('ws://localhost');
@@ -223,8 +240,10 @@ const Search = () => {
       {({ search, themeMode, results, appSettings }) => (
         <section
           className={clsx(
-            'flex flex-grow flex-shrink flex-col items-center justify-center mt-12 mb-6 w-full max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-3xl',
-            appSettings.stickySearch ? 'sm:sticky top-4 z-20' : ''
+            'flex flex-grow flex-shrink flex-col items-center justify-center mt-16 mb-6 w-full max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-3xl',
+            appSettings.stickySearch
+              ? `sm:sticky top-4 z-110 ${stickySearchCss}`
+              : ''
           )}
         >
           <motion.div
@@ -324,9 +343,16 @@ const Search = () => {
 
           <motion.div
             {...settingsAnimations}
-            className="self-start mt-2 px-6 sm:ml-4 md:ml-0 sm:p-0"
+            className={clsx(
+              'self-start px-2 sm:p-0 ml-6 md:ml-0',
+              appSettings.stickySearch
+                ? 'bg-gray-300/40 dark:bg-gray-600/40 backdrop-blur-sm p-1 rounded-br-md rounded-bl-md sticky-search-settings'
+                : 'mt-2'
+            )}
           >
-            <SearchSettings />
+            <div className={'flex gap-1'}>
+              <SearchSettings />
+            </div>
           </motion.div>
 
           {results.list.length === 0 ? (

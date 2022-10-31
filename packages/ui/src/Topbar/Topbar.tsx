@@ -31,15 +31,15 @@ const Topbar = () => {
             }
           }}
           className={clsx(
-            'bg-gray-100/70 dark:bg-black/70 backdrop-blur-sm transition-all',
-            appSettings.stickySearch ? 'sm:sticky top-0 z-10 py-3' : ''
+            'bg-white/40 dark:bg-zinc-900/40 backdrop-blur-sm transition-all',
+            appSettings.stickySearch ? 'sm:sticky top-0 z-100 py-3' : ''
           )}
         >
-          <header className="flex justify-between items-center w-full px-4 py-6 ">
+          <header className="flex justify-between items-center w-full px-4 py-3 ">
             <img
               src={themeMode === 'dark' ? Logo : LogoSecondary}
               alt="Clobbr Logo Symbol (the letter C on a grid)"
-              className="h-10 w-auto"
+              className="h-9 w-auto"
             />
 
             <ButtonBase

@@ -24,6 +24,15 @@ module.exports = {
         'tall-lg': { raw: '(min-height: 1024px)' },
         'tall-xl': { raw: '(min-height: 1280px)' },
         'tall-2xl': { raw: '(min-height: 1536px)' }
+      },
+
+      zIndex: {
+        60: 60,
+        70: 70,
+        80: 80,
+        90: 90,
+        100: 100,
+        110: 110
       }
     }
   },
