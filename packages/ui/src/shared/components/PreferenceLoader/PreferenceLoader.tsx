@@ -33,6 +33,14 @@ const PreferenceLoader = () => {
       if (isNumber(preferences.maxIterations)) {
         globalStore.appSettings.setMaxIterations(preferences.maxIterations);
       }
+
+      if (isBoolean(preferences.showTrendline)) {
+        globalStore.appSettings.setShowTrendline(preferences.showTrendline);
+      }
+
+      if (isBoolean(preferences.showBarCharts)) {
+        globalStore.appSettings.setShowBarCharts(preferences.showBarCharts);
+      }
     }
 
     setPreferencesApplied(true);

@@ -12,7 +12,8 @@ import {
   LineController,
   Tooltip,
   Legend,
-  Decimation
+  Decimation,
+  Filler
 } from 'chart.js';
 import { Chart } from 'react-chartjs-2';
 import { colors } from 'shared/colors';
@@ -28,16 +29,40 @@ ChartJS.register(
   LineElement,
   Tooltip,
   Legend,
-  Decimation
+  Decimation,
+  Filler
 );
+
+const DURATION_COLOR_MAP: { [key: number]: string } = {
+  0: 'rgba(136,255,184,1.0)',
+  1: 'rgba(95,178,128,1.0)',
+  2: 'rgba(62,139,93,1.0)',
+  3: 'rgba(31,143,76,1.0)',
+  4: 'rgba(15,146,59,1.0)',
+  5: 'rgba(0,56,18,1.0)'
+};
 
 const createGradient = (ctx: CanvasRenderingContext2D, area: ChartArea) => {
   const gradient = ctx.createLinearGradient(0, area.bottom, 0, area.top);
 
-  gradient.addColorStop(0.1, colors.primary.main);
-  gradient.addColorStop(0.5, '#5FB280');
-  gradient.addColorStop(0.75, '#3e8b5d');
-  gradient.addColorStop(1, '#1f8f4c');
+  gradient.addColorStop(0, DURATION_COLOR_MAP[0]);
+  gradient.addColorStop(0.1, DURATION_COLOR_MAP[0]);
+  gradient.addColorStop(0.4, DURATION_COLOR_MAP[1]);
+  gradient.addColorStop(0.7, DURATION_COLOR_MAP[2]);
+  gradient.addColorStop(0.8, DURATION_COLOR_MAP[4]);
+  gradient.addColorStop(1, DURATION_COLOR_MAP[4]);
+
+  return gradient;
+};
+
+const createBgGradient = (ctx: CanvasRenderingContext2D, area: ChartArea) => {
+  const gradient = ctx.createLinearGradient(0, area.bottom, 0, area.top);
+
+  gradient.addColorStop(0, 'transparent');
+  gradient.addColorStop(0.25, 'rgba(136,255,184,0.05)');
+  gradient.addColorStop(0.4, 'rgba(136,255,184,0.1)');
+  gradient.addColorStop(0.8, 'rgba(136,255,184,0.35)');
+  gradient.addColorStop(0.9, 'rgba(136,255,184,1)');
 
   return gradient;
 };
@@ -65,6 +90,7 @@ export const LineChart = ({
 }) => {
   const chartWidth = width || 300;
   const chartHeight = height || 100;
+  const samples = numberOfDownSamplePoints || 100;
 
   const chartRef = useRef<ChartJS>(null);
   const [chartData, setChartData] = useState<ChartData<'line' | 'bar'>>({
@@ -82,7 +108,15 @@ export const LineChart = ({
       ...data,
       datasets: data.datasets.map((dataset) => ({
         ...dataset,
-        borderColor: createGradient(chart.ctx, chart.chartArea)
+        ...(dataset.type === 'bar'
+          ? {
+              backgroundColor: createGradient(chart.ctx, chart.chartArea)
+            }
+          : {
+              borderColor: createGradient(chart.ctx, chart.chartArea),
+              backgroundColor: createBgGradient(chart.ctx, chart.chartArea),
+              fill: 'origin'
+            })
       }))
     };
 
@@ -96,11 +130,22 @@ export const LineChart = ({
         parsing: false,
         responsive,
         maintainAspectRatio: true,
+        layout: {
+          padding: 0
+        },
         scales: {
           ...(hideXAxis
             ? {
                 x: {
                   display: false,
+                  ticks: {
+                    // Hacks so the chart is full width inside the canvas
+                    minRotation: 90,
+                    maxTicksLimit: samples + 1,
+                    font: {
+                      size: 1
+                    }
+                  },
                   type: 'linear'
                 }
               }
@@ -120,7 +165,7 @@ export const LineChart = ({
           decimation: {
             enabled: true,
             algorithm: 'lttb',
-            samples: numberOfDownSamplePoints || 100,
+            samples,
             threshold: downsampleThreshold || 500
           },
           legend: {
@@ -130,6 +175,8 @@ export const LineChart = ({
             usePointStyle: false,
             boxWidth: 0,
             boxHeight: 0,
+            boxPadding: 0,
+            borderColor: 'transparent',
             bodyFont: {
               size: 16
             },

@@ -12,6 +12,9 @@ export const useAppSettingsState = ({
   const [showTrendline, setShowTrendline] = useState(
     initialState.appSettings.showTrendline
   );
+  const [showBarCharts, setShowBarCharts] = useState(
+    initialState.appSettings.showBarCharts
+  );
   const [chartDownSampleThreshold, setChartDownSampleThreshold] = useState(
     initialState.appSettings.chartDownSampleThreshold
   );
@@ -22,6 +25,10 @@ export const useAppSettingsState = ({
 
   const toggleShowTrendline = () => {
     setShowTrendline(!showTrendline);
+  };
+
+  const toggleShowBarCharts = () => {
+    setShowBarCharts(!showBarCharts);
   };
 
   const appSettingsState = {
@@ -35,6 +42,10 @@ export const useAppSettingsState = ({
     showTrendline,
     setShowTrendline,
     toggleShowTrendline,
+
+    showBarCharts,
+    setShowBarCharts,
+    toggleShowBarCharts,
 
     chartDownSampleThreshold,
     setChartDownSampleThreshold

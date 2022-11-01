@@ -135,6 +135,10 @@ export const DEFAULT_GLOBAL_STORE = {
     setShowTrendline: (showTrendline: boolean) => {},
     toggleShowTrendline() {},
 
+    showBarCharts: false,
+    setShowBarCharts: (showBarCharts: boolean) => {},
+    toggleShowBarCharts() {},
+
     chartDownSampleThreshold: 500,
     setChartDownSampleThreshold: (chartDownSampleThreshold: number) => {}
   }

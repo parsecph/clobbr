@@ -27,6 +27,7 @@ import { Close, BugReport, AutoFixHigh, Help } from '@mui/icons-material';
 import ThemeToggle from 'Settings/ThemeToggle/ThemeToggle';
 import StickySearchToggle from 'Settings/StickySearchToggle/StickySearchToggle';
 import TrendlineToggle from 'Settings/TrendlineToggle/TrendlineToggle';
+import BarChartToggle from 'Settings/BarChartToggle/BarChartToggle';
 
 export const Settings = () => {
   const globalStore = useContext(GlobalStore);
@@ -174,6 +175,7 @@ export const Settings = () => {
             </Typography>
 
             <TrendlineToggle />
+            <BarChartToggle />
           </FormControl>
 
           <FormControl

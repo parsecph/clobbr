@@ -24,6 +24,7 @@ export const ResultChart = ({
   const paddedDuration = maxDuration + maxDuration * 0.1 + 100;
 
   const showTrendline = globalStore.appSettings.showTrendline;
+  const showBarCharts = globalStore.appSettings.showBarCharts;
 
   const data = {
     labels: qualifiedLogs.map((log) => {
@@ -34,6 +35,13 @@ export const ResultChart = ({
     }),
     datasets: [
       {
+        ...(showBarCharts
+          ? {
+              type: 'bar' as const,
+              borderRadius: 5,
+              offset: false
+            }
+          : {}),
         data: qualifiedLogs.map((log, index) => {
           return {
             x: index,
