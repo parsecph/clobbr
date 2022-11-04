@@ -184,27 +184,6 @@ export const Settings = () => {
             className="flex flex-col gap-2"
           >
             <Typography variant="overline" className={'opacity-50'}>
-              Local data management
-            </Typography>
-
-            {storedDataSize.value ? (
-              <Typography variant="caption" className={'opacity-50'}>
-                <span className="font-semibold">
-                  About {storedDataSize.value}
-                </span>{' '}
-                used
-              </Typography>
-            ) : (
-              <></>
-            )}
-          </FormControl>
-
-          <FormControl
-            component="fieldset"
-            variant="standard"
-            className="flex flex-col gap-2"
-          >
-            <Typography variant="overline" className={'opacity-50'}>
               Other settings
             </Typography>
 
@@ -230,70 +209,91 @@ export const Settings = () => {
             )}
           </FormControl>
 
-          <div>
-            {confirmedClearing ? (
-              <div className="flex flex-col gap-2">
-                <Typography variant="caption" className="inline-block w-full">
-                  Are you sure? There is no going back.
-                </Typography>
-
-                <div className="flex gap-2">
-                  <Button onClick={clearLocalData} color="error">
-                    Clear data
-                  </Button>
-
-                  <Button
-                    onClick={() => setConfirmedClearing(false)}
-                    color="secondary"
-                    variant="text"
-                    disabled={databaseCleared}
-                  >
-                    <span className="text-gray-900 dark:text-gray-100">
-                      Cancel
-                    </span>
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              <Button
-                onClick={() => setConfirmedClearing(true)}
-                color="error"
-                disabled={databaseCleared}
-              >
-                Clear result data
-              </Button>
-            )}
-          </div>
-
-          <Snackbar
-            open={databaseCleared}
-            autoHideDuration={6000}
-            onClose={dismissToast}
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-            className="pointer-events-none"
+          <FormControl
+            component="fieldset"
+            variant="standard"
+            className="flex flex-col gap-2"
           >
-            <Alert
-              className="bg-green-200/80 dark:bg-emerald-900/80 backdrop-blur-sm mb-10 pointer-events-auto"
-              onClose={dismissToast}
-              severity="success"
-              icon={false}
-              sx={{ width: '100%' }}
-              action={
-                <IconButton
-                  aria-label="Dismiss"
-                  onClick={dismissToast}
-                  color="inherit"
-                  className="!mb-1"
+            <Typography variant="overline" className={'opacity-50'}>
+              Local data management
+            </Typography>
+
+            {storedDataSize.value ? (
+              <Typography variant="caption" className={'opacity-50'}>
+                <span className="font-semibold">
+                  About {storedDataSize.value}
+                </span>{' '}
+                used
+              </Typography>
+            ) : (
+              <></>
+            )}
+
+            <div>
+              {confirmedClearing ? (
+                <div className="flex flex-col gap-2">
+                  <Typography variant="caption" className="inline-block w-full">
+                    Are you sure? There is no going back.
+                  </Typography>
+
+                  <div className="flex gap-2">
+                    <Button onClick={clearLocalData} color="error">
+                      Clear data
+                    </Button>
+
+                    <Button
+                      onClick={() => setConfirmedClearing(false)}
+                      color="secondary"
+                      variant="text"
+                      disabled={databaseCleared}
+                    >
+                      <span className="text-gray-900 dark:text-gray-100">
+                        Cancel
+                      </span>
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <Button
+                  onClick={() => setConfirmedClearing(true)}
+                  color="error"
+                  disabled={databaseCleared}
                 >
-                  <Close />
-                </IconButton>
-              }
+                  Clear result data
+                </Button>
+              )}
+            </div>
+
+            <Snackbar
+              open={databaseCleared}
+              autoHideDuration={6000}
+              onClose={dismissToast}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+              className="pointer-events-none"
             >
-              <p className="flex h-full items-center">
-                Local result data cleared
-              </p>
-            </Alert>
-          </Snackbar>
+              <Alert
+                className="bg-green-200/80 dark:bg-emerald-900/80 backdrop-blur-sm mb-10 pointer-events-auto"
+                onClose={dismissToast}
+                severity="success"
+                icon={false}
+                sx={{ width: '100%' }}
+                action={
+                  <IconButton
+                    aria-label="Dismiss"
+                    onClick={dismissToast}
+                    color="inherit"
+                    className="!mb-1"
+                  >
+                    <Close />
+                  </IconButton>
+                }
+              >
+                <p className="flex h-full items-center">
+                  Local result data cleared
+                </p>
+              </Alert>
+            </Snackbar>
+          </FormControl>
         </div>
       )}
     </GlobalStore.Consumer>
