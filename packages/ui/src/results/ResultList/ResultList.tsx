@@ -14,7 +14,13 @@ import ResultGroup from 'results/ResultGroup/ResultGroup';
 
 const MAX_RESULTS = 100;
 
-const ResultList = ({ list }: { list: Array<ClobbrUIResultListItem> }) => {
+const ResultList = ({
+  list,
+  className
+}: {
+  list: Array<ClobbrUIResultListItem>;
+  className?: string;
+}) => {
   const globalStore = useContext(GlobalStore);
 
   const resultsByUrl = orderBy(
@@ -54,6 +60,7 @@ const ResultList = ({ list }: { list: Array<ClobbrUIResultListItem> }) => {
             animate={{ opacity: 1, y: 0, transition: { delay: 0.2 } }}
             exit={{ opacity: 0 }}
             layout
+            className={className}
           >
             <div className="flex justify-end px-2">
               <Button

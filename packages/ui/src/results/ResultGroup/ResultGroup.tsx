@@ -199,7 +199,7 @@ const ResultGroup = ({
                       expanded={isExpanded}
                       animateOnTap={false}
                       className={clsx(
-                        isExpanded && !isInProgress ? 'pb-4' : '',
+                        isExpanded && !isInProgress ? 'pb-4 xl:pb-0' : '',
                         isExpanded && hasBorder
                           ? 'border-b border-solid border-gray-500 border-opacity-30'
                           : '',

@@ -1,9 +1,24 @@
 const { colors } = require('./src/shared/colors.js');
+const { mediaQueries } = require('./src/shared/mediaQueries.js');
 
 module.exports = {
   darkMode: 'class',
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
+    screens: {
+      xs: `${mediaQueries.xs}px`,
+      sm: `${mediaQueries.sm}px`,
+      md: `${mediaQueries.md}px`,
+      lg: `${mediaQueries.lg}px`,
+      xl: `${mediaQueries.xl}px`,
+      '2xl': `${mediaQueries['2xl']}px`,
+      'tall-xs': { raw: `(min-height: ${mediaQueries.xs}px)` },
+      'tall-sm': { raw: `(min-height: ${mediaQueries.sm}px)` },
+      'tall-md': { raw: `(min-height: ${mediaQueries.md}px)` },
+      'tall-lg': { raw: `(min-height: ${mediaQueries.lg}px)` },
+      'tall-xl': { raw: `(min-height: ${mediaQueries.xl}px)` },
+      'tall-2xl': { raw: `(min-height: ${mediaQueries['2xl']}px)` }
+    },
     extend: {
       colors: {
         primary: {
@@ -17,15 +32,6 @@ module.exports = {
           700: colors.secondary.dark
         }
       },
-
-      screens: {
-        'tall-sm': { raw: '(min-height: 640px)' },
-        'tall-md': { raw: '(min-height: 768px)' },
-        'tall-lg': { raw: '(min-height: 1024px)' },
-        'tall-xl': { raw: '(min-height: 1280px)' },
-        'tall-2xl': { raw: '(min-height: 1536px)' }
-      },
-
       zIndex: {
         60: 60,
         70: 70,

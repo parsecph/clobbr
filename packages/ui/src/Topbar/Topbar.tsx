@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, forwardRef } from 'react';
 
 import { GlobalStore } from 'app/globalContext';
 import Logo from 'shared/brand/logo-primary.svg';
@@ -14,7 +14,7 @@ import { Modal } from 'shared/components/AppleModal/AppleModal';
 import { VersionNumber } from 'shared/components/VersionNumber/VersionNumber';
 import { Settings } from 'Settings/Settings';
 
-const Topbar = () => {
+const Topbar = forwardRef((_props, ref: React.ForwardedRef<HTMLDivElement>) => {
   const [settingsModalOpen, setSettingsModalOpen] = useState(false);
 
   return (
@@ -34,6 +34,7 @@ const Topbar = () => {
             'bg-gray-100/40 dark:bg-zinc-900/40 backdrop-blur-sm transition-all',
             appSettings.stickySearch ? 'sm:sticky top-0 z-100 py-3' : ''
           )}
+          ref={ref}
         >
           <header className="flex justify-between items-center w-full px-4 py-3 ">
             <img
@@ -66,6 +67,6 @@ const Topbar = () => {
       )}
     </GlobalStore.Consumer>
   );
-};
+});
 
 export default Topbar;

@@ -1,4 +1,5 @@
 import { useContext, useMemo, useRef, useState } from 'react';
+import MediaQuery from 'react-responsive';
 import clsx from 'clsx';
 import { css } from '@emotion/css';
 import {
@@ -33,6 +34,7 @@ import ResultContent from 'results/Result/ResultContent/ResultContent';
 import { useResultProperties } from 'results/Result/useResultProperties';
 
 import { VERB_COLOR_CLASS_MAP } from 'shared/enums/VerbsToColorMap';
+import { mediaQueries } from 'shared/mediaQueries';
 
 const xIconCss = css`
   && {
@@ -190,7 +192,7 @@ const Result = ({
           {...animations}
           ref={resultDom}
         >
-          <ListItem className={clsx(listItemClassName, 'flex-wrap !w-auto')}>
+          <ListItem className={clsx(listItemClassName, '!w-auto gap-4')}>
             <AnimatePresence>
               {results.editing ? (
                 <motion.div
@@ -221,7 +223,9 @@ const Result = ({
                   <span className="flex items-center gap-2 truncate mb-1">
                     {showUrl ? (
                       <Tooltip title={item.url}>
-                        <span>{item.url.replace(/^https?:\/\//, '')}</span>
+                        <span className="truncate">
+                          {item.url.replace(/^https?:\/\//, '')}
+                        </span>
                       </Tooltip>
                     ) : (
                       ''
@@ -264,7 +268,7 @@ const Result = ({
                     {showParallelOrSequenceIcon ? (
                       <Tooltip title={item.parallel ? 'Parallel' : 'Sequence'}>
                         <div
-                          className="flex items-center justify-center relative w-6 h-6 p-1 before:bg-gray-500 before:bg-opacity-10 before:flex before:w-full before:h-full before:absolute before:rounded-full"
+                          className="flex flex-shrink-0 items-center justify-center relative w-6 h-6 p-1 before:bg-gray-500 before:bg-opacity-10 before:flex before:w-full before:h-full before:absolute before:rounded-full"
                           aria-label="Toggle between parallel / sequence"
                         >
                           <span
@@ -287,7 +291,7 @@ const Result = ({
                     )}
 
                     {isInProgress ? (
-                      <div className="flex items-center">
+                      <div className="flex flex-shrink-0 items-center">
                         <CircularProgress size={14} />
                       </div>
                     ) : (
@@ -307,7 +311,7 @@ const Result = ({
                 }
               />
 
-              <div className="flex flex-col gap-1 items-end justify-between">
+              <div className="flex flex-col flex-shrink-0 gap-1 items-end justify-between">
                 {!allFailed && !timedOut ? (
                   <Tooltip title="Average response time (mean)">
                     <Typography
@@ -362,7 +366,9 @@ const Result = ({
             </ButtonBase>
           </ListItem>
 
-          <ResultContent item={item} expanded={expanded} />
+          <MediaQuery maxWidth={mediaQueries.xl}>
+            <ResultContent item={item} expanded={expanded} />
+          </MediaQuery>
         </motion.ul>
       )}
     </GlobalStore.Consumer>
