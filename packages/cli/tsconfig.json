@@ -6,6 +6,7 @@
     "skipLibCheck": false,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "declaration": true,
     "strict": false,
     "forceConsistentCasingInFileNames": true,
     "module": "commonjs",
