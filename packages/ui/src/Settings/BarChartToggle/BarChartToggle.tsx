@@ -16,6 +16,12 @@ const BarChartToggle = () => {
   const [preferencesApplied, setPreferencesApplied] = useState(false);
   const { preferences, preferencesLoaded } = useStoredPreferences();
 
+  const onChange = (_newValue: React.ChangeEvent<HTMLInputElement>) => {
+    globalStore.results.updateExpandedResults([]);
+    globalStore.results.updateExpandedResultGroups([]);
+    globalStore.appSettings.toggleShowBarCharts();
+  };
+
   useEffect(() => {
     const resultDb = getDb(EDbStores.MAIN_STORE_NAME);
     resultDb.setItem(
@@ -45,7 +51,7 @@ const BarChartToggle = () => {
           <FormControlLabel
             control={
               <AppleSwitch
-                onChange={appSettings.toggleShowBarCharts}
+                onChange={onChange}
                 checked={appSettings.showBarCharts}
               />
             }
