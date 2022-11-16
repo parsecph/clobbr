@@ -188,7 +188,11 @@ const Result = ({
     <GlobalStore.Consumer>
       {({ results }) => (
         <motion.ul
-          className={clsx(className, 'odd:bg-gray-200 dark:odd:bg-gray-800')}
+          className={clsx(
+            className,
+            'odd:bg-gray-200 dark:odd:bg-gray-800',
+            'even:bg-white dark:even:bg-zinc-900'
+          )}
           {...animations}
           ref={resultDom}
         >

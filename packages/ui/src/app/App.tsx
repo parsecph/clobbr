@@ -15,6 +15,7 @@ import { SK } from 'storage/storageKeys';
 
 import Search from 'search/Search/Search';
 import ResultList from 'results/ResultList/ResultList';
+import { NoResultSelected } from 'results/NoResultSelected/NoResultSelected';
 import ResultContent from 'results/Result/ResultContent/ResultContent';
 import PreferenceLoader from 'shared/components/PreferenceLoader/PreferenceLoader';
 import Topbar from 'Topbar/Topbar';
@@ -120,24 +121,27 @@ const App = () => {
         <main
           className={clsx(
             'flex flex-col items-center justify-center h-full transition-all',
+            // 'xl:bg-gray-200 xl:dark:bg-zinc-900/40',
             state.results.list.length === 0 ? ' flex-grow' : 'flex-grow-0'
           )}
         >
           <Search ref={searchDom} />
 
           <div
-            className="contents xl:flex xl:flex-row-reverse xl:w-full"
+            className="contents xl:flex xl:flex-row-reverse xl:w-full xl:justify-end xl:border-t border-gray-100 dark:border-opacity-30 dark:border-gray-700"
             style={{
               height: `calc(100vh - ${topbarHeight}px)`
             }}
           >
             <MediaQuery minWidth={mediaQueries.xl}>
               {expandedResult ? (
-                <div className="sticky top-0 overflow-auto w-full pt-12 max-w-5xl">
+                <div className="sticky top-0 overflow-auto w-full pt-12 bg-gray-100 dark:bg-opacity-30 dark:bg-gray-700">
                   <ResultContent item={expandedResult} expanded={true} />
                 </div>
               ) : (
-                <></>
+                <div className="sticky top-0 overflow-auto w-full flex items-center justify-center pt-12 bg-gray-100 dark:bg-opacity-30 dark:bg-gray-700">
+                  <NoResultSelected />
+                </div>
               )}
             </MediaQuery>
 

@@ -62,7 +62,7 @@ const ResultList = ({
             layout
             className={className}
           >
-            <div className="flex justify-end px-2">
+            <div className="flex justify-end px-2 py-1 -mb-2 xl:sticky top-0 z-10 xl:bg-white/90 xl:dark:bg-zinc-900/90 backdrop-blur-sm">
               <Button
                 size="small"
                 variant="text"
