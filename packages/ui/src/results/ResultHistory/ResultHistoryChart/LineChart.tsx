@@ -10,13 +10,13 @@ import {
   BarElement,
   LineElement,
   LineController,
+  BarController,
   Tooltip,
   Legend,
   Decimation,
   Filler
 } from 'chart.js';
 import { Chart } from 'react-chartjs-2';
-import { colors } from 'shared/colors';
 import { formatNumber } from 'shared/util/numberFormat';
 
 ChartJS.register(
@@ -25,6 +25,7 @@ ChartJS.register(
   LinearScale,
   PointElement,
   LineController,
+  BarController,
   BarElement,
   LineElement,
   Tooltip,
