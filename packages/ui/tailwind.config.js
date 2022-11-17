@@ -12,12 +12,14 @@ module.exports = {
       lg: `${mediaQueries.lg}px`,
       xl: `${mediaQueries.xl}px`,
       '2xl': `${mediaQueries['2xl']}px`,
+      '3xl': `${mediaQueries['3xl']}px`,
       'tall-xs': { raw: `(min-height: ${mediaQueries.xs}px)` },
       'tall-sm': { raw: `(min-height: ${mediaQueries.sm}px)` },
       'tall-md': { raw: `(min-height: ${mediaQueries.md}px)` },
       'tall-lg': { raw: `(min-height: ${mediaQueries.lg}px)` },
       'tall-xl': { raw: `(min-height: ${mediaQueries.xl}px)` },
-      'tall-2xl': { raw: `(min-height: ${mediaQueries['2xl']}px)` }
+      'tall-2xl': { raw: `(min-height: ${mediaQueries['2xl']}px)` },
+      'tall-3xl': { raw: `(min-height: ${mediaQueries['3xl']}px)` }
     },
     extend: {
       colors: {

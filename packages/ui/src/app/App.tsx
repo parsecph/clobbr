@@ -146,11 +146,8 @@ const App = () => {
             </MediaQuery>
 
             {resultStorageLoaded && state.results.list.length > 0 ? (
-              <section className="w-full xl:w-auto xl:overflow-auto flex-grow-1 flex-shrink-0 lg:flex">
-                <ResultList
-                  list={state.results.list}
-                  className="w-full xl:w-auto xl:max-w-2xl"
-                />
+              <section className="w-full xl:max-w-md 2xl:max-w-lg 3xl:max-w-xl xl:overflow-auto flex-grow-1 flex-shrink-0 lg:flex">
+                <ResultList list={state.results.list} className="w-full" />
               </section>
             ) : (
               ''
