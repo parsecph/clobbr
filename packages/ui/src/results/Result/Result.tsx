@@ -191,7 +191,7 @@ const Result = ({
           className={clsx(
             className,
             expanded
-              ? 'bg-gradient-to-r from-transparent via-primary-500/5 to-primary-500/30 dark:to-primary-700/20'
+              ? 'xl:bg-gradient-to-r xl:from-transparent xl:via-primary-500/5 xl:to-primary-500/30 xl:dark:to-primary-700/20'
               : '',
             'odd:bg-slate-100 dark:odd:bg-gray-800',
             'even:bg-white dark:even:bg-zinc-900'
