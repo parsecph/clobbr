@@ -190,7 +190,10 @@ const Result = ({
         <motion.ul
           className={clsx(
             className,
-            'odd:bg-gray-200 dark:odd:bg-gray-800',
+            expanded
+              ? 'bg-gradient-to-r from-transparent via-primary-500/5 to-primary-500/30 dark:to-primary-700/20'
+              : '',
+            'odd:bg-slate-100 dark:odd:bg-gray-800',
             'even:bg-white dark:even:bg-zinc-900'
           )}
           {...animations}

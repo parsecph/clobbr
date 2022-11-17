@@ -113,7 +113,11 @@ const ResultGroup = ({
     <GlobalStore.Consumer>
       {({ results }) => (
         <motion.div
-          className="odd:bg-gray-200 dark:odd:bg-gray-800 even:bg-white dark:even:bg-zinc-900 w-full"
+          className={clsx(
+            'w-full',
+            'odd:bg-slate-100 dark:odd:bg-gray-800',
+            'even:bg-white dark:even:bg-zinc-900'
+          )}
           {...animations}
           ref={resultDom}
         >
