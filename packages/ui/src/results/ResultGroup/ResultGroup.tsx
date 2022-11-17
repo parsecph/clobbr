@@ -113,7 +113,7 @@ const ResultGroup = ({
     <GlobalStore.Consumer>
       {({ results }) => (
         <motion.div
-          className="odd:bg-gray-200 dark:odd:bg-gray-800 w-full"
+          className="odd:bg-gray-200 dark:odd:bg-gray-800 even:bg-white dark:even:bg-zinc-900 w-full"
           {...animations}
           ref={resultDom}
         >
@@ -199,7 +199,7 @@ const ResultGroup = ({
                       expanded={isExpanded}
                       animateOnTap={false}
                       className={clsx(
-                        isExpanded && !isInProgress ? 'pb-4' : '',
+                        isExpanded && !isInProgress ? 'pb-4 xl:pb-0' : '',
                         isExpanded && hasBorder
                           ? 'border-b border-solid border-gray-500 border-opacity-30'
                           : '',
