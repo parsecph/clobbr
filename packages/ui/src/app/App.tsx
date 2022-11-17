@@ -127,32 +127,32 @@ const App = () => {
         >
           <Search ref={searchDom} />
 
-          <div
-            className="contents xl:flex xl:flex-row-reverse xl:w-full xl:justify-end xl:border-t border-gray-100 dark:border-opacity-30 dark:border-gray-700"
-            style={{
-              height: `calc(100vh - ${topbarHeight}px)`
-            }}
-          >
-            <MediaQuery minWidth={mediaQueries.xl}>
-              {expandedResult ? (
-                <div className="sticky top-0 overflow-auto w-full pt-12 bg-gray-100 dark:bg-opacity-30 dark:bg-gray-700">
-                  <ResultContent item={expandedResult} expanded={true} />
-                </div>
-              ) : (
-                <div className="sticky top-0 overflow-auto w-full flex items-center justify-center pt-12 bg-gray-100 dark:bg-opacity-30 dark:bg-gray-700">
-                  <NoResultSelected />
-                </div>
-              )}
-            </MediaQuery>
+          {resultStorageLoaded && state.results.list.length > 0 ? (
+            <div
+              className="contents xl:flex xl:flex-row-reverse xl:w-full xl:justify-end xl:border-t border-gray-100 dark:border-opacity-30 dark:border-gray-700"
+              style={{
+                height: `calc(100vh - ${topbarHeight}px)`
+              }}
+            >
+              <MediaQuery minWidth={mediaQueries.xl}>
+                {expandedResult ? (
+                  <div className="sticky top-0 overflow-auto w-full pt-12 bg-gray-100 dark:bg-opacity-30 dark:bg-gray-700">
+                    <ResultContent item={expandedResult} expanded={true} />
+                  </div>
+                ) : (
+                  <div className="sticky top-0 overflow-auto w-full flex items-center justify-center pt-12 bg-gray-100 dark:bg-opacity-30 dark:bg-gray-700">
+                    <NoResultSelected />
+                  </div>
+                )}
+              </MediaQuery>
 
-            {resultStorageLoaded && state.results.list.length > 0 ? (
               <section className="w-full xl:max-w-md 2xl:max-w-lg 3xl:max-w-xl xl:overflow-auto flex-grow-1 flex-shrink-0 lg:flex">
                 <ResultList list={state.results.list} className="w-full" />
               </section>
-            ) : (
-              ''
-            )}
-          </div>
+            </div>
+          ) : (
+            ''
+          )}
         </main>
       </ThemeProvider>
     </GlobalStore.Provider>
