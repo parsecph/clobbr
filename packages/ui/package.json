@@ -3,7 +3,6 @@
 	"homepage": "./",
 	"version": "1.12.1",
 	"description": "Clobbr UI",
-	"private": true,
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/parsecph/clobbr/blob/master/packages/ui"
