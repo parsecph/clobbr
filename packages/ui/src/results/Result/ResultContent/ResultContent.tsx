@@ -12,6 +12,7 @@ import { ResultChart } from 'results/ResultChart/ResultChart';
 import { ResultStats } from 'results/ResultStats/ResultStats';
 import { ReRunResultButton } from 'results/ReRunResultButton/ReRunResultButton';
 import { ResultHistoryToggle } from 'results/ResultHistory/ResultHistoryToggle';
+import { ShareResultToggle } from 'results/ShareResult/ShareResultToggle';
 import { UpdateSettingsButton } from 'results/UpdateSettingsButton/UpdateSettingsButton';
 import { CommonlyFailedItem } from 'results/CommonlyFailedItem/CommonlyFailedItem';
 import ActivityIndicator from 'ActivityIndicator/ActivityIndicator';
@@ -94,7 +95,9 @@ const ResultContent = ({
             <CommonlyFailedItem item={item} />
           </div>
 
-          <ResultHistoryToggle item={item} />
+          <div className="w-full absolute z-40 flex gap-4 justify-center -mt-2">
+            <ResultHistoryToggle item={item} />
+          </div>
 
           <div className="flex gap-2 mt-4">
             <ReRunResultButton item={item} />
@@ -116,7 +119,9 @@ const ResultContent = ({
             Try reducing the number of iterations and run again? <br />
           </Typography>
 
-          <ResultHistoryToggle item={item} className="-mt-10" />
+          <div className="w-full absolute z-40 flex gap-4 justify-center -mt-10">
+            <ResultHistoryToggle item={item} className="" />
+          </div>
 
           <div className="flex gap-2 mt-4">
             <ReRunResultButton item={item} />
@@ -137,7 +142,9 @@ const ResultContent = ({
             Increase the number of itetations to see more stats.
           </Typography>
 
-          <ResultHistoryToggle item={item} />
+          <div className="w-full absolute z-40 flex gap-4 justify-center -mt-2">
+            <ResultHistoryToggle item={item} />
+          </div>
 
           <div className="mt-4">
             <ResultStats result={item.latestResult} />
@@ -168,7 +175,11 @@ const ResultContent = ({
             </div>
           ) : (
             <>
-              <ResultHistoryToggle item={item} className="-mt-10" />
+              <div className="w-full absolute z-40 flex gap-4 justify-center -mt-10">
+                <ResultHistoryToggle item={item} />
+                <ShareResultToggle item={item} disabled={isInProgress} />
+              </div>
+
               <ResultChart item={item} className="mt-4" />
               <ResultStats result={item.latestResult} />
 

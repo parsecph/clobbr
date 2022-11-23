@@ -18,7 +18,8 @@ export const Modal = ({
   children,
   footerComponent,
   footerButtons,
-  closeButtonText
+  closeButtonText,
+  containerClassName
 }: {
   open?: boolean;
   maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl';
@@ -27,6 +28,7 @@ export const Modal = ({
   footerComponent?: React.ReactNode;
   footerButtons?: React.ReactNode;
   closeButtonText?: string;
+  containerClassName?: string;
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -88,7 +90,8 @@ export const Modal = ({
               className={clsx(
                 'z-0 flex flex-col w-full h-full bg-white/80 dark:bg-gray-900/70 backdrop-blur-sm rounded-t-lg shadow-xl overflow-auto',
                 'tall-lg:h-auto tall-lg:min-h-[840px]',
-                maxWidth && `max-w-${maxWidth}`
+                maxWidth && `max-w-${maxWidth}`,
+                containerClassName
               )}
               ref={modalRef}
             >

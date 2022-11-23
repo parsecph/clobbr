@@ -56,12 +56,7 @@ export const ResultHistoryToggle = ({
     <GlobalStore.Consumer>
       {({ themeMode }) => (
         <div className="contents">
-          <div
-            className={clsx(
-              'w-full absolute z-40 flex justify-center -mt-2',
-              className
-            )}
-          >
+          <div className={clsx(className)}>
             <ButtonBase
               onClick={onHistoryViewPressed}
               color="primary"
@@ -80,8 +75,11 @@ export const ResultHistoryToggle = ({
             open={showHistory}
             maxWidth="3xl"
           >
-            <div className="p-4 border-b border-solid border-gray-500 border-opacity-20 flex justify-between items-center">
-              <Typography className="flex gap-1" variant="body2">
+            <div className="p-4 border-b border-solid border-gray-500 border-opacity-20 flex justify-between items-center flex-wrap gap-4">
+              <Typography
+                className="flex gap-1 w-full flex-shrink"
+                variant="body2"
+              >
                 <span className="flex shrink-0 items-center gap-1">
                   <AssessmentIcon className="!w-6 !h-6" /> History of
                 </span>
@@ -131,7 +129,7 @@ export const ResultHistoryToggle = ({
 
               <Typography
                 variant="overline"
-                className="opacity-50 flex gap-2 justify-between m-0 px-2"
+                className="opacity-50 flex gap-2 justify-between m-0"
               >
                 <ToggleButtonGroup
                   color={themeMode === 'dark' ? 'primary' : 'secondary'}
