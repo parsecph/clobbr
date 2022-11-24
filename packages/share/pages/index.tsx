@@ -3,7 +3,7 @@ import { Topbar } from '../components/topbar/topbar';
 
 const Home: NextPage = () => {
   return (
-    <div className="fancyOverlay">
+    <div>
       <main>
         <Topbar />
       </main>

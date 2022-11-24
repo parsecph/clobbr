@@ -6,6 +6,7 @@
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
+    "declaration": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
@@ -13,7 +14,6 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
     "jsx": "react-jsx",
     "jsxImportSource": "@emotion/react",
     "noFallthroughCasesInSwitch": true

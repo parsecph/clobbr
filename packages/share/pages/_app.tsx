@@ -1,18 +1,17 @@
-import type { AppProps } from "next/app";
-import { UserProvider } from "@auth0/nextjs-auth0";
-import clsx from "clsx";
-import { Inter } from "@next/font/google";
-import { colors } from "@/theme/colors";
-import { ThemeProvider } from "@mui/material/styles";
-import { getTheme } from "@/theme/theme";
-import Head from "next/head";
-import AppHead from "@/components/layout/head";
-import { config } from "config/config";
+import type { AppProps } from 'next/app';
+import clsx from 'clsx';
+import { Inter } from '@next/font/google';
+import { colors } from '@/theme/colors';
+import { ThemeProvider } from '@mui/material/styles';
+import { getTheme } from '@/theme/theme';
+import Head from 'next/head';
+import AppHead from '@/components/layout/head';
 
-import "@/styles/globals.css";
+import '@/styles/globals.css';
 
-const globalColors: { [key: string]: string | { [key: string]: string } } =
-  colors;
+const globalColors: {
+  [key: string]: string | { [key: string]: string };
+} = colors;
 let style: Array<string> = [];
 
 Object.keys(globalColors).map((variant) => {
@@ -25,9 +24,9 @@ Object.keys(globalColors).map((variant) => {
 const inter = Inter();
 
 const isDarkMode =
-  typeof window !== "undefined" &&
+  typeof window !== 'undefined' &&
   window.matchMedia &&
-  window.matchMedia("(prefers-color-scheme: dark)").matches;
+  window.matchMedia('(prefers-color-scheme: dark)').matches;
 
 function App({ Component, pageProps }: AppProps) {
   return (
@@ -38,22 +37,17 @@ function App({ Component, pageProps }: AppProps) {
         <style>
           {`
             :root, :before, :after {
-              ${style.join(";")}
+              ${style.join(';')}
             }
           `}
         </style>
       </Head>
 
-      <UserProvider
-        profileUrl={`${config.basePath}/api/auth/me`}
-        loginUrl={`${config.basePath}/api/auth/login`}
-      >
-        <div className={clsx("contents", inter.className)}>
-          <ThemeProvider theme={getTheme(isDarkMode ? "dark" : "light")}>
-            <Component {...pageProps} />
-          </ThemeProvider>
-        </div>
-      </UserProvider>
+      <div className={clsx('contents', inter.className)}>
+        <ThemeProvider theme={getTheme(isDarkMode ? 'dark' : 'light')}>
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </div>
     </>
   );
 }

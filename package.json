@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "bootstrap": "lerna bootstrap",
-    "build": "npm run build-api && npm run build-cli && npm run",
+    "build": "npm run build-api && npm run build-cli && npm run build-ui",
     "build-cli": "cd ./packages/cli && npm run build",
     "build-api": "cd ./packages/api && npm run build",
     "build-ui": "cd ./packages/ui && npm run build",

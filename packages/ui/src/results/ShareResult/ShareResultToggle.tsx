@@ -8,6 +8,7 @@ import { ButtonBase, Typography, Tooltip } from '@mui/material';
 import ShareIcon from '@mui/icons-material/IosShare';
 
 import { Modal } from 'shared/components/AppleModal/AppleModal';
+import { toEmojiUriComponent } from 'shared/util/emojiUriComponent';
 
 export const ShareResultToggle = ({
   disabled,
@@ -112,13 +113,14 @@ export const ShareResultToggle = ({
         const itemString = JSON.stringify(sanitizedItem);
 
         const brotliCompressed = await electronAPI.compressText(itemString);
-        const brotliText = new TextDecoder().decode(brotliCompressed);
-        // const brotliDecompressed = await electronAPI.decompressText(
-        //   brotliCompressed
-        // );
 
-        if (brotliText) {
-          setShareUrl(`https://clobbr.app/?s=${brotliText}`);
+        if (brotliCompressed) {
+          setShareUrl(
+            `https://share.clobbr.app/share/${toEmojiUriComponent(
+              brotliCompressed
+            )}
+             `
+          );
         } else {
           // TODO dan handle error
           // TODO
