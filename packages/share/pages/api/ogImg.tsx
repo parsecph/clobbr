@@ -7,8 +7,8 @@ export const config = {
 
 export default async function OgImage(req: NextRequest) {
   try {
-    const { searchParams } = new URL(req.url);
-
+    // NB: hack to unescape html query string: https://github.com/facebook/react/issues/13838
+    const { searchParams } = new URL(req.url.replace(/&amp%3B/g, '&'));
     const url = searchParams.get('url');
     const verb = searchParams.get('verb');
     const durations = searchParams.get('durations')?.split('.');

@@ -187,9 +187,6 @@ export async function getServerSideProps(context: {
     const sharedData = context.params.result;
     const sharedDataStr = fromEmojiUriComponent(sharedData as string);
 
-    console.log('sharedDataStr', sharedDataStr);
-    console.log(Buffer.from(sharedDataStr, 'base64'));
-
     const brotli = await import('brotli-wasm');
     const decompressedData = brotli.decompress(
       Buffer.from(sharedDataStr, 'base64')
@@ -202,23 +199,29 @@ export async function getServerSideProps(context: {
       ? getLogStats(parsed.item.latestResult.logs)
       : [];
 
-    const ogData = parsed.item
-      ? {
-          url: parsed.item.url,
-          verb: parsed.item.verb as string,
-          durations: parsed.item.latestResult.resultDurations.join('.'),
-          isGql: gql ? gql.isGql.toString() : '',
-          gqlName: gql ? gql.gqlName : '',
-          parallel: parsed.item.parallel.toString(),
-          iterations: parsed.item.iterations.toString(),
-          stats: stats
-            .map(
-              ({ value, label }: { value: string; label: string }) =>
-                `${value}:${label}`
-            )
-            .join('|')
+    if (!parsed.item) {
+      return {
+        props: {
+          ogData: ''
         }
-      : '';
+      };
+    }
+
+    const ogData = {
+      url: parsed.item.url,
+      verb: parsed.item.verb as string,
+      durations: parsed.item.latestResult.resultDurations.join('.'),
+      isGql: gql ? gql.isGql.toString() : '',
+      gqlName: gql ? gql.gqlName : '',
+      parallel: parsed.item.parallel.toString(),
+      iterations: parsed.item.iterations.toString(),
+      stats: stats
+        .map(
+          ({ value, label }: { value: string; label: string }) =>
+            `${value}:${label}`
+        )
+        .join('|')
+    };
 
     return {
       props: {
