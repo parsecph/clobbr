@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "bootstrap": "lerna bootstrap",
+    "bootstrap:share": "lerna bootstrap --scope @clobbr/share",
     "build": "npm run build-api && npm run build-cli && npm run build-ui && npm run build-share",
     "build-cli": "cd ./packages/cli && npm run build",
     "build-api": "cd ./packages/api && npm run build",
