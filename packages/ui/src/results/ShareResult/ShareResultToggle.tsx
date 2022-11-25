@@ -38,7 +38,24 @@ export const ShareResultToggle = ({
   const [compressedCharLength, setCompressedCharLength] = useState(0);
   const [compressionError, setCompressionError] = useState('');
   const [state, copyToClipboard] = useCopyToClipboard();
+  const [shareState, setShareState] = useState<{
+    value?: string;
+    error?: Error;
+  }>({
+    value: ''
+  });
   const [urlRedacted, setUrlRedacted] = useState(false);
+
+  useEffect(() => {
+    setShareState(state);
+    const resetState = setTimeout(() => {
+      setShareState({
+        value: ''
+      });
+
+      return () => clearTimeout(resetState);
+    }, 3000);
+  }, [state]);
 
   const electronLand = useMemo(() => {
     return !!(window as any).electronAPI;
@@ -60,6 +77,7 @@ export const ShareResultToggle = ({
 
   const onShareClosePressed = () => {
     setShowShare(false);
+    setShareState({ value: '' });
   };
 
   const copyShareUrlToClipboard = () => {
@@ -306,10 +324,15 @@ export const ShareResultToggle = ({
               {!compressionError && shareUrl ? (
                 <>
                   <div className="flex gap-2 ">
-                    <Button onClick={copyShareUrlToClipboard}>
-                      {!state.error && !state.value ? 'Copy to clipboard' : ''}
-                      {state.error ? 'Failed to copy' : ''}
-                      {state.value ? 'Share link copied' : ''}
+                    <Button
+                      onClick={copyShareUrlToClipboard}
+                      className={shareState.value ? 'pointer-events-none' : ''}
+                    >
+                      {!shareState.error && !shareState.value
+                        ? 'Copy to clipboard'
+                        : ''}
+                      {shareState.error ? 'Failed to copy' : ''}
+                      {shareState.value ? 'Copied!' : ''}
                     </Button>
 
                     {electronLand ? (
