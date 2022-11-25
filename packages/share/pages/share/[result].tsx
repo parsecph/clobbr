@@ -174,14 +174,13 @@ const Result = ({ ogData }: { ogData?: string }) => {
   );
 };
 
-export async function getServerSideProps(context: NextPageContext) {
+export async function getServerSideProps(context: {
+  params: { result: string };
+}) {
   try {
-    const { req } = context;
-
-    const url = req?.url || '';
-    const sharedData = decodeURIComponent(url.slice(url.indexOf('share/') + 6));
-
+    const sharedData = context.params.result;
     const sharedDataStr = fromEmojiUriComponent(sharedData as string);
+
     const brotli = await import('brotli-wasm');
     const decompressedData = brotli.decompress(
       Buffer.from(sharedDataStr, 'base64')
