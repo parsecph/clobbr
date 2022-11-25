@@ -76,6 +76,12 @@ const Result = ({ ogData }: { ogData?: string }) => {
           content={`${ogImageUrl}?${ogData}`}
           key="ogImage"
         />
+
+        <meta
+          name="twitter:image"
+          content={`${ogImageUrl}?${ogData}`}
+          key="twitterImg"
+        />
       </Head>
 
       <div className="flex flex-col justify-center h-full min-h-screen">
