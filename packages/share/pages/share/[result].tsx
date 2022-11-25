@@ -181,6 +181,9 @@ export async function getServerSideProps(context: {
     const sharedData = context.params.result;
     const sharedDataStr = fromEmojiUriComponent(sharedData as string);
 
+    console.log('sharedDataStr', sharedDataStr);
+    console.log(Buffer.from(sharedDataStr, 'base64'));
+
     const brotli = await import('brotli-wasm');
     const decompressedData = brotli.decompress(
       Buffer.from(sharedDataStr, 'base64')
