@@ -68,9 +68,20 @@ const Result = ({ ogData }: { ogData?: string }) => {
     decompress();
   }, [result]);
 
+  const ogTitle = 'Api speed test results';
+  const ogDescription =
+    'See shared results of an api speed test done from the Clobbr App.';
+
   return (
     <>
       <Head>
+        <title>{ogTitle}</title>
+        <meta name="description" content={ogDescription} key="description" />
+
+        <meta property="og:type" content="website" key="ogType" />
+        <meta property="og:title" content={ogTitle} key="ogTitle" />
+        <meta property="og:description" content={ogDescription} key="ogDesc" />
+
         <meta
           property="og:image"
           content={`${ogImageUrl}?${ogData}`}
@@ -78,17 +89,26 @@ const Result = ({ ogData }: { ogData?: string }) => {
         />
 
         <meta
+          name="twitter:card"
+          content="summary_large_image"
+          key="twitterCard"
+        />
+        <meta
+          property="twitter:domain"
+          content={config.domain}
+          key="twitterDomain"
+        />
+        <meta property="twitter:url" content={url} key="twitterUrl" />
+        <meta name="twitter:title" content={ogTitle} key="twitterTitle" />
+        <meta
+          name="twitter:description"
+          content={ogDescription}
+          key="twitterDesc"
+        />
+        <meta
           name="twitter:image"
           content={`${ogImageUrl}?${ogData}`}
           key="twitterImg"
-        />
-
-        <title>Api speed test results</title>
-
-        <meta
-          name="description"
-          content="See shared results of an api speed test done from the Clobbr App."
-          key="description"
         />
       </Head>
 

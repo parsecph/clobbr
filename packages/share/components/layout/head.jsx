@@ -16,7 +16,6 @@ export default function AppHead() {
         key="viewport"
       />
 
-      <meta property="og:url" content={url} key="ogUrl" />
       <meta property="og:type" content="website" key="ogType" />
       <meta property="og:title" content={config.title} key="ogTitle" />
       <meta
