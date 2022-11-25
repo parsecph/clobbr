@@ -1,4 +1,4 @@
-import { useThrottle, useThrottleFn } from 'react-use';
+import { useThrottleFn } from 'react-use';
 import { Typography } from '@mui/material';
 import { isNumber } from 'lodash-es';
 

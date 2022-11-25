@@ -81,7 +81,7 @@ const Result = ({ ogData }: { ogData?: string }) => {
       <div className="flex flex-col justify-center h-full min-h-screen">
         <Topbar className="fixed top-0" />
 
-        {item ? (
+        {/* {item ? (
           <>
             <div className="w-full p-6 mt-8 flex justify-center">
               <div className="w-full max-w-xl">
@@ -139,32 +139,34 @@ const Result = ({ ogData }: { ogData?: string }) => {
             />
 
             <div className="mb-12">
-              <ResultStats
-                result={item.latestResult}
-                otherStats={[
-                  {
-                    label: 'Pct. of success',
-                    value: `${pctOfSuccess}%`,
-                    colorClass: ''
-                  }
-                ]}
-              />
-            </div>
-
-            {failedItems.length > 0 ? (
-              <div className="flex flex-col items-center">
-                <Alert severity="error">
-                  {failedItems.length} failed. Showing results only for
-                  successful requests ({pctOfSuccess}% succeded).
-                </Alert>
+              <div>
+                <ResultStats
+                  result={item.latestResult}
+                  otherStats={[
+                    {
+                      label: 'Pct. of success',
+                      value: `${pctOfSuccess}%`,
+                      colorClass: ''
+                    }
+                  ]}
+                />
               </div>
-            ) : (
-              ''
-            )}
+
+              {failedItems.length > 0 ? (
+                <div className="flex flex-col items-center mt-4">
+                  <Alert severity="error">
+                    {failedItems.length} failed. Showing results only for
+                    successful requests ({pctOfSuccess}% succeded).
+                  </Alert>
+                </div>
+              ) : (
+                ''
+              )}
+            </div>
           </>
         ) : (
           <></>
-        )}
+        )} */}
 
         <GenericFooter />
       </div>
