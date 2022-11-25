@@ -10,18 +10,18 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
 import { config } from '@/theme/config.js';
-import { fromEmojiUriComponent } from '@clobbr/ui/src/shared/util/emojiUriComponent';
-import { ClobbrUIResultListItem } from '@clobbr/ui/src/models/ClobbrUIResultListItem';
-import { ResultChart } from '@clobbr/ui/src/results/ResultChart/ResultChart';
-import { ResultStats } from '@clobbr/ui/src/results/ResultStats/ResultStats';
-import { ResultListItemPrimaryContent } from '@clobbr/ui/src/results/Result/ResultListItemPrimaryContent/ResultListItemPrimaryContent';
-import { useResultProperties } from '@clobbr/ui/src/results/Result/useResultProperties';
+import { fromEmojiUriComponent } from '@/ui/shared/util/emojiUriComponent';
+import { ClobbrUIResultListItem } from '@/ui/models/ClobbrUIResultListItem';
+import { ResultChart } from '@/ui/results/ResultChart/ResultChart';
+import { ResultStats } from '@/ui/results/ResultStats/ResultStats';
+import { ResultListItemPrimaryContent } from '@/ui/results/Result/ResultListItemPrimaryContent/ResultListItemPrimaryContent';
+import { useResultProperties } from '@/ui/results/Result/useResultProperties';
 
 import { parseResult } from '@/components/parseResults';
 import { Topbar } from '@/components/topbar/topbar';
 import { GenericFooter } from '@/components/footer/footer';
 import { decodeShareData } from '@/components/decodeShareData';
-import { getLogStats } from '@clobbr/ui/src/shared/util/getLogStats';
+import { getLogStats } from '@/ui/shared/util/getLogStats';
 
 const url = `https://${config.domain}`;
 const ogImageUrl = `${url}/api/ogImg`;
@@ -81,7 +81,7 @@ const Result = ({ ogData }: { ogData?: string }) => {
       <div className="flex flex-col justify-center h-full min-h-screen">
         <Topbar className="fixed top-0" />
 
-        {/* {item ? (
+        {item ? (
           <>
             <div className="w-full p-6 mt-8 flex justify-center">
               <div className="w-full max-w-xl">
@@ -166,7 +166,7 @@ const Result = ({ ogData }: { ogData?: string }) => {
           </>
         ) : (
           <></>
-        )} */}
+        )}
 
         <GenericFooter />
       </div>

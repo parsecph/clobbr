@@ -7,6 +7,11 @@ const nextConfig = {
   basePath: config.basePath,
   experimental: {
     externalDir: true
+  },
+
+  webpack: (config, { buildId, dev }) => {
+    config.resolve.symlinks = false;
+    return config;
   }
 };
 

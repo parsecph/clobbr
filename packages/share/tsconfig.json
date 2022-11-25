@@ -15,18 +15,18 @@
     "jsx": "preserve",
     "incremental": true,
     "baseUrl": ".",
+    "preserveSymlinks": false,
     "paths": {
       "@/components/*": ["components/*"],
       "@/theme/*": ["theme/*"],
       "@/pages/*": ["pages/*"],
       "@/app/*": ["app/*"],
       "@/styles/*": ["styles/*"],
-      "shared/*": ["../ui/src/shared/*"],
-      "models/*": ["../ui/src/models/*"],
-      "react/*": ["react/*"],
-      "react-dom/*": ["react-dom/*"]
+      "@/ui/*": ["ui/*"],
+      "shared/*": ["ui/shared/*"],
+      "models/*": ["ui/models/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.js", "../ui/*"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.js"],
   "exclude": ["node_modules"]
 }
