@@ -32,7 +32,10 @@
     "**/*.ts",
     "**/*.tsx",
     "**/*.js",
-    "../api/src/*"
+    "../api/src/*",
+
+    "ui/results/*",
+    "ui/shared/*"
   ],
   "exclude": ["node_modules", "ui"]
 }
