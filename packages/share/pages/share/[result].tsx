@@ -218,7 +218,7 @@ export async function getServerSideProps(context: {
     const ogData = {
       url: parsed.item.url,
       verb: parsed.item.verb as string,
-      durations: parsed.item.latestResult.resultDurations.join('|'),
+      durations: parsed.item.latestResult.resultDurations.join(','),
       isGql: gql ? gql.isGql.toString() : '',
       gqlName: gql ? gql.gqlName : '',
       parallel: parsed.item.parallel.toString(),
@@ -228,7 +228,7 @@ export async function getServerSideProps(context: {
           ({ value, label }: { value: string; label: string }) =>
             `${value}:${label}`
         )
-        .join('|')
+        .join(',')
     };
 
     return {
