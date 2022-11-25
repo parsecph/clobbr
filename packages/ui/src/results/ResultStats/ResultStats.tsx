@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useThrottle, useThrottleFn } from 'react-use';
 import { Typography } from '@mui/material';
 import { isNumber } from 'lodash-es';
 
@@ -28,7 +28,9 @@ export const ResultStats = ({
     colorClass: string;
   }>;
 }) => {
-  const stats = useMemo(() => getResultStats(result), [result]);
+  const stats = useThrottleFn((result) => getResultStats(result), 200, [
+    result
+  ]);
 
   if (!stats) {
     return <></>;
