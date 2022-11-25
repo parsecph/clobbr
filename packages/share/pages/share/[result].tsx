@@ -82,6 +82,14 @@ const Result = ({ ogData }: { ogData?: string }) => {
           content={`${ogImageUrl}?${ogData}`}
           key="twitterImg"
         />
+
+        <title>Api speed test results</title>
+
+        <meta
+          name="description"
+          content="See shared results of an api speed test done from the Clobbr App."
+          key="description"
+        />
       </Head>
 
       <div className="flex flex-col justify-center h-full min-h-screen">
