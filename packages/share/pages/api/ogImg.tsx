@@ -26,10 +26,8 @@ export default async function OgImage(req: NextRequest) {
         return { value, label };
       });
 
-    console.log(durations);
-
     const canvasWidth = 1200;
-    const canvasHeight = 800;
+    const canvasHeight = 630;
     const svgWidth = 1200;
     const svgHeight = canvasHeight - 350;
 
@@ -107,7 +105,7 @@ export default async function OgImage(req: NextRequest) {
           </div>
 
           <div tw="bg-gray-50/95 flex relative z-10">
-            <div tw="flex flex-row w-full py-12 px-4 items-center justify-between p-8">
+            <div tw="flex flex-row w-full py-4 px-8 items-center justify-between">
               <h2 tw="flex flex-col text-4xl font-bold tracking-tight text-gray-900 text-left">
                 {url ? (
                   <span>
@@ -116,7 +114,7 @@ export default async function OgImage(req: NextRequest) {
                 ) : (
                   ''
                 )}
-                <span tw="flex text-2xl text-green-400">
+                <span tw="flex text-3xl text-green-400 mt-1">
                   <u tw="mr-1">{iterations}</u>
                   <span tw="mr-1">iterations sent in</span>
                   <u tw="mr-1">{parallel ? 'parallel' : 'sequence'}</u>
@@ -126,7 +124,9 @@ export default async function OgImage(req: NextRequest) {
                 <div tw="flex rounded-md shadow">
                   <a
                     href="#"
-                    tw="flex items-center justify-center rounded-md border border-transparent bg-green-600 px-6 py-4 text-xl font-medium text-white uppercase"
+                    tw={`flex items-center justify-center rounded-md border border-transparent px-8 py-4 text-3xl font-medium text-white uppercase ${
+                      isGql ? 'bg-purple-500' : 'bg-blue-500'
+                    }`}
                   >
                     {isGql ? 'GQL' : verb}
                   </a>
@@ -140,7 +140,7 @@ export default async function OgImage(req: NextRequest) {
               ? stats.map(({ label, value }, index) => (
                   <div
                     key={index}
-                    tw={`flex flex-col items-center border-l border-gray-500 border-opacity-20 p-4 text-lg ${
+                    tw={`flex flex-col items-center border-l border-gray-500 border-opacity-20 p-5 text-2xl ${
                       index === 0 ? 'border-0' : 'border-l'
                     }`}
                   >
