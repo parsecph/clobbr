@@ -172,61 +172,61 @@ const Result = ({ ogData }: { ogData?: string }) => {
   );
 };
 
-export async function getServerSideProps(context: NextPageContext) {
-  try {
-    const { req } = context;
+// export async function getServerSideProps(context: NextPageContext) {
+//   try {
+//     const { req } = context;
 
-    const referrer = req?.headers.referer || '';
-    const sharedData = decodeURIComponent(
-      referrer.slice(referrer.indexOf('share/') + 6)
-    );
+//     const referrer = req?.headers.referer || '';
+//     const sharedData = decodeURIComponent(
+//       referrer.slice(referrer.indexOf('share/') + 6)
+//     );
 
-    const sharedDataStr = fromEmojiUriComponent(sharedData as string);
-    console.log(sharedDataStr); // Seems to be needed for decoding?!
+//     const sharedDataStr = fromEmojiUriComponent(sharedData as string);
+//     console.log(sharedDataStr); // Seems to be needed for decoding?!
 
-    const brotli = await import('brotli-wasm');
-    const decompressedData = brotli.decompress(
-      Buffer.from(sharedDataStr, 'base64')
-    );
-    const decompressedText = Buffer.from(decompressedData).toString('utf8');
-    const parsed = parseResult(decompressedText);
+//     const brotli = await import('brotli-wasm');
+//     const decompressedData = brotli.decompress(
+//       Buffer.from(sharedDataStr, 'base64')
+//     );
+//     const decompressedText = Buffer.from(decompressedData).toString('utf8');
+//     const parsed = parseResult(decompressedText);
 
-    const gql = parsed.item?.properties?.gql;
-    const stats = parsed.item?.latestResult.logs
-      ? getLogStats(parsed.item.latestResult.logs)
-      : [];
+//     const gql = parsed.item?.properties?.gql;
+//     const stats = parsed.item?.latestResult.logs
+//       ? getLogStats(parsed.item.latestResult.logs)
+//       : [];
 
-    const ogData = parsed.item
-      ? {
-          url: parsed.item.url,
-          verb: parsed.item.verb as string,
-          durations: parsed.item.latestResult.resultDurations.join('.'),
-          isGql: gql ? gql.isGql.toString() : '',
-          gqlName: gql ? gql.gqlName : '',
-          parallel: parsed.item.parallel.toString(),
-          iterations: parsed.item.iterations.toString(),
-          stats: stats
-            .map(
-              ({ value, label }: { value: string; label: string }) =>
-                `${value}:${label}`
-            )
-            .join('|')
-        }
-      : '';
+//     const ogData = parsed.item
+//       ? {
+//           url: parsed.item.url,
+//           verb: parsed.item.verb as string,
+//           durations: parsed.item.latestResult.resultDurations.join('.'),
+//           isGql: gql ? gql.isGql.toString() : '',
+//           gqlName: gql ? gql.gqlName : '',
+//           parallel: parsed.item.parallel.toString(),
+//           iterations: parsed.item.iterations.toString(),
+//           stats: stats
+//             .map(
+//               ({ value, label }: { value: string; label: string }) =>
+//                 `${value}:${label}`
+//             )
+//             .join('|')
+//         }
+//       : '';
 
-    return {
-      props: {
-        ogData: new URLSearchParams(ogData).toString()
-      }
-    };
-  } catch (e) {
-    console.error(e);
-    return {
-      props: {
-        ogData: ''
-      }
-    };
-  }
-}
+//     return {
+//       props: {
+//         ogData: new URLSearchParams(ogData).toString()
+//       }
+//     };
+//   } catch (e) {
+//     console.error(e);
+//     return {
+//       props: {
+//         ogData: ''
+//       }
+//     };
+//   }
+// }
 
 export default Result;
