@@ -1,5 +1,5 @@
-import { ClobbrUIResultListItem } from '@clobbr/ui/src/models/ClobbrUIResultListItem';
-import { ClobbrUICompressedResultListItem } from '@clobbr/ui/src/models/ClobbrCompressedResultListItem';
+import { ClobbrUIResultListItem } from '@/ui/models/ClobbrUIResultListItem';
+import { ClobbrUICompressedResultListItem } from '@/ui/models/ClobbrCompressedResultListItem';
 
 export const parseResult = (
   result: string
