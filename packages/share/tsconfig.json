@@ -27,6 +27,12 @@
       "models/*": ["ui/models/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.js"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.js",
+    "../api/src/*"
+  ],
   "exclude": ["node_modules", "ui"]
 }
