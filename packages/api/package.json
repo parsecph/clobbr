@@ -1,6 +1,6 @@
 {
   "name": "@clobbr/api",
-  "version": "1.12.0",
+  "version": "1.12.3",
   "description": "Clobbr API",
   "main": "dist/index.js",
   "scripts": {
