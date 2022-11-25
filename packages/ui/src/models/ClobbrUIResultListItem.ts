@@ -14,9 +14,9 @@ export interface ClobbrUIResultListItem {
   historicalResults: Array<ClobbrUIResult>;
   ssl: boolean;
   headers: Array<ClobbrUIHeaderItem>;
-  headerInputMode: string;
-  headerShellCmd: string;
-  headerNodeScriptData: {
+  headerInputMode?: string;
+  headerShellCmd?: string;
+  headerNodeScriptData?: {
     text?: string;
     valid: boolean;
   };

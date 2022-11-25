@@ -73,13 +73,6 @@ const ResultGroup = ({
       tapped: { scale: 0.98, opacity: 0.5, transition: { duration: 0.1 } }
     },
     onAnimationComplete: () => {
-      if (isPresent && expanded && resultDom?.current) {
-        (resultDom.current as HTMLElement).scrollIntoView({
-          behavior: 'smooth',
-          block: 'center'
-        });
-      }
-
       if (!isPresent) {
         safeToRemove();
       }
@@ -92,6 +85,15 @@ const ResultGroup = ({
       globalStore.results.updateExpandedResultGroups([]);
     } else {
       globalStore.results.updateExpandedResultGroups([url]);
+
+      setTimeout(() => {
+        if (resultDom?.current) {
+          (resultDom.current as HTMLElement).scrollIntoView({
+            behavior: 'auto',
+            block: 'center'
+          });
+        }
+      }, 0);
     }
   };
 
@@ -207,7 +209,7 @@ const ResultGroup = ({
                         isExpanded && hasBorder
                           ? 'border-b border-solid border-gray-500 border-opacity-30'
                           : '',
-                        'bg-inherit dark:bg-inherit odd:bg-inherit dark:odd:bg-inherit'
+                        'bg-inherit dark:bg-inherit odd:bg-inherit dark:odd:bg-inherit even:bg-inherit dark:even:bg-inherit'
                       )}
                       showUrl={false}
                       listItemClassName={clsx(

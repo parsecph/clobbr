@@ -20,7 +20,11 @@
       "@/theme/*": ["theme/*"],
       "@/pages/*": ["pages/*"],
       "@/app/*": ["app/*"],
-      "@/styles/*": ["styles/*"]
+      "@/styles/*": ["styles/*"],
+      "shared/*": ["../ui/src/shared/*"],
+      "models/*": ["../ui/src/models/*"],
+      "react/*": ["react/*"],
+      "react-dom/*": ["react-dom/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.js", "../ui/*"],

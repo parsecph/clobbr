@@ -2,6 +2,7 @@
 	"name": "@clobbr/ui",
 	"homepage": "./",
 	"version": "1.12.2",
+	"private": true,
 	"description": "Clobbr UI",
 	"repository": {
 		"type": "git",
@@ -36,9 +37,7 @@
 		"is-absolute-url": "^4.0.1",
 		"localforage": "^1.10.0",
 		"lodash-es": "^4.17.21",
-		"react": "^18.0.0",
 		"react-app-rewired": "^2.2.1",
-		"react-dom": "^18.0.0",
 		"react-responsive": "^9.0.0",
 		"react-scripts": "5.0.0",
 		"react-use": "^17.3.2",

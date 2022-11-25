@@ -38,9 +38,9 @@ export const useResultRunner = ({
   dataJson: { [key: string]: any };
   properties?: ClobbrUIProperties;
   headerItems: Array<ClobbrUIHeaderItem>;
-  headerInputMode: string;
-  headerShellCmd: string;
-  headerNodeScriptData: { text?: string; valid: boolean };
+  headerInputMode?: string;
+  headerShellCmd?: string;
+  headerNodeScriptData?: { text?: string; valid: boolean };
   timeout: number;
 }) => {
   const globalStore = useContext(GlobalStore);

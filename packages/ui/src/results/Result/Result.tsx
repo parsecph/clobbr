@@ -9,11 +9,11 @@ import {
   usePresence
 } from 'framer-motion';
 import { useInterval, useMount } from 'react-use';
-import { formatDistanceToNow } from 'date-fns';
+import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 
 import { GlobalStore } from 'app/globalContext';
 
-import { ButtonBase, CircularProgress, Typography } from '@mui/material';
+import { ButtonBase, Typography } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -25,15 +25,17 @@ import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
 import { ReactComponent as ParallelIcon } from 'shared/icons/Parallel.svg';
 import { ReactComponent as SequenceIcon } from 'shared/icons/Sequence.svg';
 import { formatNumber } from 'shared/util/numberFormat';
+import { getDurationColorClass } from 'shared/util/getDurationColorClass';
 
 import { mathUtils } from '@clobbr/api';
 import { isNumber } from 'lodash-es';
 import { nextTick } from 'shared/util/nextTick';
 
 import ResultContent from 'results/Result/ResultContent/ResultContent';
+import { ResultListItemPrimaryContent } from 'results/Result/ResultListItemPrimaryContent/ResultListItemPrimaryContent';
+import { ResultListItemSecondaryContent } from 'results/Result/ResultListItemSecondaryContent/ResultListItemSecondaryContent';
 import { useResultProperties } from 'results/Result/useResultProperties';
 
-import { VERB_COLOR_CLASS_MAP } from 'shared/enums/VerbsToColorMap';
 import { mediaQueries } from 'shared/mediaQueries';
 
 const xIconCss = css`
@@ -42,21 +44,6 @@ const xIconCss = css`
     height: 0.75rem;
   }
 `;
-
-const DURATION_COLOR_MAP: { [key: number]: string } = {
-  0: 'text-green-400',
-  1: 'text-yellow-400',
-  2: 'text-orange-400',
-  3: 'text-red-600'
-};
-
-export const getDurationColorClass = (duration: number): string => {
-  const roundedDuration = Math.round(duration / 1000);
-
-  return DURATION_COLOR_MAP[roundedDuration]
-    ? DURATION_COLOR_MAP[roundedDuration]
-    : 'text-red-400';
-};
 
 const Result = ({
   item,
@@ -91,23 +78,13 @@ const Result = ({
         : 'absolute') as unknown as MotionValue<string>
     },
     animate: isPresent ? 'in' : 'out',
-    whileTap: animateOnTap ? 'tapped' : 'noop',
+    whileTap: animateOnTap ? 'tapped' : 'tapped-not-animated',
     variants: {
       in: { scaleY: 1, opacity: 1, transition: { delay: 0.3 } },
       out: { scaleY: 0, opacity: 0, zIndex: -1 },
       tapped: { scale: 0.98, opacity: 0.5, transition: { duration: 0.1 } }
     },
     onAnimationComplete: () => {
-      nextTick(() => {
-        if (isPresent && expanded && resultDom?.current) {
-          // The idea with next tick is to allow the result group animation to fire first, if any.
-          (resultDom.current as HTMLElement).scrollIntoView({
-            behavior: 'smooth',
-            block: 'center'
-          });
-        }
-      });
-
       if (!isPresent) {
         safeToRemove();
       }
@@ -120,6 +97,15 @@ const Result = ({
       globalStore.results.updateExpandedResults([]);
     } else {
       globalStore.results.updateExpandedResults([item.id]);
+
+      setTimeout(() => {
+        if (resultDom?.current) {
+          (resultDom.current as HTMLElement).scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+          });
+        }
+      }, 300);
     }
   };
 
@@ -227,94 +213,18 @@ const Result = ({
             <ButtonBase onClick={onResultPressed} className="!contents">
               <ListItemText
                 primary={
-                  <span className="flex items-center gap-2 truncate mb-1">
-                    {showUrl ? (
-                      <Tooltip title={item.url}>
-                        <span className="truncate">
-                          {item.url.replace(/^https?:\/\//, '')}
-                        </span>
-                      </Tooltip>
-                    ) : (
-                      ''
-                    )}
-
-                    {item.properties?.gql?.isGql ? (
-                      <>
-                        <small
-                          className={clsx(
-                            'px-2 py-0.5',
-                            'rounded-sm text-black',
-                            'bg-fuchsia-300'
-                          )}
-                        >
-                          GQL
-                        </small>
-
-                        <small
-                          className={clsx(
-                            'px-2 py-0.5',
-                            'rounded-sm text-black',
-                            'bg-gray-300'
-                          )}
-                        >
-                          {item.properties?.gql.gqlName}
-                        </small>
-                      </>
-                    ) : (
-                      <small
-                        className={clsx(
-                          'px-2 py-0.5',
-                          'rounded-sm text-black',
-                          VERB_COLOR_CLASS_MAP[item.verb] || 'bg-gray-300'
-                        )}
-                      >
-                        {item.verb.toUpperCase()}
-                      </small>
-                    )}
-
-                    {showParallelOrSequenceIcon ? (
-                      <Tooltip title={item.parallel ? 'Parallel' : 'Sequence'}>
-                        <div
-                          className="flex flex-shrink-0 items-center justify-center relative w-6 h-6 p-1 before:bg-gray-500 before:bg-opacity-10 before:flex before:w-full before:h-full before:absolute before:rounded-full"
-                          aria-label="Toggle between parallel / sequence"
-                        >
-                          <span
-                            className={
-                              globalStore.themeMode === 'light'
-                                ? 'text-black'
-                                : 'text-gray-300'
-                            }
-                          >
-                            {item.parallel ? (
-                              <ParallelIcon className="w-full h-full" />
-                            ) : (
-                              <SequenceIcon className="w-full h-full" />
-                            )}
-                          </span>
-                        </div>
-                      </Tooltip>
-                    ) : (
-                      ''
-                    )}
-
-                    {isInProgress ? (
-                      <div className="flex flex-shrink-0 items-center">
-                        <CircularProgress size={14} />
-                      </div>
-                    ) : (
-                      <></>
-                    )}
-                  </span>
+                  <ResultListItemPrimaryContent
+                    item={item}
+                    showUrl={showUrl}
+                    showParallelOrSequenceIcon={showParallelOrSequenceIcon}
+                    themeMode={globalStore.themeMode}
+                    isInProgress={isInProgress}
+                  />
                 }
                 secondary={
-                  <>
-                    <Typography
-                      variant="caption"
-                      className="flex w-full text-left opacity-50"
-                    >
-                      {formattedDate ? `${formattedDate} ago` : '...'}
-                    </Typography>
-                  </>
+                  <ResultListItemSecondaryContent
+                    formattedDate={formattedDate}
+                  />
                 }
               />
 

@@ -1,20 +1,22 @@
 import clsx from 'clsx';
-import { useContext } from 'react';
 
 import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
-import { GlobalStore } from 'app/globalContext';
 
 import { LineChart } from '../ResultHistory/ResultHistoryChart/LineChart';
 
 export const ResultChart = ({
   item,
+  showTrendline,
+  showBarCharts,
+  chartDownSampleThreshold,
   className
 }: {
   item: ClobbrUIResultListItem;
+  showTrendline?: boolean;
+  showBarCharts?: boolean;
+  chartDownSampleThreshold: number;
   className?: string;
 }) => {
-  const globalStore = useContext(GlobalStore);
-
   const qualifiedLogs = item.latestResult.logs.filter((log) => !log.failed);
   const qualifiedDurations = qualifiedLogs.map(
     (log) => log.metas.duration as number
@@ -22,9 +24,6 @@ export const ResultChart = ({
 
   const maxDuration = Math.max(...qualifiedDurations);
   const paddedDuration = maxDuration + maxDuration * 0.1 + 100;
-
-  const showTrendline = globalStore.appSettings.showTrendline;
-  const showBarCharts = globalStore.appSettings.showBarCharts;
 
   const data = {
     labels: qualifiedLogs.map((log) => {
@@ -72,7 +71,7 @@ export const ResultChart = ({
     <div className={clsx('relative cursor-crosshair', className)}>
       <LineChart
         data={data}
-        downsampleThreshold={globalStore.appSettings.chartDownSampleThreshold}
+        downsampleThreshold={chartDownSampleThreshold}
         suggestedYMax={paddedDuration}
         responsive={true}
         hideYAxis={true}

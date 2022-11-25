@@ -5,11 +5,9 @@ import { ClobbrUIResult } from 'models/ClobbrUIResult';
 
 import { Tooltip, Typography } from '@mui/material';
 
-import {
-  getResultStats,
-  RESULT_STAT_TYPES
-} from 'results/ResultStats/ResultStats';
+import { getResultStats } from 'results/ResultStats/ResultStats';
 import { formatNumber } from 'shared/util/numberFormat';
+import { RESULT_STAT_TYPES } from 'shared/util/getLogStats';
 
 export const ResultHistoryStats = ({
   results,

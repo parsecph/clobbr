@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { differenceInMinutes } from 'date-fns';
+import differenceInMinutes from 'date-fns/differenceInMinutes';
 
 import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
 
@@ -10,9 +10,11 @@ export const useResultProperties = ({
 }: {
   item: ClobbrUIResultListItem;
 }) => {
+  const itemInternal = item || { latestResult: {} };
+
   const timedOut = useMemo(() => {
-    const startDate = item.latestResult.startDate as string;
-    const endDate = item.latestResult.endDate;
+    const startDate = itemInternal.latestResult.startDate as string;
+    const endDate = itemInternal.latestResult.endDate;
 
     return !!(
       startDate &&
@@ -20,7 +22,18 @@ export const useResultProperties = ({
       differenceInMinutes(new Date(), new Date(startDate)) >
         TIMEOUT_WAIT_IN_MINUTES
     );
-  }, [item.latestResult.startDate, item.latestResult.endDate]);
+  }, [itemInternal.latestResult.startDate, itemInternal.latestResult.endDate]);
+
+  if (!item) {
+    return {
+      timedOut: false,
+      isInProgress: false,
+      successfulItems: [],
+      failedItems: [],
+      allFailed: false,
+      pctOfSuccess: 0
+    };
+  }
 
   const isInProgress =
     !timedOut && item.latestResult.logs.length !== item.iterations;
@@ -31,11 +44,14 @@ export const useResultProperties = ({
 
   const allFailed = failedItems.length === item.iterations;
 
+  const pctOfSuccess = (successfulItems.length * 100) / item.iterations;
+
   return {
     timedOut,
     isInProgress,
     successfulItems,
     failedItems,
-    allFailed
+    allFailed,
+    pctOfSuccess
   };
 };

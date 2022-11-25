@@ -1,14 +1,28 @@
 import clsx from 'clsx';
 import { useEffect, useMemo, useState } from 'react';
 import { isBoolean } from 'lodash-es';
+import { useCopyToClipboard } from 'react-use';
 
 import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
+import { ClobbrUICompressedResultListItem } from 'models/ClobbrCompressedResultListItem';
 import { GlobalStore } from 'app/globalContext';
-import { ButtonBase, Typography, Tooltip } from '@mui/material';
+import {
+  ButtonBase,
+  Typography,
+  Tooltip,
+  TextField,
+  Alert,
+  Button,
+  FormControlLabel,
+  FormGroup
+} from '@mui/material';
 import ShareIcon from '@mui/icons-material/IosShare';
+import HelpIcon from '@mui/icons-material/Help';
+import AppleSwitch from 'shared/components/AppleSwitch/AppleSwitch';
 
 import { Modal } from 'shared/components/AppleModal/AppleModal';
 import { toEmojiUriComponent } from 'shared/util/emojiUriComponent';
+import { VERB_COLOR_CLASS_MAP } from 'shared/enums/VerbsToColorMap';
 
 export const ShareResultToggle = ({
   disabled,
@@ -21,6 +35,20 @@ export const ShareResultToggle = ({
 }) => {
   const [shareUrl, setShareUrl] = useState('');
   const [showShare, setShowShare] = useState(false);
+  const [compressedCharLength, setCompressedCharLength] = useState(0);
+  const [compressionError, setCompressionError] = useState('');
+  const [state, copyToClipboard] = useCopyToClipboard();
+  const [urlRedacted, setUrlRedacted] = useState(false);
+
+  const electronLand = useMemo(() => {
+    return !!(window as any).electronAPI;
+  }, []);
+
+  const onUrlRedactionToggled = (
+    newValue: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setUrlRedacted(newValue.target.checked);
+  };
 
   const onShareViewPressed = (
     event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
@@ -34,18 +62,26 @@ export const ShareResultToggle = ({
     setShowShare(false);
   };
 
-  const sanitizedItem = useMemo(() => {
+  const copyShareUrlToClipboard = () => {
+    copyToClipboard(shareUrl);
+  };
+
+  const openShareUrlAsExternal = () => {
+    (window as any).electronAPI.openExternalUrl(shareUrl);
+  };
+
+  const sanitizedItem: ClobbrUICompressedResultListItem = useMemo(() => {
     let sizeMap: { [key: string]: number } = {};
     let statusMap: { [key: string]: number } = {};
     let statusCodeMap: { [key: string]: number } = {};
 
-    const { latestResult, url, verb } = item;
+    const { latestResult, url, verb, ssl, properties } = item;
 
     const { iterations, logs, parallel, startDate, endDate } = latestResult;
 
     const sanitizedLogs = logs.map((log) => {
       const { failed, metas } = log;
-      const { duration, index, size, status, statusCode } = metas;
+      const { duration, size, status, statusCode } = metas;
 
       if (size && !sizeMap[size]) {
         sizeMap[size] = Object.keys(sizeMap).length + 1;
@@ -61,7 +97,6 @@ export const ShareResultToggle = ({
 
       return [
         duration,
-        index,
         size ? sizeMap[size] : 0,
         status ? statusMap[status] : 0,
         statusCode ? statusCodeMap[statusCode] : 0,
@@ -83,8 +118,11 @@ export const ShareResultToggle = ({
       szM: sizeMap,
       stM: statusMap,
       scM: statusCodeMap,
-      u: url,
+      u: urlRedacted ? '<redacted>' : url,
       v: verb,
+      s: ssl,
+      ig: properties?.gql?.isGql,
+      gql: properties?.gql?.gqlName,
       lr: {
         i: iterations,
         l: sanitizedLogs,
@@ -93,7 +131,7 @@ export const ShareResultToggle = ({
         e: endDate
       }
     };
-  }, [item]);
+  }, [item, urlRedacted]);
 
   useEffect(() => {
     const compressText = async () => {
@@ -101,8 +139,7 @@ export const ShareResultToggle = ({
         const electronAPI = (window as any).electronAPI;
 
         if (!electronAPI) {
-          // TODO dan handle error
-          console.error('electronAPI not found');
+          setCompressionError('This feature is currently not active.');
           return;
         }
 
@@ -115,19 +152,20 @@ export const ShareResultToggle = ({
         const brotliCompressed = await electronAPI.compressText(itemString);
 
         if (brotliCompressed) {
+          setCompressedCharLength(brotliCompressed.length);
           setShareUrl(
             `https://share.clobbr.app/share/${toEmojiUriComponent(
               brotliCompressed
-            )}
-             `
+            )}`
           );
         } else {
-          // TODO dan handle error
-          // TODO
+          throw new Error('Could not compress text.');
         }
       } catch (error) {
         console.error(error);
-        // TODO dan handle error
+        setCompressionError(
+          'Oops, failed to generate share link. Try to run the test again and re-share.'
+        );
       }
     };
 
@@ -160,7 +198,7 @@ export const ShareResultToggle = ({
             containerClassName="h-auto tall-lg:min-h-0"
           >
             <div className="p-4 border-b border-solid border-gray-500 border-opacity-20 flex justify-between items-center">
-              <Typography className="flex gap-1" variant="body2">
+              <Typography className="flex gap-1 items-center" variant="body2">
                 <span className="flex shrink-0 items-center gap-1">
                   <ShareIcon className="!w-6 !h-6" /> Share results of
                 </span>
@@ -172,10 +210,130 @@ export const ShareResultToggle = ({
                     </span>
                   </Tooltip>
                 </span>
+
+                {item.properties?.gql?.isGql ? (
+                  <>
+                    <small
+                      className={clsx(
+                        'px-2 py-0.5',
+                        'rounded-sm text-black',
+                        'bg-fuchsia-300'
+                      )}
+                    >
+                      GQL
+                    </small>
+
+                    <small
+                      className={clsx(
+                        'px-2 py-0.5',
+                        'rounded-sm text-black',
+                        'bg-gray-300'
+                      )}
+                    >
+                      {item.properties?.gql.gqlName}
+                    </small>
+                  </>
+                ) : (
+                  <small
+                    className={clsx(
+                      'px-2 py-0.5',
+                      'rounded-sm text-black',
+                      VERB_COLOR_CLASS_MAP[item.verb] || 'bg-gray-300'
+                    )}
+                  >
+                    {item.verb.toUpperCase()}
+                  </small>
+                )}
+
+                <Tooltip
+                  title="Share results securely with your team or friends. All
+                    sensitive data will be removed from the results such as
+                    headers, payload data, scripts or response content."
+                >
+                  <HelpIcon className="!w-4 !h-4 opacity-90" />
+                </Tooltip>
               </Typography>
             </div>
 
-            <div className="p-4">{shareUrl}</div>
+            <div className="p-4 flex flex-col gap-6">
+              {!compressionError ? (
+                <>
+                  <TextField
+                    label="Share link"
+                    value={shareUrl}
+                    onFocus={(event) => {
+                      event.target.select();
+                    }}
+                    className="w-full"
+                  />
+
+                  <FormGroup>
+                    <FormControlLabel
+                      control={
+                        <AppleSwitch
+                          onChange={onUrlRedactionToggled}
+                          checked={urlRedacted}
+                        />
+                      }
+                      label="Do not share request URL"
+                    />
+                  </FormGroup>
+                </>
+              ) : (
+                <></>
+              )}
+
+              {compressionError ? (
+                <div className="flex flex-col items-center">
+                  <Alert severity="error">{compressionError}</Alert>
+                </div>
+              ) : (
+                <></>
+              )}
+
+              {compressedCharLength > 2048 ? (
+                <div className="flex flex-col items-center">
+                  <Alert severity="warning">
+                    Note: opening the share url might not work in certain
+                    browsers due to the large iteration count. If you experience
+                    any issues, reduce the iteration count and share again.
+                  </Alert>
+                </div>
+              ) : (
+                <></>
+              )}
+
+              {!compressionError && shareUrl ? (
+                <>
+                  <div className="flex gap-2 ">
+                    <Button onClick={copyShareUrlToClipboard}>
+                      {!state.error && !state.value ? 'Copy to clipboard' : ''}
+                      {state.error ? 'Failed to copy' : ''}
+                      {state.value ? 'Share link copied' : ''}
+                    </Button>
+
+                    {electronLand ? (
+                      <Button
+                        variant="outlined"
+                        href={shareUrl}
+                        target="_blank"
+                      >
+                        Open in browser
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="outlined"
+                        onClick={openShareUrlAsExternal}
+                      >
+                        Open in browser
+                      </Button>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <></>
+              )}
+            </div>
           </Modal>
         </div>
       )}

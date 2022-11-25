@@ -89,9 +89,9 @@ export const DEFAULT_GLOBAL_STORE = {
       verb: Everbs;
       ssl: boolean;
       headers: Array<ClobbrUIHeaderItem>;
-      headerInputMode: string;
-      headerShellCmd: string;
-      headerNodeScriptData: {
+      headerInputMode?: string;
+      headerShellCmd?: string;
+      headerNodeScriptData?: {
         text?: string;
         valid: boolean;
       };

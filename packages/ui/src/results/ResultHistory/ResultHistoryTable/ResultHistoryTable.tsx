@@ -5,9 +5,10 @@ import { ClobbrUIResult } from 'models/ClobbrUIResult';
 
 import { Tooltip, Typography } from '@mui/material';
 import { ResultHistoryTableFailedItem } from 'results/ResultHistory/ResultHistoryTable/ResultHistoryTableFailedItem';
+import { Ping } from 'shared/components/Ping/Ping';
 
 import { formatNumber } from 'shared/util/numberFormat';
-import { getDurationColorClass } from 'results/Result/Result';
+import { getDurationColorClass } from 'shared/util/getDurationColorClass';
 
 export const ResultHistoryTable = ({
   results,
@@ -23,8 +24,18 @@ export const ResultHistoryTable = ({
       </Typography>
 
       <div className="overflow-auto bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-md">
-        {results.map((result) => (
-          <div className="flex gap-2" key={result.id}>
+        {results.map((result, index) => (
+          <div className="flex gap-2 relative" key={result.id}>
+            {index === 0 && results.length > 1 ? (
+              <Tooltip title="Latest result">
+                <div className="w-1 h-1 absolute p-2 -left-2.5 -top-1.5">
+                  <Ping size={1} />
+                </div>
+              </Tooltip>
+            ) : (
+              <> </>
+            )}
+
             {result.startDate ? (
               <Tooltip
                 title={format(
@@ -34,7 +45,10 @@ export const ResultHistoryTable = ({
               >
                 <Typography
                   variant="caption"
-                  className="uppercase opacity-50 inline-flex items-center w-20 flex-shrink-0"
+                  className={clsx(
+                    'uppercase inline-flex items-center w-20 flex-shrink-0',
+                    index === 0 ? 'opacity-100' : 'opacity-50'
+                  )}
                 >
                   {format(new Date(result.startDate), 'dd MMM HH:mm')}
                 </Typography>

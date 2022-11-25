@@ -1,7 +1,8 @@
-import { Alert } from '@mui/material';
+import { useContext } from 'react';
 
 import { AnimatePresence } from 'framer-motion';
 
+import { Alert } from '@mui/material';
 import { Typography } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
 
@@ -20,6 +21,7 @@ import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
 import { useResultProperties } from 'results/Result/useResultProperties';
 
 import { useCommonlyFailedMessage } from 'results/CommonlyFailedItem/useCommonlyFailedMessage';
+import { GlobalStore } from 'app/globalContext';
 
 const ResultContent = ({
   item,
@@ -28,18 +30,25 @@ const ResultContent = ({
   item: ClobbrUIResultListItem;
   expanded: boolean;
 }) => {
+  const globalStore = useContext(GlobalStore);
+
   const {
     allFailed,
-
     timedOut,
     isInProgress,
     failedItems,
-    successfulItems
+    successfulItems,
+    pctOfSuccess
   } = useResultProperties({ item });
 
   const { message } = useCommonlyFailedMessage({
     logs: item.latestResult.logs
   });
+
+  const showTrendline = globalStore.appSettings.showTrendline;
+  const showBarCharts = globalStore.appSettings.showBarCharts;
+  const chartDownSampleThreshold =
+    globalStore.appSettings.chartDownSampleThreshold;
 
   const shouldShowChart =
     !allFailed &&
@@ -180,7 +189,13 @@ const ResultContent = ({
                 <ShareResultToggle item={item} disabled={isInProgress} />
               </div>
 
-              <ResultChart item={item} className="mt-4" />
+              <ResultChart
+                item={item}
+                showTrendline={showTrendline}
+                showBarCharts={showBarCharts}
+                chartDownSampleThreshold={chartDownSampleThreshold}
+                className="mt-4"
+              />
               <ResultStats result={item.latestResult} />
 
               <footer className="flex flex-col items-center justify-center gap-2 pb-4">
@@ -189,7 +204,7 @@ const ResultContent = ({
                     <div className="flex flex-col items-center">
                       <Alert severity="error">
                         {failedItems.length} failed. Showing results only for
-                        successful requests.
+                        successful requests ({pctOfSuccess}% succeded).
                       </Alert>
                     </div>
                   </Tooltip>

@@ -1,20 +1,54 @@
+import { NextPageContext } from 'next';
+import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
+import Head from 'next/head';
+import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 
-import brotliPromise from 'brotli-wasm';
-import { useEffect } from 'react';
+import Alert from '@mui/material/Alert';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+
+import { config } from '@/theme/config.js';
 import { fromEmojiUriComponent } from '@clobbr/ui/src/shared/util/emojiUriComponent';
+import { ClobbrUIResultListItem } from '@clobbr/ui/src/models/ClobbrUIResultListItem';
+import { ResultChart } from '@clobbr/ui/src/results/ResultChart/ResultChart';
+import { ResultStats } from '@clobbr/ui/src/results/ResultStats/ResultStats';
+import { ResultListItemPrimaryContent } from '@clobbr/ui/src/results/Result/ResultListItemPrimaryContent/ResultListItemPrimaryContent';
+import { useResultProperties } from '@clobbr/ui/src/results/Result/useResultProperties';
 
-const decode = async (compressedData: Uint8Array) => {
-  const brotli = await brotliPromise;
-  const textDecoder = new TextDecoder();
+import { parseResult } from '@/components/parseResults';
+import { Topbar } from '@/components/topbar/topbar';
+import { GenericFooter } from '@/components/footer/footer';
+import { decodeShareData } from '@/components/decodeShareData';
+import { getLogStats } from '@clobbr/ui/src/shared/util/getLogStats';
 
-  const decompressedData = brotli.decompress(compressedData);
-  return textDecoder.decode(decompressedData);
-};
+const url = `https://${config.domain}`;
+const ogImageUrl = `${url}/api/ogImg`;
 
-const Result = () => {
+const Result = ({ ogData }: { ogData?: string }) => {
   const router = useRouter();
   const { result } = router.query;
+  const [item, setItem] = useState<ClobbrUIResultListItem | undefined>(
+    undefined
+  );
+
+  const { failedItems, pctOfSuccess } = useResultProperties({ item });
+
+  const formattedDate = useMemo(() => {
+    if (!item) {
+      return '...';
+    }
+
+    const date = formatDistanceToNow(
+      new Date(item.latestResult.startDate as string),
+      {
+        includeSeconds: true
+      }
+    );
+
+    return date;
+  }, [item]);
 
   useEffect(() => {
     const decompress = async () => {
@@ -23,24 +57,176 @@ const Result = () => {
       }
 
       const resultStr = fromEmojiUriComponent(result as string);
+      const decoded = await decodeShareData(resultStr);
+      const parsed = parseResult(decoded);
 
-      const decoded = await decode(
-        Uint8Array.from(atob(resultStr), (c) => c.charCodeAt(0))
-      );
-
-      console.log(decoded);
+      if (parsed.success && parsed.item) {
+        setItem(parsed.item);
+      }
     };
 
     decompress();
   }, [result]);
 
   return (
-    <div>
-      <h1>Result</h1>
+    <>
+      <Head>
+        <meta
+          property="og:image"
+          content={`${ogImageUrl}?${ogData}`}
+          key="ogImage"
+        />
+      </Head>
 
-      {result}
-    </div>
+      <div className="flex flex-col justify-center h-full min-h-screen">
+        <Topbar className="fixed top-0" />
+
+        {item ? (
+          <>
+            <div className="w-full p-6 mt-8 flex justify-center">
+              <div className="w-full max-w-xl">
+                <ResultListItemPrimaryContent
+                  className="w-full inline-flex justify-center"
+                  item={item}
+                  showUrl={true}
+                  themeMode={'dark'}
+                  isInProgress={false}
+                  suffixComponent={
+                    <Tooltip title={item.parallel ? 'Parallel' : 'Sequence'}>
+                      <div
+                        className="flex flex-shrink-0 items-center justify-center relative w-6 h-6 p-1 before:bg-gray-500 before:bg-opacity-10 before:flex before:w-full before:h-full before:absolute before:rounded-full"
+                        aria-label="Toggle between parallel / sequence"
+                      >
+                        <span className="dark:invert">
+                          {item.parallel ? (
+                            <Image
+                              alt="Parallel"
+                              src="/img/icons/Parallel.svg"
+                              className="w-full h-full"
+                              width={20}
+                              height={20}
+                            />
+                          ) : (
+                            <Image
+                              alt="Sequence"
+                              src="/img/icons/Sequence.svg"
+                              className="w-full h-full"
+                              width={20}
+                              height={20}
+                            />
+                          )}
+                        </span>
+                      </div>
+                    </Tooltip>
+                  }
+                />
+
+                <Typography
+                  variant="caption"
+                  className="flex items-center gap-1 justify-center opacity-50 py-1 w-full"
+                >
+                  <strong>{item.iterations}</strong> iterations sent in
+                  <strong>{item.parallel ? 'parallel' : 'sequence'}</strong> ran
+                  <strong>{formattedDate} ago</strong>
+                </Typography>
+              </div>
+            </div>
+
+            <ResultChart
+              chartDownSampleThreshold={1000}
+              item={item}
+              className="mt-4"
+            />
+
+            <div className="mb-12">
+              <ResultStats
+                result={item.latestResult}
+                otherStats={[
+                  {
+                    label: 'Pct. of success',
+                    value: `${pctOfSuccess}%`,
+                    colorClass: ''
+                  }
+                ]}
+              />
+            </div>
+
+            {failedItems.length > 0 ? (
+              <div className="flex flex-col items-center">
+                <Alert severity="error">
+                  {failedItems.length} failed. Showing results only for
+                  successful requests ({pctOfSuccess}% succeded).
+                </Alert>
+              </div>
+            ) : (
+              ''
+            )}
+          </>
+        ) : (
+          <></>
+        )}
+
+        <GenericFooter />
+      </div>
+    </>
   );
 };
+
+export async function getServerSideProps(context: NextPageContext) {
+  try {
+    const { req } = context;
+
+    const referrer = req?.headers.referer || '';
+    const sharedData = decodeURIComponent(
+      referrer.slice(referrer.indexOf('share/') + 6)
+    );
+
+    const sharedDataStr = fromEmojiUriComponent(sharedData as string);
+    console.log(sharedDataStr); // Seems to be needed for decoding?!
+
+    const brotli = await import('brotli-wasm');
+    const decompressedData = brotli.decompress(
+      Buffer.from(sharedDataStr, 'base64')
+    );
+    const decompressedText = Buffer.from(decompressedData).toString('utf8');
+    const parsed = parseResult(decompressedText);
+
+    const gql = parsed.item?.properties?.gql;
+    const stats = parsed.item?.latestResult.logs
+      ? getLogStats(parsed.item.latestResult.logs)
+      : [];
+
+    const ogData = parsed.item
+      ? {
+          url: parsed.item.url,
+          verb: parsed.item.verb as string,
+          durations: parsed.item.latestResult.resultDurations.join('.'),
+          isGql: gql ? gql.isGql.toString() : '',
+          gqlName: gql ? gql.gqlName : '',
+          parallel: parsed.item.parallel.toString(),
+          iterations: parsed.item.iterations.toString(),
+          stats: stats
+            .map(
+              ({ value, label }: { value: string; label: string }) =>
+                `${value}:${label}`
+            )
+            .join('|')
+        }
+      : '';
+
+    return {
+      props: {
+        ogData: new URLSearchParams(ogData).toString()
+      }
+    };
+  } catch (e) {
+    console.error(e);
+    return {
+      props: {
+        ogData: ''
+      }
+    };
+  }
+}
 
 export default Result;
