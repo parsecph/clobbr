@@ -178,14 +178,10 @@ export async function getServerSideProps(context: NextPageContext) {
   try {
     const { req } = context;
 
-    const referrer = req?.headers.referer || '';
-    const sharedData = decodeURIComponent(
-      referrer.slice(referrer.indexOf('share/') + 6)
-    );
+    const url = req?.url || '';
+    const sharedData = decodeURIComponent(url.slice(url.indexOf('share/') + 6));
 
     const sharedDataStr = fromEmojiUriComponent(sharedData as string);
-    console.log(sharedDataStr); // Seems to be needed for decoding?!
-
     const brotli = await import('brotli-wasm');
     const decompressedData = brotli.decompress(
       Buffer.from(sharedDataStr, 'base64')
