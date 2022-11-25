@@ -210,7 +210,7 @@ export async function getServerSideProps(context: {
     const ogData = {
       url: parsed.item.url,
       verb: parsed.item.verb as string,
-      durations: parsed.item.latestResult.resultDurations.join('.'),
+      durations: parsed.item.latestResult.resultDurations.join('|'),
       isGql: gql ? gql.isGql.toString() : '',
       gqlName: gql ? gql.gqlName : '',
       parallel: parsed.item.parallel.toString(),

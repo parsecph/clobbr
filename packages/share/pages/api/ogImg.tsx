@@ -11,7 +11,7 @@ export default async function OgImage(req: NextRequest) {
     const { searchParams } = new URL(req.url.replace(/&amp%3B/g, '&'));
     const url = searchParams.get('url');
     const verb = searchParams.get('verb');
-    const durations = searchParams.get('durations')?.split('.');
+    const durations = searchParams.get('durations')?.split('|');
     const isGql =
       searchParams.get('isGql') && searchParams.get('isGql') === 'true';
     const gqlName = searchParams.get('gqlName');
