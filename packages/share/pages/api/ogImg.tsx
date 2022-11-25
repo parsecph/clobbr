@@ -26,16 +26,6 @@ export default async function OgImage(req: NextRequest) {
         return { value, label };
       });
 
-    console.log({
-      url,
-      verb,
-      durations,
-      isGql,
-      parallel,
-      iterations,
-      stats
-    });
-
     const canvasWidth = 1200;
     const canvasHeight = 630;
     const svgWidth = 1200;
