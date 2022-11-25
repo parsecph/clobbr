@@ -6,6 +6,10 @@ import { runSequence } from './src/sequence';
 import * as resultMath from './src/resultMath';
 
 export const parseOptions = (options?: ClobbrRequestSettings) => {
+  if (!options) {
+    return;
+  }
+
   return {
     ...options,
     verb: options.verb.toLowerCase() as Everbs,
@@ -19,6 +23,10 @@ export const run = (
   eventCallback?: ClobbrEventCallback
 ) => {
   const parsedOptions = parseOptions(options);
+
+  if (!parsedOptions) {
+    return;
+  }
 
   if (parallel) {
     return runParallel(parsedOptions, eventCallback);

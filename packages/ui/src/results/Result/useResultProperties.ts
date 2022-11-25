@@ -8,9 +8,14 @@ const TIMEOUT_WAIT_IN_MINUTES = 3;
 export const useResultProperties = ({
   item
 }: {
-  item: ClobbrUIResultListItem;
+  item?: ClobbrUIResultListItem;
 }) => {
-  const itemInternal = item || { latestResult: {} };
+  const itemInternal = item || {
+    latestResult: {
+      endDate: new Date(),
+      startDate: new Date()
+    }
+  };
 
   const timedOut = useMemo(() => {
     const startDate = itemInternal.latestResult.startDate as string;
