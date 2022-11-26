@@ -33,7 +33,7 @@ export const ResultHistoryTable = ({
                 </div>
               </Tooltip>
             ) : (
-              <> </>
+              <></>
             )}
 
             {result.startDate ? (
