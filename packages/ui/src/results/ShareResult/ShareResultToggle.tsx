@@ -340,6 +340,7 @@ export const ShareResultToggle = ({
                         variant="outlined"
                         href={shareUrl}
                         target="_blank"
+                        color={themeMode === 'dark' ? 'primary' : 'secondary'}
                       >
                         Open in browser
                       </Button>
@@ -347,6 +348,7 @@ export const ShareResultToggle = ({
                       <Button
                         variant="outlined"
                         onClick={openShareUrlAsExternal}
+                        color={themeMode === 'dark' ? 'primary' : 'secondary'}
                       >
                         Open in browser
                       </Button>
