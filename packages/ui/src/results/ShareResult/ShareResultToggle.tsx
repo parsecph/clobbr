@@ -213,7 +213,7 @@ export const ShareResultToggle = ({
             onClose={onShareClosePressed}
             open={showShare}
             maxWidth="xl"
-            containerClassName="h-auto tall-lg:min-h-0"
+            containerClassName="h-auto tall-lg:!min-h-0"
           >
             <div className="p-4 border-b border-solid border-gray-500 border-opacity-20 flex justify-between items-center">
               <Typography className="flex gap-1 items-center" variant="body2">
