@@ -26,7 +26,7 @@ jobs:
           npm i -g yarn
           yarn
           npm run bootstrap
-          npm run build
+          npm run build-api && npm run build-cli
 
           cd ./packages/api
           npm run test
@@ -50,7 +50,7 @@ jobs:
           npm i -g yarn
           yarn
           npm run bootstrap
-          npm run build
+          npm run build-api && npm run build-cli
 
       - name: Release
         uses: softprops/action-gh-release@v1
