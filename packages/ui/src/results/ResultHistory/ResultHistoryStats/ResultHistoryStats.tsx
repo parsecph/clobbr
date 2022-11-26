@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import { ClobbrUIResult } from 'models/ClobbrUIResult';
 
 import { Tooltip, Typography } from '@mui/material';
+import { Ping } from 'shared/components/Ping/Ping';
 
 import { getResultStats } from 'results/ResultStats/ResultStats';
 import { formatNumber } from 'shared/util/numberFormat';
@@ -85,8 +86,18 @@ export const ResultHistoryStats = ({
           </ul>
         </div>
 
-        {resultsWithStats.map(({ result, stats, successPct }) => (
-          <div className="flex gap-2" key={result.id}>
+        {resultsWithStats.map(({ result, stats, successPct }, index) => (
+          <div className="flex gap-2 relative" key={result.id}>
+            {index === 0 && results.length > 1 ? (
+              <Tooltip title="Latest result">
+                <div className="w-1 h-1 absolute p-2 -left-2.5 -top-1.5">
+                  <Ping size={1} />
+                </div>
+              </Tooltip>
+            ) : (
+              <></>
+            )}
+
             {result.startDate ? (
               <Tooltip
                 title={format(
@@ -96,7 +107,10 @@ export const ResultHistoryStats = ({
               >
                 <Typography
                   variant="caption"
-                  className="uppercase opacity-50 inline-flex items-center w-20 flex-shrink-0"
+                  className={clsx(
+                    'uppercase inline-flex items-center w-20 flex-shrink-0',
+                    index === 0 ? 'opacity-100' : 'opacity-50'
+                  )}
                 >
                   {format(new Date(result.startDate), 'dd MMM HH:mm')}
                 </Typography>

@@ -1,9 +1,11 @@
+import clsx from 'clsx';
 import { format } from 'date-fns';
 
 import { Tooltip, Typography } from '@mui/material';
-import { ClobbrUIResult } from 'models/ClobbrUIResult';
-
+import { Ping } from 'shared/components/Ping/Ping';
 import { LineChart } from './LineChart';
+
+import { ClobbrUIResult } from 'models/ClobbrUIResult';
 
 export const ResultHistoryChart = ({
   results,
@@ -25,7 +27,7 @@ export const ResultHistoryChart = ({
       </Typography>
 
       <div className="overflow-auto bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-md flex gap-8">
-        {results.map((result) => {
+        {results.map((result, index) => {
           const qualifiedLogs = result.logs.filter((log) => !log.failed);
 
           const data = {
@@ -54,7 +56,17 @@ export const ResultHistoryChart = ({
           };
 
           return (
-            <div className="flex flex-col gap-3" key={result.id}>
+            <div className="flex flex-col gap-3 relative" key={result.id}>
+              {index === 0 && results.length > 1 ? (
+                <Tooltip title="Latest result">
+                  <div className="w-1 h-1 absolute p-2 -left-2.5 -top-1.5">
+                    <Ping size={1} />
+                  </div>
+                </Tooltip>
+              ) : (
+                <></>
+              )}
+
               {result.startDate ? (
                 <Tooltip
                   title={format(
@@ -64,7 +76,10 @@ export const ResultHistoryChart = ({
                 >
                   <Typography
                     variant="caption"
-                    className="uppercase opacity-50 inline-flex items-center w-20 flex-shrink-0"
+                    className={clsx(
+                      'uppercase inline-flex items-center w-20 flex-shrink-0',
+                      index === 0 ? 'opacity-100' : 'opacity-50'
+                    )}
                   >
                     {format(new Date(result.startDate), 'dd MMM HH:mm')}
                   </Typography>
