@@ -90,24 +90,26 @@ const App = () => {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    const topbarElement = topbarDom?.current
-      ? (topbarDom.current as HTMLElement)
-      : null;
-    const searchElement = searchDom?.current
-      ? (searchDom.current as HTMLElement)
-      : null;
-    const topbarHeight = topbarElement
-      ? topbarElement.offsetHeight +
-        parseFloat(getComputedStyle(topbarElement).marginBottom) +
-        parseFloat(getComputedStyle(topbarElement).marginTop)
-      : 0;
-    const searchHeight = searchElement
-      ? searchElement.offsetHeight +
-        parseFloat(getComputedStyle(searchElement).marginBottom) +
-        parseFloat(getComputedStyle(searchElement).marginTop)
-      : 0;
+    setTimeout(() => {
+      const topbarElement = topbarDom?.current
+        ? (topbarDom.current as HTMLElement)
+        : null;
+      const searchElement = searchDom?.current
+        ? (searchDom.current as HTMLElement)
+        : null;
+      const topbarHeight = topbarElement
+        ? topbarElement.offsetHeight +
+          parseFloat(getComputedStyle(topbarElement).marginBottom) +
+          parseFloat(getComputedStyle(topbarElement).marginTop)
+        : 0;
+      const searchHeight = searchElement
+        ? searchElement.offsetHeight +
+          parseFloat(getComputedStyle(searchElement).marginBottom) +
+          parseFloat(getComputedStyle(searchElement).marginTop)
+        : 0;
 
-    setTopbarHeight(topbarHeight + searchHeight);
+      setTopbarHeight(topbarHeight + searchHeight);
+    }, 800); // HACK: ensure topbar animation has been completed to get correct height
   });
 
   return (
