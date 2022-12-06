@@ -1608,10 +1608,10 @@
   resolved "https://registry.npmjs.org/@chevrotain/utils/-/utils-10.1.2.tgz"
   integrity sha512-bbZIpW6fdyf7FMaeDmw3cBbkTqsecxEkwlVKgVfqqXWBPLH6azxhPA2V9F7OhoZSVrsnMYw7QuyK6qutXPjEew==
 
-"@clobbr/api@^1.12.0":
-  version "1.12.0"
-  resolved "https://registry.yarnpkg.com/@clobbr/api/-/api-1.12.0.tgz#dd4a3307aebd507e529a2520ca81845dd23be878"
-  integrity sha512-LtQSjyHcqpRpgKO5KIzlPigcQLUryt9aG7PqgVtAnlflWWbtjzAoe8SFfq9sG5gCuzUp31Tm37gcnwUG0epRQA==
+"@clobbr/api@^1.12.3":
+  version "1.12.3"
+  resolved "https://registry.yarnpkg.com/@clobbr/api/-/api-1.12.3.tgz#4d58939be7e0eb982717f37999617bf0fe901855"
+  integrity sha512-mBFapmPTdVOAUc9cKsdw6W3VwFZ//Z6LuZoF85RpKbmBK16HBEOvL4NKm05EoGvAwecwHybN2mgn+6wDZOlDdg==
   dependencies:
     "@vercel/ncc" "^0.28.0"
     axios "^0.21.1"
@@ -4568,9 +4568,9 @@ decimal.js@^10.2.1:
   integrity sha512-V0pfhfr8suzyPGOx3nmq4aHqabehUZn6Ch9kyFpV79TGDTWFmHqUqXdabR7QHqxzrYolF4+tVmJhUG4OURg5dQ==
 
 decode-uri-component@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.npmjs.org/decode-uri-component/-/decode-uri-component-0.2.0.tgz"
-  integrity sha1-6zkTMzRYd1y4TNGh+uBiEGu4dUU=
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.2.tgz#e69dbe25d37941171dd540e024c444cd5188e1e9"
+  integrity sha512-FqUYQ+8o158GyGTrMFJms9qh3CqTKvAqgqsTnkLI8sKu0028orqBhxNMFkFen0zGyg6epACD32pjVk58ngIErQ==
 
 dedent@^0.7.0:
   version "0.7.0"
