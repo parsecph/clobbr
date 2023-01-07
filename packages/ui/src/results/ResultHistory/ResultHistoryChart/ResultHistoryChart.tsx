@@ -3,7 +3,7 @@ import { format } from 'date-fns';
 
 import { Tooltip, Typography } from '@mui/material';
 import { Ping } from 'shared/components/Ping/Ping';
-import { LineChart } from './LineChart';
+import { GenericChart } from './GenericChart';
 
 import { ClobbrUIResult } from 'models/ClobbrUIResult';
 
@@ -95,7 +95,7 @@ export const ResultHistoryChart = ({
 
               <ul className="flex gap-3 cursor-crosshair">
                 <li>
-                  <LineChart
+                  <GenericChart
                     data={data}
                     hideXAxis={true}
                     downsampleThreshold={50}

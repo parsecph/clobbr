@@ -2,7 +2,7 @@ import clsx from 'clsx';
 
 import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
 
-import { LineChart } from '../ResultHistory/ResultHistoryChart/LineChart';
+import { GenericChart } from '../ResultHistory/ResultHistoryChart/GenericChart';
 
 export const ResultChart = ({
   item,
@@ -69,7 +69,7 @@ export const ResultChart = ({
 
   return (
     <div className={clsx('relative cursor-crosshair', className)}>
-      <LineChart
+      <GenericChart
         data={data}
         downsampleThreshold={chartDownSampleThreshold}
         suggestedYMax={paddedDuration}

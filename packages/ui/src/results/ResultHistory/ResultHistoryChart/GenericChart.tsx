@@ -34,7 +34,7 @@ ChartJS.register(
   Filler
 );
 
-const DURATION_COLOR_MAP: { [key: number]: string } = {
+const DEFAULT_COLOR_MAP: { [key: number]: string } = {
   0: 'rgba(136,255,184,1.0)',
   1: 'rgba(95,178,128,1.0)',
   2: 'rgba(62,139,93,1.0)',
@@ -43,32 +43,47 @@ const DURATION_COLOR_MAP: { [key: number]: string } = {
   5: 'rgba(0,56,18,1.0)'
 };
 
-const createGradient = (ctx: CanvasRenderingContext2D, area: ChartArea) => {
+const DEFAULT_BG_COLOR_MAP: { [key: number]: string } = {
+  0: 'rgba(136,255,184,0.05)',
+  1: 'rgba(136,255,184,0.1)',
+  2: 'rgba(136,255,184,0.35)',
+  3: 'rgba(136,255,184,1)'
+};
+
+const createGradient = (
+  ctx: CanvasRenderingContext2D,
+  area: ChartArea,
+  colorMap: { [key: number]: string }
+) => {
   const gradient = ctx.createLinearGradient(0, area.bottom, 0, area.top);
 
-  gradient.addColorStop(0, DURATION_COLOR_MAP[0]);
-  gradient.addColorStop(0.1, DURATION_COLOR_MAP[0]);
-  gradient.addColorStop(0.4, DURATION_COLOR_MAP[1]);
-  gradient.addColorStop(0.7, DURATION_COLOR_MAP[2]);
-  gradient.addColorStop(0.8, DURATION_COLOR_MAP[4]);
-  gradient.addColorStop(1, DURATION_COLOR_MAP[4]);
+  gradient.addColorStop(0, colorMap[0]);
+  gradient.addColorStop(0.1, colorMap[0]);
+  gradient.addColorStop(0.4, colorMap[1]);
+  gradient.addColorStop(0.7, colorMap[2]);
+  gradient.addColorStop(0.8, colorMap[4]);
+  gradient.addColorStop(1, colorMap[4]);
 
   return gradient;
 };
 
-const createBgGradient = (ctx: CanvasRenderingContext2D, area: ChartArea) => {
+const createBgGradient = (
+  ctx: CanvasRenderingContext2D,
+  area: ChartArea,
+  colorMap: { [key: number]: string }
+) => {
   const gradient = ctx.createLinearGradient(0, area.bottom, 0, area.top);
 
   gradient.addColorStop(0, 'transparent');
-  gradient.addColorStop(0.25, 'rgba(136,255,184,0.05)');
-  gradient.addColorStop(0.4, 'rgba(136,255,184,0.1)');
-  gradient.addColorStop(0.8, 'rgba(136,255,184,0.35)');
-  gradient.addColorStop(0.9, 'rgba(136,255,184,1)');
+  gradient.addColorStop(0.25, colorMap[0]);
+  gradient.addColorStop(0.4, colorMap[1]);
+  gradient.addColorStop(0.8, colorMap[2]);
+  gradient.addColorStop(0.9, colorMap[3]);
 
   return gradient;
 };
 
-export const LineChart = ({
+export const GenericChart = ({
   data,
   width,
   height,
@@ -77,7 +92,9 @@ export const LineChart = ({
   hideYAxis,
   suggestedYMax,
   downsampleThreshold,
-  numberOfDownSamplePoints
+  numberOfDownSamplePoints,
+  colorMap,
+  bgColorMap
 }: {
   data: ChartData<'line' | 'bar'>;
   width?: number | string;
@@ -88,10 +105,14 @@ export const LineChart = ({
   suggestedYMax?: number;
   downsampleThreshold?: number;
   numberOfDownSamplePoints?: number;
+  colorMap?: { [key: number]: string };
+  bgColorMap?: { [key: number]: string };
 }) => {
   const chartWidth = width || 300;
   const chartHeight = height || 100;
   const samples = numberOfDownSamplePoints || 100;
+  const gradientColorMap = colorMap || DEFAULT_COLOR_MAP;
+  const gradientBgColorMap = bgColorMap || DEFAULT_BG_COLOR_MAP;
 
   const chartRef = useRef<ChartJS>(null);
   const [chartData, setChartData] = useState<ChartData<'line' | 'bar'>>({
@@ -111,11 +132,23 @@ export const LineChart = ({
         ...dataset,
         ...(dataset.type === 'bar'
           ? {
-              backgroundColor: createGradient(chart.ctx, chart.chartArea)
+              backgroundColor: createGradient(
+                chart.ctx,
+                chart.chartArea,
+                gradientColorMap
+              )
             }
           : {
-              borderColor: createGradient(chart.ctx, chart.chartArea),
-              backgroundColor: createBgGradient(chart.ctx, chart.chartArea),
+              borderColor: createGradient(
+                chart.ctx,
+                chart.chartArea,
+                gradientColorMap
+              ),
+              backgroundColor: createBgGradient(
+                chart.ctx,
+                chart.chartArea,
+                gradientBgColorMap
+              ),
               fill: 'origin'
             })
       }))
