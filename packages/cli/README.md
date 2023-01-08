@@ -83,3 +83,10 @@ Options:
 
 ![Clobbr icon](https://user-images.githubusercontent.com/1515742/80861773-da9a6a00-8c70-11ea-9671-77e1bb2dea04.png)
 
+--------
+
+<img width="180px" alt="APIHUSTLE Logo" src="https://user-images.githubusercontent.com/1515742/211200114-a9ed477f-5a61-4c97-915c-0791f09b1648.png"/>
+
+Clobbr is a tool part of the [Apihustle](https://apihustle.com) suite - a collection of tools to test, improve and get to know your API inside and out.
+
+
