@@ -50,7 +50,7 @@ head over to [@clobbr/cli docs](./packages/cli/README.md).
 The cli can be used in a CI context too.
 [See examples with popular CIs here ↗️](https://github.com/parsecph/clobbr-ci)
 
-<a href="https://app.circleci.com/pipelines/github/parsecph/clobbr-ci?branch=main">
+<a href="https://app.circleci.com/pipelines/github/parsecph/clobbr-ci/471/workflows/706bab66-3ced-4a60-aca1-f832e1d1e85a/jobs/470/parallel-runs/0/steps/0-102">
   <img width="200px" alt="CircleCI integration config" src="https://user-images.githubusercontent.com/1515742/189537171-4a064b0d-3db9-4016-9baf-f6b6ac49f45d.png">
 </a>
 
