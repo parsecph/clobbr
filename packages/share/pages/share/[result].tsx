@@ -19,7 +19,7 @@ import { useResultProperties } from '@/ui/results/Result/useResultProperties';
 
 import { parseResult } from '@/components/parseResults';
 import { Topbar } from '@/components/topbar/topbar';
-import { GenericFooter } from '@/components/footer/footer';
+import { BasicFooter } from '@/components/footer/basicFooter';
 import { decodeShareData } from '@/components/decodeShareData';
 import { getLogStats } from '@/ui/shared/util/getLogStats';
 
@@ -202,7 +202,7 @@ const Result = ({ ogData }: { ogData?: string }) => {
           <></>
         )}
 
-        <GenericFooter />
+        <BasicFooter />
       </div>
     </>
   );

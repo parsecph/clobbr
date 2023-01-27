@@ -5,7 +5,6 @@
 /**
  * Fancy heading gradients
  */
-
 @supports (background-clip: text) {
   .fancyHeading {
     background-image: linear-gradient(
@@ -40,4 +39,76 @@
   body {
     color: white;
   }
+}
+
+/**
+ * Fancy glass
+ * with a gradient background and blur
+ */
+.fancyGlass {
+  --glass-color: 200, 100, 200;
+
+  background: radial-gradient(
+      63.94% 63.94% at 50% 0%,
+      rgba(var(--glass-color), 0.12) 0%,
+      rgba(var(--glass-color), 0) 100%
+    ),
+    rgba(var(--glass-color), 0.01);
+  backdrop-filter: blur(6px);
+  position: relative;
+  overflow: hidden;
+}
+
+.fancyGlass:before {
+  content: '';
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+  background: linear-gradient(
+      rgba(var(--glass-color), 0.12) 0%,
+      rgba(var(--glass-color), 0) 74.04%
+    ),
+    linear-gradient(
+      0deg,
+      rgba(var(--glass-color), 0.04),
+      rgba(var(--glass-color), 0.04)
+    );
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  mask: url("data:image/svg+xml,%3Csvg width='402' height='202' viewBox='0 0 402 202' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='0.5' y='0.5' width='401' height='201' rx='9.5' /%3E%3C/svg%3E%0A");
+  pointer-events: none;
+}
+
+/**
+ * Hacks and fixes
+ */
+.safariBorderRadiusFix {
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+}
+
+/**
+ * Scrollbar
+ */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: rgba(240, 240, 240, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #d6dee1;
+  border-radius: 16px;
+  border: 4px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #a8bbbf;
+}
+
+::-webkit-scrollbar-corner {
+  background: rgba(240, 240, 240, 0.1);
 }
