@@ -4,7 +4,6 @@
 
 html {
   font-family: 'Inter', sans-serif;
-  scroll-behavior: smooth;
 }
 
 @supports (font-variation-settings: normal) {
