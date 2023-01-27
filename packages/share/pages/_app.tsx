@@ -21,7 +21,10 @@ Object.keys(globalColors).map((variant) => {
   });
 });
 
-const inter = Inter();
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'fallback'
+});
 
 const isDarkMode =
   typeof window !== 'undefined' &&
