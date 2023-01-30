@@ -74,6 +74,23 @@ With all that, output to various file formats such as csv, json, yaml and more. 
 
 ### Usage examples for the cli
 
+#### Kitchen sink example
+```bash
+npx @clobbr/cli run \
+  --url "https://api.github.com/zen" \
+  --method POST \
+  --iterations 50 \
+  --parallel \
+  --checks mean=200 median=200 stdDev=50 q5=150 q50=200 q95=250 q99=300 pctOfSuccess=95 \
+  --headersPath "headers.json" \
+  --dataPath "data.json" \
+  --outputFile \
+  --outputFormat yaml \
+  --table "compact"
+```
+
+> This is an advanced run configuration example. Typically, less config is needed. Read on for more.
+
 #### Define iterations
 
 ```bash
@@ -121,6 +138,12 @@ npx @clobbr/cli run \
 #### Customize Request Method
 `GET` is used as the default request method, but you can pass an optional request method, such as `POST`, `PUT`, `PATCH`, `DELETE` etc.
 
+```bash
+npx @clobbr/cli run \
+  --url "https://api.github.com/zen" \
+  --method OPTIONS
+```
+
 #### Send Headers
 Arbitrary request headers are accepted as a JSON file.
 
@@ -129,7 +152,7 @@ Arbitrary request headers are accepted as a JSON file.
 > Passing { Cookie: "val" } adds a cookie to the request.
 
 ```json
-// headers.json
+# headers.json
 {
   "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.Et9HFtf9R3",
   "User-Agent": "Mozilla/5.0"
@@ -140,14 +163,14 @@ Arbitrary request headers are accepted as a JSON file.
 npx @clobbr/cli run \
   --url "https://api.github.com/zen" \
   --iterations 20 \
-  --headerPath "headers.json"
+  --headersPath "headers.json"
 ```
 
 #### Send Data
 Arbitrary request data is accepted as a JSON file.
 
 ```json
-// data.json
+# data.json
 {
   "id": "17b",
   "user": {
@@ -174,7 +197,7 @@ npx @clobbr/cli run \
   --url "https://api.github.com/zen" \
   --iterations 20 \
   --method "POST" \
-  --headerPath "headers.json" \
+  --headersPath "headers.json" \
   --dataPath "data.json" \
   --table "compact"
 ```
