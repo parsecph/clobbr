@@ -1,5 +1,5 @@
 import { oneLine } from 'common-tags';
-import { merge } from 'lodash';
+import { merge, isEmpty } from 'lodash';
 import { Command } from 'commander';
 import ora from 'ora';
 import chalk from 'chalk';
@@ -9,7 +9,13 @@ import { EEvents } from '@clobbr/api/src/enums/events';
 import { getTimeAverage } from '@clobbr/api/src/util';
 import { run, mathUtils } from '@clobbr/api';
 
-import { error, errorMessage, highlightInfo, success } from './src/output/log';
+import {
+  error,
+  errorMessage,
+  highlightInfo,
+  success,
+  warn
+} from './src/output/log';
 import { renderStatsTable, renderTable } from './src/output/table';
 import { renderChart } from './src/output/chart';
 import { renderFormattedOutput } from './src/output/output';
@@ -120,6 +126,7 @@ program
     `checks to be made on the results. Can have multiple values. Available checks: ${getAvailableChecks()}.`,
     DEFAULTS.outputFile
   )
+  .option('-dbg, --debug', `output debug logs with full request/response data.`)
 
   .action(async (cliOptions: { [key: string]: any }) => {
     const {
@@ -133,7 +140,8 @@ program
       dataPath,
       outputFormat,
       outputFile,
-      checks
+      checks,
+      debug
     } = cliOptions;
 
     const spinner = ora({
@@ -143,8 +151,18 @@ program
     }).start();
 
     try {
+      const methodAcceptsBody = ['post', 'put', 'patch'].includes(
+        method.toLowerCase()
+      );
+
       const headers = await getHeaders(headersPath);
       const data = await getData(dataPath);
+
+      if (data && !isEmpty(data) && !methodAcceptsBody) {
+        warn(
+          `\nThe method ${method} does not accept a body, but a data file was provided.\n`
+        );
+      }
 
       const options = merge(DEFAULTS, {
         iterations,
@@ -160,6 +178,10 @@ program
         runEventCallback(spinner)
       );
       spinner.stop();
+
+      if (debug) {
+        console.log(JSON.stringify(logs, null, 2));
+      }
 
       const allFailed = results.length === 0;
       const failedRequests = logs.filter(({ failed }) => failed);

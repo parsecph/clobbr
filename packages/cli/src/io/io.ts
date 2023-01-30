@@ -17,7 +17,7 @@ export const getHeaders = async (headersPath: string) => {
 
     return JSON.parse(headers);
   } catch {
-    error('Failed to parse headers\n');
+    error('\nFailed to parse headers\nDid you pass a valid JSON file?\n');
     return {};
   }
 };
@@ -34,7 +34,7 @@ export const getData = async (dataPath: string) => {
 
     return JSON.parse(data);
   } catch {
-    error('Failed to parse data\n');
+    error('\nFailed to parse data\nDid you pass a valid JSON file?\n');
     return {};
   }
 };

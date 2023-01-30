@@ -6,7 +6,7 @@ import { getJSON } from './json';
 import { getCsv } from './csv';
 import { getYAML } from './yaml';
 import fs from 'fs';
-import { success } from './log';
+import { success, warn } from './log';
 
 const { mean, q5, q95, q99, stdDev } = mathUtils;
 
@@ -56,6 +56,12 @@ export const renderFormattedOutput = async (
     success(`\n Output written to ${chalk.bold(filepath)}\n`);
   } else {
     console.log(output);
+  }
+
+  if (outputFormat && !outputFile) {
+    warn(
+      `\nYou've set the output format to ${outputFormat} but haven't turned on file output using the "--outputFile" option. Output will only be printed to the console.\n`
+    );
   }
 
   return null;
