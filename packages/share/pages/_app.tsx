@@ -6,6 +6,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { getTheme } from '@/theme/theme';
 import Head from 'next/head';
 import AppHead from '@/components/layout/head';
+import { Analytics } from '@vercel/analytics/react';
 
 import '@/styles/globals.css';
 
@@ -51,6 +52,8 @@ function App({ Component, pageProps }: AppProps) {
           <Component {...pageProps} />
         </ThemeProvider>
       </div>
+
+      <Analytics />
     </>
   );
 }
