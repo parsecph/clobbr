@@ -8,6 +8,9 @@ export const SK = {
     MAX_ITERATIONS: 'preferences.maxIterations',
     SHOW_TRENDLINE: 'preferences.showTrendline',
     SHOW_BAR_CHARTS: 'preferences.showBarCharts',
-    CHART_DOWNSAMPLE_THRESHOLD: 'preferences.chartDownSampleThreshold'
+    CHART_DOWNSAMPLE_THRESHOLD: 'preferences.chartDownSampleThreshold',
+    PANELS: {
+      MAIN_LAYOUT: 'preferences.panels.mainLayout'
+    }
   }
 };

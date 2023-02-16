@@ -129,7 +129,9 @@ const ResultGroup = ({
                 primary={
                   <span className="flex items-center gap-2 truncate mb-1">
                     <Tooltip title={url}>
-                      <span>{url.replace(/^https?:\/\//, '')}</span>
+                      <span className="truncate">
+                        {url.replace(/^https?:\/\//, '')}
+                      </span>
                     </Tooltip>
 
                     {isInProgress ? (

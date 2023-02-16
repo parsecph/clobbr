@@ -1,8 +1,13 @@
 import { DragIndicator as DragIndicatorIcon } from '@mui/icons-material';
-import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels'
+import {
+  PanelGroup,
+  Panel,
+  PanelResizeHandle,
+  PanelGroupStorage
+} from 'react-resizable-panels';
 import MediaQuery, { useMediaQuery } from 'react-responsive';
 import clsx from 'clsx';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useAsync } from 'react-use';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
@@ -28,9 +33,15 @@ import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
 const App = () => {
   const topbarDom = useRef(null);
   const searchDom = useRef(null);
-  const isDesktopOrLaptop = useMediaQuery({
-    query: '(min-width: 1224px)'
-  })
+
+  const is2xl = useMediaQuery({
+    query: `(min-width: ${mediaQueries['2xl']}})`
+  });
+
+  const is3xl = useMediaQuery({
+    query: `(min-width: ${mediaQueries['3xl']}})`
+  });
+
   const [topbarHeight, setTopbarHeight] = useState(0);
   const [resultStorageLoaded, setResultStorageLoaded] = useState(false);
   const [preferencesApplied, setPreferencesApplied] = useState(false);
@@ -104,18 +115,70 @@ const App = () => {
         : null;
       const topbarHeight = topbarElement
         ? topbarElement.offsetHeight +
-        parseFloat(getComputedStyle(topbarElement).marginBottom) +
-        parseFloat(getComputedStyle(topbarElement).marginTop)
+          parseFloat(getComputedStyle(topbarElement).marginBottom) +
+          parseFloat(getComputedStyle(topbarElement).marginTop)
         : 0;
       const searchHeight = searchElement
         ? searchElement.offsetHeight +
-        parseFloat(getComputedStyle(searchElement).marginBottom) +
-        parseFloat(getComputedStyle(searchElement).marginTop)
+          parseFloat(getComputedStyle(searchElement).marginBottom) +
+          parseFloat(getComputedStyle(searchElement).marginTop)
         : 0;
 
       setTopbarHeight(topbarHeight + searchHeight);
     }, 800); // HACK: ensure topbar animation has been completed to get correct height
   });
+
+  const dbStorage = useMemo(
+    () => ({
+      getItem(name: string) {
+        try {
+          const existingPref = localStorage.getItem(
+            SK.PREFERENCES.PANELS.MAIN_LAYOUT
+          );
+          const parsed = existingPref ? JSON.parse(existingPref) : {};
+          const value = parsed[name] || '';
+
+          if (value) {
+            return value;
+          } else {
+            let minWidth = 448;
+
+            if (is2xl) {
+              minWidth = 512;
+            }
+
+            if (is3xl) {
+              minWidth = 576;
+            }
+
+            const widthPercentage = (minWidth * 100) / window.innerWidth;
+            const flexValues = {
+              '10': [100],
+              '10,10': [widthPercentage, 100 - widthPercentage]
+            };
+
+            return JSON.stringify(flexValues);
+          }
+        } catch (error) {
+          console.error(error);
+          return '';
+        }
+      },
+
+      setItem(name: string, value: string) {
+        try {
+          const encoded = JSON.stringify({
+            [name]: value
+          });
+
+          localStorage.setItem(SK.PREFERENCES.PANELS.MAIN_LAYOUT, encoded);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    }),
+    [is2xl, is3xl]
+  );
 
   return (
     <GlobalStore.Provider value={state}>
@@ -135,30 +198,40 @@ const App = () => {
           <Search ref={searchDom} />
 
           {resultStorageLoaded && state.results.list.length > 0 ? (
-            <PanelGroup autoSaveId="persistence" direction="horizontal"
+            <PanelGroup
+              autoSaveId="mainLayout"
+              direction="horizontal"
               className="contents xl:flex xl:flex-row-reverse xl:w-full xl:justify-end xl:border-t border-gray-100 dark:border-opacity-30 dark:border-gray-700"
               style={{
                 height: `calc(100vh - ${topbarHeight}px)`
               }}
+              storage={dbStorage}
             >
-              <Panel className="w-full min-w-[18%] xl:max-w-md 2xl:max-w-lg 3xl:max-w-xl xl:overflow-auto flex-grow-1 flex-shrink-0 lg:flex">
-                <ResultList list={state.results.list} className="w-full" />
+              <Panel className="w-full h-full min-w-[400px]">
+                <div className="flex h-full overflow-auto">
+                  <ResultList list={state.results.list} className="w-full" />
+                </div>
               </Panel>
-              {isDesktopOrLaptop && (
-                <PanelResizeHandle className='w-4 hover:bg-zinc-900/90 opacity-70 hover:opacity-100 transition-all m-1 p-px flex items-center justify-center'>
-                  <DragIndicatorIcon aria-label="Resize panel" />
-                </PanelResizeHandle>
-              )}
+
               <MediaQuery minWidth={mediaQueries.xl}>
-                {expandedResult ? (
-                  <Panel className="sticky top-0 overflow-auto w-full pt-12 bg-gray-100 dark:bg-opacity-30 dark:bg-gray-700">
-                    <ResultContent item={expandedResult} expanded={true} />
-                  </Panel>
-                ) : (
-                  <Panel className="sticky top-0 overflow-auto w-full flex items-center justify-center pt-12 bg-gray-100 dark:bg-opacity-30 dark:bg-gray-700">
-                    <NoResultSelected />
-                  </Panel>
-                )}
+                <PanelResizeHandle className="group w-4 bg-gray-200 dark:bg-zinc-800/70 hover:bg-zinc-300/80 dark:hover:bg-zinc-900/100 opacity-100 hover:opacity-100 transition-all flex items-center justify-center">
+                  <DragIndicatorIcon
+                    aria-label="Resize panel"
+                    className="!w-5 opacity-50 group-hover:opacity-100 transition-all"
+                  />
+                </PanelResizeHandle>
+
+                <Panel className="w-full flex min-w-[600px]">
+                  {expandedResult ? (
+                    <div className="sticky top-0 overflow-auto w-full pt-12 bg-gray-100 dark:bg-gray-700/30">
+                      <ResultContent item={expandedResult} expanded={true} />
+                    </div>
+                  ) : (
+                    <div className="sticky top-0 overflow-auto w-full flex items-center justify-center pt-12 bg-gray-100 dark:bg-gray-600/30">
+                      <NoResultSelected />
+                    </div>
+                  )}
+                </Panel>
               </MediaQuery>
             </PanelGroup>
           ) : (
@@ -166,7 +239,7 @@ const App = () => {
           )}
         </main>
       </ThemeProvider>
-    </GlobalStore.Provider >
+    </GlobalStore.Provider>
   );
 };
 
