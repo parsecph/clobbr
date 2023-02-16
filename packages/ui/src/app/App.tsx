@@ -1,4 +1,6 @@
-import MediaQuery from 'react-responsive';
+import { DragIndicator as DragIndicatorIcon } from '@mui/icons-material';
+import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels'
+import MediaQuery, { useMediaQuery } from 'react-responsive';
 import clsx from 'clsx';
 import { useEffect, useRef, useState } from 'react';
 import { useAsync } from 'react-use';
@@ -26,6 +28,9 @@ import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
 const App = () => {
   const topbarDom = useRef(null);
   const searchDom = useRef(null);
+  const isDesktopOrLaptop = useMediaQuery({
+    query: '(min-width: 1224px)'
+  })
   const [topbarHeight, setTopbarHeight] = useState(0);
   const [resultStorageLoaded, setResultStorageLoaded] = useState(false);
   const [preferencesApplied, setPreferencesApplied] = useState(false);
@@ -99,13 +104,13 @@ const App = () => {
         : null;
       const topbarHeight = topbarElement
         ? topbarElement.offsetHeight +
-          parseFloat(getComputedStyle(topbarElement).marginBottom) +
-          parseFloat(getComputedStyle(topbarElement).marginTop)
+        parseFloat(getComputedStyle(topbarElement).marginBottom) +
+        parseFloat(getComputedStyle(topbarElement).marginTop)
         : 0;
       const searchHeight = searchElement
         ? searchElement.offsetHeight +
-          parseFloat(getComputedStyle(searchElement).marginBottom) +
-          parseFloat(getComputedStyle(searchElement).marginTop)
+        parseFloat(getComputedStyle(searchElement).marginBottom) +
+        parseFloat(getComputedStyle(searchElement).marginTop)
         : 0;
 
       setTopbarHeight(topbarHeight + searchHeight);
@@ -130,34 +135,38 @@ const App = () => {
           <Search ref={searchDom} />
 
           {resultStorageLoaded && state.results.list.length > 0 ? (
-            <div
+            <PanelGroup autoSaveId="persistence" direction="horizontal"
               className="contents xl:flex xl:flex-row-reverse xl:w-full xl:justify-end xl:border-t border-gray-100 dark:border-opacity-30 dark:border-gray-700"
               style={{
                 height: `calc(100vh - ${topbarHeight}px)`
               }}
             >
+              <Panel className="w-full min-w-[18%] xl:max-w-md 2xl:max-w-lg 3xl:max-w-xl xl:overflow-auto flex-grow-1 flex-shrink-0 lg:flex">
+                <ResultList list={state.results.list} className="w-full" />
+              </Panel>
+              {isDesktopOrLaptop && (
+                <PanelResizeHandle className='w-4 hover:bg-zinc-900/90 opacity-70 hover:opacity-100 transition-all m-1 p-px flex items-center justify-center'>
+                  <DragIndicatorIcon aria-label="Resize panel" />
+                </PanelResizeHandle>
+              )}
               <MediaQuery minWidth={mediaQueries.xl}>
                 {expandedResult ? (
-                  <div className="sticky top-0 overflow-auto w-full pt-12 bg-gray-100 dark:bg-opacity-30 dark:bg-gray-700">
+                  <Panel className="sticky top-0 overflow-auto w-full pt-12 bg-gray-100 dark:bg-opacity-30 dark:bg-gray-700">
                     <ResultContent item={expandedResult} expanded={true} />
-                  </div>
+                  </Panel>
                 ) : (
-                  <div className="sticky top-0 overflow-auto w-full flex items-center justify-center pt-12 bg-gray-100 dark:bg-opacity-30 dark:bg-gray-700">
+                  <Panel className="sticky top-0 overflow-auto w-full flex items-center justify-center pt-12 bg-gray-100 dark:bg-opacity-30 dark:bg-gray-700">
                     <NoResultSelected />
-                  </div>
+                  </Panel>
                 )}
               </MediaQuery>
-
-              <section className="w-full xl:max-w-md 2xl:max-w-lg 3xl:max-w-xl xl:overflow-auto flex-grow-1 flex-shrink-0 lg:flex">
-                <ResultList list={state.results.list} className="w-full" />
-              </section>
-            </div>
+            </PanelGroup>
           ) : (
             ''
           )}
         </main>
       </ThemeProvider>
-    </GlobalStore.Provider>
+    </GlobalStore.Provider >
   );
 };
 

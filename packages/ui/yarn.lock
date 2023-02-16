@@ -1608,10 +1608,10 @@
   resolved "https://registry.npmjs.org/@chevrotain/utils/-/utils-10.1.2.tgz"
   integrity sha512-bbZIpW6fdyf7FMaeDmw3cBbkTqsecxEkwlVKgVfqqXWBPLH6azxhPA2V9F7OhoZSVrsnMYw7QuyK6qutXPjEew==
 
-"@clobbr/api@^1.12.3":
-  version "1.12.3"
-  resolved "https://registry.yarnpkg.com/@clobbr/api/-/api-1.12.3.tgz#4d58939be7e0eb982717f37999617bf0fe901855"
-  integrity sha512-mBFapmPTdVOAUc9cKsdw6W3VwFZ//Z6LuZoF85RpKbmBK16HBEOvL4NKm05EoGvAwecwHybN2mgn+6wDZOlDdg==
+"@clobbr/api@^1.13.1":
+  version "1.13.1"
+  resolved "https://registry.yarnpkg.com/@clobbr/api/-/api-1.13.1.tgz#04c3f3667e432a74eb1b02e4c1a0287ac0002ea2"
+  integrity sha512-DdfpbAVaafM4pYHGS7te/eh4HlJkpkMBNCF3TVP53es5Dv9OttPvVNIym2HjX+g31pcVjpvufDZXJN0dOKZVsg==
   dependencies:
     "@vercel/ncc" "^0.28.0"
     axios "^0.21.1"
@@ -8697,6 +8697,11 @@ react-refresh@^0.11.0:
   version "0.11.0"
   resolved "https://registry.npmjs.org/react-refresh/-/react-refresh-0.11.0.tgz"
   integrity sha512-F27qZr8uUqwhWZboondsPx8tnC3Ct3SxZA3V5WyEvujRyyNv0VYPhoBg1gZ8/MV5tubQp76Trw8lTv9hzRBa+A==
+
+react-resizable-panels@^0.0.36:
+  version "0.0.36"
+  resolved "https://registry.yarnpkg.com/react-resizable-panels/-/react-resizable-panels-0.0.36.tgz#2747695d60969ec3bba68bf7cc42dc4a524d77bb"
+  integrity sha512-aDGw+DTe/RwsUsdk0Z+xQ/Iz81CZRxTayg3WQ2d5PVAV/v9rcYikck75NpYnRuY3oOOu7+yl8H0Fj24Hk7ymxA==
 
 react-responsive@^9.0.0:
   version "9.0.0"
