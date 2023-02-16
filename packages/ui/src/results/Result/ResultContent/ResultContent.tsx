@@ -142,10 +142,10 @@ const ResultContent = ({
       )}
 
       {expanded &&
-      !isInProgress &&
-      !shouldShowChart &&
-      !timedOut &&
-      !allFailed ? (
+        !isInProgress &&
+        !shouldShowChart &&
+        !timedOut &&
+        !allFailed ? (
         <>
           <Typography variant="body2" className="opacity-50 text-center">
             Increase the number of itetations to see more stats.
