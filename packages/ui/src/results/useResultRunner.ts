@@ -1,5 +1,5 @@
 import { useCallback, useContext, useState } from 'react';
-
+import { isObjectLike } from 'lodash-es';
 import { GlobalStore } from 'app/globalContext';
 
 import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
@@ -8,6 +8,7 @@ import { Everbs } from 'shared/enums/http';
 import { ClobbrUIHeaderItem } from 'models/ClobbrUIHeaderItem';
 import { ClobbrUIProperties } from 'models/ClobbrUIProperties';
 import { HEADER_MODES } from 'search/SearchSettings/HeaderSettings/HeaderSettings';
+import { useToastStore } from 'toasts/state/toastStore';
 
 import { run } from '@clobbr/api';
 
@@ -45,7 +46,7 @@ export const useResultRunner = ({
 }) => {
   const globalStore = useContext(GlobalStore);
 
-  const [headerError, setHeaderError] = useState<string>('');
+  const addToast = useToastStore((state) => state.addToast);
 
   const runEventCallback = useCallback(
     (itemId: string) => {
@@ -131,9 +132,10 @@ export const useResultRunner = ({
                   options.headers = parsedJson;
                 }
               } catch (error) {
-                setHeaderError(
-                  'Header shell script failed. Using default headers.'
-                );
+                addToast({
+                  message: 'Header shell script failed. Using default headers.',
+                  type: 'error'
+                });
               }
             }
           }
@@ -152,12 +154,24 @@ export const useResultRunner = ({
               }
 
               const parsedJson = JSON.parse(result);
+
+              if (!isObjectLike(parsedJson)) {
+                addToast({
+                  message:
+                    'Header node.js script did not return a JSON object. Using default headers.',
+                  type: 'warning'
+                });
+              }
+
               options.headers = parsedJson;
             } catch (error) {
               console.error(error);
-              setHeaderError(
-                'Header node.js script failed to run. Using default headers.'
-              );
+
+              addToast({
+                message:
+                  'Header node.js script failed to run. Using default headers.',
+                type: 'error'
+              });
             }
           }
 
@@ -195,9 +209,6 @@ export const useResultRunner = ({
   );
 
   return {
-    startRun,
-
-    headerError,
-    setHeaderError
+    startRun
   };
 };

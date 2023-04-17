@@ -16,11 +16,8 @@ import {
   Tooltip,
   SelectChangeEvent,
   Typography,
-  CircularProgress,
-  Alert,
-  Snackbar
+  CircularProgress
 } from '@mui/material';
-import { Close } from '@mui/icons-material';
 import { GlobalStore } from 'app/globalContext';
 
 import { ReactComponent as ParallelIcon } from 'shared/icons/Parallel.svg';
@@ -93,6 +90,7 @@ const Search = forwardRef(
     ref: React.ForwardedRef<HTMLDivElement>
   ) => {
     const globalStore = useContext(GlobalStore);
+
     const [wssUrl, setWssUrl] = useState<string>('ws://localhost');
 
     const getSocketUrl = useCallback((): Promise<string> => {
@@ -107,7 +105,7 @@ const Search = forwardRef(
 
     const wsReady = readyState === ReadyState.OPEN;
 
-    const { startRun, headerError, setHeaderError } = useResultRunner({
+    const { startRun } = useResultRunner({
       requestUrl: globalStore.search.url.requestUrl,
       parallel: globalStore.search.parallel,
       iterations: globalStore.search.iterations,
@@ -151,8 +149,6 @@ const Search = forwardRef(
       },
       [globalStore.search, globalStore.results]
     );
-
-    const dismissHeaderErrorToast = () => setHeaderError('');
 
     const settingsAnimations = {
       animate:
@@ -401,34 +397,6 @@ const Search = forwardRef(
             ) : (
               ''
             )}
-
-            <Snackbar
-              open={!!headerError}
-              autoHideDuration={6000}
-              onClose={dismissHeaderErrorToast}
-              anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-              className="pointer-events-none"
-            >
-              <Alert
-                className="bg-red-200/80 dark:bg-red-900/80 backdrop-blur-sm mb-10 pointer-events-auto"
-                onClose={dismissHeaderErrorToast}
-                severity="error"
-                icon={false}
-                sx={{ width: '100%' }}
-                action={
-                  <IconButton
-                    aria-label="Dismiss"
-                    onClick={dismissHeaderErrorToast}
-                    color="inherit"
-                    className="!mb-1"
-                  >
-                    <Close />
-                  </IconButton>
-                }
-              >
-                <p className="flex h-full items-center">{headerError}</p>
-              </Alert>
-            </Snackbar>
           </section>
         )}
       </GlobalStore.Consumer>
