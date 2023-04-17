@@ -37,7 +37,8 @@ export const getFailedMessage = (
 export const getResponseMetas = (
   response: AxiosResponse,
   duration: number,
-  index: number
+  index: number,
+  includeDataInResponse = false
 ): { metas: ClobbrLogItemMeta; errors: any } => {
   const { status, statusText, data } = response;
 
@@ -52,7 +53,7 @@ export const getResponseMetas = (
     duration,
     durationUnit: 'ms',
     size: `${sizeof(data) / 1000} KB`,
-    data
+    ...(includeDataInResponse ? { data } : {})
   };
 
   return {
@@ -64,7 +65,8 @@ export const getResponseMetas = (
 export const getGqlResponseMetas = (
   response: AxiosResponse,
   duration: number,
-  index: number
+  index: number,
+  includeDataInResponse = false
 ): {
   metas: ClobbrLogItemMeta;
   errors: any;
@@ -82,7 +84,7 @@ export const getGqlResponseMetas = (
     duration,
     durationUnit: 'ms',
     size: `${sizeof(data) / 1000} KB`,
-    data
+    ...(includeDataInResponse ? { data } : {})
   };
 
   return {

@@ -13,7 +13,14 @@ import { sanitizeUrl } from './sanitize';
 
 export const handleApiCall = async (
   index: number,
-  { url, verb, headers, data, timeout }: ClobbrRequestSettings
+  {
+    url,
+    verb,
+    headers,
+    data,
+    timeout,
+    includeDataInResponse
+  }: ClobbrRequestSettings
 ) => {
   const sanitizedUrl = sanitizeUrl(url);
   const startTime = new Date().valueOf();
@@ -31,8 +38,8 @@ export const handleApiCall = async (
   const isGql = data && !!(data.query || data.mutation);
 
   const { metas, errors } = isGql
-    ? getGqlResponseMetas(res, duration, index)
-    : getResponseMetas(res, duration, index);
+    ? getGqlResponseMetas(res, duration, index, includeDataInResponse)
+    : getResponseMetas(res, duration, index, includeDataInResponse);
 
   const logItem = {
     url: sanitizedUrl,
