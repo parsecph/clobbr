@@ -6,12 +6,13 @@ import { GlobalStore } from 'app/globalContext';
 
 import { ButtonBase, Typography } from '@mui/material';
 
-import { Settings as SettingsIcon } from '@mui/icons-material';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 import { Modal } from 'shared/components/AppleModal/AppleModal';
 import { VersionNumber } from 'shared/components/VersionNumber/VersionNumber';
 import { ClobbrAppLogo } from 'shared/brand/clobbr-app-logo';
 import { Settings } from 'Settings/Settings';
+import { ApiHustleGroup } from 'apihustle/apihustle-group';
 
 const Topbar = forwardRef((_props, ref: React.ForwardedRef<HTMLDivElement>) => {
   const [settingsModalOpen, setSettingsModalOpen] = useState(false);
@@ -36,11 +37,11 @@ const Topbar = forwardRef((_props, ref: React.ForwardedRef<HTMLDivElement>) => {
           ref={ref}
         >
           <header className="flex justify-between items-center w-full px-4 py-2">
-            <ClobbrAppLogo width={50} height={50} color={null} className="" />
+            <ClobbrAppLogo width={52} height={52} color={null} className="" />
 
             <ButtonBase
               disableRipple
-              className="h-full flex flex-col gap-1 opacity-70 hover:opacity-100 transition-all"
+              className="h-full flex flex-col gap-2 opacity-70 hover:opacity-100 transition-all"
               onClick={() => setSettingsModalOpen(true)}
             >
               <SettingsIcon className="w-5 h-5" aria-label="General Settings" />
@@ -57,9 +58,35 @@ const Topbar = forwardRef((_props, ref: React.ForwardedRef<HTMLDivElement>) => {
           <Modal
             onClose={() => setSettingsModalOpen(false)}
             open={settingsModalOpen}
-            footerComponent={<VersionNumber />}
+            footerComponent={
+              <div className="flex flex-col gap-6">
+                <ApiHustleGroup
+                  otherChildren={
+                    <li className="flex gap-3 items-center justify-between relative text-xs">
+                      <a
+                        href="https://www.npmjs.com/package/@clobbr/cli"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex flex-col items-center gap-3 hover:grayscale transition-all"
+                      >
+                        <div className="w-14 h-[54px] bg-rose-700 text-white flex items-center justify-center rounded-lg">
+                          <span className="font-bold text-base">npm</span>
+                        </div>
+                        <h3>Clobbr CLI</h3>
+                      </a>
+                    </li>
+                  }
+                  hideVisitButton={true}
+                  useOverlayFullLink={true}
+                  className="pt-12 px-6 mt-auto w-full"
+                  layout="horizontal"
+                  headline="This tool is part of the Apihustle suite - a collection of tools to test, improve and get to know your API inside and out."
+                />
+                <VersionNumber />
+              </div>
+            }
           >
-            <Settings />
+            <Settings dismissModal={() => setSettingsModalOpen(false)} />
           </Modal>
         </motion.div>
       )}
