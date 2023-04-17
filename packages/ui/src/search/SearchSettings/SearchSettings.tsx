@@ -129,7 +129,7 @@ const SearchSettings = () => {
                 <Tabs
                   value={activeTabIndex}
                   onChange={onTabChange}
-                  aria-label="basic tabs example"
+                  aria-label="Configuration tabs"
                   indicatorColor="primary"
                 >
                   <Tab label="General" {...a11yProps(0)} />
