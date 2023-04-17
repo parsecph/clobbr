@@ -9,6 +9,7 @@ import { Everbs } from 'shared/enums/http';
 import { ClobbrUIHeaderItem } from 'models/ClobbrUIHeaderItem';
 import useStateRef from 'react-usestateref';
 import { ClobbrUIProperties } from 'models/ClobbrUIProperties';
+import { useThrottle } from 'react-use';
 
 export const useResultState = ({ initialState }: { [key: string]: any }) => {
   const [editing, setEditing] = useState(false);
@@ -228,11 +229,13 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     ]);
   };
 
+  const throttledList = useThrottle(list, 500);
+
   const resultState = {
     editing,
     toggleEdit,
 
-    list,
+    list: throttledList,
     listRef,
     setList,
 
