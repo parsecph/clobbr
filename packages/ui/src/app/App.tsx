@@ -35,15 +35,15 @@ const App = () => {
   const searchDom = useRef(null);
 
   const isXl = useMediaQuery({
-    query: `(min-width: ${mediaQueries.xl}})`
+    query: `(min-width: ${mediaQueries.xl}px)`
   });
 
   const is2xl = useMediaQuery({
-    query: `(min-width: ${mediaQueries['2xl']}})`
+    query: `(min-width: ${mediaQueries['2xl']}px)`
   });
 
   const is3xl = useMediaQuery({
-    query: `(min-width: ${mediaQueries['3xl']}})`
+    query: `(min-width: ${mediaQueries['3xl']}px)`
   });
 
   const [topbarHeight, setTopbarHeight] = useState(0);
