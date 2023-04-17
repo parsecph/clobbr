@@ -1,10 +1,5 @@
-import { DragIndicator as DragIndicatorIcon } from '@mui/icons-material';
-import {
-  PanelGroup,
-  Panel,
-  PanelResizeHandle,
-  PanelGroupStorage
-} from 'react-resizable-panels';
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
+import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels';
 import MediaQuery, { useMediaQuery } from 'react-responsive';
 import clsx from 'clsx';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -13,6 +8,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 import { getTheme } from 'shared/theme';
 import { mediaQueries } from 'shared/mediaQueries';
+import Portal from '@mui/base/Portal';
 
 import { DEFAULT_GLOBAL_STORE, GlobalStore } from './globalContext';
 import { useClobbrState } from 'state/useClobbrState';
@@ -26,11 +22,16 @@ import { NoResultSelected } from 'results/NoResultSelected/NoResultSelected';
 import ResultContent from 'results/Result/ResultContent/ResultContent';
 import PreferenceLoader from 'shared/components/PreferenceLoader/PreferenceLoader';
 import Topbar from 'Topbar/Topbar';
+import { ToastContainer } from 'toasts/toastContainer';
 
 import { useStoredPreferences } from 'shared/hooks/useStoredPreferences';
 import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
+import { useToastStore } from 'toasts/state/toastStore';
 
 const App = () => {
+  const toasts = useToastStore((state) => state.toasts);
+  const removeToast = useToastStore((state) => state.removeToast);
+
   const topbarDom = useRef(null);
   const searchDom = useRef(null);
 
@@ -246,6 +247,10 @@ const App = () => {
             ''
           )}
         </main>
+
+        <Portal>
+          <ToastContainer toasts={toasts} removeToast={removeToast} />
+        </Portal>
       </ThemeProvider>
     </GlobalStore.Provider>
   );
