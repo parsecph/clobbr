@@ -34,6 +34,10 @@ const App = () => {
   const topbarDom = useRef(null);
   const searchDom = useRef(null);
 
+  const isXl = useMediaQuery({
+    query: `(min-width: ${mediaQueries.xl}})`
+  });
+
   const is2xl = useMediaQuery({
     query: `(min-width: ${mediaQueries['2xl']}})`
   });
@@ -202,9 +206,13 @@ const App = () => {
               autoSaveId="mainLayout"
               direction="horizontal"
               className="contents xl:flex xl:flex-row-reverse xl:w-full xl:justify-end xl:border-t border-gray-100 dark:border-opacity-30 dark:border-gray-700"
-              style={{
-                height: `calc(100vh - ${topbarHeight}px)`
-              }}
+              style={
+                isXl
+                  ? {
+                      height: `calc(100vh - ${topbarHeight}px)`
+                    }
+                  : {}
+              }
               storage={dbStorage}
             >
               <Panel className="w-full h-full min-w-[400px]">
