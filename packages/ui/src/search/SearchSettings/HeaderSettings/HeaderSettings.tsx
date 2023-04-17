@@ -12,7 +12,8 @@ import {
   Button,
   Alert
 } from '@mui/material';
-import { Clear, Delete } from '@mui/icons-material';
+import Clear from '@mui/icons-material/Clear';
+import Delete from '@mui/icons-material/Delete';
 
 import { KNOWN_HEADERS } from 'shared/enums/EKnownHeaders';
 
