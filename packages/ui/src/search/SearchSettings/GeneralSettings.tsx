@@ -8,12 +8,9 @@ import {
   FormGroup,
   Button,
   Alert,
-  Snackbar,
-  IconButton,
   FormControl,
   SelectChangeEvent
 } from '@mui/material';
-import { Close } from '@mui/icons-material';
 
 import { GlobalStore } from 'app/globalContext';
 
@@ -21,22 +18,24 @@ import AppleSwitch from 'shared/components/AppleSwitch/AppleSwitch';
 import IterationsInput from 'search/Search/IterationsInput';
 import VerbSelect from 'search/Search/VerbSelect';
 import { Everbs } from 'shared/enums/http';
+import { useToastStore } from 'toasts/state/toastStore';
 
 export const GeneralSettings = () => {
   const globalStore = useContext(GlobalStore);
 
+  const addToast = useToastStore((state) => state.addToast);
+
   const [confirmedSetSettingsToDefault, setConfirmedSetSettingsToDefault] =
-    useState(false);
-  const [settingsToDefaultToastShown, setSettingsToDefaultToastShown] =
     useState(false);
 
   const setSettingsToDefault = () => {
     globalStore.search.resetSettingsToDefault();
     setConfirmedSetSettingsToDefault(false);
-    setSettingsToDefaultToastShown(true);
-  };
 
-  const dismissToast = () => setSettingsToDefaultToastShown(false);
+    addToast({
+      message: 'Settings reset to default'
+    });
+  };
 
   const handleTimeoutChange =
     (updateTimeout: (timeout: number) => void) =>
@@ -145,36 +144,6 @@ export const GeneralSettings = () => {
               )}
             </FormControl>
           </div>
-
-          <Snackbar
-            open={settingsToDefaultToastShown}
-            autoHideDuration={6000}
-            onClose={dismissToast}
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-            className="pointer-events-none"
-          >
-            <Alert
-              className="bg-green-200/80 dark:bg-emerald-900/80 backdrop-blur-sm mb-10 pointer-events-auto"
-              onClose={dismissToast}
-              severity="success"
-              icon={false}
-              sx={{ width: '100%' }}
-              action={
-                <IconButton
-                  aria-label="Dismiss"
-                  onClick={dismissToast}
-                  color="inherit"
-                  className="!mb-1"
-                >
-                  <Close />
-                </IconButton>
-              }
-            >
-              <p className="flex h-full items-center">
-                Settings reset to default.
-              </p>
-            </Alert>
-          </Snackbar>
         </>
       )}
     </GlobalStore.Consumer>
