@@ -35,7 +35,9 @@
     "react-chartjs-2": "^4.3.1",
     "react-dom": "18.2.0",
     "react-responsive": "^9.0.0",
-    "react-use": "^17.3.2"
+    "react-use": "^17.3.2",
+    "uuid": "^8.3.2",
+    "zustand": "^4.1.5"
   },
   "devDependencies": {
     "@types/node": "18.11.9",
