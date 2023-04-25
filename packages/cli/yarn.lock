@@ -14,10 +14,10 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@clobbr/api@^1.12.3":
-  version "1.12.3"
-  resolved "https://registry.yarnpkg.com/@clobbr/api/-/api-1.12.3.tgz#4d58939be7e0eb982717f37999617bf0fe901855"
-  integrity sha512-mBFapmPTdVOAUc9cKsdw6W3VwFZ//Z6LuZoF85RpKbmBK16HBEOvL4NKm05EoGvAwecwHybN2mgn+6wDZOlDdg==
+"@clobbr/api@^1.13.2":
+  version "1.13.2"
+  resolved "https://registry.yarnpkg.com/@clobbr/api/-/api-1.13.2.tgz#66f6fefa45d814cb8f5b7f56780d64bc8bed15cf"
+  integrity sha512-wtydJm+/BTmLxMw7mgw8OwDgtiP8JCI1hzI6EyCm74Ym67LkK7f2D7fyvpUgqPyh7ruBX94C4Y897QuZWDo1yA==
   dependencies:
     "@vercel/ncc" "^0.28.0"
     axios "^0.21.1"
@@ -1616,9 +1616,9 @@ wrappy@1:
   integrity sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8=
 
 yaml@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/yaml/-/yaml-2.1.1.tgz#1e06fb4ca46e60d9da07e4f786ea370ed3c3cfec"
-  integrity sha512-o96x3OPo8GjWeSLF+wOAbrPfhFOGY0W00GNaxCDv+9hkcDJEnev1yh8S7pgHF0ik6zc8sQLuL8hjHjJULZp8bw==
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/yaml/-/yaml-2.2.2.tgz#ec551ef37326e6d42872dad1970300f8eb83a073"
+  integrity sha512-CBKFWExMn46Foo4cldiChEzn7S7SRV+wqiluAb6xmueD/fGyRHIhX8m14vVGgeFWjN540nKCNVj6P21eQjgTuA==
 
 yn@3.1.1:
   version "3.1.1"
