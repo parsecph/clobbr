@@ -126,7 +126,10 @@ program
     `checks to be made on the results. Can have multiple values. Available checks: ${getAvailableChecks()}.`,
     DEFAULTS.outputFile
   )
-  .option('-dbg, --debug', `output debug logs with full request/response data.`)
+  .option(
+    '-dbg, --debug',
+    `output debug logs with full request/response data  & config.`
+  )
 
   .action(async (cliOptions: { [key: string]: any }) => {
     const {

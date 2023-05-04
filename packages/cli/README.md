@@ -78,7 +78,7 @@ Options:
   -ck, --checks <checks...>           checks to be made on the results. Can have multiple values. Available checks: mean
                                       (max ms), median (max ms), stdDev (max ms), q5 (max ms), q50 (max ms), q95 (max ms),
                                       q99 (max ms), pctOfSuccess (0-100). (default: false)
-  -dbg, --debug                       output debug logs with full request/response data.
+  -dbg, --debug                       output debug logs with full request/response data & config.
   --help                              display help for command
 ```
 
