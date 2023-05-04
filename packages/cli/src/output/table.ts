@@ -88,7 +88,11 @@ export const renderStatsTable = (
 
   const stats = [
     chalk.keyword(getDurationColor(meanValue))(`${formatNumber(meanValue)} ms`),
-    chalk.keyword(getDurationColor(stdValue))(`${formatNumber(stdValue)} ms`),
+    stdValue
+      ? chalk.keyword(getDurationColor(stdValue))(
+          `${formatNumber(stdValue)} ms`
+        )
+      : '-',
     chalk.keyword(getDurationColor(q5Value))(`${formatNumber(q5Value)} ms`),
     chalk.keyword(getDurationColor(q95Value))(`${formatNumber(q95Value)} ms`),
     chalk.keyword(getDurationColor(q99Value))(`${formatNumber(q99Value)} ms`)
