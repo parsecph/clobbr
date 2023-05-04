@@ -23,7 +23,7 @@ export const mean = (arr: Array<number>) =>
 export const median = (arr: Array<number>) => q50(arr);
 
 export const stdDev = (arr: Array<number>) => {
-  if (!arr.length) {
+  if (!arr.length && arr.length < 2) {
     return 0;
   }
 

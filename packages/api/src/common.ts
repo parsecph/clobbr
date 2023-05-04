@@ -22,13 +22,16 @@ export const handleApiCall = async (
     includeDataInResponse
   }: ClobbrRequestSettings
 ) => {
+  // Dont's send payload data if data object is empty
+  const payloadData = data && Object.keys(data).length > 0 ? data : undefined;
+
   const sanitizedUrl = sanitizeUrl(url);
   const startTime = new Date().valueOf();
   const res = await api.http({
     url: sanitizedUrl,
     method: verb,
     headers,
-    data,
+    data: payloadData,
     timeout: timeout || DEFAULT_HTTP_TIMEOUT_IN_MS
   });
 
