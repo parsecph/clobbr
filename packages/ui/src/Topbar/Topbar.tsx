@@ -17,6 +17,8 @@ import { ApiHustleGroup } from 'apihustle/apihustle-group';
 const Topbar = forwardRef((_props, ref: React.ForwardedRef<HTMLDivElement>) => {
   const [settingsModalOpen, setSettingsModalOpen] = useState(false);
 
+  const showAds = process.env.REACT_APP_NO_ADS === 'true';
+
   return (
     <GlobalStore.Consumer>
       {({ themeMode, appSettings }) => (
@@ -60,29 +62,49 @@ const Topbar = forwardRef((_props, ref: React.ForwardedRef<HTMLDivElement>) => {
             open={settingsModalOpen}
             footerComponent={
               <div className="flex flex-col gap-6">
-                <ApiHustleGroup
-                  otherChildren={
-                    <li className="flex gap-3 items-center justify-between relative text-xs">
+                {showAds ? (
+                  <ApiHustleGroup
+                    otherChildren={
+                      <li className="flex gap-3 items-center justify-between relative text-xs">
+                        <a
+                          href="https://www.npmjs.com/package/@clobbr/cli"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex flex-col items-center gap-3 hover:grayscale transition-all"
+                        >
+                          <div className="w-14 h-[54px] bg-rose-700 text-white flex items-center justify-center rounded-lg">
+                            <span className="font-bold text-base">npm</span>
+                          </div>
+                          <h3>Clobbr CLI</h3>
+                        </a>
+                      </li>
+                    }
+                    hideVisitButton={true}
+                    useOverlayFullLink={true}
+                    className="pt-12 px-6 mt-auto w-full"
+                    layout="horizontal"
+                    headline="This tool is part of the Apihustle suite - a collection of tools to test, improve and get to know your API inside and out."
+                  />
+                ) : (
+                  ''
+                )}
+
+                <span className="flex gap-1 justify-center items-center">
+                  <VersionNumber />
+                  {!showAds ? (
+                    <>
+                      ·
                       <a
-                        href="https://www.npmjs.com/package/@clobbr/cli"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex flex-col items-center gap-3 hover:grayscale transition-all"
+                        href="https://apihustle.com"
+                        className="text-xs opacity-50 hover:opacity-100"
                       >
-                        <div className="w-14 h-[54px] bg-rose-700 text-white flex items-center justify-center rounded-lg">
-                          <span className="font-bold text-base">npm</span>
-                        </div>
-                        <h3>Clobbr CLI</h3>
+                        apihustle.com
                       </a>
-                    </li>
-                  }
-                  hideVisitButton={true}
-                  useOverlayFullLink={true}
-                  className="pt-12 px-6 mt-auto w-full"
-                  layout="horizontal"
-                  headline="This tool is part of the Apihustle suite - a collection of tools to test, improve and get to know your API inside and out."
-                />
-                <VersionNumber />
+                    </>
+                  ) : (
+                    ''
+                  )}
+                </span>
               </div>
             }
           >

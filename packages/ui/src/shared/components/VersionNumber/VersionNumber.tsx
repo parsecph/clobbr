@@ -8,7 +8,7 @@ export const VersionNumber = () => {
       variant="caption"
       className={'opacity-50 flex-shrink-0 py-2 text-center !mt-auto'}
     >
-      Clobbr version {version}
+      Clobbr v{version}
     </Typography>
   );
 };
