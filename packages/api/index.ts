@@ -7,6 +7,22 @@ import * as resultMath from './src/resultMath';
 
 export const parseOptions = (options?: ClobbrRequestSettings) => {
   if (!options) {
+    console.error('Options are required.');
+    return;
+  }
+
+  if (!options.url) {
+    console.error('URL is required.');
+    return;
+  }
+
+  if (!options.verb) {
+    console.error('Verb is required.');
+    return;
+  }
+
+  if (!options.iterations) {
+    console.error('Iterations is required.');
     return;
   }
 
@@ -25,6 +41,7 @@ export const run = (
   const parsedOptions = parseOptions(options);
 
   if (!parsedOptions) {
+    console.warn('Did not run, options were invalid.');
     return;
   }
 
