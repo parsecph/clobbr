@@ -17,7 +17,7 @@ import { ApiHustleGroup } from 'apihustle/apihustle-group';
 const Topbar = forwardRef((_props, ref: React.ForwardedRef<HTMLDivElement>) => {
   const [settingsModalOpen, setSettingsModalOpen] = useState(false);
 
-  const showAds = process.env.REACT_APP_NO_ADS === 'true';
+  const showAds = process.env.REACT_APP_NO_ADS !== 'true';
 
   return (
     <GlobalStore.Consumer>
