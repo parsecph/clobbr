@@ -1,5 +1,6 @@
 import { ClobbrUIResultListItem } from '@/ui/models/ClobbrUIResultListItem';
 import { ClobbrUICompressedResultListItem } from '@/ui/models/ClobbrCompressedResultListItem';
+import { ClobbrUIResult } from '@/ui/models/ClobbrUIResult';
 
 export const parseResult = (
   result: string
@@ -86,7 +87,7 @@ export const parseResult = (
         parallel: parsed.lr.p,
         logs,
         resultDurations
-      },
+      } as ClobbrUIResult,
       historicalResults: [],
       properties: {
         gql: {
