@@ -31,4 +31,5 @@ export interface ClobbrLogItemFailedMessage {
   formatted: string;
   status?: string;
   statusText?: string;
+  statusCode?: number;
 }

@@ -27,7 +27,8 @@ export const getFailedMessage = (
     return {
       formatted: `${baseError} ${status} (${statusText})`,
       status: `${status} (${statusText})`,
-      statusText
+      statusText,
+      statusCode: status
     };
   } catch {}
 
