@@ -68,15 +68,12 @@ export const ResultHistory = ({
             <></>
           )}
 
-          {Object.keys(parallelResultsByIterations).length ? (
+          {mode !== HISTORY_MODES.CHRONOLOGICAL &&
+          Object.keys(parallelResultsByIterations).length ? (
             <div>
-              {mode !== HISTORY_MODES.CHRONOLOGICAL ? (
-                <Typography variant="h6" className="pb-4">
-                  Parallel results
-                </Typography>
-              ) : (
-                <></>
-              )}
+              <Typography variant="h6" className="pb-4">
+                Parallel results
+              </Typography>
 
               <ul className="flex flex-col gap-4">
                 {Object.keys(parallelResultsByIterations).map((key) => (
@@ -118,15 +115,12 @@ export const ResultHistory = ({
             <></>
           )}
 
-          {Object.keys(sequentialResultsByIterations).length ? (
+          {mode !== HISTORY_MODES.CHRONOLOGICAL &&
+          Object.keys(sequentialResultsByIterations).length ? (
             <ul>
-              {mode !== HISTORY_MODES.CHRONOLOGICAL ? (
-                <Typography variant="h6" className="pb-4">
-                  Sequence results
-                </Typography>
-              ) : (
-                <></>
-              )}
+              <Typography variant="h6" className="pb-4">
+                Sequence results
+              </Typography>
 
               <div className="flex flex-col gap-4">
                 {Object.keys(sequentialResultsByIterations).map((key) => (

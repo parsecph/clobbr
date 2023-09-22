@@ -152,21 +152,21 @@ export const ResultHistoryToggle = ({
                     value={HISTORY_MODES.SUMMARY}
                     sx={{ textTransform: 'none', padding: '0.25rem 1rem' }}
                   >
-                    Stats
-                  </ToggleButton>
-
-                  <ToggleButton
-                    value={HISTORY_MODES.TABLE}
-                    sx={{ textTransform: 'none', padding: '0.25rem 1rem' }}
-                  >
-                    Table
+                    Key metrics
                   </ToggleButton>
 
                   <ToggleButton
                     value={HISTORY_MODES.CHART}
                     sx={{ textTransform: 'none', padding: '0.25rem 1rem' }}
                   >
-                    Chart
+                    Charts
+                  </ToggleButton>
+
+                  <ToggleButton
+                    value={HISTORY_MODES.TABLE}
+                    sx={{ textTransform: 'none', padding: '0.25rem 1rem' }}
+                  >
+                    Response times
                   </ToggleButton>
                 </ToggleButtonGroup>
               </Typography>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import clsx from 'clsx';
 import { format } from 'date-fns';
+import { AnimatePresence, motion } from 'framer-motion';
 
 import { ButtonBase, Tooltip, Typography } from '@mui/material';
 import { ClobbrUIResult } from 'models/ClobbrUIResult';
@@ -24,7 +25,7 @@ export const ResultHistoryChronologicalItem = ({
   index: number;
 }) => {
   const [detailsOpen, setDetailsOpen] = useState(false);
-  console.log(result.headers);
+
   const config = [
     {
       value: result.parallel ? 'Parallel' : 'Sequence',
@@ -172,77 +173,94 @@ export const ResultHistoryChronologicalItem = ({
         </div>
       </div>
 
-      {detailsOpen ? (
-        <div className="ml-6 flex flex-col gap-1">
-          <div className="bg-gray-800 border-4 border-solid border-black/5 rounded-md overflow-auto">
-            <Typography
-              variant="caption"
-              className="flex w-full p-2 border-b border-solid border-gray-500/10"
-            >
-              Statistics
-            </Typography>
-            <ResultStats result={result} />
-          </div>
+      <AnimatePresence>
+        {detailsOpen ? (
+          <motion.div
+            initial={{ scaleY: 0.9, translateY: -10, opacity: 0.2 }}
+            animate={{
+              translateY: 0,
+              opacity: 1,
+              scaleY: 1
+            }}
+            exit={{ scaleY: 0.9, translateY: 10, opacity: 0 }}
+            transition={{
+              duration: 0.2
+            }}
+            className="ml-6 flex flex-col gap-1"
+          >
+            <div className="bg-gray-800 border-4 border-solid border-black/5 rounded-md overflow-auto">
+              <Typography
+                variant="caption"
+                className="sticky left-0 flex w-full p-2 border-b border-solid border-gray-500/10"
+              >
+                Statistics
+              </Typography>
+              <ResultStats result={result} />
+            </div>
 
-          <div className="bg-gray-800 border-4 border-solid border-black/5 rounded-md overflow-auto">
-            <Typography
-              variant="caption"
-              className="flex w-full p-2 border-b border-solid border-gray-500/10"
-            >
-              Responses
-            </Typography>
-            <ul
-              className="grid gap-3 p-2"
-              style={{
-                gridTemplateColumns: `repeat(${result.iterations}, 52px)`
-              }}
-            >
-              {result.logs.map((log) => (
-                <li key={log.metas.number} className="inline-flex items-center">
-                  {log.metas.statusOk && log.metas.duration ? (
-                    <ResultHistoryTableItem log={log} />
-                  ) : (
-                    <></>
-                  )}
+            <div className="bg-gray-800 border-4 border-solid border-black/5 rounded-md overflow-auto">
+              <Typography
+                variant="caption"
+                className="sticky left-0 flex w-full p-2 border-b border-solid border-gray-500/10"
+              >
+                Responses
+              </Typography>
+              <ul
+                className="grid gap-3 p-2"
+                style={{
+                  gridTemplateColumns: `repeat(${result.iterations}, 52px)`
+                }}
+              >
+                {result.logs.map((log) => (
+                  <li
+                    key={log.metas.number}
+                    className="inline-flex items-center"
+                  >
+                    {log.metas.statusOk && log.metas.duration ? (
+                      <ResultHistoryTableItem log={log} />
+                    ) : (
+                      <></>
+                    )}
 
-                  {!log.metas.statusOk ? (
-                    <ResultHistoryTableFailedItem log={log} />
-                  ) : (
-                    <></>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
+                    {!log.metas.statusOk ? (
+                      <ResultHistoryTableFailedItem log={log} />
+                    ) : (
+                      <></>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-          <div className="bg-gray-800 border-4 border-solid border-black/5 rounded-md overflow-auto">
-            <Typography
-              variant="caption"
-              className="flex w-full p-2 border-b border-solid border-gray-500/10"
-            >
-              Configuration
-            </Typography>
-            <ul
-              key={'stats-list'}
-              className="grid grid-cols-3 md:flex items-center justify-center gap-4"
-            >
-              {config.map(({ label, value }, index) => (
-                <li
-                  key={index}
-                  className="flex flex-col items-center border-l border-gray-500 border-opacity-20 first:border-0 p-2"
-                >
-                  <Typography variant="body2">{value}</Typography>
-                  <Typography variant="caption" className="opacity-50">
-                    {label}
-                  </Typography>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      ) : (
-        <></>
-      )}
+            <div className="bg-gray-800 border-4 border-solid border-black/5 rounded-md overflow-auto">
+              <Typography
+                variant="caption"
+                className="sticky left-0 flex w-full p-2 border-b border-solid border-gray-500/10"
+              >
+                Configuration
+              </Typography>
+              <ul
+                key={'stats-list'}
+                className="grid grid-cols-3 md:flex items-center justify-center gap-4"
+              >
+                {config.map(({ label, value }, index) => (
+                  <li
+                    key={index}
+                    className="flex flex-col items-center border-l border-gray-500 border-opacity-20 first:border-0 p-2"
+                  >
+                    <Typography variant="body2">{value}</Typography>
+                    <Typography variant="caption" className="opacity-50">
+                      {label}
+                    </Typography>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </motion.div>
+        ) : (
+          ''
+        )}
+      </AnimatePresence>
     </div>
   );
 };
