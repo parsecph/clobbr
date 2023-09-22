@@ -65,7 +65,7 @@ export const ResultHistoryTable = ({
             <ul
               className="grid gap-3"
               style={{
-                gridTemplateColumns: `repeat(${iterations}, 40px)`
+                gridTemplateColumns: `repeat(${iterations}, 52px)`
               }}
             >
               {result.logs.map((log) => (

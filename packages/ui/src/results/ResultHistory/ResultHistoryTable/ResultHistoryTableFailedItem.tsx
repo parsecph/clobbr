@@ -20,8 +20,10 @@ export const ResultHistoryTableFailedItem = ({
     return message || log.metas.status || 'Request failed';
   }, [log]);
 
+  const statusCode = log.metas?.statusCode;
+
   return (
-    <ButtonBase onClick={copyLogToClipboard}>
+    <ButtonBase onClick={copyLogToClipboard} className="w-full">
       <Tooltip
         title={
           <>
@@ -30,8 +32,20 @@ export const ResultHistoryTableFailedItem = ({
           </>
         }
       >
-        <Typography variant="caption" className="uppercase opacity-50">
-          {!state.error && !state.value ? 'Fail' : ''}
+        <Typography
+          variant="caption"
+          className="uppercase flex items-center gap-0.5 w-full"
+        >
+          {!state.error && !state.value ? (
+            <small>
+              <span className="opacity-50">Fail</span>
+              <span className="text-red-500">
+                {statusCode ? ` ${statusCode}` : ''}
+              </span>
+            </small>
+          ) : (
+            ''
+          )}
           {state.error ? 'Error' : ''}
           {state.value ? 'Copied' : ''}
         </Typography>
