@@ -3,23 +3,36 @@ import { format } from 'date-fns';
 
 import { ClobbrUIResult } from 'models/ClobbrUIResult';
 
-import { Tooltip, Typography } from '@mui/material';
+import { ButtonBase, Tooltip, Typography } from '@mui/material';
 import { Ping } from 'shared/components/Ping/Ping';
 
 import { getResultStats } from 'results/ResultStats/ResultStats';
 import { formatNumber } from 'shared/util/numberFormat';
 import { RESULT_STAT_TYPES } from 'shared/util/getLogStats';
+import { useState } from 'react';
 
 export const ResultHistoryStats = ({
   results,
-  iterations
+  iterations,
+  maximumResults
 }: {
   iterations: string;
   results: Array<ClobbrUIResult>;
+  maximumResults: number;
 }) => {
+  const [numberOfResultsToShow, setNumberOfResultsToShow] =
+    useState(maximumResults);
+
+  const resultsToShow = results.slice(0, numberOfResultsToShow);
+  const someResultsNotShown = results.length > resultsToShow.length;
+
+  const showMoreResults = () => {
+    setNumberOfResultsToShow(numberOfResultsToShow + 10);
+  };
+
   const iterationNumber = parseInt(iterations, 10);
 
-  const resultsWithStats = results.map((result) => {
+  const resultsWithStats = resultsToShow.map((result) => {
     const successfulLogs = result.logs.filter((log) => !log.failed);
 
     return {
@@ -57,7 +70,12 @@ export const ResultHistoryStats = ({
         {iterations} {iterations === '1' ? 'iteration' : 'iterations'}
       </Typography>
 
-      <div className="overflow-auto bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-md">
+      <div
+        className={clsx(
+          'overflow-auto bg-gray-100 dark:bg-gray-800 px-3 py-1',
+          someResultsNotShown ? 'rounded-t-md' : 'rounded-md'
+        )}
+      >
         <div className="flex gap-2">
           <Typography
             variant="caption"
@@ -165,6 +183,19 @@ export const ResultHistoryStats = ({
           </div>
         ))}
       </div>
+
+      {someResultsNotShown ? (
+        <div className="w-full bg-white/20 dark:bg-black/20 hover:bg-gray-200/40 hover:dark:bg-black/40 transition-all flex justify-center rounded-b-md">
+          <ButtonBase
+            onClick={showMoreResults}
+            className="text-xs w-full !p-1.5"
+          >
+            Show more
+          </ButtonBase>
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

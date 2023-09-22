@@ -13,6 +13,8 @@ import {
   HISTORY_MODES
 } from 'shared/enums/EResultHistoryMode';
 
+const MAX_RESULTS = 10;
+
 export const ResultHistory = ({
   results,
   mode
@@ -70,6 +72,7 @@ export const ResultHistory = ({
                   <li key={key}>
                     {mode === HISTORY_MODES.SUMMARY ? (
                       <ResultHistoryStats
+                        maximumResults={MAX_RESULTS}
                         iterations={key}
                         results={parallelResultsByIterations[key]}
                       />
@@ -79,6 +82,7 @@ export const ResultHistory = ({
 
                     {mode === HISTORY_MODES.TABLE ? (
                       <ResultHistoryTable
+                        maximumResults={MAX_RESULTS}
                         iterations={key}
                         results={parallelResultsByIterations[key]}
                       />
@@ -88,6 +92,7 @@ export const ResultHistory = ({
 
                     {mode === HISTORY_MODES.CHART ? (
                       <ResultHistoryChart
+                        maximumResults={MAX_RESULTS}
                         iterations={key}
                         results={parallelResultsByIterations[key]}
                       />
@@ -113,6 +118,7 @@ export const ResultHistory = ({
                   <li key={key}>
                     {mode === HISTORY_MODES.SUMMARY ? (
                       <ResultHistoryStats
+                        maximumResults={MAX_RESULTS}
                         iterations={key}
                         results={sequentialResultsByIterations[key]}
                       />
@@ -122,6 +128,7 @@ export const ResultHistory = ({
 
                     {mode === HISTORY_MODES.TABLE ? (
                       <ResultHistoryTable
+                        maximumResults={MAX_RESULTS}
                         iterations={key}
                         results={sequentialResultsByIterations[key]}
                       />
@@ -131,6 +138,7 @@ export const ResultHistory = ({
 
                     {mode === HISTORY_MODES.CHART ? (
                       <ResultHistoryChart
+                        maximumResults={MAX_RESULTS}
                         iterations={key}
                         results={sequentialResultsByIterations[key]}
                       />

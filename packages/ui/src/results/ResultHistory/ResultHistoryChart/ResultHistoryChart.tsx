@@ -1,19 +1,32 @@
 import clsx from 'clsx';
 import { format } from 'date-fns';
 
-import { Tooltip, Typography } from '@mui/material';
+import { ButtonBase, Tooltip, Typography } from '@mui/material';
 import { Ping } from 'shared/components/Ping/Ping';
 import { GenericChart } from './GenericChart';
 
 import { ClobbrUIResult } from 'models/ClobbrUIResult';
+import { useState } from 'react';
 
 export const ResultHistoryChart = ({
   results,
-  iterations
+  iterations,
+  maximumResults
 }: {
   iterations: string;
   results: Array<ClobbrUIResult>;
+  maximumResults: number;
 }) => {
+  const [numberOfResultsToShow, setNumberOfResultsToShow] =
+    useState(maximumResults);
+
+  const resultsToShow = results.slice(0, numberOfResultsToShow);
+  const someResultsNotShown = results.length > resultsToShow.length;
+
+  const showMoreResults = () => {
+    setNumberOfResultsToShow(numberOfResultsToShow + 10);
+  };
+
   const iterationNumber = parseInt(iterations, 10);
 
   if (iterationNumber === 1) {
@@ -27,7 +40,7 @@ export const ResultHistoryChart = ({
       </Typography>
 
       <div className="overflow-auto bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-md flex gap-8">
-        {results.map((result, index) => {
+        {resultsToShow.map((result, index) => {
           const qualifiedLogs = result.logs.filter((log) => !log.failed);
 
           const data = {
@@ -106,6 +119,19 @@ export const ResultHistoryChart = ({
             </div>
           );
         })}
+
+        {someResultsNotShown ? (
+          <div className="w-24 shrink-0 bg-white/20 dark:bg-black/20 hover:bg-white/40 hover:dark:bg-black/40 transition-all flex justify-center rounded-md">
+            <ButtonBase
+              onClick={showMoreResults}
+              className="text-xs w-full !p-1.5"
+            >
+              Show more
+            </ButtonBase>
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );

@@ -3,28 +3,46 @@ import { format } from 'date-fns';
 
 import { ClobbrUIResult } from 'models/ClobbrUIResult';
 
-import { Tooltip, Typography } from '@mui/material';
+import { ButtonBase, Tooltip, Typography } from '@mui/material';
 import { ResultHistoryTableFailedItem } from 'results/ResultHistory/ResultHistoryTable/ResultHistoryTableFailedItem';
 import { Ping } from 'shared/components/Ping/Ping';
 
 import { formatNumber } from 'shared/util/numberFormat';
 import { getDurationColorClass } from 'shared/util/getDurationColorClass';
+import { useState } from 'react';
 
 export const ResultHistoryTable = ({
   results,
-  iterations
+  iterations,
+  maximumResults
 }: {
   iterations: string;
   results: Array<ClobbrUIResult>;
+  maximumResults: number;
 }) => {
+  const [numberOfResultsToShow, setNumberOfResultsToShow] =
+    useState(maximumResults);
+
+  const resultsToShow = results.slice(0, numberOfResultsToShow);
+  const someResultsNotShown = results.length > resultsToShow.length;
+
+  const showMoreResults = () => {
+    setNumberOfResultsToShow(numberOfResultsToShow + 10);
+  };
+
   return (
     <div>
       <Typography>
         {iterations} {iterations === '1' ? 'iteration' : 'iterations'}
       </Typography>
 
-      <div className="overflow-auto bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-md">
-        {results.map((result, index) => (
+      <div
+        className={clsx(
+          'overflow-auto bg-gray-100 dark:bg-gray-800 px-3 py-1',
+          someResultsNotShown ? 'rounded-t-md' : 'rounded-md'
+        )}
+      >
+        {resultsToShow.map((result, index) => (
           <div className="flex gap-2 relative" key={result.id}>
             {index === 0 && results.length > 1 ? (
               <Tooltip title="Latest result">
@@ -102,6 +120,19 @@ export const ResultHistoryTable = ({
           </div>
         ))}
       </div>
+
+      {someResultsNotShown ? (
+        <div className="w-full bg-white/20 dark:bg-black/20 hover:bg-gray-200/40 hover:dark:bg-black/40 transition-all flex justify-center rounded-b-md">
+          <ButtonBase
+            onClick={showMoreResults}
+            className="text-xs w-full !p-1.5"
+          >
+            Show more
+          </ButtonBase>
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

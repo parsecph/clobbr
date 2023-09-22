@@ -36,18 +36,20 @@ export const ResultHistoryTableFailedItem = ({
           variant="caption"
           className="uppercase flex items-center gap-0.5 w-full"
         >
-          {!state.error && !state.value ? (
-            <small>
-              <span className="opacity-50">Fail</span>
-              <span className="text-red-500">
-                {statusCode ? ` ${statusCode}` : ''}
-              </span>
-            </small>
-          ) : (
-            ''
-          )}
-          {state.error ? 'Error' : ''}
-          {state.value ? 'Copied' : ''}
+          <small>
+            {!state.error && !state.value ? (
+              <>
+                <span className="opacity-50">Fail</span>{' '}
+                <span className="opacity-50 border-b border-red-500">
+                  {statusCode ? ` ${statusCode}` : ''}
+                </span>
+              </>
+            ) : (
+              ''
+            )}
+            {state.error ? 'Error' : ''}
+            {state.value ? 'Copied' : ''}
+          </small>
         </Typography>
       </Tooltip>
     </ButtonBase>
