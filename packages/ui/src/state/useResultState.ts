@@ -105,7 +105,13 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
       resultDurations,
       logs: logsWithoutMetaResponseData,
       parallel,
-      iterations
+      iterations,
+      headers,
+      headerInputMode,
+      headerShellCmd,
+      headerNodeScriptData,
+      data,
+      timeout
     };
 
     const determineExistingItem = (i: ClobbrUIResultListItem) => {

@@ -30,7 +30,7 @@ export const ResultHistoryToggle = ({
   className?: string;
 }) => {
   const [showHistory, setShowHistory] = useState(false);
-  const [historyMode, setHistoryMode] = useState(HISTORY_MODES.SUMMARY);
+  const [historyMode, setHistoryMode] = useState(HISTORY_MODES.CHRONOLOGICAL);
 
   const updateHistoryMode = (newHistoryMode: EResultHistoryMode) => {
     if (newHistoryMode) {
@@ -142,10 +142,17 @@ export const ResultHistoryToggle = ({
                   size="small"
                 >
                   <ToggleButton
+                    value={HISTORY_MODES.CHRONOLOGICAL}
+                    sx={{ textTransform: 'none', padding: '0.25rem 1rem' }}
+                  >
+                    Chronological
+                  </ToggleButton>
+
+                  <ToggleButton
                     value={HISTORY_MODES.SUMMARY}
                     sx={{ textTransform: 'none', padding: '0.25rem 1rem' }}
                   >
-                    Summary
+                    Stats
                   </ToggleButton>
 
                   <ToggleButton

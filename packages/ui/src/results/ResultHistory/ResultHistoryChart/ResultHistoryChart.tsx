@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import clsx from 'clsx';
 import { format } from 'date-fns';
 
@@ -6,7 +7,6 @@ import { Ping } from 'shared/components/Ping/Ping';
 import { GenericChart } from './GenericChart';
 
 import { ClobbrUIResult } from 'models/ClobbrUIResult';
-import { useState } from 'react';
 
 export const ResultHistoryChart = ({
   results,

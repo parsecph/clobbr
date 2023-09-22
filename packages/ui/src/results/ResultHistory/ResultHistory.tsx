@@ -7,6 +7,7 @@ import { Typography } from '@mui/material';
 import { ResultHistoryTable } from './ResultHistoryTable/ResultHistoryTable';
 import { ResultHistoryStats } from './ResultHistoryStats/ResultHistoryStats';
 import { ResultHistoryChart } from './ResultHistoryChart/ResultHistoryChart';
+import { ResultHistoryChronological } from './ResultHistoryChronological/ResultHistoryChronological';
 
 import {
   EResultHistoryMode,
@@ -61,11 +62,21 @@ export const ResultHistory = ({
     <GlobalStore.Consumer>
       {({ search }) => (
         <div className="flex flex-col gap-12">
+          {mode === HISTORY_MODES.CHRONOLOGICAL ? (
+            <ResultHistoryChronological maximumResults={20} results={results} />
+          ) : (
+            <></>
+          )}
+
           {Object.keys(parallelResultsByIterations).length ? (
             <div>
-              <Typography variant="h6" className="pb-4">
-                Parallel results
-              </Typography>
+              {mode !== HISTORY_MODES.CHRONOLOGICAL ? (
+                <Typography variant="h6" className="pb-4">
+                  Parallel results
+                </Typography>
+              ) : (
+                <></>
+              )}
 
               <ul className="flex flex-col gap-4">
                 {Object.keys(parallelResultsByIterations).map((key) => (
@@ -109,9 +120,13 @@ export const ResultHistory = ({
 
           {Object.keys(sequentialResultsByIterations).length ? (
             <ul>
-              <Typography variant="h6" className="pb-4">
-                Sequence results
-              </Typography>
+              {mode !== HISTORY_MODES.CHRONOLOGICAL ? (
+                <Typography variant="h6" className="pb-4">
+                  Sequence results
+                </Typography>
+              ) : (
+                <></>
+              )}
 
               <div className="flex flex-col gap-4">
                 {Object.keys(sequentialResultsByIterations).map((key) => (

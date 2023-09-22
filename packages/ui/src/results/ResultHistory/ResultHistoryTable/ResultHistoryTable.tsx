@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import clsx from 'clsx';
 import { format } from 'date-fns';
 
@@ -5,11 +6,8 @@ import { ClobbrUIResult } from 'models/ClobbrUIResult';
 
 import { ButtonBase, Tooltip, Typography } from '@mui/material';
 import { ResultHistoryTableFailedItem } from 'results/ResultHistory/ResultHistoryTable/ResultHistoryTableFailedItem';
+import { ResultHistoryTableItem } from 'results/ResultHistory/ResultHistoryTable/ResultHistoryTableItem';
 import { Ping } from 'shared/components/Ping/Ping';
-
-import { formatNumber } from 'shared/util/numberFormat';
-import { getDurationColorClass } from 'shared/util/getDurationColorClass';
-import { useState } from 'react';
 
 export const ResultHistoryTable = ({
   results,
@@ -89,22 +87,7 @@ export const ResultHistoryTable = ({
               {result.logs.map((log) => (
                 <li key={log.metas.number} className="inline-flex items-center">
                   {log.metas.statusOk && log.metas.duration ? (
-                    <Tooltip
-                      title={`Response time in ms of request #${
-                        log.metas.index + 1
-                      }`}
-                    >
-                      <Typography
-                        variant="caption"
-                        className={clsx(
-                          getDurationColorClass(log.metas.duration),
-                          '!font-semibold',
-                          'tabular-nums'
-                        )}
-                      >
-                        {formatNumber(log.metas.duration, 0, 0)}
-                      </Typography>
-                    </Tooltip>
+                    <ResultHistoryTableItem log={log} />
                   ) : (
                     <></>
                   )}

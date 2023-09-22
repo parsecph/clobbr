@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import clsx from 'clsx';
 import { format } from 'date-fns';
 
@@ -9,7 +10,6 @@ import { Ping } from 'shared/components/Ping/Ping';
 import { getResultStats } from 'results/ResultStats/ResultStats';
 import { formatNumber } from 'shared/util/numberFormat';
 import { RESULT_STAT_TYPES } from 'shared/util/getLogStats';
-import { useState } from 'react';
 
 export const ResultHistoryStats = ({
   results,
