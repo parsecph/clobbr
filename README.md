@@ -5,6 +5,10 @@
 </p>
 
 <div align="center">
+  <a href="https://go.setapp.com/stp379?refAppID=593&utm_medium=vendor_program" target="_blank">
+    <img height="40px" src="https://user-images.githubusercontent.com/1515742/272677025-8751337a-b18a-4429-8b8b-7333e647e561.svg" alt="Get Clobbr Free on Setapp" />
+  </a>
+  
   <a href="https://apps.apple.com/us/app/clobbr-test-endpoint-speed/id1629096010?mt=12" target="_blank">
     <img height="40px" src="https://user-images.githubusercontent.com/1515742/189620547-646b3682-708a-4378-9e40-b6ca8e67a077.svg" alt="Download Clobbr on the Apple App Store" />
   </a>
@@ -14,7 +18,7 @@
   </a>
 
   <a href="https://www.npmjs.com/package/@clobbr/cli" target="_blank">
-    <img height="40px" src="https://user-images.githubusercontent.com/1515742/189622786-30f2b136-1877-48a6-817d-49c9d0a97367.svg" alt="Download Clobbr on the Microsoft Store" />
+    <img height="40px" src="https://user-images.githubusercontent.com/1515742/189622786-30f2b136-1877-48a6-817d-49c9d0a97367.svg" alt="Get Clobbr on npm" />
   </a>
 </div>
 
