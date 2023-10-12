@@ -16,6 +16,7 @@
 		"@emotion/react": "^11.9.0",
 		"@emotion/styled": "^11.8.1",
 		"@headlessui/react": "^1.6.4",
+		"@koale/useworker": "^4.0.2",
 		"@mui/icons-material": "^5.8.3",
 		"@mui/material": "^5.8.3",
 		"@react-three/drei": "^9.4.2",

@@ -1,13 +1,15 @@
 import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
-import { isString } from 'lodash-es';
+import { useWorker } from '@koale/useworker';
+import { useEffect, useState } from 'react';
 
-export const useCommonlyFailedMessage = ({
-  logs
-}: {
-  logs: Array<ClobbrLogItem>;
-}) => {
+const findMessage = (logs: Array<ClobbrLogItem>) => {
+  const isString = (value: unknown): value is string => {
+    return typeof value === 'string';
+  };
+
   const firstError = logs
     .filter(({ failed }) => failed)
+    .slice(0, 100)
     .sort((a, b) => {
       const aMessage = isString(a.error) ? a.error : a.error?.message;
       const bMessage = isString(b.error) ? b.error : b.error?.message;
@@ -24,12 +26,33 @@ export const useCommonlyFailedMessage = ({
     .pop();
 
   if (!firstError) {
-    return { message: '' };
+    return '';
   }
 
+  return isString(firstError.error)
+    ? firstError.error
+    : firstError.error?.message;
+};
+
+export const useCommonlyFailedMessage = ({
+  logs
+}: {
+  logs: Array<ClobbrLogItem>;
+}) => {
+  const [findMessageWorker] = useWorker(findMessage);
+
+  const [message, setMessage] = useState<string>('');
+
+  useEffect(() => {
+    const awaitMessage = async () => {
+      const result = await findMessageWorker(logs);
+      setMessage(result || '');
+    };
+
+    awaitMessage();
+  }, [logs, findMessageWorker]);
+
   return {
-    message: isString(firstError.error)
-      ? firstError.error
-      : firstError.error?.message
+    message
   };
 };
