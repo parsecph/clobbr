@@ -9,7 +9,6 @@ export const CrontapAppLogo = ({ color, width, height, className }) => {
       style={{ color }}
       className={className}
     >
-      <title>Crontap logo</title>
       <g clipPath="url(#clip0_1_205)">
         <g filter="url(#filter0_d_1_205)">
           <path
