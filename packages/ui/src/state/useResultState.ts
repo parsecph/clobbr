@@ -195,7 +195,7 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
   }) => {
     const currentList = listRef.current;
     const logsWithoutMetaResponseData = logs.map((log) => {
-      delete log.metas.data;
+      // delete log.metas.data; // might want to make deleting data an option this could blow up in some cases.
       return log;
     });
 

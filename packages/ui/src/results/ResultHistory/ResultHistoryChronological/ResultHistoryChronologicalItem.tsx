@@ -14,6 +14,7 @@ import { formatNumber } from 'shared/util/numberFormat';
 import { ResultHistoryTableItem } from 'results/ResultHistory/ResultHistoryTable/ResultHistoryTableItem';
 import { ResultHistoryTableFailedItem } from 'results/ResultHistory/ResultHistoryTable/ResultHistoryTableFailedItem';
 import { HEADER_MODES } from 'search/SearchSettings/HeaderSettings/HeaderSettings';
+import { ResultHistoryTableLogList } from 'results/ResultHistory/ResultHistoryTable/ResultHistoryTableLogList';
 
 export const ResultHistoryChronologicalItem = ({
   result,
@@ -205,31 +206,11 @@ export const ResultHistoryChronologicalItem = ({
               >
                 Responses
               </Typography>
-              <ul
-                className="grid gap-3 p-2"
-                style={{
-                  gridTemplateColumns: `repeat(${result.iterations}, 52px)`
-                }}
-              >
-                {result.logs.map((log) => (
-                  <li
-                    key={log.metas.number}
-                    className="inline-flex items-center"
-                  >
-                    {log.metas.statusOk && log.metas.duration ? (
-                      <ResultHistoryTableItem log={log} />
-                    ) : (
-                      <></>
-                    )}
 
-                    {!log.metas.statusOk ? (
-                      <ResultHistoryTableFailedItem log={log} />
-                    ) : (
-                      <></>
-                    )}
-                  </li>
-                ))}
-              </ul>
+              <ResultHistoryTableLogList
+                iterations={result.iterations}
+                logs={result.logs}
+              />
             </div>
 
             <div className="bg-gray-800 border-4 border-solid border-black/5 rounded-md overflow-auto">

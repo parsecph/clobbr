@@ -3,10 +3,10 @@ import clsx from 'clsx';
 import { format } from 'date-fns';
 
 import { ClobbrUIResult } from 'models/ClobbrUIResult';
+import { ResultHistoryTableLogList } from 'results/ResultHistory/ResultHistoryTable/ResultHistoryTableLogList';
 
 import { ButtonBase, Tooltip, Typography } from '@mui/material';
-import { ResultHistoryTableFailedItem } from 'results/ResultHistory/ResultHistoryTable/ResultHistoryTableFailedItem';
-import { ResultHistoryTableItem } from 'results/ResultHistory/ResultHistoryTable/ResultHistoryTableItem';
+
 import { Ping } from 'shared/components/Ping/Ping';
 
 export const ResultHistoryTable = ({
@@ -78,28 +78,10 @@ export const ResultHistoryTable = ({
               </Typography>
             )}
 
-            <ul
-              className="grid gap-3"
-              style={{
-                gridTemplateColumns: `repeat(${iterations}, 52px)`
-              }}
-            >
-              {result.logs.map((log) => (
-                <li key={log.metas.number} className="inline-flex items-center">
-                  {log.metas.statusOk && log.metas.duration ? (
-                    <ResultHistoryTableItem log={log} />
-                  ) : (
-                    <></>
-                  )}
-
-                  {!log.metas.statusOk ? (
-                    <ResultHistoryTableFailedItem log={log} />
-                  ) : (
-                    <></>
-                  )}
-                </li>
-              ))}
-            </ul>
+            <ResultHistoryTableLogList
+              iterations={result.iterations}
+              logs={result.logs}
+            />
           </div>
         ))}
       </div>

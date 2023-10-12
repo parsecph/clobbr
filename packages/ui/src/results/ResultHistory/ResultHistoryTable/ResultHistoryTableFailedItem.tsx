@@ -1,7 +1,7 @@
 import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
 import { ButtonBase, Tooltip, Typography } from '@mui/material';
 import { isString } from 'lodash-es';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
 
 export const ResultHistoryTableFailedItem = ({
@@ -10,10 +10,18 @@ export const ResultHistoryTableFailedItem = ({
   log: ClobbrLogItem;
 }) => {
   const [state, copyToClipboard] = useCopyToClipboard();
+  const [copied, setCopied] = useState(false);
 
   const copyLogToClipboard = () => {
     copyToClipboard(JSON.stringify(log, null, 2));
+    setCopied(true);
+
+    setTimeout(() => {
+      setCopied(false);
+    }, 5000);
   };
+
+  const showCopiedText = state.value && copied;
 
   const errorMessage = useCallback(() => {
     const message = isString(log.error) ? log.error : log.error?.message;
@@ -37,7 +45,7 @@ export const ResultHistoryTableFailedItem = ({
           className="uppercase flex items-center gap-0.5 w-full"
         >
           <small>
-            {!state.error && !state.value ? (
+            {!state.error && !showCopiedText ? (
               <>
                 <span className="opacity-50">Fail</span>{' '}
                 <span className="opacity-50 border-b border-red-500">
@@ -47,8 +55,12 @@ export const ResultHistoryTableFailedItem = ({
             ) : (
               ''
             )}
-            {state.error ? 'Error' : ''}
-            {state.value ? 'Copied' : ''}
+            {state.error ? (
+              <span className="uppercase text-red-500">Error</span>
+            ) : (
+              ''
+            )}
+            {showCopiedText ? 'Copied' : ''}
           </small>
         </Typography>
       </Tooltip>
