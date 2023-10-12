@@ -9,7 +9,6 @@ export const ClobbrAppLogo = ({ color, width, height, className }) => {
       style={{ color }}
       className={className}
     >
-      <title>Clobbr logo</title>
       <g clipPath="url(#clip0_1_195)">
         <g filter="url(#filter0_d_1_195)">
           <path
