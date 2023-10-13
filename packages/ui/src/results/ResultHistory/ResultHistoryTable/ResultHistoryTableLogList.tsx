@@ -21,8 +21,6 @@ export const ResultHistoryTableLogList = ({
     setNumberOfResultsToShow(numberOfResultsToShow + 100);
   };
 
-  console.log('logs', resultsToShow.length, logs.length, someResultsNotShown);
-
   return (
     <ul
       className="grid gap-3"
