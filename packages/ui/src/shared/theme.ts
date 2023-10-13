@@ -140,6 +140,24 @@ export const getTheme = (mode: string = 'dark') => {
           }
         }
       },
+      MuiToggleButton: {
+        variants: [
+          {
+            props: {}, // match any props combination
+            style: ({ theme }: any) => {
+              if (theme.palette.mode === 'light') {
+                return {
+                  '&.Mui-selected': {
+                    color: 'black'
+                  }
+                };
+              }
+
+              return {};
+            }
+          }
+        ]
+      },
       MuiIconButton: {
         styleOverrides: {
           root: {

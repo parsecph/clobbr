@@ -101,9 +101,9 @@ export const ResultHistoryChronologicalItem = ({
             className="flex flex-shrink-0 items-center relative  justify-center w-6 h-6 p-1"
             aria-label={result.parallel ? 'Sequence icon' : 'Parallel icon'}
           >
-            <span className="absolute -left-1 -top-1 w-8 h-8 rounded-full bg-white dark:bg-gray-900"></span>
+            <span className="absolute -left-1 -top-1 w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-900"></span>
 
-            <span className="absolute w-full h-full rounded-full bg-gray-200/50 dark:bg-gray-800/50"></span>
+            <span className="absolute w-full h-full rounded-full bg-gray-200/50 darkbg-gray-200 :dark:bg-gray-800/50"></span>
 
             <span className={'relative z-10 text-black dark:text-gray-300'}>
               {result.parallel ? (
@@ -119,7 +119,9 @@ export const ResultHistoryChronologicalItem = ({
           variant="body2"
           className="text-gray-500 flex items-center gap-1"
         >
-          <span className="text-white">{result.iterations}</span>
+          <span className="text-black dark:text-white">
+            {result.iterations}
+          </span>
           {result.iterations === 1 ? 'iteration' : 'iterations'}{' '}
           {result.parallel ? 'in parallel' : 'in sequence'}{' '}
           <span>
@@ -189,7 +191,7 @@ export const ResultHistoryChronologicalItem = ({
             }}
             className="ml-6 flex flex-col gap-1"
           >
-            <div className="bg-gray-800 border-4 border-solid border-black/5 rounded-md overflow-auto">
+            <div className="bg-gray-200 dark:bg-gray-800 border-4 border-solid dark:border-black/5 rounded-md overflow-auto">
               <Typography
                 variant="caption"
                 className="sticky left-0 flex w-full p-2 border-b border-solid border-gray-500/10"
@@ -199,7 +201,7 @@ export const ResultHistoryChronologicalItem = ({
               <ResultStats result={result} />
             </div>
 
-            <div className="bg-gray-800 border-4 border-solid border-black/5 rounded-md overflow-auto">
+            <div className="bg-gray-200 dark:bg-gray-800 border-4 border-solid dark:border-black/5 rounded-md overflow-auto">
               <Typography
                 variant="caption"
                 className="sticky left-0 flex w-full p-2 border-b border-solid border-gray-500/10"
@@ -213,7 +215,7 @@ export const ResultHistoryChronologicalItem = ({
               />
             </div>
 
-            <div className="bg-gray-800 border-4 border-solid border-black/5 rounded-md overflow-auto">
+            <div className="bg-gray-200 dark:bg-gray-800 border-4 border-solid dark:border-black/5 rounded-md overflow-auto">
               <Typography
                 variant="caption"
                 className="sticky left-0 flex w-full p-2 border-b border-solid border-gray-500/10"
