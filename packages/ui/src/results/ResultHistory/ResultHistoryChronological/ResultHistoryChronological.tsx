@@ -7,7 +7,7 @@ import { ButtonBase } from '@mui/material';
 
 import { getResultStats } from 'results/ResultStats/ResultStats';
 import { orderBy } from 'lodash-es';
-import { ResultHistoryChronologicalItem } from './ResultHistoryChronologicalItem';
+import { ResultHistoryChronologicalItem } from 'results/ResultHistory/ResultHistoryChronological/ResultHistoryChronologicalItem';
 
 export const ResultHistoryChronological = ({
   results,
@@ -55,7 +55,7 @@ export const ResultHistoryChronological = ({
       </div>
 
       {someResultsNotShown ? (
-        <div className="w-full bg-white/20 dark:bg-black/20 hover:bg-gray-200/40 hover:dark:bg-black/40 transition-all flex justify-center rounded-md">
+        <div className="w-full bg-white/20 dark:bg-black/20 hover:bg-gray-200/40 hover:dark:bg-black/40 transition-all flex justify-center rounded-md overflow-hidden">
           <ButtonBase
             onClick={showMoreResults}
             className="text-xs w-full !p-1.5"

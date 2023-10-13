@@ -87,7 +87,7 @@ export const ResultHistoryTable = ({
       </div>
 
       {someResultsNotShown ? (
-        <div className="w-full bg-white/20 dark:bg-black/20 hover:bg-gray-200/40 hover:dark:bg-black/40 transition-all flex justify-center rounded-b-md">
+        <div className="w-full bg-white/20 dark:bg-black/20 hover:bg-gray-200/40 hover:dark:bg-black/40 transition-all flex justify-center rounded-b-md overflow-hidden">
           <ButtonBase
             onClick={showMoreResults}
             className="text-xs w-full !p-1.5"

@@ -12,13 +12,13 @@ export const ResultHistoryTableLogList = ({
   iterations: number;
   logs: Array<ClobbrLogItem>;
 }) => {
-  const [numberOfResultsToShow, setNumberOfResultsToShow] = useState(100);
+  const [numberOfLogsToShow, setNumberOfLogsToShow] = useState(100);
 
-  const resultsToShow = logs.slice(0, numberOfResultsToShow);
+  const resultsToShow = logs.slice(0, numberOfLogsToShow);
   const someResultsNotShown = logs.length > resultsToShow.length;
 
   const showMoreResults = () => {
-    setNumberOfResultsToShow(numberOfResultsToShow + 100);
+    setNumberOfLogsToShow(numberOfLogsToShow + 100);
   };
 
   return (

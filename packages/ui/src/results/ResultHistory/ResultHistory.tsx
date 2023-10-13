@@ -8,6 +8,7 @@ import { ResultHistoryTable } from './ResultHistoryTable/ResultHistoryTable';
 import { ResultHistoryStats } from './ResultHistoryStats/ResultHistoryStats';
 import { ResultHistoryChart } from './ResultHistoryChart/ResultHistoryChart';
 import { ResultHistoryChronological } from './ResultHistoryChronological/ResultHistoryChronological';
+import { ResultHistoryResponseList } from './ResultHistoryResponses/ResultHistoryResponseList';
 
 import {
   EResultHistoryMode,
@@ -58,6 +59,9 @@ export const ResultHistory = ({
       return acc;
     }, {});
 
+  const splitParallelAndSequence =
+    mode !== HISTORY_MODES.CHRONOLOGICAL && mode !== HISTORY_MODES.RESPONSES;
+
   return (
     <GlobalStore.Consumer>
       {({ search }) => (
@@ -68,7 +72,13 @@ export const ResultHistory = ({
             <></>
           )}
 
-          {mode !== HISTORY_MODES.CHRONOLOGICAL &&
+          {mode === HISTORY_MODES.RESPONSES ? (
+            <ResultHistoryResponseList maximumResults={20} results={results} />
+          ) : (
+            <></>
+          )}
+
+          {splitParallelAndSequence &&
           Object.keys(parallelResultsByIterations).length ? (
             <div>
               <Typography variant="h6" className="pb-4">
@@ -115,7 +125,7 @@ export const ResultHistory = ({
             <></>
           )}
 
-          {mode !== HISTORY_MODES.CHRONOLOGICAL &&
+          {splitParallelAndSequence &&
           Object.keys(sequentialResultsByIterations).length ? (
             <ul>
               <Typography variant="h6" className="pb-4">
