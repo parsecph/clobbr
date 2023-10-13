@@ -15,7 +15,7 @@ import {
 
 import { MONACO_OPTIONS } from 'shared/monaco/options';
 import { isString } from 'lodash-es';
-import { Button, Typography } from '@mui/material';
+import { Button } from '@mui/material';
 
 declare type IMonacoEditor = typeof monaco;
 

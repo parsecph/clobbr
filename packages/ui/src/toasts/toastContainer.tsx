@@ -1,4 +1,4 @@
-import { ToastType, useToastStore } from 'toasts/state/toastStore';
+import { ToastType } from 'toasts/state/toastStore';
 import { AnimatePresence } from 'framer-motion';
 import { Toast } from './toast';
 

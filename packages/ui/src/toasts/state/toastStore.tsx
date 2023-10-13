@@ -1,16 +1,16 @@
-import create from "zustand";
-import { devtools, persist } from "zustand/middleware";
-import { v4 as uuidv4 } from "uuid";
+import create from 'zustand';
+import { devtools } from 'zustand/middleware';
+import { v4 as uuidv4 } from 'uuid';
 
 export type ToastType = {
   id?: string;
   message: string;
-  type?: "success" | "error" | "info" | "warning";
+  type?: 'success' | 'error' | 'info' | 'warning';
   dismissible?: boolean;
   autoHideDuration?: number;
   anchorOrigin?: {
-    vertical: "top" | "bottom" | string;
-    horizontal: "left" | "center" | "right" | string;
+    vertical: 'top' | 'bottom' | string;
+    horizontal: 'left' | 'center' | 'right' | string;
   };
 };
 
@@ -32,13 +32,13 @@ export const useToastStore = create<ToastState>()(
         const toast = {
           id,
           message: newToast.message,
-          type: newToast.type || "success",
+          type: newToast.type || 'success',
           dismissible: newToast.dismissible || true,
           autoHideDuration,
           anchorOrigin: {
-            vertical: newToast.anchorOrigin?.vertical || "top",
-            horizontal: newToast.anchorOrigin?.horizontal || "center",
-          },
+            vertical: newToast.anchorOrigin?.vertical || 'top',
+            horizontal: newToast.anchorOrigin?.horizontal || 'center'
+          }
         };
 
         set((state) => {
@@ -48,7 +48,7 @@ export const useToastStore = create<ToastState>()(
         setTimeout(() => {
           set((state) => {
             return {
-              toasts: state.toasts.filter((toast) => toast.id !== id),
+              toasts: state.toasts.filter((toast) => toast.id !== id)
             };
           });
         }, autoHideDuration);
@@ -57,13 +57,13 @@ export const useToastStore = create<ToastState>()(
       removeToast: (id) => {
         set((state) => {
           return {
-            toasts: state.toasts.filter((toast) => toast.id !== id),
+            toasts: state.toasts.filter((toast) => toast.id !== id)
           };
         });
-      },
+      }
     }),
     {
-      name: "toast-storage",
+      name: 'toast-storage'
     }
   )
 );

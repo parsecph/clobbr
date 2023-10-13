@@ -155,7 +155,7 @@ export const GenericChart = ({
     };
 
     setChartData(chartData);
-  }, [data]);
+  }, [data, gradientColorMap, gradientBgColorMap]);
 
   return (
     <Chart
