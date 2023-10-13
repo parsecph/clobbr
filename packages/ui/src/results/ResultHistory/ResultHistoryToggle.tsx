@@ -52,6 +52,12 @@ export const ResultHistoryToggle = ({
 
   const results = [item.latestResult, ...item.historicalResults];
 
+  const toggleButtonStyle = {
+    textTransform: 'none',
+    padding: '0.25rem 1rem',
+    flexShrink: 0
+  };
+
   return (
     <GlobalStore.Consumer>
       {({ themeMode }) => (
@@ -129,7 +135,7 @@ export const ResultHistoryToggle = ({
 
               <Typography
                 variant="overline"
-                className="opacity-50 flex gap-2 justify-between m-0"
+                className="opacity-50 flex gap-2 justify-between m-0 w-full overflow-hidden"
               >
                 <ToggleButtonGroup
                   color={themeMode === 'dark' ? 'primary' : 'secondary'}
@@ -140,33 +146,41 @@ export const ResultHistoryToggle = ({
                     newMode: EResultHistoryMode
                   ) => updateHistoryMode(newMode)}
                   size="small"
+                  className="overflow-x-auto"
                 >
                   <ToggleButton
                     value={HISTORY_MODES.CHRONOLOGICAL}
-                    sx={{ textTransform: 'none', padding: '0.25rem 1rem' }}
+                    sx={toggleButtonStyle}
                   >
                     Chronological
                   </ToggleButton>
 
                   <ToggleButton
                     value={HISTORY_MODES.SUMMARY}
-                    sx={{ textTransform: 'none', padding: '0.25rem 1rem' }}
+                    sx={toggleButtonStyle}
                   >
                     Key metrics
                   </ToggleButton>
 
                   <ToggleButton
                     value={HISTORY_MODES.CHART}
-                    sx={{ textTransform: 'none', padding: '0.25rem 1rem' }}
+                    sx={toggleButtonStyle}
                   >
                     Charts
                   </ToggleButton>
 
                   <ToggleButton
                     value={HISTORY_MODES.TABLE}
-                    sx={{ textTransform: 'none', padding: '0.25rem 1rem' }}
+                    sx={toggleButtonStyle}
                   >
                     Response times
+                  </ToggleButton>
+
+                  <ToggleButton
+                    value={HISTORY_MODES.RESPONSES}
+                    sx={toggleButtonStyle}
+                  >
+                    Responses
                   </ToggleButton>
                 </ToggleButtonGroup>
               </Typography>
