@@ -86,6 +86,8 @@ const App = () => {
       return;
     }
 
+    // NB: this could be optimized to not store all history items with each write.
+    // Might be a issue as data piles up.
     const resultDb = getDb(EDbStores.RESULT_STORE_NAME);
     resultDb.setItem(SK.RESULT.LIST, state.results.list);
   }, [resultStorageLoaded, state.results.list]);
