@@ -60,7 +60,24 @@ export const ResultHistoryResponseViewer = ({
   const showCopiedText = state.value && copied;
 
   const copyLogToClipboard = () => {
-    copyToClipboard(JSON.stringify(log, null, 2));
+    let response;
+
+    try {
+      response = JSON.parse(formattedResponse);
+    } catch (e) {
+      response = formattedResponse;
+    }
+
+    copyToClipboard(
+      JSON.stringify(
+        {
+          ...log,
+          response
+        },
+        null,
+        2
+      )
+    );
     setCopied(true);
 
     setTimeout(() => {
