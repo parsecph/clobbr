@@ -58,9 +58,13 @@ export const Settings = ({ dismissModal }: { dismissModal: () => void }) => {
     };
 
   const clearLocalData = async () => {
-    globalStore.results.setList([]);
-    const resultDb = getDb(EDbStores.MAIN_STORE_NAME);
+    const resultDb = getDb(EDbStores.RESULT_STORE_NAME);
     await resultDb.clear();
+
+    const resultLogDb = getDb(EDbStores.RESULT_LOGS_STORE_NAME);
+    await resultLogDb.clear();
+
+    globalStore.results.setList([]);
 
     setDatabaseCleared(true);
     setConfirmedClearing(false);
