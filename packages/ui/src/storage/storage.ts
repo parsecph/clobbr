@@ -23,6 +23,12 @@ const resultDb = localforage.createInstance({
   description: 'Holds result data'
 });
 
+const resultResponseDb = localforage.createInstance({
+  name: DB_NAME,
+  storeName: EDbStores.RESULT_LOGS_STORE_NAME,
+  description: 'Holds result response data'
+});
+
 export const getDb = (type: EDbStores) => {
   const _getDb = () => {
     switch (type) {
@@ -30,6 +36,8 @@ export const getDb = (type: EDbStores) => {
         return mainDb;
       case EDbStores.RESULT_STORE_NAME:
         return resultDb;
+      case EDbStores.RESULT_LOGS_STORE_NAME:
+        return resultResponseDb;
       default:
         return mainDb;
     }

@@ -24,7 +24,7 @@ export interface ClobbrLogItemMeta {
   duration?: number;
   durationUnit?: string;
   size?: string;
-  data?: { [key: string]: string };
+  data?: { [key: string]: string } | string;
 }
 
 export interface ClobbrLogItemFailedMessage {

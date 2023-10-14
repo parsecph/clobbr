@@ -8,6 +8,7 @@ import { getDurationColorClass } from 'shared/util/getDurationColorClass';
 
 import { ClobbrUIResult } from 'models/ClobbrUIResult';
 import { ResultHistoryResponseViewer } from 'results/ResultHistory/ResultHistoryResponses/ResultHistoryResponseViewer';
+import { getResultLogsKey } from 'shared/util/getResultLogsKey';
 
 export const ResultHistoryResponse = ({
   className,
@@ -31,6 +32,9 @@ export const ResultHistoryResponse = ({
   };
 
   const openLog = isNumber(openLogIndex) ? result.logs[openLogIndex] : null;
+  const logKey = getResultLogsKey({
+    cachedId: result.cachedId
+  });
 
   return (
     <div className={clsx('flex', className)}>
@@ -97,7 +101,7 @@ export const ResultHistoryResponse = ({
       </ul>
 
       {openLog ? (
-        <ResultHistoryResponseViewer log={openLog} />
+        <ResultHistoryResponseViewer log={openLog} logKey={logKey} />
       ) : (
         <Typography variant="caption" className="text-center p-6">
           Select an item to view the response.

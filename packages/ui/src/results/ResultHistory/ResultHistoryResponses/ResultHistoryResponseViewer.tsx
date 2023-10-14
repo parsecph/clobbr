@@ -4,6 +4,7 @@ import MonacoEditor from '@uiw/react-monacoeditor';
 import * as monaco from 'monaco-editor';
 import { GlobalStore } from 'app/globalContext';
 import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
+import { ClobbrUICachedLog } from 'models/ClobbrUICachedLog';
 import { useCopyToClipboard } from 'react-use';
 
 import {
@@ -16,6 +17,9 @@ import {
 import { MONACO_OPTIONS } from 'shared/monaco/options';
 import { isString } from 'lodash-es';
 import { Button } from '@mui/material';
+import { getDb } from 'storage/storage';
+import { EDbStores } from 'storage/EDbStores';
+import { SK } from 'storage/storageKeys';
 
 declare type IMonacoEditor = typeof monaco;
 
@@ -40,10 +44,12 @@ const onEditorMount = (
 
 export const ResultHistoryResponseViewer = ({
   className,
-  log
+  log,
+  logKey
 }: {
   className?: string;
   log: ClobbrLogItem;
+  logKey: string;
 }) => {
   const [state, copyToClipboard] = useCopyToClipboard();
   const [copied, setCopied] = useState(false);
@@ -64,10 +70,17 @@ export const ResultHistoryResponseViewer = ({
 
   const parseResponse = useCallback(async () => {
     if (log.failed) {
-      // Failed items
-      // Try to parse as JSON
+      /* Failed items */
       try {
-        const string = JSON.stringify(log.error, null, 2);
+        // Try to parse as JSON
+        const string = JSON.stringify(
+          {
+            ...log.metas,
+            error: log.error
+          },
+          null,
+          2
+        );
         setFormattedResponse(string);
         setEditorLanguage('json');
         return;
@@ -76,23 +89,48 @@ export const ResultHistoryResponseViewer = ({
       }
 
       try {
-        setEditorLanguage('plaintext');
-        setFormattedResponse(log.error?.toString() || '');
+        // Try to parse as plaintext
+        setEditorLanguage('json');
+        setFormattedResponse(
+          JSON.stringify(
+            {
+              ...log.metas,
+              error: log.error?.toString()
+            },
+            null,
+            2
+          )
+        );
         return;
       } catch (e) {
         console.warn('Could not parse error as plaintext', e);
       }
     } else {
-      // Successful items
-      if (!log.metas.data) {
+      /* Successful items */
+      const resultDb = getDb(EDbStores.RESULT_LOGS_STORE_NAME);
+      const data = await resultDb.getItem(
+        `${SK.RESULT_RESPONSE.ITEM}-${logKey}`
+      );
+
+      // Get response data from DB.
+      if (!data) {
         setFormattedResponse('');
         return;
       }
 
-      if (isString(log.metas.data)) {
-        // Try to parse as XML
+      const cachedResponse = data.find(
+        (item: ClobbrUICachedLog) => item.index === log.metas.index
+      );
+
+      if (!cachedResponse) {
+        setFormattedResponse('');
+        return;
+      }
+
+      if (isString(cachedResponse.data)) {
         try {
-          const xmlString = await formatXml(log.metas.data);
+          // Try to parse as XML
+          const xmlString = await formatXml(cachedResponse.data);
 
           if (xmlString) {
             setFormattedResponse(xmlString);
@@ -104,9 +142,9 @@ export const ResultHistoryResponseViewer = ({
         }
       }
 
-      // Try to parse as JSON
       try {
-        const string = JSON.stringify(log.metas.data, null, 2);
+        // Try to parse as JSON
+        const string = JSON.stringify(cachedResponse.data, null, 2);
         setFormattedResponse(string);
         setEditorLanguage('json');
         return;
@@ -114,13 +152,7 @@ export const ResultHistoryResponseViewer = ({
         console.warn('Could not parse as JSON', e);
       }
     }
-  }, [
-    log.error,
-    log.failed,
-    log.metas.data,
-    setEditorLanguage,
-    setFormattedResponse
-  ]);
+  }, [log.error, log.failed, log.metas, logKey]);
 
   useEffect(() => {
     const formatResponse = async () => {

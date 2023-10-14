@@ -1,4 +1,4 @@
-import { uniq } from 'lodash-es';
+import { isPlainObject, uniq } from 'lodash-es';
 import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
@@ -6,10 +6,58 @@ import { formatISO } from 'date-fns';
 import { ClobbrUIResult } from 'models/ClobbrUIResult';
 import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
 import { Everbs } from 'shared/enums/http';
+import { getResultLogsKey } from 'shared/util/getResultLogsKey';
 import { ClobbrUIHeaderItem } from 'models/ClobbrUIHeaderItem';
 import useStateRef from 'react-usestateref';
 import { ClobbrUIProperties } from 'models/ClobbrUIProperties';
 import { useThrottle } from 'react-use';
+import { AxiosError } from 'axios';
+import { getDb } from 'storage/storage';
+import { SK } from 'storage/storageKeys';
+import { EDbStores } from 'storage/EDbStores';
+
+const unbloatLogs = (log: ClobbrLogItem) => {
+  if (log.failed && log.error && isPlainObject(log.error)) {
+    try {
+      const error = log.error as AxiosError;
+      error.config = {
+        url: error.config.url,
+        method: error.config.method,
+        headers: error.config.headers,
+        data: error.config.data
+      };
+    } catch (error) {
+      console.error('Failed to prune error object', error);
+    }
+  }
+
+  delete log.metas.data;
+  return log;
+};
+
+const writeLogResponsesToStorage = async ({
+  cachedId,
+  logs
+}: {
+  cachedId: string;
+  logs: Array<ClobbrLogItem>;
+}) => {
+  const resultDb = getDb(EDbStores.RESULT_LOGS_STORE_NAME);
+  const id = getResultLogsKey({
+    cachedId
+  });
+
+  resultDb.setItem(
+    `${SK.RESULT_RESPONSE.ITEM}-${id}`,
+    logs.map((log) => {
+      let logData = log.failed ? log.error : log.metas.data;
+      return {
+        index: log.metas.index,
+        data: logData
+      };
+    })
+  );
+};
 
 export const useResultState = ({ initialState }: { [key: string]: any }) => {
   const [editing, setEditing] = useState(false);
@@ -92,18 +140,23 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     properties: ClobbrUIProperties;
   }) => {
     const runId = uuidv4();
+    const cachedId = uuidv4();
     const currentList = listRef.current;
-    const logsWithoutMetaResponseData = logs.map((log) => {
-      delete log.metas.data;
-      return log;
+
+    writeLogResponsesToStorage({
+      cachedId,
+      logs
     });
+
+    const logsWithoutBloat = logs.map(unbloatLogs);
 
     const result: ClobbrUIResult = {
       id: runId,
+      cachedId,
       startDate: formatISO(new Date()),
       endDate: undefined,
       resultDurations,
-      logs: logsWithoutMetaResponseData,
+      logs: logsWithoutBloat,
       parallel,
       iterations,
       headers,
@@ -194,10 +247,6 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     logs: Array<ClobbrLogItem>;
   }) => {
     const currentList = listRef.current;
-    const logsWithoutMetaResponseData = logs.map((log) => {
-      // delete log.metas.data; // might want to make deleting data an option this could blow up in some cases.
-      return log;
-    });
 
     const existingListItem = currentList.find((i) => i.id === itemId);
     const isComplete = existingListItem?.iterations === logs.length;
@@ -208,7 +257,13 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
       return false;
     }
 
-    const resultDurations = logsWithoutMetaResponseData
+    writeLogResponsesToStorage({
+      cachedId: existingListItem.latestResult.cachedId,
+      logs
+    });
+
+    const logsWithoutBloat = logs.map(unbloatLogs);
+    const resultDurations = logsWithoutBloat
       .filter((l) => typeof l.metas.duration === 'number')
       .map((l) => {
         return l.metas.duration as number;
@@ -217,7 +272,7 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     const nextResult: ClobbrUIResult = {
       ...existingListItem.latestResult,
       endDate,
-      logs: logsWithoutMetaResponseData,
+      logs: logsWithoutBloat,
       resultDurations
     };
 

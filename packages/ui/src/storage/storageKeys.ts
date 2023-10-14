@@ -2,6 +2,9 @@ export const SK = {
   RESULT: {
     LIST: 'result.resultList'
   },
+  RESULT_RESPONSE: {
+    ITEM: 'result.response.item'
+  },
   PREFERENCES: {
     THEME: 'preferences.theme',
     STICKY_SEARCH: 'preferences.stickySearch',
