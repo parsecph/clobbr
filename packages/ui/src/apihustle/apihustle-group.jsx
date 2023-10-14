@@ -37,11 +37,13 @@ export const ApiHustleGroup = ({
       >
         <li
           className={clsx(
-            'flex gap-3 items-center relative',
+            'flex gap-3 items-center relative group',
             layout === 'horizontal' ? 'flex-col text-xs' : ''
           )}
         >
-          <ClobbrAppLogo className={'w-14'} />
+          <ClobbrAppLogo
+            className={'w-14 group-hover:grayscale transition-all'}
+          />
 
           <div>
             <h3>Clobbr</h3>
@@ -70,7 +72,7 @@ export const ApiHustleGroup = ({
               href="https://clobbr.app"
               target="_blank"
               rel="noopener noreferrer"
-              className="absolute inset-0 hover:backdrop-grayscale transition-all"
+              className="absolute inset-0 transition-all"
             >
               <span className="opacity-0">Visit Clobbr</span>
             </a>
@@ -79,11 +81,13 @@ export const ApiHustleGroup = ({
 
         <li
           className={clsx(
-            'flex gap-3 items-center relative',
+            'flex gap-3 items-center relative group',
             layout === 'horizontal' ? 'flex-col text-xs' : ''
           )}
         >
-          <CrontapAppLogo className={'w-14'} />
+          <CrontapAppLogo
+            className={'w-14 group-hover:grayscale transition-all'}
+          />
 
           <div>
             <h3>Crontap</h3>
@@ -112,7 +116,7 @@ export const ApiHustleGroup = ({
               href="https://crontap.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="absolute inset-0 hover:backdrop-grayscale transition-all"
+              className="absolute inset-0 transition-all"
             >
               <span className="opacity-0">Visit Crontap</span>
             </a>
@@ -121,11 +125,13 @@ export const ApiHustleGroup = ({
 
         <li
           className={clsx(
-            'flex gap-3 items-center relative',
+            'flex gap-3 items-center relative group',
             layout === 'horizontal' ? 'flex-col text-xs' : ''
           )}
         >
-          <CronToolAppLogo className={'w-14'} />
+          <CronToolAppLogo
+            className={'w-14 group-hover:grayscale transition-all'}
+          />
 
           <div>
             <h3>CronTool</h3>
@@ -154,7 +160,7 @@ export const ApiHustleGroup = ({
               href="https://tool.crontap.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="absolute inset-0 hover:backdrop-grayscale transition-all"
+              className="absolute inset-0 transition-all"
             >
               <span className="opacity-0">Visit CronTool</span>
             </a>

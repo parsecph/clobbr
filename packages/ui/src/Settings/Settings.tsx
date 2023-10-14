@@ -24,6 +24,7 @@ import {
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { a11yProps, TabPanel } from 'shared/components/TabPanel/TabPanel';
+import { useToastStore } from 'toasts/state/toastStore';
 import BugReport from '@mui/icons-material/BugReport';
 import AutoFixHigh from '@mui/icons-material/AutoFixHigh';
 import Help from '@mui/icons-material/Help';
@@ -31,7 +32,7 @@ import ThemeToggle from 'Settings/ThemeToggle/ThemeToggle';
 import StickySearchToggle from 'Settings/StickySearchToggle/StickySearchToggle';
 import TrendlineToggle from 'Settings/TrendlineToggle/TrendlineToggle';
 import BarChartToggle from 'Settings/BarChartToggle/BarChartToggle';
-import { useToastStore } from 'toasts/state/toastStore';
+import { ImportExportData } from 'Settings/ImportExportData/ImportExportData';
 
 export const Settings = ({ dismissModal }: { dismissModal: () => void }) => {
   const globalStore = useContext(GlobalStore);
@@ -213,59 +214,70 @@ export const Settings = ({ dismissModal }: { dismissModal: () => void }) => {
             <FormControl
               component="fieldset"
               variant="standard"
-              className="flex flex-col gap-2"
+              className="flex flex-col gap-12"
             >
-              <Typography variant="overline" className={'opacity-50'}>
-                Local data management
-              </Typography>
-
-              {storedDataSize.value ? (
-                <Typography variant="caption" className={'opacity-50'}>
-                  <span className="font-semibold">
-                    About {storedDataSize.value}
-                  </span>{' '}
-                  used
+              <div>
+                <Typography variant="overline" className={'opacity-50'}>
+                  Import or export data
                 </Typography>
-              ) : (
-                <></>
-              )}
+                <ImportExportData />
+              </div>
 
               <div>
-                {confirmedClearing ? (
-                  <div className="flex flex-col gap-2">
-                    <Typography
-                      variant="caption"
-                      className="inline-block w-full"
-                    >
-                      Are you sure? There is no going back.
-                    </Typography>
+                <Typography variant="overline" className={'opacity-50'}>
+                  Local data management
+                </Typography>
 
-                    <div className="flex gap-2">
-                      <Button onClick={clearLocalData} color="error">
-                        Clear data
-                      </Button>
+                {storedDataSize.value ? (
+                  <Typography variant="caption" className={'opacity-50'}>
+                    <span className="font-semibold">
+                      About {storedDataSize.value}
+                    </span>{' '}
+                    used
+                  </Typography>
+                ) : (
+                  <></>
+                )}
 
+                <div className="flex flex-col gap-2">
+                  {confirmedClearing ? (
+                    <div className="flex flex-col gap-2">
+                      <Typography
+                        variant="caption"
+                        className="inline-block w-full"
+                      >
+                        Are you sure? There is no going back.
+                      </Typography>
+
+                      <div className="flex gap-2">
+                        <Button onClick={clearLocalData} color="error">
+                          Clear data
+                        </Button>
+
+                        <Button
+                          onClick={() => setConfirmedClearing(false)}
+                          color="secondary"
+                          variant="text"
+                          disabled={databaseCleared}
+                        >
+                          <span className="text-gray-900 dark:text-gray-100">
+                            Cancel
+                          </span>
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
                       <Button
-                        onClick={() => setConfirmedClearing(false)}
-                        color="secondary"
-                        variant="text"
+                        onClick={() => setConfirmedClearing(true)}
+                        color="error"
                         disabled={databaseCleared}
                       >
-                        <span className="text-gray-900 dark:text-gray-100">
-                          Cancel
-                        </span>
+                        Clear result data
                       </Button>
                     </div>
-                  </div>
-                ) : (
-                  <Button
-                    onClick={() => setConfirmedClearing(true)}
-                    color="error"
-                    disabled={databaseCleared}
-                  >
-                    Clear result data
-                  </Button>
-                )}
+                  )}
+                </div>
               </div>
             </FormControl>
           </TabPanel>
