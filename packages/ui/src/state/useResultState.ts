@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { formatISO } from 'date-fns';
 import { ClobbrUIResult } from 'models/ClobbrUIResult';
-import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
+import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
 import { Everbs } from 'shared/enums/http';
 import { getResultLogsKey } from 'shared/util/getResultLogsKey';
 import { ClobbrUIHeaderItem } from 'models/ClobbrUIHeaderItem';
@@ -12,7 +12,7 @@ import useStateRef from 'react-usestateref';
 import { ClobbrUIProperties } from 'models/ClobbrUIProperties';
 import { useThrottle } from 'react-use';
 import { AxiosError } from 'axios';
-import { getDb } from 'storage/storage';
+import { IStorage, getDb } from 'storage/storage';
 import { SK } from 'storage/storageKeys';
 import { EDbStores } from 'storage/EDbStores';
 
@@ -36,33 +36,31 @@ const unbloatLogs = (log: ClobbrLogItem) => {
 };
 
 const writeLogResponsesToStorage = async ({
+  resultDb,
   cachedId,
   logs
 }: {
+  resultDb: IStorage;
   cachedId: string;
   logs: Array<ClobbrLogItem>;
 }) => {
-  const resultDb = getDb(EDbStores.RESULT_LOGS_STORE_NAME);
-  const id = getResultLogsKey({
-    cachedId
-  });
+  for (const log of logs) {
+    const id = getResultLogsKey({
+      cachedId,
+      index: log.metas.index
+    });
 
-  resultDb.setItem(
-    `${SK.RESULT_RESPONSE.ITEM}-${id}`,
-    logs.map((log) => {
-      let logData = log.failed ? log.error : log.metas.data;
-      return {
-        index: log.metas.index,
-        data: logData
-      };
-    })
-  );
+    await resultDb.setItem(`${SK.RESULT_RESPONSE.ITEM}-${id}`, {
+      index: log.metas.index,
+      data: log.metas.data
+    });
+  }
 };
 
 export const useResultState = ({ initialState }: { [key: string]: any }) => {
   const [editing, setEditing] = useState(false);
 
-  const [list, setList, listRef] = useStateRef<Array<ClobbrUIResultListItem>>(
+  const [list, setList, listRef] = useStateRef<Array<ClobbrUIListItem>>(
     initialState.results.list
   );
 
@@ -143,7 +141,9 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     const cachedId = uuidv4();
     const currentList = listRef.current;
 
+    const resultDb = getDb(EDbStores.RESULT_LOGS_STORE_NAME);
     writeLogResponsesToStorage({
+      resultDb,
       cachedId,
       logs
     });
@@ -167,7 +167,7 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
       timeout
     };
 
-    const determineExistingItem = (i: ClobbrUIResultListItem) => {
+    const determineExistingItem = (i: ClobbrUIListItem) => {
       if (i.properties?.gql?.isGql) {
         return (
           i.url === url &&
@@ -257,7 +257,9 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
       return false;
     }
 
+    const resultDb = getDb(EDbStores.RESULT_LOGS_STORE_NAME);
     writeLogResponsesToStorage({
+      resultDb,
       cachedId: existingListItem.latestResult.cachedId,
       logs
     });

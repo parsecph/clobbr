@@ -1,16 +1,12 @@
 import { useContext } from 'react';
 import { Button, Typography, CircularProgress } from '@mui/material';
 
-import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
+import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
 import { GlobalStore } from 'app/globalContext';
 
 import { useResultRunner } from 'results/useResultRunner';
 
-export const ReRunResultButton = ({
-  item
-}: {
-  item: ClobbrUIResultListItem;
-}) => {
+export const ReRunResultButton = ({ item }: { item: ClobbrUIListItem }) => {
   const globalStore = useContext(GlobalStore);
 
   const { startRun } = useResultRunner({

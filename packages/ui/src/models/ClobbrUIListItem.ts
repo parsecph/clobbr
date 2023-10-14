@@ -3,7 +3,7 @@ import { ClobbrUIHeaderItem } from './ClobbrUIHeaderItem';
 import { ClobbrUIResult } from './ClobbrUIResult';
 import { ClobbrUIProperties } from './ClobbrUIProperties';
 
-export interface ClobbrUIResultListItem {
+export interface ClobbrUIListItem {
   properties?: ClobbrUIProperties;
   id: string;
   url: string;

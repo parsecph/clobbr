@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 
-import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
+import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
 
 import { GenericChart } from '../ResultHistory/ResultHistoryChart/GenericChart';
 
@@ -11,7 +11,7 @@ export const ResultChart = ({
   chartDownSampleThreshold,
   className
 }: {
-  item: ClobbrUIResultListItem;
+  item: ClobbrUIListItem;
   showTrendline?: boolean;
   showBarCharts?: boolean;
   chartDownSampleThreshold: number;

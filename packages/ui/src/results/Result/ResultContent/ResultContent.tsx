@@ -17,7 +17,7 @@ import { ShareResultToggle } from 'results/ShareResult/ShareResultToggle';
 import { UpdateSettingsButton } from 'results/UpdateSettingsButton/UpdateSettingsButton';
 import { CommonlyFailedItem } from 'results/CommonlyFailedItem/CommonlyFailedItem';
 import ActivityIndicator from 'ActivityIndicator/ActivityIndicator';
-import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
+import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
 import { useResultProperties } from 'results/Result/useResultProperties';
 
 import { useCommonlyFailedMessage } from 'results/CommonlyFailedItem/useCommonlyFailedMessage';
@@ -27,7 +27,7 @@ const ResultContent = ({
   item,
   expanded
 }: {
-  item: ClobbrUIResultListItem;
+  item: ClobbrUIListItem;
   expanded: boolean;
 }) => {
   const globalStore = useContext(GlobalStore);

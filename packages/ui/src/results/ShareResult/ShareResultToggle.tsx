@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { isBoolean } from 'lodash-es';
 import { useCopyToClipboard } from 'react-use';
 
-import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
+import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
 import { ClobbrUICompressedResultListItem } from 'models/ClobbrCompressedResultListItem';
 import { GlobalStore } from 'app/globalContext';
 import {
@@ -30,7 +30,7 @@ export const ShareResultToggle = ({
   className
 }: {
   disabled: boolean;
-  item: ClobbrUIResultListItem;
+  item: ClobbrUIListItem;
   className?: string;
 }) => {
   const [shareUrl, setShareUrl] = useState('');

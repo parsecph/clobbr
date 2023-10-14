@@ -13,7 +13,7 @@ import AssessmentIcon from '@mui/icons-material/Assessment';
 import { Modal } from 'shared/components/AppleModal/AppleModal';
 
 import { GlobalStore } from 'app/globalContext';
-import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
+import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
 import { ResultHistory } from './ResultHistory';
 
 import { VERB_COLOR_CLASS_MAP } from 'shared/enums/VerbsToColorMap';
@@ -26,7 +26,7 @@ export const ResultHistoryToggle = ({
   item,
   className
 }: {
-  item: ClobbrUIResultListItem;
+  item: ClobbrUIListItem;
   className?: string;
 }) => {
   const [showHistory, setShowHistory] = useState(false);

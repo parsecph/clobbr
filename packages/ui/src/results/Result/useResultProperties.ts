@@ -1,15 +1,11 @@
 import { useMemo } from 'react';
 import differenceInMinutes from 'date-fns/differenceInMinutes';
 
-import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
+import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
 
 const TIMEOUT_WAIT_IN_MINUTES = 3;
 
-export const useResultProperties = ({
-  item
-}: {
-  item?: ClobbrUIResultListItem;
-}) => {
+export const useResultProperties = ({ item }: { item?: ClobbrUIListItem }) => {
   const itemInternal = item || {
     latestResult: {
       endDate: new Date(),

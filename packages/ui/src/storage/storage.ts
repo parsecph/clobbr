@@ -29,6 +29,14 @@ const resultResponseDb = localforage.createInstance({
   description: 'Holds result response data'
 });
 
+export interface IStorage {
+  getKeys: () => Promise<string[]>;
+  getItem: (itemName: string) => Promise<any>;
+  setItem: (itemName: string, item: any) => Promise<any>;
+  removeItem: (itemName: string) => Promise<any>;
+  clear: () => Promise<void>;
+}
+
 export const getDb = (type: EDbStores) => {
   const _getDb = () => {
     switch (type) {

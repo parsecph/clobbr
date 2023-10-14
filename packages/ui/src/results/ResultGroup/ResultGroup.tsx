@@ -18,7 +18,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Result from 'results/Result/Result';
 import { VERB_COLOR_CLASS_MAP } from 'shared/enums/VerbsToColorMap';
 
-import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
+import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
 
 const TIMEOUT_WAIT_IN_MINUTES = 3;
 
@@ -27,7 +27,7 @@ const ResultGroup = ({
   url,
   expanded
 }: {
-  items: Array<ClobbrUIResultListItem>;
+  items: Array<ClobbrUIListItem>;
   url: string;
   expanded: boolean;
 }) => {

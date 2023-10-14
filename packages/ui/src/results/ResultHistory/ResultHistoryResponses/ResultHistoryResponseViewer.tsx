@@ -49,7 +49,7 @@ export const ResultHistoryResponseViewer = ({
 }: {
   className?: string;
   log: ClobbrLogItem;
-  logKey: string;
+  logKey?: string;
 }) => {
   const [state, copyToClipboard] = useCopyToClipboard();
   const [copied, setCopied] = useState(false);
@@ -107,20 +107,21 @@ export const ResultHistoryResponseViewer = ({
       }
     } else {
       /* Successful items */
-      const resultDb = getDb(EDbStores.RESULT_LOGS_STORE_NAME);
-      const data = await resultDb.getItem(
-        `${SK.RESULT_RESPONSE.ITEM}-${logKey}`
-      );
-
-      // Get response data from DB.
-      if (!data) {
+      if (!logKey) {
         setFormattedResponse('');
         return;
       }
 
-      const cachedResponse = data.find(
-        (item: ClobbrUICachedLog) => item.index === log.metas.index
+      const resultDb = getDb(EDbStores.RESULT_LOGS_STORE_NAME);
+      const cachedResponse = await resultDb.getItem(
+        `${SK.RESULT_RESPONSE.ITEM}-${logKey}`
       );
+
+      // Get response data from DB.
+      if (!cachedResponse) {
+        setFormattedResponse('');
+        return;
+      }
 
       if (!cachedResponse) {
         setFormattedResponse('');

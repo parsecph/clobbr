@@ -1,16 +1,12 @@
 import { useContext } from 'react';
 import { Button, Typography } from '@mui/material';
 
-import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
+import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
 
 import { GlobalStore } from 'app/globalContext';
 import { SEARCH_SETTINGS_MODE } from 'shared/enums/ESearchSettingsMode';
 
-export const UpdateSettingsButton = ({
-  item
-}: {
-  item: ClobbrUIResultListItem;
-}) => {
+export const UpdateSettingsButton = ({ item }: { item: ClobbrUIListItem }) => {
   const globalStore = useContext(GlobalStore);
 
   const updateSettings = () => {

@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { orderBy } from 'lodash-es';
 import { motion, AnimatePresence } from 'framer-motion';
 
-import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
+import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
 
 import { GlobalStore } from 'app/globalContext';
 
@@ -18,7 +18,7 @@ const ResultList = ({
   list,
   className
 }: {
-  list: Array<ClobbrUIResultListItem>;
+  list: Array<ClobbrUIListItem>;
   className?: string;
 }) => {
   const globalStore = useContext(GlobalStore);
@@ -28,7 +28,7 @@ const ResultList = ({
     ['latestResult.startDate'],
     ['desc']
   ).reduce(
-    (acc, cur: ClobbrUIResultListItem) => {
+    (acc, cur: ClobbrUIListItem) => {
       const isGql = cur.properties?.gql?.isGql;
 
       const key = isGql
@@ -47,7 +47,7 @@ const ResultList = ({
       return acc;
     },
     {} as {
-      [key: string]: { url: string; list: Array<ClobbrUIResultListItem> };
+      [key: string]: { url: string; list: Array<ClobbrUIListItem> };
     }
   );
 

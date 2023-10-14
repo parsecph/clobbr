@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Everbs } from 'shared/enums/http';
 import { ClobbrUIHeaderItem } from 'models/ClobbrUIHeaderItem';
-import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
+import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
 import {
   ESearchSettingsMode,
   SEARCH_SETTINGS_MODE
@@ -200,7 +200,7 @@ export const useSearchState = ({ initialState }: { [key: string]: any }) => {
     }
   };
 
-  const setSettings = (item: ClobbrUIResultListItem) => {
+  const setSettings = (item: ClobbrUIListItem) => {
     const payloadData = item.data
       ? {
           json: item.data,

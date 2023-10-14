@@ -20,7 +20,7 @@ import ListItemText from '@mui/material/ListItemText';
 import CloseIcon from '@mui/icons-material/Close';
 import DoDisturbOnIcon from '@mui/icons-material/DoDisturbOn';
 
-import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
+import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
 
 import { ReactComponent as ParallelIcon } from 'shared/icons/Parallel.svg';
 import { ReactComponent as SequenceIcon } from 'shared/icons/Sequence.svg';
@@ -54,7 +54,7 @@ const Result = ({
   className = '',
   listItemClassName = ''
 }: {
-  item: ClobbrUIResultListItem;
+  item: ClobbrUIListItem;
   expanded: boolean;
   animateOnTap?: boolean;
   showUrl?: boolean;
@@ -113,7 +113,7 @@ const Result = ({
     const currentScroll = document.documentElement.scrollTop;
 
     const nextResultList = globalStore.results.listRef.current.filter(
-      (result: ClobbrUIResultListItem) => result.id !== item.id
+      (result: ClobbrUIListItem) => result.id !== item.id
     );
     globalStore.results.setList(nextResultList);
 

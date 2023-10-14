@@ -298,8 +298,8 @@ export const Settings = ({ dismissModal }: { dismissModal: () => void }) => {
               />
               {appSettings.maxIterations && appSettings.maxIterations > 100 ? (
                 <Alert severity="warning">
-                  Keep in mind that your operating system might throttle sending
-                  these many requests in parallel. <br />
+                  Keep in mind that sending these many requests might increase
+                  the costs of your server <br />
                   Generally, around 100 requests should give you a good idea of
                   the performance of an endpoint.
                 </Alert>

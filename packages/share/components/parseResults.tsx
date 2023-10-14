@@ -1,4 +1,4 @@
-import { ClobbrUIResultListItem } from '@/ui/models/ClobbrUIResultListItem';
+import { ClobbrUIListItem } from '@/ui/models/ClobbrUIListItem';
 import { ClobbrUICompressedResultListItem } from '@/ui/models/ClobbrCompressedResultListItem';
 import { ClobbrUIResult } from '@/ui/models/ClobbrUIResult';
 
@@ -6,7 +6,7 @@ export const parseResult = (
   result: string
 ): {
   success: boolean;
-  item?: ClobbrUIResultListItem;
+  item?: ClobbrUIListItem;
 } => {
   try {
     const parsed: ClobbrUICompressedResultListItem = JSON.parse(result);
@@ -73,7 +73,7 @@ export const parseResult = (
       })
       .flat();
 
-    const item: ClobbrUIResultListItem = {
+    const item: ClobbrUIListItem = {
       ssl: parsed.s,
       parallel: parsed.lr.p,
       iterations: parsed.lr.i,

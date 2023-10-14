@@ -1,7 +1,7 @@
 import { VERBS, Everbs } from 'shared/enums/http';
 import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
 import React from 'react';
-import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
+import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
 import { ClobbrUIHeaderItem } from 'models/ClobbrUIHeaderItem';
 import { ClobbrUIProperties } from 'models/ClobbrUIProperties';
 import { HEADER_MODES } from 'search/SearchSettings/HeaderSettings/HeaderSettings';
@@ -63,7 +63,7 @@ export const DEFAULT_GLOBAL_STORE = {
     updateTimeout(timeout: number) {},
     updateData(jsonString: string) {},
     updateHeaderNodeScriptData(scriptString: string) {},
-    setSettings(item: ClobbrUIResultListItem) {},
+    setSettings(item: ClobbrUIListItem) {},
     resetSettingsToDefault() {}
   },
 
@@ -73,7 +73,7 @@ export const DEFAULT_GLOBAL_STORE = {
     expandedResults: [] as Array<string>,
     expandedResultGroups: [] as Array<string>, // NB: ID'ed by url
     list: [],
-    setList: (list: Array<ClobbrUIResultListItem>) => {},
+    setList: (list: Array<ClobbrUIListItem>) => {},
     listRef: React.createRef<any>(),
 
     toggleEdit() {},

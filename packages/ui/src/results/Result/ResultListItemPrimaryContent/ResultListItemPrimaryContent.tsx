@@ -7,7 +7,7 @@ import { ReactComponent as ParallelIcon } from 'shared/icons/Parallel.svg';
 import { ReactComponent as SequenceIcon } from 'shared/icons/Sequence.svg';
 
 import { VERB_COLOR_CLASS_MAP } from 'shared/enums/VerbsToColorMap';
-import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
+import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
 
 export const ResultListItemPrimaryContent = ({
   item,
@@ -18,7 +18,7 @@ export const ResultListItemPrimaryContent = ({
   suffixComponent,
   className
 }: {
-  item: ClobbrUIResultListItem;
+  item: ClobbrUIListItem;
   showUrl?: boolean;
   showParallelOrSequenceIcon?: boolean;
   themeMode: string;

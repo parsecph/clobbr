@@ -1,15 +1,11 @@
 import { useContext } from 'react';
 import { Button, Typography } from '@mui/material';
 
-import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
+import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
 
 import { GlobalStore } from 'app/globalContext';
 
-export const SetAsSearchButton = ({
-  item
-}: {
-  item: ClobbrUIResultListItem;
-}) => {
+export const SetAsSearchButton = ({ item }: { item: ClobbrUIListItem }) => {
   const globalStore = useContext(GlobalStore);
 
   const setAsSearch = () => {

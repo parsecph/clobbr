@@ -25,7 +25,7 @@ import Topbar from 'Topbar/Topbar';
 import { ToastContainer } from 'toasts/toastContainer';
 
 import { useStoredPreferences } from 'shared/hooks/useStoredPreferences';
-import { ClobbrUIResultListItem } from 'models/ClobbrUIResultListItem';
+import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
 import { useToastStore } from 'toasts/state/toastStore';
 
 const App = () => {
@@ -63,8 +63,7 @@ const App = () => {
   });
 
   const expandedResult = state.results.list.find(
-    (item: ClobbrUIResultListItem) =>
-      item.id === state.results.expandedResults[0]
+    (item: ClobbrUIListItem) => item.id === state.results.expandedResults[0]
   );
 
   // Result state

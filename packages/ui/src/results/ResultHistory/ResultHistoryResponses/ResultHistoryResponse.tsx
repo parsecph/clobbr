@@ -32,9 +32,12 @@ export const ResultHistoryResponse = ({
   };
 
   const openLog = isNumber(openLogIndex) ? result.logs[openLogIndex] : null;
-  const logKey = getResultLogsKey({
-    cachedId: result.cachedId
-  });
+  const logKey = openLog
+    ? getResultLogsKey({
+        cachedId: result.cachedId,
+        index: openLog?.metas.index
+      })
+    : undefined;
 
   return (
     <div className={clsx('flex', className)}>

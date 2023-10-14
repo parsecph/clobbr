@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 
 import { config } from '@/theme/config.js';
 import { fromEmojiUriComponent } from '@/ui/shared/util/emojiUriComponent';
-import { ClobbrUIResultListItem } from '@/ui/models/ClobbrUIResultListItem';
+import { ClobbrUIListItem } from '@/ui/models/ClobbrUIListItem';
 import { ResultChart } from '@/ui/results/ResultChart/ResultChart';
 import { ResultStats } from '@/ui/results/ResultStats/ResultStats';
 import { ResultListItemPrimaryContent } from '@/ui/results/Result/ResultListItemPrimaryContent/ResultListItemPrimaryContent';
@@ -29,9 +29,7 @@ const ogImageUrl = `${url}/api/ogImg`;
 const Result = ({ ogData }: { ogData?: string }) => {
   const router = useRouter();
   const { result } = router.query;
-  const [item, setItem] = useState<ClobbrUIResultListItem | undefined>(
-    undefined
-  );
+  const [item, setItem] = useState<ClobbrUIListItem | undefined>(undefined);
 
   const { failedItems, pctOfSuccess } = useResultProperties({ item });
 
