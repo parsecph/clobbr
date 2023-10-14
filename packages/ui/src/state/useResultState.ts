@@ -145,7 +145,7 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     writeLogResponsesToStorage({
       resultDb,
       cachedId,
-      logs
+      logs: structuredClone(logs)
     });
 
     const logsWithoutBloat = logs.map(unbloatLogs);
@@ -261,7 +261,7 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     writeLogResponsesToStorage({
       resultDb,
       cachedId: existingListItem.latestResult.cachedId,
-      logs
+      logs: structuredClone(logs)
     });
 
     const logsWithoutBloat = logs.map(unbloatLogs);
