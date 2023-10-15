@@ -124,11 +124,12 @@ export const ResultHistoryResponseViewer = ({
     // Try to parse as JSON
     try {
       const json = JSON.parse(decompressedResponse);
+
       if (json) {
         setFormattedResponse(JSON.stringify(json, null, 2));
         setEditorLanguage('json');
+        return;
       }
-      return;
     } catch (e) {
       console.warn('Could not parse as JSON', e);
     }
@@ -145,7 +146,7 @@ export const ResultHistoryResponseViewer = ({
     } catch (e) {
       console.warn('Could not parse as XML', e);
     }
-  }, [log.failed, logKey, log.metas]);
+  }, [log.failed, logKey]);
 
   useEffect(() => {
     const formatResponse = async () => {
