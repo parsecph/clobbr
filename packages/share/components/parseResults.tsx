@@ -80,7 +80,6 @@ export const parseResult = (
       verb: parsed.v as any,
       url: parsed.u,
       latestResult: {
-        id: '',
         startDate: parsed.lr.s,
         endDate: parsed.lr.e,
         iterations: parsed.lr.i,
