@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import differenceInMinutes from 'date-fns/differenceInMinutes';
 
 import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
@@ -42,13 +41,6 @@ export const isResultPartiallyComplete = ({
 };
 
 export const useResultProperties = ({ item }: { item?: ClobbrUIListItem }) => {
-  const itemInternal = item || {
-    latestResult: {
-      endDate: new Date(),
-      startDate: new Date()
-    }
-  };
-
   if (!item) {
     return {
       isInProgress: false,

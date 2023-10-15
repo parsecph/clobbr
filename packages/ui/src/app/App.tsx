@@ -3,7 +3,7 @@ import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels';
 import MediaQuery, { useMediaQuery } from 'react-responsive';
 import clsx from 'clsx';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useAsync, useMount } from 'react-use';
+import { useAsync } from 'react-use';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 import { getTheme } from 'shared/theme';

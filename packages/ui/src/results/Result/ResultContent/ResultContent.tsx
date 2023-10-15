@@ -7,7 +7,6 @@ import { Typography } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
 
 import { ReactComponent as AllFailed } from 'shared/images/search/AllFailed.svg';
-import { ReactComponent as Timeout } from 'shared/images/search/Timeout.svg';
 
 import { ResultChart } from 'results/ResultChart/ResultChart';
 import { ResultStats } from 'results/ResultStats/ResultStats';
@@ -34,7 +33,6 @@ const ResultContent = ({
 
   const {
     allFailed,
-    isPartiallyComplete,
     isInProgress,
     failedItems,
     successfulItems,
