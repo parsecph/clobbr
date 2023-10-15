@@ -70,7 +70,7 @@ export const ResultHistoryChronologicalItem = ({
   };
 
   return (
-    <div className="relative flex flex-col gap-2 p-2" key={result.id}>
+    <div className="relative flex flex-col gap-2 p-2" key={result.cacheId}>
       <div className="w-px absolute -z-10 h-[calc(100%-1.5rem)] left-5 top-10 bg-gray-500/50" />
 
       <ResultHistoryChronologicalItemTitle

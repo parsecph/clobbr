@@ -34,7 +34,7 @@ export const ResultHistoryResponse = ({
   const openLog = isNumber(openLogIndex) ? result.logs[openLogIndex] : null;
   const logKey = openLog
     ? getResultLogsKey({
-        cachedId: result.cachedId,
+        cacheId: result.cacheId,
         index: openLog?.metas.index
       })
     : undefined;

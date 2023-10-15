@@ -33,7 +33,11 @@ export const ResultStats = ({
   ]);
 
   if (!stats) {
-    return <></>;
+    return (
+      <Typography className="!text-xs text-center opacity-50 p-2">
+        No statistics available
+      </Typography>
+    );
   }
 
   return (

@@ -27,6 +27,11 @@ import { ToastContainer } from 'toasts/toastContainer';
 import { useStoredPreferences } from 'shared/hooks/useStoredPreferences';
 import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
 import { useToastStore } from 'toasts/state/toastStore';
+import {
+  isResultInProgress,
+  isResultPartiallyComplete
+} from 'results/Result/useResultProperties';
+import { UI_RESULT_STATES } from 'models/ClobbrUIResult';
 
 const App = () => {
   const toasts = useToastStore((state) => state.toasts);
@@ -63,7 +68,8 @@ const App = () => {
   });
 
   const expandedResult = state.results.list.find(
-    (item: ClobbrUIListItem) => item.id === state.results.expandedResults[0]
+    (item: ClobbrUIListItem) =>
+      item.listItemId === state.results.expandedResults[0]
   );
 
   // Result state
@@ -73,7 +79,32 @@ const App = () => {
     }
 
     if (storedResultState.value) {
-      state.results.setList(storedResultState.value);
+      try {
+        // Update unfinised results & set them to partially finished.
+        const resultList = storedResultState.value.map(
+          (item: ClobbrUIListItem) => {
+            const isPartiallyComplete = isResultPartiallyComplete({
+              resultState: item.latestResult.state
+            });
+
+            const isInProgress = isResultInProgress({
+              logs: item.latestResult.logs,
+              iterations: item.latestResult.iterations,
+              isPartiallyComplete
+            });
+
+            if (isInProgress) {
+              item.latestResult.state = UI_RESULT_STATES.PARTIALLY_COMPLETED;
+            }
+
+            return item;
+          }
+        );
+
+        state.results.setList(resultList);
+      } catch (error) {
+        console.error(error);
+      }
     }
 
     setResultStorageLoaded(true);

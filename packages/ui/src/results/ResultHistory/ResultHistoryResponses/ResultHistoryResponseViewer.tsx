@@ -15,11 +15,11 @@ import {
 } from 'shared/monaco/theme';
 
 import { MONACO_OPTIONS } from 'shared/monaco/options';
-import { isString } from 'lodash-es';
 import { Button } from '@mui/material';
 import { getDb } from 'storage/storage';
 import { EDbStores } from 'storage/EDbStores';
 import { SK } from 'storage/storageKeys';
+import { decompressBrotli } from 'shared/util/compression';
 
 declare type IMonacoEditor = typeof monaco;
 
@@ -31,7 +31,9 @@ declare type IMonacoEditor = typeof monaco;
 const formatXml = async (markup: string) => {
   const jsBeautify = await import('js-beautify');
 
-  return jsBeautify.default.html(markup, {});
+  // Remove any newlines or spaces
+  const formattedMarkup = markup.replace(/\n/g, '').replace(/\s\s+/g, ' ');
+  return jsBeautify.default.html(formattedMarkup, {});
 };
 
 const onEditorMount = (
@@ -86,91 +88,65 @@ export const ResultHistoryResponseViewer = ({
   };
 
   const parseResponse = useCallback(async () => {
-    if (log.failed) {
-      /* Failed items */
-      try {
-        // Try to parse as JSON
-        const string = JSON.stringify(
-          {
-            ...log.metas,
-            error: log.error
-          },
-          null,
-          2
-        );
-        setFormattedResponse(string);
-        setEditorLanguage('json');
-        return;
-      } catch (e) {
-        console.warn('Could not parse error as JSON', e);
-      }
-
-      try {
-        // Try to parse as plaintext
-        setEditorLanguage('json');
-        setFormattedResponse(
-          JSON.stringify(
-            {
-              ...log.metas,
-              error: log.error?.toString()
-            },
-            null,
-            2
-          )
-        );
-        return;
-      } catch (e) {
-        console.warn('Could not parse error as plaintext', e);
-      }
-    } else {
-      /* Successful items */
-      if (!logKey) {
-        setFormattedResponse('');
-        return;
-      }
-
-      const resultDb = getDb(EDbStores.RESULT_LOGS_STORE_NAME);
-      const cachedResponse = await resultDb.getItem(
-        `${SK.RESULT_RESPONSE.ITEM}-${logKey}`
-      );
-
-      // Get response data from DB.
-      if (!cachedResponse) {
-        setFormattedResponse('');
-        return;
-      }
-
-      if (!cachedResponse) {
-        setFormattedResponse('');
-        return;
-      }
-
-      if (isString(cachedResponse.data)) {
-        try {
-          // Try to parse as XML
-          const xmlString = await formatXml(cachedResponse.data);
-
-          if (xmlString) {
-            setFormattedResponse(xmlString);
-            setEditorLanguage('xml');
-            return;
-          }
-        } catch (e) {
-          console.warn('Could not parse as XML', e);
-        }
-      }
-
-      try {
-        // Try to parse as JSON
-        const string = JSON.stringify(cachedResponse.data, null, 2);
-        setFormattedResponse(string);
-        setEditorLanguage('json');
-        return;
-      } catch (e) {
-        console.warn('Could not parse as JSON', e);
-      }
+    /* Successful items */
+    if (!logKey) {
+      setFormattedResponse('');
+      return;
     }
-  }, [log.error, log.failed, log.metas, logKey]);
+
+    // Get response data from DB.
+    const resultDb = getDb(EDbStores.RESULT_LOGS_STORE_NAME);
+    const cachedResponse = (await resultDb.getItem(
+      `${SK.RESULT_RESPONSE.ITEM}-${logKey}`
+    )) as ClobbrUICachedLog | null;
+
+    if (!cachedResponse) {
+      setFormattedResponse('');
+      return;
+    }
+
+    // Decompress response data
+    let decompressedResponse;
+
+    try {
+      decompressedResponse = await decompressBrotli(
+        log.failed ? cachedResponse.error : cachedResponse.data
+      );
+    } catch (e) {
+      console.warn('Could not decompress response', e);
+    }
+
+    if (!decompressedResponse) {
+      setFormattedResponse('');
+      return;
+    }
+
+    // Try to parse as JSON
+    try {
+      const json = JSON.parse(decompressedResponse);
+
+      if (json) {
+        setFormattedResponse(JSON.stringify(json, null, 2));
+        setEditorLanguage('json');
+        return;
+      }
+    } catch (e) {
+      console.warn('Could not parse as JSON', e);
+    }
+
+    // Try to parse as XML
+    try {
+      const xmlString = await formatXml(decompressedResponse);
+
+      if (xmlString) {
+        setFormattedResponse(xmlString);
+        setEditorLanguage('xml');
+        return;
+      }
+    } catch (e) {
+      console.warn('Could not parse as XML', e);
+    }
+  }, [log.failed, logKey]);
 
   useEffect(() => {
     const formatResponse = async () => {

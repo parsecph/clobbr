@@ -2,11 +2,11 @@
  * Get the key for the result logs cache.
  */
 export const getResultLogsKey = ({
-  cachedId,
+  cacheId,
   index
 }: {
-  cachedId: string;
+  cacheId: string;
   index: number;
 }): string => {
-  return `${cachedId}-${index}`;
+  return `${cacheId}-${index}`;
 };

@@ -6,15 +6,11 @@ import { formatISO } from 'date-fns';
 import { ClobbrUIResult } from 'models/ClobbrUIResult';
 import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
 import { Everbs } from 'shared/enums/http';
-import { getResultLogsKey } from 'shared/util/getResultLogsKey';
 import { ClobbrUIHeaderItem } from 'models/ClobbrUIHeaderItem';
 import useStateRef from 'react-usestateref';
 import { ClobbrUIProperties } from 'models/ClobbrUIProperties';
 import { useThrottle } from 'react-use';
 import { AxiosError } from 'axios';
-import { IStorage, getDb } from 'storage/storage';
-import { SK } from 'storage/storageKeys';
-import { EDbStores } from 'storage/EDbStores';
 
 const unbloatLogs = (log: ClobbrLogItem) => {
   if (log.failed && log.error && isPlainObject(log.error)) {
@@ -33,28 +29,6 @@ const unbloatLogs = (log: ClobbrLogItem) => {
 
   delete log.metas.data;
   return log;
-};
-
-const writeLogResponsesToStorage = async ({
-  resultDb,
-  cachedId,
-  logs
-}: {
-  resultDb: IStorage;
-  cachedId: string;
-  logs: Array<ClobbrLogItem>;
-}) => {
-  for (const log of logs) {
-    const id = getResultLogsKey({
-      cachedId,
-      index: log.metas.index
-    });
-
-    await resultDb.setItem(`${SK.RESULT_RESPONSE.ITEM}-${id}`, {
-      index: log.metas.index,
-      data: log.metas.data
-    });
-  }
 };
 
 export const useResultState = ({ initialState }: { [key: string]: any }) => {
@@ -82,7 +56,7 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
       uniq([
         ...expandedResultGroups,
         ...currentList
-          .filter(({ id }) => nextExpandedResults.includes(id))
+          .filter(({ listItemId }) => nextExpandedResults.includes(listItemId))
           .map(({ url }) => url)
       ])
     );
@@ -136,23 +110,17 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     data: { [key: string]: any };
     timeout: number;
     properties: ClobbrUIProperties;
-  }) => {
-    const runId = uuidv4();
-    const cachedId = uuidv4();
+  }): {
+    listItemId: string;
+    cacheId: string;
+  } => {
+    const cacheId = uuidv4();
     const currentList = listRef.current;
-
-    const resultDb = getDb(EDbStores.RESULT_LOGS_STORE_NAME);
-    writeLogResponsesToStorage({
-      resultDb,
-      cachedId,
-      logs: structuredClone(logs)
-    });
 
     const logsWithoutBloat = logs.map(unbloatLogs);
 
     const result: ClobbrUIResult = {
-      id: runId,
-      cachedId,
+      cacheId,
       startDate: formatISO(new Date()),
       endDate: undefined,
       resultDurations,
@@ -183,8 +151,9 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     if (existingListItem) {
       const index = currentList.findIndex(determineExistingItem);
 
-      const nextItem = {
+      const nextItem: ClobbrUIListItem = {
         ...existingListItem,
+        cacheId,
         parallel,
         iterations,
         verb,
@@ -208,12 +177,13 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
         ...currentList.slice(index + 1)
       ]);
 
-      return { id: existingListItem.id };
+      return { listItemId: existingListItem.listItemId, cacheId };
     } else {
-      const id = uuidv4();
+      const listItemId = uuidv4();
 
-      const listItem = {
-        id,
+      const listItem: ClobbrUIListItem = {
+        listItemId,
+        cacheId,
         url,
         parallel,
         iterations,
@@ -232,37 +202,31 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
 
       setList([...currentList, listItem]);
 
-      return { id };
+      return { listItemId, cacheId };
     }
   };
 
   /**
    * Updates the latest result.
+   * The result will be looked up by cacheId.
    */
   const updateLatestResult = ({
-    itemId,
+    cacheId,
     logs
   }: {
-    itemId: string;
+    cacheId: string;
     logs: Array<ClobbrLogItem>;
   }) => {
     const currentList = listRef.current;
 
-    const existingListItem = currentList.find((i) => i.id === itemId);
+    const existingListItem = currentList.find((i) => i.cacheId === cacheId);
     const isComplete = existingListItem?.iterations === logs.length;
     const endDate = isComplete ? formatISO(new Date()) : undefined;
 
     if (!existingListItem) {
-      console.warn(`Could not find result item with id ${itemId}`);
+      console.warn(`Could not find result item with id ${cacheId}`);
       return false;
     }
-
-    const resultDb = getDb(EDbStores.RESULT_LOGS_STORE_NAME);
-    writeLogResponsesToStorage({
-      resultDb,
-      cachedId: existingListItem.latestResult.cachedId,
-      logs: structuredClone(logs)
-    });
 
     const logsWithoutBloat = logs.map(unbloatLogs);
     const resultDurations = logsWithoutBloat
@@ -283,7 +247,7 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
       latestResult: nextResult
     };
 
-    const index = currentList.findIndex((i) => i.id === itemId);
+    const index = currentList.findIndex((i) => i.cacheId === cacheId);
 
     setList([
       ...currentList.slice(0, index),

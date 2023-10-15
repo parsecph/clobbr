@@ -62,7 +62,9 @@ const Result = ({
   className?: string;
   listItemClassName?: string;
 }) => {
-  const { allFailed, timedOut, isInProgress } = useResultProperties({ item });
+  const { allFailed, isPartiallyComplete, isInProgress } = useResultProperties({
+    item
+  });
 
   const resultDom = useRef(null);
   const globalStore = useContext(GlobalStore);
@@ -96,7 +98,7 @@ const Result = ({
     if (expanded) {
       globalStore.results.updateExpandedResults([]);
     } else {
-      globalStore.results.updateExpandedResults([item.id]);
+      globalStore.results.updateExpandedResults([item.listItemId]);
 
       setTimeout(() => {
         if (resultDom?.current) {
@@ -113,7 +115,7 @@ const Result = ({
     const currentScroll = document.documentElement.scrollTop;
 
     const nextResultList = globalStore.results.listRef.current.filter(
-      (result: ClobbrUIListItem) => result.id !== item.id
+      (result: ClobbrUIListItem) => result.listItemId !== item.listItemId
     );
     globalStore.results.setList(nextResultList);
 
@@ -229,7 +231,7 @@ const Result = ({
               />
 
               <div className="flex flex-col flex-shrink-0 gap-1 items-end justify-between">
-                {!allFailed && !timedOut ? (
+                {!allFailed ? (
                   <Tooltip title="Average response time (mean)">
                     <Typography
                       variant="body2"
@@ -245,14 +247,6 @@ const Result = ({
                 {allFailed ? (
                   <Typography variant="body2" className="opacity-50">
                     Failed
-                  </Typography>
-                ) : (
-                  ''
-                )}
-
-                {timedOut ? (
-                  <Typography variant="body2" className="opacity-50">
-                    Timed out
                   </Typography>
                 ) : (
                   ''
@@ -278,6 +272,20 @@ const Result = ({
                       <CloseIcon className={xIconCss} />
                     </span>
                   </Tooltip>
+
+                  {isPartiallyComplete ? (
+                    <Tooltip
+                      title={`${item.latestResult.logs.length} ${
+                        item.latestResult.logs.length === 1 ? 'call' : 'calls'
+                      } ran`}
+                    >
+                      <Typography variant="body2" className="opacity-50">
+                        Partial
+                      </Typography>
+                    </Tooltip>
+                  ) : (
+                    ''
+                  )}
                 </Typography>
               </div>
             </ButtonBase>

@@ -99,13 +99,13 @@ const ResultList = ({
                   }
 
                   const expanded = results.expandedResults.includes(
-                    result.list[0].id
+                    result.list[0].listItemId
                   );
 
                   return (
                     <Result
                       item={result.list[0]}
-                      key={result.list[0].id}
+                      key={result.list[0].listItemId}
                       expanded={expanded}
                     />
                   );

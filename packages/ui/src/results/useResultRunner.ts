@@ -49,7 +49,7 @@ export const useResultRunner = ({
   const addToast = useToastStore((state) => state.addToast);
 
   const runEventCallback = useCallback(
-    (itemId: string) => {
+    (cacheId: string, listItemId: string) => {
       return (
         _event: EEvents,
         log: ClobbrLogItem,
@@ -57,17 +57,17 @@ export const useResultRunner = ({
       ) => {
         if (!log.metas) {
           console.warn(
-            `Skipped log for item [${itemId}] because it has no metas`
+            `Skipped log for item [${cacheId}] because it has no metas`
           );
         }
 
-        globalStore.results.updateLatestResult({ itemId, logs });
+        globalStore.results.updateLatestResult({ cacheId, logs });
 
         if (logs.length === globalStore.search.plannedIterations) {
           globalStore.search.setInProgress(false);
 
           // Update the expanded item yet again to bring the user to the latest results in case there has been navigation in the meantime.
-          globalStore.results.updateExpandedResults([itemId]);
+          globalStore.results.updateExpandedResults([listItemId]);
         }
       };
     },
@@ -76,7 +76,7 @@ export const useResultRunner = ({
 
   const startRun = useCallback(
     async () => {
-      const { id: itemId } = globalStore.results.addItem({
+      const { listItemId, cacheId } = globalStore.results.addItem({
         url: requestUrl,
         resultDurations: [],
         logs: [],
@@ -93,7 +93,7 @@ export const useResultRunner = ({
         timeout
       });
 
-      globalStore.results.updateExpandedResults([itemId]);
+      globalStore.results.updateExpandedResults([listItemId]);
       globalStore.search.setInProgress(true);
       globalStore.search.setPlannedIterations(iterations);
 
@@ -177,13 +177,14 @@ export const useResultRunner = ({
 
           // NB: results would be recieved via websocket and not handled in this hook anymore.
           await electronAPI.run(
-            itemId,
+            cacheId,
+            listItemId,
             parallel,
             options,
-            runEventCallback(itemId)
+            runEventCallback(cacheId, listItemId)
           );
         } else {
-          await run(parallel, options, runEventCallback(itemId));
+          await run(parallel, options, runEventCallback(cacheId, listItemId));
         }
       } catch (error) {
         // TODO dan: toast
