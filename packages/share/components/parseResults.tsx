@@ -99,7 +99,8 @@ export const parseResult = (
       },
 
       // Unkown
-      id: '',
+      cacheId: '',
+      listItemId: '',
       timeout: 0,
       headers: [],
       data: {}
