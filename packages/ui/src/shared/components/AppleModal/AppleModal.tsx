@@ -88,7 +88,7 @@ export const Modal = ({
                 transition: { duration: 0.3, ease: [0.36, 0.66, 0.04, 1] }
               }}
               className={clsx(
-                'z-0 flex flex-col w-full h-full bg-white/80 dark:bg-gray-900/70 backdrop-blur-sm rounded-t-lg shadow-xl overflow-auto',
+                'z-0 flex flex-col w-full h-full bg-white/80 dark:bg-gray-900/70 backdrop-blur-lg rounded-t-lg shadow-xl overflow-auto',
                 'tall-lg:h-auto tall-lg:min-h-[840px]',
                 maxWidth && `max-w-${maxWidth}`,
                 containerClassName
