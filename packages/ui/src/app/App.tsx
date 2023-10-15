@@ -29,8 +29,7 @@ import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
 import { useToastStore } from 'toasts/state/toastStore';
 import {
   isResultInProgress,
-  isResultPartiallyComplete,
-  isResultTimeout
+  isResultPartiallyComplete
 } from 'results/Result/useResultProperties';
 import { UI_RESULT_STATES } from 'models/ClobbrUIResult';
 
@@ -69,7 +68,8 @@ const App = () => {
   });
 
   const expandedResult = state.results.list.find(
-    (item: ClobbrUIListItem) => item.id === state.results.expandedResults[0]
+    (item: ClobbrUIListItem) =>
+      item.listItemId === state.results.expandedResults[0]
   );
 
   // Result state

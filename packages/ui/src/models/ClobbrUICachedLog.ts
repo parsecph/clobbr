@@ -1,4 +1,5 @@
 export interface ClobbrUICachedLog {
   index: number;
-  data?: { [key: string]: string } | string;
+  data?: string;
+  error?: string;
 }

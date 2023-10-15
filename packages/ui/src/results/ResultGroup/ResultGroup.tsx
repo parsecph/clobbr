@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { useContext, useMemo, useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import {
   AnimatePresence,
   MotionValue,
@@ -7,7 +7,7 @@ import {
   usePresence
 } from 'framer-motion';
 import { useInterval } from 'react-use';
-import { formatDistanceToNow, differenceInMinutes } from 'date-fns';
+import { formatDistanceToNow } from 'date-fns';
 
 import { GlobalStore } from 'app/globalContext';
 
@@ -23,8 +23,6 @@ import {
   isResultInProgress,
   isResultPartiallyComplete
 } from 'results/Result/useResultProperties';
-
-const TIMEOUT_WAIT_IN_MINUTES = 3;
 
 const ResultGroup = ({
   items,
@@ -195,13 +193,15 @@ const ResultGroup = ({
             {expanded ? (
               <div className="border-t border-solid border-gray-500 border-opacity-30">
                 {items.map((item, index) => {
-                  const isExpanded = results.expandedResults.includes(item.id);
+                  const isExpanded = results.expandedResults.includes(
+                    item.listItemId
+                  );
                   const hasBorder = index !== items.length - 1;
 
                   return (
                     <Result
                       item={item}
-                      key={item.id}
+                      key={item.listItemId}
                       expanded={isExpanded}
                       animateOnTap={false}
                       className={clsx(

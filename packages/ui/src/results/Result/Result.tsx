@@ -98,7 +98,7 @@ const Result = ({
     if (expanded) {
       globalStore.results.updateExpandedResults([]);
     } else {
-      globalStore.results.updateExpandedResults([item.id]);
+      globalStore.results.updateExpandedResults([item.listItemId]);
 
       setTimeout(() => {
         if (resultDom?.current) {
@@ -115,7 +115,7 @@ const Result = ({
     const currentScroll = document.documentElement.scrollTop;
 
     const nextResultList = globalStore.results.listRef.current.filter(
-      (result: ClobbrUIListItem) => result.id !== item.id
+      (result: ClobbrUIListItem) => result.listItemId !== item.listItemId
     );
     globalStore.results.setList(nextResultList);
 

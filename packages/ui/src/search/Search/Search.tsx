@@ -1,4 +1,5 @@
 import useWebSocket, { ReadyState } from 'react-use-websocket';
+import { useMount } from 'react-use';
 import clsx from 'clsx';
 import {
   useCallback,
@@ -34,7 +35,10 @@ import { EEvents } from '@clobbr/api/src/enums/events';
 import { WS_EVENTS } from 'shared/consts/wss';
 
 import { useResultRunner } from 'results/useResultRunner';
-import { useMount } from 'react-use';
+import { getResultLogsKey } from 'shared/util/getResultLogsKey';
+import { getDb } from 'storage/storage';
+import { SK } from 'storage/storageKeys';
+import { EDbStores } from 'storage/EDbStores';
 
 const iterationInputCss = css`
   .MuiInputBase-root {
@@ -125,7 +129,7 @@ const Search = forwardRef(
     const [autoFocusUrlInput, setAutoFocusUrlInput] = useState(true);
 
     const runEventCallback = useCallback(
-      (itemId: string) => {
+      (cacheId: string, listItemId: string) => {
         return (
           _event: EEvents,
           log: ClobbrLogItem,
@@ -133,21 +137,42 @@ const Search = forwardRef(
         ) => {
           if (!log.metas) {
             console.warn(
-              `Skipped log for item [${itemId}] because it has no metas`
+              `Skipped log for item [${cacheId}] because it has no metas`
             );
           }
 
-          globalStore.results.updateLatestResult({ itemId, logs });
+          globalStore.results.updateLatestResult({ cacheId, logs });
 
           if (logs.length === globalStore.search.plannedIterations) {
             globalStore.search.setInProgress(false);
 
             // Update the expanded item yet again to bring the user to the latest results in case there has been navigation in the meantime.
-            globalStore.results.updateExpandedResults([itemId]);
+            globalStore.results.updateExpandedResults([listItemId]);
           }
         };
       },
       [globalStore.search, globalStore.results]
+    );
+
+    const runLogResponseCallback = useCallback(
+      async (payload: { runningItemId: string; log: ClobbrLogItem }) => {
+        const { runningItemId, log } = payload;
+        const cacheId = runningItemId;
+
+        const resultDb = getDb(EDbStores.RESULT_LOGS_STORE_NAME);
+
+        const id = getResultLogsKey({
+          cacheId,
+          index: log.metas.index
+        });
+
+        await resultDb.setItem(`${SK.RESULT_RESPONSE.ITEM}-${id}`, {
+          index: log.metas.index,
+          data: log.metas.data,
+          error: log.error
+        });
+      },
+      []
     );
 
     const settingsAnimations = {
@@ -207,11 +232,20 @@ const Search = forwardRef(
             const { event, payload } = message;
 
             if (event.includes(WS_EVENTS.API.RUN_CALLBACK)) {
-              runEventCallback(payload.runningItemId)(
+              runEventCallback(payload.runningItemId, payload.listItemId)(
                 payload.event,
                 payload.log,
                 payload.logs
               );
+            }
+
+            if (event.includes(WS_EVENTS.API.EMIT_LOG_RESPONSE)) {
+              let emitLogPayload: {
+                runningItemId: string;
+                log: ClobbrLogItem;
+              } = payload;
+
+              runLogResponseCallback(emitLogPayload);
             }
           } catch (error) {
             console.warn('Skipped ws message, failed to parse JSON');

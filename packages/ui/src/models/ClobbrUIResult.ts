@@ -9,8 +9,7 @@ export type ClobbrUIResultState =
   typeof UI_RESULT_STATES[keyof typeof UI_RESULT_STATES];
 
 export interface ClobbrUIResult {
-  id: string;
-  cachedId: string;
+  cacheId: string;
   startDate?: string;
   endDate?: string;
   resultDurations: Array<number>;

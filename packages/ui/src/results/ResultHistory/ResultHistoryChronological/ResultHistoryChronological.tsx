@@ -45,7 +45,7 @@ export const ResultHistoryChronological = ({
         {chronologicalResultsWithStats.map(({ result, successPct }, index) => {
           return (
             <ResultHistoryChronologicalItem
-              key={result.id}
+              key={result.cacheId}
               index={index}
               result={result}
               successPct={successPct}

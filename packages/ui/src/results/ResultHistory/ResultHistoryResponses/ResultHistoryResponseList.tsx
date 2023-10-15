@@ -57,7 +57,7 @@ export const ResultHistoryResponseList = ({
           const detailsOpen = openIndexes?.includes(index) || false;
 
           return (
-            <div key={result.id}>
+            <div key={result.cacheId}>
               <ResultHistoryChronologicalItemTitle
                 index={index}
                 result={result}

@@ -5,7 +5,8 @@ import { ClobbrUIProperties } from './ClobbrUIProperties';
 
 export interface ClobbrUIListItem {
   properties?: ClobbrUIProperties;
-  id: string;
+  listItemId: string;
+  cacheId: string;
   url: string;
   latestResult: ClobbrUIResult;
   parallel: boolean;

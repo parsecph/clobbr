@@ -98,23 +98,15 @@ export const DEFAULT_GLOBAL_STORE = {
       data: { [key: string]: any };
       properties?: ClobbrUIProperties;
       timeout: number;
-    }): { id: string } {
-      return { id: '' };
+    }): { listItemId: string; cacheId: string } {
+      return { listItemId: '', cacheId: '' };
     },
 
-    addLatestResultLog({
-      itemId,
-      log
-    }: {
-      itemId: string;
-      log: ClobbrLogItem;
-    }) {},
-
     updateLatestResult({
-      itemId,
+      cacheId,
       logs
     }: {
-      itemId: string;
+      cacheId: string;
       logs: Array<ClobbrLogItem>;
     }) {}
   },
