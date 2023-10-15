@@ -19,6 +19,10 @@ import Result from 'results/Result/Result';
 import { VERB_COLOR_CLASS_MAP } from 'shared/enums/VerbsToColorMap';
 
 import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
+import {
+  isResultInProgress,
+  isResultPartiallyComplete
+} from 'results/Result/useResultProperties';
 
 const TIMEOUT_WAIT_IN_MINUTES = 3;
 
@@ -36,25 +40,19 @@ const ResultGroup = ({
   const resultDom = useRef(null);
   const [isPresent, safeToRemove] = usePresence();
 
-  const timedOut = useMemo(() => {
-    return items.some((item) => {
-      const startDate = item.latestResult.startDate as string;
-      const endDate = item.latestResult.endDate;
-
-      return (
-        startDate &&
-        !endDate &&
-        differenceInMinutes(new Date(), new Date(startDate)) >
-          TIMEOUT_WAIT_IN_MINUTES
-      );
+  const isInProgress = items.some((item) => {
+    const isPartiallyComplete = isResultPartiallyComplete({
+      resultState: item.latestResult.state
     });
-  }, [items]);
 
-  const isInProgress =
-    !timedOut &&
-    items.some(
-      (item) => item.latestResult.resultDurations.length !== item.iterations
-    );
+    const isInProgress = isResultInProgress({
+      logs: item.latestResult.logs,
+      iterations: item.latestResult.iterations,
+      isPartiallyComplete
+    });
+
+    return isInProgress;
+  });
 
   const transition = { type: 'spring', stiffness: 500, damping: 50, mass: 1 };
 

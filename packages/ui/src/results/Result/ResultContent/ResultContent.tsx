@@ -34,7 +34,7 @@ const ResultContent = ({
 
   const {
     allFailed,
-    timedOut,
+    isPartiallyComplete,
     isInProgress,
     failedItems,
     successfulItems,
@@ -51,11 +51,7 @@ const ResultContent = ({
     globalStore.appSettings.chartDownSampleThreshold;
 
   const shouldShowChart =
-    !allFailed &&
-    !timedOut &&
-    expanded &&
-    item.iterations > 1 &&
-    successfulItems.length > 1;
+    !allFailed && expanded && item.iterations > 1 && successfulItems.length > 1;
 
   return (
     <AnimatePresence>
@@ -117,35 +113,7 @@ const ResultContent = ({
         ''
       )}
 
-      {expanded && timedOut ? (
-        <div className="flex flex-col gap-4 pb-12 items-center">
-          <Timeout className="w-full max-w-xs p-6" />
-          <Typography variant="body1">
-            <strong className="font-semibold">Requests timed out</strong>
-          </Typography>
-
-          <Typography variant="body2" className="opacity-50">
-            Try reducing the number of iterations and run again? <br />
-          </Typography>
-
-          <div className="w-full absolute z-40 flex gap-4 justify-center -mt-10">
-            <ResultHistoryToggle item={item} className="" />
-          </div>
-
-          <div className="flex gap-2 mt-4">
-            <ReRunResultButton item={item} />
-            <UpdateSettingsButton item={item} />
-          </div>
-        </div>
-      ) : (
-        ''
-      )}
-
-      {expanded &&
-      !isInProgress &&
-      !shouldShowChart &&
-      !timedOut &&
-      !allFailed ? (
+      {expanded && !isInProgress && !shouldShowChart && !allFailed ? (
         <>
           <Typography variant="body2" className="opacity-50 text-center">
             Increase the number of itetations to see more stats.
