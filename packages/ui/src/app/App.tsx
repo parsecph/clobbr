@@ -97,6 +97,12 @@ const App = () => {
               item.latestResult.state = UI_RESULT_STATES.PARTIALLY_COMPLETED;
             }
 
+            // Migrate id to listItemId
+            // Save to remove after January 2024
+            if (!item.listItemId) {
+              item.listItemId = (item as unknown as { id: string }).id;
+            }
+
             return item;
           }
         );
