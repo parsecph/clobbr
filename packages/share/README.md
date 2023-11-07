@@ -78,5 +78,14 @@ This tool is part of the Apihustle suite - a collection of tools to test, improv
 
 -----------------
 
+Save 10s of hours of work by using Shipixen to generate a customized boilerplate with your branding, pages and blog <br/>
+― then deploy it to Vercel with 1 click.
+
+| | |
+| :- | :- |
+| <a href="https://shipixen.com" target="_blank"><img height="60px" src="https://user-images.githubusercontent.com/1515742/281071510-d5c0095d-d336-4857-ad80-d18cf65f4acb.png" alt="Shipixen Logo" /></a> <br/> <b>Shipixen</b> <br/> Create a blog & landing page in minutes with <b>Shipixen</b>. <br/> Get started on <a href="https://shipixen.com">shipixen.com</a>. | <a href="https://shipixen.com" target="_blank"><img width="300px" src="https://user-images.githubusercontent.com/1515742/281077548-57b24773-3c2a-4e89-b088-cc3945d7037b.png" alt="Shipixen Logo" /></a> |
+ 
+-----------------
+
 ![Clobbr icon](https://user-images.githubusercontent.com/1515742/80861773-da9a6a00-8c70-11ea-9671-77e1bb2dea04.png)
 
