@@ -1,6 +1,6 @@
 {
   "name": "@clobbr/share",
-  "version": "1.15.0",
+  "version": "1.15.1",
   "private": true,
   "scripts": {
     "dev": "PORT=4343 next dev",
@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^1.9.2",
-    "@clobbr/api": "^1.15.0",
+    "@clobbr/api": "^1.15.1",
     "@emotion/css": "^11.9.0",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
