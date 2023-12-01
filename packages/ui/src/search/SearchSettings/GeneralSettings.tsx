@@ -19,11 +19,15 @@ import IterationsInput from 'search/Search/IterationsInput';
 import VerbSelect from 'search/Search/VerbSelect';
 import { Everbs } from 'shared/enums/http';
 import { useToastStore } from 'toasts/state/toastStore';
+import clsx from 'clsx';
 
 export const GeneralSettings = () => {
   const globalStore = useContext(GlobalStore);
 
   const addToast = useToastStore((state) => state.addToast);
+  const [urlErrorShown, setUrlErrorShown] = useState(false);
+  const [inputFocused, setInputFocused] = useState(false);
+  const [autoFocusUrlInput, setAutoFocusUrlInput] = useState(false);
 
   const [confirmedSetSettingsToDefault, setConfirmedSetSettingsToDefault] =
     useState(false);
@@ -54,6 +58,22 @@ export const GeneralSettings = () => {
       updateVerb(event.target.value as Everbs);
     };
 
+  const handleUrlChange =
+    (updateUrl: (url: string) => void) =>
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      updateUrl(event.target.value.trim());
+    };
+
+  const onUrlFieldBlur = () => {
+    setInputFocused(false);
+    toggleUrlError(false);
+  };
+
+  const toggleUrlError = (nextValue: boolean = true) => {
+    setUrlErrorShown(nextValue);
+    setAutoFocusUrlInput(nextValue);
+  };
+
   return (
     <GlobalStore.Consumer>
       {({ search }) => (
@@ -61,6 +81,26 @@ export const GeneralSettings = () => {
           <Typography variant="overline" className={'opacity-50'}>
             General settings
           </Typography>
+
+          <TextField
+            error={urlErrorShown}
+            variant="filled"
+            inputRef={(input) =>
+              input && autoFocusUrlInput ? input.focus() : null
+            }
+            onFocus={() => setInputFocused(true)}
+            onBlur={onUrlFieldBlur}
+            autoFocus={autoFocusUrlInput}
+            label="Type an endpoint (URL) to test"
+            placeholder="example.com/api/v1"
+            id="search"
+            value={search.url.displayText}
+            onChange={handleUrlChange(search.updateUrl)}
+            className={clsx('flex')}
+            multiline
+            rows={3}
+            inputProps={{ style: { resize: 'vertical' } }}
+          />
 
           <div className="flex flex-col gap-6 mt-6">
             <FormGroup>

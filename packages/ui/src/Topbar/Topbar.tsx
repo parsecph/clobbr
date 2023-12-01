@@ -19,6 +19,18 @@ const Topbar = forwardRef((_props, ref: React.ForwardedRef<HTMLDivElement>) => {
 
   const showAds = process.env.REACT_APP_NO_ADS !== 'true';
 
+  const openNpm = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    e.preventDefault();
+    window.open('https://www.npmjs.com/package/@clobbr/cli', '_blank');
+  };
+
+  const openApiHustle = (
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+    window.open('https://apihustle.com', '_blank');
+  };
+
   return (
     <GlobalStore.Consumer>
       {({ themeMode, appSettings }) => (
@@ -67,9 +79,8 @@ const Topbar = forwardRef((_props, ref: React.ForwardedRef<HTMLDivElement>) => {
                     otherChildren={
                       <li className="flex gap-3 items-center justify-between relative text-xs">
                         <a
-                          href="https://www.npmjs.com/package/@clobbr/cli"
-                          target="_blank"
-                          rel="noopener noreferrer"
+                          href="/"
+                          onClick={openNpm}
                           className="flex flex-col items-center gap-3 hover:grayscale transition-all"
                         >
                           <div className="w-14 h-[54px] bg-rose-700 text-white flex items-center justify-center rounded-lg">
@@ -95,7 +106,8 @@ const Topbar = forwardRef((_props, ref: React.ForwardedRef<HTMLDivElement>) => {
                     <>
                       ·
                       <a
-                        href="https://apihustle.com"
+                        href="/"
+                        onClick={openApiHustle}
                         className="text-xs opacity-50 hover:opacity-100"
                       >
                         apihustle.com

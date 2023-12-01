@@ -280,7 +280,7 @@ const Search = forwardRef(
         {({ search, themeMode, results, appSettings }) => (
           <section
             className={clsx(
-              'flex flex-grow flex-shrink flex-col items-center justify-center mt-16 mb-6 w-full max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-3xl',
+              'flex flex-grow flex-shrink flex-col items-center justify-center mt-16 mb-6 w-full max-w-lg md:max-w-xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-5xl',
               appSettings.stickySearch
                 ? `sm:sticky top-3 z-110 ${stickySearchCss}`
                 : '',

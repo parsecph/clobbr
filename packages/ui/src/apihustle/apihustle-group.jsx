@@ -12,12 +12,31 @@ export const ApiHustleGroup = ({
   useOverlayFullLink,
   otherChildren
 }) => {
+  const openApiHustle = (e) => {
+    e.preventDefault();
+    window.open('https://apihustle.com', '_blank');
+  };
+
+  const openClobbr = (e) => {
+    e.preventDefault();
+    window.open('https://clobbr.app', '_blank');
+  };
+
+  const openCrontap = (e) => {
+    e.preventDefault();
+    window.open('https://crontap.com', '_blank');
+  };
+
+  const openCronTool = (e) => {
+    e.preventDefault();
+    window.open('https://tool.crontap.com', '_blank');
+  };
+
   return (
     <div className={clsx('flex flex-col gap-2 w-full max-w-md', className)}>
       <a
-        href="https://apihustle.com"
-        target="_blank"
-        rel="noopener noreferrer"
+        href="/"
+        onClick={openApiHustle}
         className="opacity-90 hover:opacity-100 transition-opacity duration-200"
       >
         <ApiHustle className={'h-6'} />
@@ -58,9 +77,8 @@ export const ApiHustleGroup = ({
             ''
           ) : (
             <a
-              href="https://clobbr.app"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/"
+              onClick={openClobbr}
               className="mt-2 flex-shrink-0 px-4 py-2 rounded-md text-xs border border-solid border-gray-500/50 hover:border-gray-500 transition-colors"
             >
               Visit
@@ -69,9 +87,8 @@ export const ApiHustleGroup = ({
 
           {useOverlayFullLink ? (
             <a
-              href="https://clobbr.app"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/"
+              onClick={openClobbr}
               className="absolute inset-0 transition-all"
             >
               <span className="opacity-0">Visit Clobbr</span>
@@ -102,9 +119,8 @@ export const ApiHustleGroup = ({
             ''
           ) : (
             <a
-              href="https://crontap.com"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/"
+              onClick={openCrontap}
               className="mt-2 flex-shrink-0 px-4 py-2 rounded-md text-xs border border-solid border-gray-500/50 hover:border-gray-500 transition-colors"
             >
               Visit
@@ -113,9 +129,8 @@ export const ApiHustleGroup = ({
 
           {useOverlayFullLink ? (
             <a
-              href="https://crontap.com"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/"
+              onClick={openCrontap}
               className="absolute inset-0 transition-all"
             >
               <span className="opacity-0">Visit Crontap</span>
@@ -146,9 +161,8 @@ export const ApiHustleGroup = ({
             ''
           ) : (
             <a
-              href="https://tool.crontap.com"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/"
+              onClick={openCronTool}
               className="mt-2 flex-shrink-0 px-4 py-2 rounded-md text-xs border border-solid border-gray-500/50 hover:border-gray-500 transition-colors"
             >
               Visit
@@ -157,9 +171,8 @@ export const ApiHustleGroup = ({
 
           {useOverlayFullLink ? (
             <a
-              href="https://tool.crontap.com"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/"
+              onClick={openCronTool}
               className="absolute inset-0 transition-all"
             >
               <span className="opacity-0">Visit CronTool</span>
