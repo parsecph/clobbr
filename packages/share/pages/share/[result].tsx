@@ -222,7 +222,7 @@ export async function getServerSideProps(context: {
 
     const gql = parsed.item?.properties?.gql;
     const stats = parsed.item?.latestResult.logs
-      ? getLogStats(parsed.item.latestResult.logs)
+      ? getLogStats(parsed.item.latestResult.logs, parsed.item.latestResult)
       : [];
 
     if (!parsed.item) {

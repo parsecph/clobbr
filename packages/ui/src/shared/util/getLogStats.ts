@@ -4,6 +4,7 @@ import { mathUtils } from '@clobbr/api';
 import { formatNumber } from 'shared/util/numberFormat';
 import { getDurationColorClass } from 'shared/util/getDurationColorClass';
 import { isNumber } from 'lodash-es';
+import { ClobbrUIResult } from 'models/ClobbrUIResult';
 
 const { mean, q5, q95, q99, stdDev } = mathUtils;
 
@@ -18,14 +19,27 @@ export const RESULT_STAT_TYPES: {
   TOTAL_TIME: 'Total time (s)'
 };
 
-export const getLogStats = (logs: Array<ClobbrLogItem>) => {
+export const getLogStats = (
+  logs: Array<ClobbrLogItem>,
+  result: ClobbrUIResult
+) => {
   const qualifiedDurations = logs
     .filter((log) => !log.failed)
     .filter((log) => isNumber(log.metas.duration))
     .map((log) => log.metas.duration as number);
 
-  const totalDuration = qualifiedDurations.reduce((acc, curr) => acc + curr, 0);
+  const startUnixTime = result.startDate
+    ? new Date(result.startDate).valueOf()
+    : 0;
+  const endUnixTime = result.endDate ? new Date(result.endDate).valueOf() : 0;
+  const totalDuration = startUnixTime ? endUnixTime - startUnixTime : 0;
   const totalDurationInSeconds = totalDuration / 1000;
+
+  const cumulativeDuration = qualifiedDurations.reduce(
+    (acc, curr) => acc + curr,
+    0
+  );
+  const cumulativeDurationInSeconds = cumulativeDuration / 1000;
   const meanValue = mean(qualifiedDurations);
   const stdDevValue = stdDev(qualifiedDurations);
   const q5Value = q5(qualifiedDurations);
@@ -64,7 +78,7 @@ export const getLogStats = (logs: Array<ClobbrLogItem>) => {
       colorClass: getDurationColorClass(q99Value)
     },
     {
-      value: formatNumber(totalDurationInSeconds),
+      value: formatNumber(totalDurationInSeconds, 1),
       unit: 's',
       label: 'Total time',
       colorClass: getDurationColorClass(0) // Always green

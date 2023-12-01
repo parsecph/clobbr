@@ -14,7 +14,7 @@ export const getResultStats = (result: ClobbrUIResult) => {
     return null;
   }
 
-  return getLogStats(result.logs);
+  return getLogStats(result.logs, result);
 };
 
 export const ResultStats = ({
