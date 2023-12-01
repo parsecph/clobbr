@@ -87,11 +87,11 @@ export const ResultHistoryStats = ({
           <ul
             className="grid gap-3"
             style={{
-              gridTemplateColumns: `repeat(${numberOfStats + 1}, 90px)`
+              gridTemplateColumns: `repeat(${numberOfStats + 1}, 80px)`
             }}
           >
             <li key="successPct" className="inline-flex items-center">
-              <Typography variant="caption">Successful %</Typography>
+              <Typography variant="caption">Success (%)</Typography>
             </li>
 
             {Object.keys(RESULT_STAT_TYPES).map((key) => (
@@ -145,7 +145,7 @@ export const ResultHistoryStats = ({
             <ul
               className="grid gap-3"
               style={{
-                gridTemplateColumns: `repeat(${numberOfStats + 1}, 90px)`
+                gridTemplateColumns: `repeat(${numberOfStats + 1}, 80px)`
               }}
             >
               <li key="success" className="inline-flex items-center">

@@ -45,13 +45,18 @@ export const ResultStats = ({
       key={'stats-list'}
       className="grid grid-cols-3 md:flex items-center justify-center gap-4"
     >
-      {stats.map(({ label, value }, index) => (
+      {stats.map(({ label, value, unit }, index) => (
         <li
           key={index}
           className="flex flex-col items-center border-l border-gray-500 border-opacity-20 first:border-0 p-2"
         >
-          <Typography variant="body2">{value} ms</Typography>
-          <Typography variant="caption" className="opacity-50">
+          <Typography variant="body2">
+            {value} {unit}
+          </Typography>
+          <Typography
+            variant="caption"
+            className="!text-[0.7rem] lg:!text-xs opacity-50"
+          >
             {label}
           </Typography>
         </li>
