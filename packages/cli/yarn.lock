@@ -14,10 +14,10 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@clobbr/api@^1.13.3":
-  version "1.13.3"
-  resolved "https://registry.yarnpkg.com/@clobbr/api/-/api-1.13.3.tgz#a2131c37f5a3429a5f856407f3f8df11ac0819d4"
-  integrity sha512-oxm9bMfSJtACZOH2Lm7W66owYn2lw2PV9OAlUbVy6IlIXNcWjfcb5wehj+48SLyrpxq06Obyp9CBrHPNfVMXwA==
+"@clobbr/api@^1.15.1":
+  version "1.15.1"
+  resolved "https://registry.yarnpkg.com/@clobbr/api/-/api-1.15.1.tgz#5dd005b6986ee9f2614aa623c6b8e426173952ce"
+  integrity sha512-xgstGlJuJor99i0qgaHgL3CpFJOIoqKw52IwdX2/loPsKD/m19p3oA6otn1p0rRmNmCPhl3QsGdvOQrCgBmQaw==
   dependencies:
     "@vercel/ncc" "^0.28.0"
     axios "^0.21.1"
@@ -498,9 +498,9 @@ fill-range@^7.0.1:
     to-regex-range "^5.0.1"
 
 follow-redirects@^1.14.0:
-  version "1.15.2"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.2.tgz#b460864144ba63f2681096f274c4e57026da2c13"
-  integrity sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==
+  version "1.15.4"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.4.tgz#cdc7d308bf6493126b17ea2191ea0ccf3e535adf"
+  integrity sha512-Cr4D/5wlrb0z9dgERpUL3LrmPKVDsETIJhaCMeDfuFYcqa5bldGV6wBsAN6X/vxlXQtFBMrXdXxdL8CbDTGniw==
 
 forever-agent@~0.6.1:
   version "0.6.1"
