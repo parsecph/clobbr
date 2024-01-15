@@ -79,7 +79,7 @@ export const ResultHistoryToggle = ({
           <Modal
             onClose={onHistoryClosePressed}
             open={showHistory}
-            maxWidth="3xl"
+            maxWidth={787}
           >
             <div className="p-4 border-b border-solid border-gray-500 border-opacity-20 flex justify-between items-center flex-wrap gap-4">
               <Typography

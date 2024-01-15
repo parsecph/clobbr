@@ -19,6 +19,36 @@ export const RESULT_STAT_TYPES: {
   TOTAL_TIME: 'Total time (s)'
 };
 
+const getTotalDurationInSeconds = ({
+  startDate,
+  endDate,
+  startTimestamp,
+  endTimestamp
+}: {
+  startDate?: string;
+  endDate?: string;
+  startTimestamp?: number;
+  endTimestamp?: number;
+}) => {
+  const canCompute = (startDate && endDate) || (startTimestamp && endTimestamp);
+
+  if (!canCompute) {
+    return 0;
+  }
+
+  if (startTimestamp && endTimestamp) {
+    return (endTimestamp - startTimestamp) / 1000;
+  }
+
+  if (startDate && endDate) {
+    const startDateEpoch = new Date(startDate).valueOf();
+    const endDateEpoch = new Date(endDate).valueOf();
+    return (endDateEpoch - startDateEpoch) / 1000;
+  }
+
+  return 0;
+};
+
 export const getLogStats = (
   logs: Array<ClobbrLogItem>,
   result: ClobbrUIResult
@@ -28,12 +58,12 @@ export const getLogStats = (
     .filter((log) => isNumber(log.metas.duration))
     .map((log) => log.metas.duration as number);
 
-  const startUnixTime = result.startDate
-    ? new Date(result.startDate).valueOf()
-    : 0;
-  const endUnixTime = result.endDate ? new Date(result.endDate).valueOf() : 0;
-  const totalDuration = startUnixTime ? endUnixTime - startUnixTime : 0;
-  const totalDurationInSeconds = totalDuration / 1000;
+  const totalDurationInSeconds = getTotalDurationInSeconds({
+    startDate: result.startDate,
+    endDate: result.endDate,
+    startTimestamp: result.startTimestamp,
+    endTimestamp: result.endTimestamp
+  });
 
   const cumulativeDuration = qualifiedDurations.reduce(
     (acc, curr) => acc + curr,

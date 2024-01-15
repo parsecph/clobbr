@@ -11,7 +11,9 @@ export type ClobbrUIResultState =
 export interface ClobbrUIResult {
   cacheId: string;
   startDate?: string;
+  startTimestamp?: number;
   endDate?: string;
+  endTimestamp?: number;
   resultDurations: Array<number>;
   logs: Array<ClobbrLogItem>;
 

@@ -122,6 +122,7 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     const result: ClobbrUIResult = {
       cacheId,
       startDate: formatISO(new Date()),
+      startTimestamp: new Date().valueOf(),
       endDate: undefined,
       resultDurations,
       logs: logsWithoutBloat,
@@ -222,6 +223,7 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     const existingListItem = currentList.find((i) => i.cacheId === cacheId);
     const isComplete = existingListItem?.iterations === logs.length;
     const endDate = isComplete ? formatISO(new Date()) : undefined;
+    const endTimestamp = isComplete ? new Date().valueOf() : undefined;
 
     if (!existingListItem) {
       console.warn(`Could not find result item with id ${cacheId}`);
@@ -238,6 +240,7 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     const nextResult: ClobbrUIResult = {
       ...existingListItem.latestResult,
       endDate,
+      endTimestamp,
       logs: logsWithoutBloat,
       resultDurations
     };

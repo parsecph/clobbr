@@ -42,7 +42,7 @@ export const ResultHistoryTableFailedItem = ({
       >
         <Typography
           variant="caption"
-          className="uppercase flex items-center gap-0.5 w-full"
+          className="uppercase flex items-center justify-center gap-0.5 w-full"
         >
           <small>
             {!state.error && !showCopiedText ? (

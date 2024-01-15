@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { rootContainer } from 'rootContainer';
 
 import { Button } from '@mui/material';
+import { isNumber } from 'lodash-es';
 
 const WrappedDialog = Dialog as unknown as React.ElementType<any>;
 
@@ -22,7 +23,7 @@ export const Modal = ({
   containerClassName
 }: {
   open?: boolean;
-  maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl';
+  maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl' | number;
   onClose: () => void;
   children: React.ReactNode;
   footerComponent?: React.ReactNode;
@@ -90,9 +91,12 @@ export const Modal = ({
               className={clsx(
                 'z-0 flex flex-col w-full h-full bg-white/80 dark:bg-gray-900/70 backdrop-blur-lg rounded-t-lg shadow-xl overflow-auto',
                 'tall-lg:h-auto tall-lg:min-h-[840px]',
-                maxWidth && `max-w-${maxWidth}`,
+                maxWidth && !isNumber(maxWidth) && `max-w-${maxWidth}`,
                 containerClassName
               )}
+              style={{
+                ...(isNumber(maxWidth) && { maxWidth })
+              }}
               ref={modalRef}
             >
               {children}
