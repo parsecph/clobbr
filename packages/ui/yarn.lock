@@ -1674,10 +1674,10 @@
   resolved "https://registry.npmjs.org/@chevrotain/utils/-/utils-10.1.2.tgz"
   integrity sha512-bbZIpW6fdyf7FMaeDmw3cBbkTqsecxEkwlVKgVfqqXWBPLH6azxhPA2V9F7OhoZSVrsnMYw7QuyK6qutXPjEew==
 
-"@clobbr/api@^1.15.0":
-  version "1.15.0"
-  resolved "https://registry.yarnpkg.com/@clobbr/api/-/api-1.15.0.tgz#0df295f3402c74d06bc6bd42810337072a2e5d35"
-  integrity sha512-jxMesuoS+OdIEKXlHXTHzOABsvgOsRVYvFzOqfqlnlVYT9T7e0uDsTyBShqddJZR2DxTHVSrr0sJdGhoJjWy2A==
+"@clobbr/api@^1.15.1":
+  version "1.15.1"
+  resolved "https://registry.yarnpkg.com/@clobbr/api/-/api-1.15.1.tgz#5dd005b6986ee9f2614aa623c6b8e426173952ce"
+  integrity sha512-xgstGlJuJor99i0qgaHgL3CpFJOIoqKw52IwdX2/loPsKD/m19p3oA6otn1p0rRmNmCPhl3QsGdvOQrCgBmQaw==
   dependencies:
     "@vercel/ncc" "^0.28.0"
     axios "^0.21.1"
