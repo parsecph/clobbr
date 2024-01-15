@@ -104,7 +104,19 @@ const Search = forwardRef(
     }, [wssUrl]);
 
     const { lastMessage, readyState } = useWebSocket(getSocketUrl, {
-      shouldReconnect: (closeEvent) => true
+      shouldReconnect: (closeEvent) => true,
+      reconnectAttempts: 1000,
+      reconnectInterval: 1000,
+      onError: (event) => {
+        console.error('Error connecting to ws', event);
+      },
+      onOpen: (event) => {
+        console.info('Connected to ws', event);
+      },
+      onReconnectStop: (event) => {
+        console.info('Stopped reconnecting to ws', event);
+      },
+      retryOnError: true
     });
 
     const wsReady = readyState === ReadyState.OPEN;
@@ -231,6 +243,10 @@ const Search = forwardRef(
             const message = JSON.parse(lastMessage.data);
             const { event, payload } = message;
 
+            if (process.env.NODE_ENV === 'development') {
+              console.info('Received ws message', message);
+            }
+
             if (event.includes(WS_EVENTS.API.RUN_CALLBACK)) {
               runEventCallback(payload.runningItemId, payload.listItemId)(
                 payload.event,
@@ -272,7 +288,9 @@ const Search = forwardRef(
             setWssUrl(newWsUrl);
           });
         }
-      } catch {}
+      } catch (error) {
+        console.warn('Failed to connect to wss via backend API', error);
+      }
     });
 
     return (
