@@ -27,7 +27,7 @@
 		"@types/react-chartjs-2": "^2.5.7",
 		"@types/uuid": "^8.3.4",
 		"@uiw/react-monacoeditor": "^3.5.3",
-		"axios": "^0.26.1",
+		"axios": "^0.28.0",
 		"brotli-wasm": "^2.0.1",
 		"byte-size": "^8.1.0",
 		"chart.js": "^3.9.1",
