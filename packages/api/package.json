@@ -16,7 +16,7 @@
   "license": "MIT",
   "dependencies": {
     "@vercel/ncc": "^0.28.0",
-    "axios": "^0.21.1",
+    "axios": "^0.28.0",
     "faker": "^5.5.2",
     "is-absolute-url": "^3.0.3",
     "object-sizeof": "^1.6.1"
