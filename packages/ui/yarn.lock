@@ -1674,10 +1674,10 @@
   resolved "https://registry.npmjs.org/@chevrotain/utils/-/utils-10.1.2.tgz"
   integrity sha512-bbZIpW6fdyf7FMaeDmw3cBbkTqsecxEkwlVKgVfqqXWBPLH6azxhPA2V9F7OhoZSVrsnMYw7QuyK6qutXPjEew==
 
-"@clobbr/api@^1.15.1":
-  version "1.15.1"
-  resolved "https://registry.yarnpkg.com/@clobbr/api/-/api-1.15.1.tgz#5dd005b6986ee9f2614aa623c6b8e426173952ce"
-  integrity sha512-xgstGlJuJor99i0qgaHgL3CpFJOIoqKw52IwdX2/loPsKD/m19p3oA6otn1p0rRmNmCPhl3QsGdvOQrCgBmQaw==
+"@clobbr/api@^1.16.0":
+  version "1.16.0"
+  resolved "https://registry.yarnpkg.com/@clobbr/api/-/api-1.16.0.tgz#8607e1499fab4a5d89703b602f6c9e28f18b9c3f"
+  integrity sha512-kCCwa+mxZdpnoqEtYD0NSH3W+g5Ikflzcp9gsBiQ0G2RbPOruuAMy1psj6Fp9N6YxfZ1xj6m7uGCFvYZUlEMlA==
   dependencies:
     "@vercel/ncc" "^0.28.0"
     axios "^0.21.1"
@@ -10494,9 +10494,9 @@ webidl-conversions@^6.1.0:
   integrity sha512-qBIvFLGiBpLjfwmYAaHPXsn+ho5xZnGvyGvsarywGNc8VyQJUMHJ8OBKGGrPER0okBeMDaan4mNBlgBROxuI8w==
 
 webpack-dev-middleware@^5.3.1:
-  version "5.3.3"
-  resolved "https://registry.npmjs.org/webpack-dev-middleware/-/webpack-dev-middleware-5.3.3.tgz"
-  integrity sha512-hj5CYrY0bZLB+eTO+x/j67Pkrquiy7kWepMHmUMoPsmcUaeEnQJqFzHJOyxgWlq746/wUuA64p9ta34Kyb01pA==
+  version "5.3.4"
+  resolved "https://registry.yarnpkg.com/webpack-dev-middleware/-/webpack-dev-middleware-5.3.4.tgz#eb7b39281cbce10e104eb2b8bf2b63fce49a3517"
+  integrity sha512-BVdTqhhs+0IfoeAf7EoH5WE+exCmqGerHfDM0IL096Px60Tq2Mn9MAbnaGUe6HiMa41KMCYF19gyzZmBcq/o4Q==
   dependencies:
     colorette "^2.0.10"
     memfs "^3.4.3"
