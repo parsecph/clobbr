@@ -17,21 +17,8 @@ Test your api endpoints to see how well they perform under multiple requests (cl
 [👉 See cli usage examples here ↗️](https://github.com/parsecph/clobbr/blob/master/README.md#usage-examples-for-the-cli)
 
 
-Use this cli tool from your favorite shell or integrate with your CI server:
-
-<a href="https://app.circleci.com/pipelines/github/parsecph/clobbr-ci/471/workflows/706bab66-3ced-4a60-aca1-f832e1d1e85a/jobs/470/parallel-runs/0/steps/0-102">
-  <img width="200px" alt="CircleCI integration config" src="https://user-images.githubusercontent.com/1515742/189537171-4a064b0d-3db9-4016-9baf-f6b6ac49f45d.png">
-</a>
-
-<a href="https://app.travis-ci.com/github/parsecph/clobbr-ci">
-  <img width="200px" alt="Travis CI integration config" src="https://user-images.githubusercontent.com/1515742/189537172-c4e01aaf-16f2-499f-92d5-924c82a44540.png">
-</a>
-
-<a href="https://ci.appveyor.com/project/dandaniel/clobbr-ci">
-  <img width="200px" alt="AppVeyor CI integration config" src="https://user-images.githubusercontent.com/1515742/189537169-1b6b812a-9830-4573-955d-b25ccec27e08.png">
-</a>
-
-[See more ci samples ↗️](https://github.com/parsecph/clobbr-ci-examples)
+Use this cli tool from your favorite shell or integrate with your CI/CD server.
+[See CI/CD examples here ↗️](https://github.com/parsecph/clobbr-ci-examples)
 
 ### Basic usage
 
@@ -39,8 +26,7 @@ Use this cli tool from your favorite shell or integrate with your CI server:
 npx @clobbr/cli run --url "https://github.com"
 ```
 
-[See more examples here ↗️](https://github.com/parsecph/clobbr/blob/master/README.md#usage-examples-for-the-cli)
-
+[See more usage examples here ↗️](https://github.com/parsecph/clobbr/blob/master/README.md#usage-examples-for-the-cli)
 
 ### Options
 
