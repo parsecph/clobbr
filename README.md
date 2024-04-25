@@ -8,7 +8,7 @@
   <a href="https://go.setapp.com/stp379?refAppID=593&utm_medium=vendor_program" target="_blank">
     <img height="40px" src="https://user-images.githubusercontent.com/1515742/272677025-8751337a-b18a-4429-8b8b-7333e647e561.svg" alt="Get Clobbr Free on Setapp" />
   </a>
-  
+
   <a href="https://apps.apple.com/us/app/clobbr-test-endpoint-speed/id1629096010?mt=12" target="_blank">
     <img height="40px" src="https://user-images.githubusercontent.com/1515742/189620547-646b3682-708a-4378-9e40-b6ca8e67a077.svg" alt="Download Clobbr on the Apple App Store" />
   </a>
@@ -52,7 +52,7 @@ head over to [@clobbr/cli docs](./packages/cli/README.md).
 
 #### CI
 The cli can be used in a CI context too.
-[See examples with popular CIs here ↗️](https://github.com/parsecph/clobbr-ci)
+[See examples with popular CIs here ↗️](https://github.com/parsecph/clobbr-ci-examples)
 
 <a href="https://app.circleci.com/pipelines/github/parsecph/clobbr-ci/471/workflows/706bab66-3ced-4a60-aca1-f832e1d1e85a/jobs/470/parallel-runs/0/steps/0-102">
   <img width="200px" alt="CircleCI integration config" src="https://user-images.githubusercontent.com/1515742/189537171-4a064b0d-3db9-4016-9baf-f6b6ac49f45d.png">
@@ -248,8 +248,8 @@ This tool is part of the Apihustle suite - a collection of tools to test, improv
 
 |    |    |    |    |
 | :- | :- | :- | :- |
-| <a href="https://clobbr.app" target="_blank"><img height="70px" src="https://user-images.githubusercontent.com/1515742/215217949-0fe7096c-10f1-47ec-bdc7-91d8047ddc70.svg" alt="Clobbr Logo" /></a> | **Clobbr** | Debug multiple cron expressions on a calendar. | [clobbr.app](https://clobbr.app) | 
-| <a href="https://crontap.com" target="_blank"><img height="70px" src="https://user-images.githubusercontent.com/1515742/215218037-44233c7d-7e21-4180-8572-6a759a6a118f.svg" alt="Crontap Logo" /></a> | **Crontap** | Schedule API calls using cron syntax. | [crontap.com](https://crontap.com) | 
+| <a href="https://clobbr.app" target="_blank"><img height="70px" src="https://user-images.githubusercontent.com/1515742/215217949-0fe7096c-10f1-47ec-bdc7-91d8047ddc70.svg" alt="Clobbr Logo" /></a> | **Clobbr** | Debug multiple cron expressions on a calendar. | [clobbr.app](https://clobbr.app) |
+| <a href="https://crontap.com" target="_blank"><img height="70px" src="https://user-images.githubusercontent.com/1515742/215218037-44233c7d-7e21-4180-8572-6a759a6a118f.svg" alt="Crontap Logo" /></a> | **Crontap** | Schedule API calls using cron syntax. | [crontap.com](https://crontap.com) |
 | <a href="https://tool.crontap.com" target="_blank"><img height="70px" src="https://user-images.githubusercontent.com/1515742/215217997-fedcc496-a868-40bd-81f9-d07dabc0597e.svg" alt="CronTool Logo" /></a> | **CronTool** | Debug multiple cron expressions on a calendar. | [tool.crontap.com](https://tool.crontap.com)  |
 
 -----------------
@@ -260,7 +260,7 @@ Save 10s of hours of work by using Shipixen to generate a customized boilerplate
 | | |
 | :- | :- |
 | <a href="https://shipixen.com" target="_blank"><img height="60px" src="https://user-images.githubusercontent.com/1515742/281071510-d5c0095d-d336-4857-ad80-d18cf65f4acb.png" alt="Shipixen Logo" /></a> <br/> <b>Shipixen</b> <br/> Create a blog & landing page in minutes with <b>Shipixen</b>. <br/> Get started on <a href="https://shipixen.com">shipixen.com</a>. | <a href="https://shipixen.com" target="_blank"><img width="300px" src="https://user-images.githubusercontent.com/1515742/281077548-57b24773-3c2a-4e89-b088-cc3945d7037b.png" alt="Shipixen Logo" /></a> |
- 
+
 -----------------
 
 ![Clobbr icon](https://user-images.githubusercontent.com/1515742/80861773-da9a6a00-8c70-11ea-9671-77e1bb2dea04.png)
