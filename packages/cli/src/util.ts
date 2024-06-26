@@ -6,7 +6,15 @@ const COLOR_MAP = {
 };
 
 export const getDurationColor = (duration) => {
-  return COLOR_MAP[Math.round(duration / 1000)] || 'red';
+  if (duration < 0) {
+    return 'white';
+  }
+
+  if (duration > 3000) {
+    return 'red';
+  }
+
+  return COLOR_MAP[Math.round(duration / 1000)];
 };
 
 export const formatNumber = (
@@ -14,8 +22,12 @@ export const formatNumber = (
   minDigits: number = 0,
   maxDigits: number = 2
 ) => {
-  return new Intl.NumberFormat('en', {
-    minimumFractionDigits: minDigits,
-    maximumFractionDigits: maxDigits
-  }).format(num);
+  try {
+    return new Intl.NumberFormat('en', {
+      minimumFractionDigits: minDigits,
+      maximumFractionDigits: maxDigits
+    }).format(num);
+  } catch (error) {
+    return num;
+  }
 };

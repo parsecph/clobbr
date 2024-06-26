@@ -80,11 +80,11 @@ export const renderStatsTable = (
     '99th percentile'
   ].map((t) => chalk.bold(t));
 
-  const meanValue = mean(qualifiedDurations);
-  const stdValue = stdDev(qualifiedDurations);
-  const q5Value = q5(qualifiedDurations);
-  const q95Value = q95(qualifiedDurations);
-  const q99Value = q99(qualifiedDurations);
+  const meanValue = mean(qualifiedDurations) || 0;
+  const stdValue = stdDev(qualifiedDurations) || 0;
+  const q5Value = q5(qualifiedDurations) || 0;
+  const q95Value = q95(qualifiedDurations) || 0;
+  const q99Value = q99(qualifiedDurations) || 0;
 
   const stats = [
     chalk.keyword(getDurationColor(meanValue))(`${formatNumber(meanValue)} ms`),
