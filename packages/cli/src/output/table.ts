@@ -1,3 +1,4 @@
+import { isNumber } from 'lodash';
 import chalk from 'chalk';
 import { table } from 'table';
 
@@ -68,16 +69,24 @@ export const renderTable = (
 export const renderStatsTable = (
   _failed: Array<ClobbrLogItem>,
   ok: Array<ClobbrLogItem>,
-  tableType: ETableTypes = TABLE_TYPES.compact
+  tableType: ETableTypes = TABLE_TYPES.compact,
+  startTimestamp?: number,
+  endTimestamp?: number
 ) => {
   const qualifiedDurations = ok.map((r) => r.metas.duration);
+  const totalTime =
+    isNumber(startTimestamp) && isNumber(endTimestamp)
+      ? endTimestamp - startTimestamp
+      : 0;
+  const totalTimeInSeconds = totalTime ? totalTime : 0;
 
   const tableHeader = [
     'Average (Mean)',
     'Standard Deviation',
     '5th percentile',
     '95th percentile',
-    '99th percentile'
+    '99th percentile',
+    ...(totalTimeInSeconds ? ['Total time'] : [])
   ].map((t) => chalk.bold(t));
 
   const meanValue = mean(qualifiedDurations) || 0;
@@ -95,7 +104,10 @@ export const renderStatsTable = (
       : '-',
     chalk.keyword(getDurationColor(q5Value))(`${formatNumber(q5Value)} ms`),
     chalk.keyword(getDurationColor(q95Value))(`${formatNumber(q95Value)} ms`),
-    chalk.keyword(getDurationColor(q99Value))(`${formatNumber(q99Value)} ms`)
+    chalk.keyword(getDurationColor(q99Value))(`${formatNumber(q99Value)} ms`),
+    ...(totalTimeInSeconds
+      ? [`${formatNumber(totalTimeInSeconds, 0, 0)} ms`]
+      : [])
   ];
 
   const tableOptions = {
@@ -110,5 +122,8 @@ export const renderStatsTable = (
 
   if (ok.length) {
     console.log(table([tableHeader, stats], tableOptions));
+    return [tableHeader, stats];
   }
+
+  return [tableHeader, stats];
 };

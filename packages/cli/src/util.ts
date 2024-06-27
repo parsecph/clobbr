@@ -2,7 +2,7 @@ const COLOR_MAP = {
   0: 'green',
   1: 'yellow',
   2: 'orange',
-  3: 'redBright'
+  3: 'red'
 };
 
 export const getDurationColor = (duration) => {

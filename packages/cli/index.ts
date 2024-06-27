@@ -175,11 +175,16 @@ program
         data
       });
 
+      const startDuration = Date.now();
+
       const { results, logs } = await run(
         parallel,
         options,
         runEventCallback(spinner)
       );
+
+      const endDuration = Date.now();
+
       spinner.stop();
 
       if (debug) {
@@ -216,7 +221,13 @@ program
             renderChart(results);
           }
 
-          renderStatsTable(failedRequests, okRequests);
+          renderStatsTable(
+            failedRequests,
+            okRequests,
+            TABLE_TYPES.compact,
+            startDuration,
+            endDuration
+          );
 
           success(`\n Finished run of ${results.length} iterations ✅ `);
 
