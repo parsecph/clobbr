@@ -1,6 +1,6 @@
 {
   "name": "@clobbr/cli",
-  "version": "1.16.1",
+  "version": "1.16.2",
   "description": "Clobbr CLI",
   "main": "dist/index.js",
   "bin": "dist/index.js",
