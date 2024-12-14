@@ -1,10 +1,10 @@
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 
 export const COMMENT = () => {
   return {
-    id: faker.datatype.uuid(),
+    id: faker.string.uuid(),
     createdAt: faker.date.soon(),
-    name: faker.name.firstName(),
+    name: faker.person.firstName(),
     avatar: faker.image.avatar(),
     ip: faker.internet.ip(),
     comment: faker.lorem.words()
