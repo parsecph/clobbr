@@ -1,14 +1,13 @@
-import axios from 'axios';
-import { AxiosInstance } from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { DEFAULT_HTTP_TIMEOUT_IN_MS } from './consts/http';
 import packageJson from '../package.json';
 
-console.log(axios);
-
 const api = {
-  http: axios
+  http: axios,
+  CancelToken: axios.CancelToken
 } as {
   http: AxiosInstance;
+  CancelToken: typeof axios.CancelToken;
 };
 
 api.http.defaults.timeout = DEFAULT_HTTP_TIMEOUT_IN_MS;

@@ -22,17 +22,19 @@ export const handleApiCall = async (
     includeDataInResponse
   }: ClobbrRequestSettings
 ) => {
-  // Dont's send payload data if data object is empty
+  // Don't send payload data if data object is empty
   const payloadData = data && Object.keys(data).length > 0 ? data : undefined;
 
   const sanitizedUrl = sanitizeUrl(url);
   const startTime = new Date().valueOf();
+  const abortController = new AbortController();
   const res = await api.http({
     url: sanitizedUrl,
     method: verb,
     headers,
     data: payloadData,
-    timeout: timeout || DEFAULT_HTTP_TIMEOUT_IN_MS
+    timeout: timeout || DEFAULT_HTTP_TIMEOUT_IN_MS,
+    signal: abortController.signal
   });
 
   const endTime = new Date().valueOf();
@@ -57,10 +59,11 @@ export const handleApiCall = async (
           name: 'GQL error',
           gqlErrors: errors
         } as ClobbrExtendedAxiosError)
-      : undefined
+      : undefined,
+    abortController
   };
 
-  return { logItem, duration };
+  return { logItem, duration, abortController };
 };
 
 export const handleApiCallError = (

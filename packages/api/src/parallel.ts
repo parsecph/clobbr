@@ -23,14 +23,19 @@ export const runParallel = async (
 
   const results = [] as Array<number>;
   const logs = [] as Array<ClobbrLogItem>;
+  const abortControllers = [] as Array<AbortController>;
 
   const requests = Array.from({ length: iterations }).map(async (_v, index) => {
     const runStartTime = new Date().valueOf(); // Only used for fails.
 
     try {
-      const { duration, logItem } = await handleApiCall(index, settings);
+      const { duration, logItem, abortController } = await handleApiCall(
+        index,
+        settings
+      );
       results.push(duration);
       logs.push(logItem);
+      abortControllers.push(abortController);
 
       if (eventCallback) {
         eventCallback(EVENTS.RESPONSE_OK, logItem, logs);
@@ -51,5 +56,5 @@ export const runParallel = async (
   });
 
   await Promise.all(requests);
-  return { results, logs, average: getTimeAverage(results) };
+  return { results, logs, average: getTimeAverage(results), abortControllers };
 };
