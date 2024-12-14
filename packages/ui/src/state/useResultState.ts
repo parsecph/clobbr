@@ -16,12 +16,14 @@ const unbloatLogs = (log: ClobbrLogItem) => {
   if (log.failed && log.error && isPlainObject(log.error)) {
     try {
       const error = log.error as AxiosError;
-      error.config = {
-        url: error.config.url,
-        method: error.config.method,
-        headers: error.config.headers,
-        data: error.config.data
-      };
+      if (error.config) {
+        error.config = {
+          url: error.config.url,
+          method: error.config.method,
+          headers: error.config.headers,
+          data: error.config.data
+        };
+      }
     } catch (error) {
       console.error('Failed to prune error object', error);
     }

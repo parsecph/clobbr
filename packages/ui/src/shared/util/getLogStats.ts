@@ -65,11 +65,11 @@ export const getLogStats = (
     endTimestamp: result.endTimestamp
   });
 
-  const cumulativeDuration = qualifiedDurations.reduce(
-    (acc, curr) => acc + curr,
-    0
-  );
-  const cumulativeDurationInSeconds = cumulativeDuration / 1000;
+  // const cumulativeDuration = qualifiedDurations.reduce(
+  //   (acc, curr) => acc + curr,
+  //   0
+  // );
+  // const cumulativeDurationInSeconds = cumulativeDuration / 1000;
   const meanValue = mean(qualifiedDurations);
   const stdDevValue = stdDev(qualifiedDurations);
   const q5Value = q5(qualifiedDurations);

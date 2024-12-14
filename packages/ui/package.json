@@ -8,7 +8,7 @@
 		"type": "git",
 		"url": "https://github.com/parsecph/clobbr/blob/master/packages/ui"
 	},
-	"author": "Dan Mindru <mindrudan@gmail.com>",
+	"author": "Dan Mindru <hey@danmindru.dev>",
 	"license": "MIT",
 	"dependencies": {
 		"@clobbr/api": "^1.16.1",
@@ -25,19 +25,20 @@
 		"@types/js-beautify": "^1.14.1",
 		"@types/lodash-es": "^4.17.6",
 		"@types/react-chartjs-2": "^2.5.7",
-		"@types/uuid": "^8.3.4",
+		"@types/uuid": "^10.0.0",
 		"@uiw/react-monacoeditor": "^3.5.3",
-		"axios": "^0.26.1",
+		"axios": "^1.7.9",
 		"brotli-wasm": "^2.0.1",
 		"byte-size": "^8.1.0",
+		"caniuse-lite": "^1.0.30001688",
 		"chart.js": "^3.9.1",
 		"chartjs-plugin-trendline": "^2.0.0",
-		"clsx": "^1.1.1",
+		"clsx": "^2.1.1",
 		"cra-template-typescript": "1.1.3",
 		"date-fns": "^2.28.0",
 		"framer-motion": "^6.2.10",
 		"framer-motion-3d": "^6.2.10",
-		"is-absolute-url": "^4.0.1",
+		"is-absolute-url": "^3.0.3",
 		"js-beautify": "^1.14.9",
 		"localforage": "^1.10.0",
 		"lodash-es": "^4.17.21",
@@ -53,9 +54,9 @@
 		"react-use-websocket": "^4.2.0",
 		"react-usestateref": "^1.0.8",
 		"tailwindcss": "^3.0.23",
-		"three": "^0.139.2",
-		"uuid": "^8.3.2",
-		"zustand": "^4.1.5"
+		"three": "^0.171.0",
+		"uuid": "^11.0.3",
+		"zustand": "^5.0.2"
 	},
 	"scripts": {
 		"start": "react-app-rewired start",
@@ -90,7 +91,7 @@
 		"autoprefixer": "^10.4.4",
 		"monaco-editor-webpack-plugin": "^7.0.1",
 		"postcss": "^8.4.31",
-		"prettier": "^2.6.2",
+		"prettier": "^3.4.2",
 		"typescript": "^4.9.5"
 	},
 	"gitHead": "01a06d12621f08f85adba1513c574a97d9e5c0f9"

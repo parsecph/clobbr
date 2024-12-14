@@ -1,11 +1,12 @@
+import axios from 'axios';
 import { AxiosInstance } from 'axios';
 import { DEFAULT_HTTP_TIMEOUT_IN_MS } from './consts/http';
 import packageJson from '../package.json';
 
-const http = require('axios');
+console.log(axios);
 
 const api = {
-  http
+  http: axios
 } as {
   http: AxiosInstance;
 };

@@ -26,7 +26,7 @@ export const GeneralSettings = () => {
 
   const addToast = useToastStore((state) => state.addToast);
   const [urlErrorShown, setUrlErrorShown] = useState(false);
-  const [inputFocused, setInputFocused] = useState(false);
+  const [, setInputFocused] = useState(false);
   const [autoFocusUrlInput, setAutoFocusUrlInput] = useState(false);
 
   const [confirmedSetSettingsToDefault, setConfirmedSetSettingsToDefault] =

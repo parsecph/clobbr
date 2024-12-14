@@ -27,28 +27,28 @@
     "type": "git",
     "url": "https://github.com/parsecph/clobbr/blob/master/packages/cli"
   },
-  "author": "Dan Mindru <mindrudan@gmail.com>",
+  "author": "Dan Mindru <hey@danmindru.dev>",
   "license": "MIT",
   "dependencies": {
     "@clobbr/api": "^1.16.1",
     "asciichart": "^1.5.25",
     "ava": "^3.15.0",
-    "chalk": "^4.1.0",
-    "commander": "^7.2.0",
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
     "common-tags": "^1.8.0",
-    "json-2-csv": "^3.17.1",
+    "json-2-csv": "^5.5.7",
     "lodash": "^4.17.21",
-    "ora": "^5.4.0",
+    "ora": "^8.1.1",
     "table": "^6.0.9",
     "yaml": "^2.1.1"
   },
   "devDependencies": {
-    "@types/node": "^14.14.37",
+    "@types/node": "^22.10.2",
     "@vercel/ncc": "^0.38.1",
-    "pkg": "^4.4.9",
+    "pkg": "^5.8.1",
     "prepend-file": "^2.0.0",
-    "ts-node": "^9.1.1",
-    "typescript": "^4.2.3"
+    "ts-node": "^10.9.2",
+    "typescript": "^4.9.5"
   },
   "ava": {
     "files": [

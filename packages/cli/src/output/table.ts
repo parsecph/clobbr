@@ -20,7 +20,7 @@ export const getLogItemTableRow = (logItem: ClobbrLogItem) => {
     : chalk.bold.green(metas.status);
   const duration = error
     ? '-'
-    : chalk.keyword(getDurationColor(metas.duration))(
+    : chalk.hex(getDurationColor(metas.duration))(
         `${metas.duration} ${metas.durationUnit}`
       );
   const size = error ? '-' : metas.size;
@@ -96,15 +96,13 @@ export const renderStatsTable = (
   const q99Value = q99(qualifiedDurations) || 0;
 
   const stats = [
-    chalk.keyword(getDurationColor(meanValue))(`${formatNumber(meanValue)} ms`),
+    chalk.hex(getDurationColor(meanValue))(`${formatNumber(meanValue)} ms`),
     stdValue
-      ? chalk.keyword(getDurationColor(stdValue))(
-          `${formatNumber(stdValue)} ms`
-        )
+      ? chalk.hex(getDurationColor(stdValue))(`${formatNumber(stdValue)} ms`)
       : '-',
-    chalk.keyword(getDurationColor(q5Value))(`${formatNumber(q5Value)} ms`),
-    chalk.keyword(getDurationColor(q95Value))(`${formatNumber(q95Value)} ms`),
-    chalk.keyword(getDurationColor(q99Value))(`${formatNumber(q99Value)} ms`),
+    chalk.hex(getDurationColor(q5Value))(`${formatNumber(q5Value)} ms`),
+    chalk.hex(getDurationColor(q95Value))(`${formatNumber(q95Value)} ms`),
+    chalk.hex(getDurationColor(q99Value))(`${formatNumber(q99Value)} ms`),
     ...(totalTimeInSeconds
       ? [`${formatNumber(totalTimeInSeconds, 0, 0)} ms`]
       : [])

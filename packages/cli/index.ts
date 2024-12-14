@@ -57,8 +57,8 @@ const runEventCallback = (spinner) => (
   if (statusOk) {
     spinner.text = oneLine`
       #${index + 1}
-      ${chalk.keyword(getDurationColor(duration))(`${duration}ms`)}
-      ${chalk.bold.keyword(getDurationColor(rollingAverage))(
+      ${chalk.hex(getDurationColor(duration))(`${duration}ms`)}
+      ${chalk.bold.hex(getDurationColor(rollingAverage))(
         `[${rollingAverage}ms ${chalk.white('μ')}]`
       )}
     `;

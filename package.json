@@ -21,5 +21,9 @@
     "hooks": {
       "pre-commit": "pretty-quick --staged"
     }
+  },
+  "dependencies": {
+    "@clobbr/api": "^1.16.1",
+    "axios": "^1.7.9"
   }
 }

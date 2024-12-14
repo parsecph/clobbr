@@ -1,7 +1,6 @@
 import { EErrors, ERRORS } from './enums/errors';
 import { Everbs, VERBS } from './enums/http';
-
-const isAbsoluteUrl = require('is-absolute-url');
+import isAbsoluteUrl from 'is-absolute-url';
 
 export const validate = (url: string, verb: Everbs) => {
   const errors = [];
