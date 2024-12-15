@@ -52,18 +52,18 @@ export const useResultProperties = ({ item }: { item?: ClobbrUIListItem }) => {
   }
 
   const isPartiallyComplete = isResultPartiallyComplete({
-    resultState: item.latestResult.state
+    resultState: item.state
   });
 
   const isInProgress = isResultInProgress({
-    logs: item.latestResult.logs,
+    logs: item.logs,
     iterations: item.iterations,
     isPartiallyComplete
   });
 
-  const successfulItems = item.latestResult.logs.filter((log) => !log.failed);
+  const successfulItems = item.logs.filter((log) => !log.failed);
 
-  const failedItems = item.latestResult.logs.filter((log) => log.failed);
+  const failedItems = item.logs.filter((log) => log.failed);
 
   const allFailed = failedItems.length === item.iterations;
 

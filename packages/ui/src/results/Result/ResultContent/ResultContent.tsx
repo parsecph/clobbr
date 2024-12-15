@@ -40,7 +40,7 @@ const ResultContent = ({
   } = useResultProperties({ item });
 
   const { message } = useCommonlyFailedMessage({
-    logs: item.latestResult.logs
+    logs: item.logs
   });
 
   const showTrendline = globalStore.appSettings.showTrendline;
@@ -127,7 +127,7 @@ const ResultContent = ({
           </div>
 
           <div className="mt-4">
-            <ResultStats result={item.latestResult} />
+            <ResultStats result={item} />
           </div>
 
           <div className="flex justify-center gap-2 px-2 py-6 mt-8">
@@ -148,7 +148,7 @@ const ResultContent = ({
                 startDelay={0}
               />
               <Typography variant="caption">
-                {item.latestResult.resultDurations.length < item.iterations / 2
+                {item.resultDurations.length < item.iterations / 2
                   ? 'Getting results'
                   : 'Almost there'}
               </Typography>
@@ -167,7 +167,7 @@ const ResultContent = ({
                 chartDownSampleThreshold={chartDownSampleThreshold}
                 className="mt-4"
               />
-              <ResultStats result={item.latestResult} />
+              <ResultStats result={item} />
 
               <footer className="flex flex-col items-center justify-center gap-2 pb-4">
                 {failedItems.length ? (

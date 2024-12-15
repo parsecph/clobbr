@@ -17,7 +17,7 @@ export const ResultChart = ({
   chartDownSampleThreshold: number;
   className?: string;
 }) => {
-  const qualifiedLogs = item.latestResult.logs.filter((log) => !log.failed);
+  const qualifiedLogs = item.logs.filter((log) => !log.failed);
   const qualifiedDurations = qualifiedLogs.map(
     (log) => log.metas.duration as number
   );

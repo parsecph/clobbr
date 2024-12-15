@@ -2,15 +2,11 @@ import { useCallback, useContext } from 'react';
 import { isObjectLike } from 'lodash-es';
 import { GlobalStore } from 'app/globalContext';
 
-import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
-import { EEvents } from '@clobbr/api/src/enums/events';
 import { Everbs } from 'shared/enums/http';
 import { ClobbrUIHeaderItem } from 'models/ClobbrUIHeaderItem';
 import { ClobbrUIProperties } from 'models/ClobbrUIProperties';
 import { HEADER_MODES } from 'search/SearchSettings/HeaderSettings/HeaderSettings';
 import { useToastStore } from 'toasts/state/toastStore';
-
-import { run } from '@clobbr/api';
 
 const DEFAULTS = {
   headers: {},
@@ -48,32 +44,6 @@ export const useResultRunner = ({
 
   const addToast = useToastStore((state) => state.addToast);
 
-  const runEventCallback = useCallback(
-    (cacheId: string, listItemId: string) => {
-      return (
-        _event: EEvents,
-        log: ClobbrLogItem,
-        logs: Array<ClobbrLogItem>
-      ) => {
-        if (!log.metas) {
-          console.warn(
-            `Skipped log for item [${cacheId}] because it has no metas`
-          );
-        }
-
-        globalStore.results.updateLatestResult({ cacheId, logs });
-
-        if (logs.length === globalStore.search.plannedIterations) {
-          globalStore.search.setInProgress(false);
-
-          // Update the expanded item yet again to bring the user to the latest results in case there has been navigation in the meantime.
-          globalStore.results.updateExpandedResults([listItemId]);
-        }
-      };
-    },
-    [globalStore.search, globalStore.results]
-  );
-
   const startRun = useCallback(
     async () => {
       const item = {
@@ -93,9 +63,6 @@ export const useResultRunner = ({
         timeout
       };
 
-      const { listItemId, cacheId } = globalStore.results.addItem(item);
-
-      globalStore.results.updateExpandedResults([listItemId]);
       globalStore.search.setInProgress(true);
       globalStore.search.setPlannedIterations(iterations);
 
@@ -120,6 +87,7 @@ export const useResultRunner = ({
       const options = { ...DEFAULTS, ...configuredOptions };
 
       try {
+        let listItemId = '';
         const electronAPI = (window as any).electronAPI;
 
         if (electronAPI) {
@@ -178,17 +146,14 @@ export const useResultRunner = ({
           }
 
           // NB: results would be received via websocket and not handled in this hook anymore.
-          await electronAPI.run(
-            cacheId,
-            listItemId,
-            parallel,
-            options,
-            item,
-            runEventCallback(cacheId, listItemId)
-          );
+          const res = await electronAPI.run(parallel, options, item);
+
+          listItemId = res.listItemId;
         } else {
-          await run(parallel, options, runEventCallback(cacheId, listItemId));
+          console.error('API not available');
         }
+
+        globalStore.results.updateExpandedResults([listItemId]);
       } catch (error) {
         // Add detailed logging for errors
         console.error('Error during run:', error);

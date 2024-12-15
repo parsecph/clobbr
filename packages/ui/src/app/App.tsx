@@ -84,17 +84,17 @@ const App = () => {
         const resultList = storedResultState.value.map(
           (item: ClobbrUIListItem) => {
             const isPartiallyComplete = isResultPartiallyComplete({
-              resultState: item.latestResult.state
+              resultState: item.state
             });
 
             const isInProgress = isResultInProgress({
-              logs: item.latestResult.logs,
-              iterations: item.latestResult.iterations,
+              logs: item.logs,
+              iterations: item.iterations,
               isPartiallyComplete
             });
 
             if (isInProgress) {
-              item.latestResult.state = UI_RESULT_STATES.PARTIALLY_COMPLETED;
+              item.state = UI_RESULT_STATES.PARTIALLY_COMPLETED;
             }
 
             // Migrate id to listItemId

@@ -1,5 +1,4 @@
 import { VERBS, Everbs } from 'shared/enums/http';
-import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
 import React from 'react';
 import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
 import { ClobbrUIHeaderItem } from 'models/ClobbrUIHeaderItem';
@@ -78,37 +77,7 @@ export const DEFAULT_GLOBAL_STORE = {
 
     toggleEdit() {},
     updateExpandedResults(expandedResults: Array<string>) {},
-    updateExpandedResultGroups(expandedResultGroups: Array<string>) {},
-
-    addItem(result: {
-      url: string;
-      resultDurations: Array<number>;
-      logs: Array<ClobbrLogItem>;
-      parallel: boolean;
-      iterations: number;
-      verb: Everbs;
-      ssl: boolean;
-      headers: Array<ClobbrUIHeaderItem>;
-      headerInputMode?: string;
-      headerShellCmd?: string;
-      headerNodeScriptData?: {
-        text?: string;
-        valid: boolean;
-      };
-      data: { [key: string]: any };
-      properties?: ClobbrUIProperties;
-      timeout: number;
-    }): { listItemId: string; cacheId: string } {
-      return { listItemId: '', cacheId: '' };
-    },
-
-    updateLatestResult({
-      cacheId,
-      logs
-    }: {
-      cacheId: string;
-      logs: Array<ClobbrLogItem>;
-    }) {}
+    updateExpandedResultGroups(expandedResultGroups: Array<string>) {}
   },
 
   themeMode: 'dark',

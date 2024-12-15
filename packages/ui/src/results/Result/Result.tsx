@@ -126,7 +126,7 @@ const Result = ({
   };
 
   const averageDuration = useMemo(() => {
-    const qualifiedDurations = item.latestResult.logs
+    const qualifiedDurations = item.logs
       .filter((log) => !log.failed)
       .filter((log) => isNumber(log.metas.duration))
       .map((log) => log.metas.duration as number);
@@ -140,7 +140,7 @@ const Result = ({
     }
 
     return mathUtils.mean(qualifiedDurations);
-  }, [item.latestResult.logs]);
+  }, [item.logs]);
 
   const durationColor = useMemo(
     () => getDurationColorClass(averageDuration),
@@ -151,23 +151,17 @@ const Result = ({
   const [formattedDate, setFormattedDate] = useState('');
 
   useInterval(() => {
-    const date = formatDistanceToNow(
-      new Date(item.latestResult.startDate as string),
-      {
-        includeSeconds: true
-      }
-    );
+    const date = formatDistanceToNow(new Date(item.startDate as string), {
+      includeSeconds: true
+    });
 
     setFormattedDate(date);
   }, 3000);
 
   useMount(() => {
-    const date = formatDistanceToNow(
-      new Date(item.latestResult.startDate as string),
-      {
-        includeSeconds: true
-      }
-    );
+    const date = formatDistanceToNow(new Date(item.startDate as string), {
+      includeSeconds: true
+    });
 
     setFormattedDate(date);
   });
@@ -275,8 +269,8 @@ const Result = ({
 
                   {isPartiallyComplete ? (
                     <Tooltip
-                      title={`${item.latestResult.logs.length} ${
-                        item.latestResult.logs.length === 1 ? 'call' : 'calls'
+                      title={`${item.logs.length} ${
+                        item.logs.length === 1 ? 'call' : 'calls'
                       } ran`}
                     >
                       <Typography variant="body2" className="opacity-50">

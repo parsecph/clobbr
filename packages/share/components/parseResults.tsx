@@ -79,14 +79,10 @@ export const parseResult = (
       iterations: parsed.lr.i,
       verb: parsed.v as any,
       url: parsed.u,
-      latestResult: {
-        startDate: parsed.lr.s,
-        endDate: parsed.lr.e,
-        iterations: parsed.lr.i,
-        parallel: parsed.lr.p,
-        logs,
-        resultDurations
-      } as ClobbrUIResult,
+      startDate: parsed.lr.s,
+      endDate: parsed.lr.e,
+      logs,
+      resultDurations,
       historicalResults: [],
       properties: {
         gql: {

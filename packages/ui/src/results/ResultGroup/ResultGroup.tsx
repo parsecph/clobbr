@@ -40,12 +40,12 @@ const ResultGroup = ({
 
   const isInProgress = items.some((item) => {
     const isPartiallyComplete = isResultPartiallyComplete({
-      resultState: item.latestResult.state
+      resultState: item.state
     });
 
     const isInProgress = isResultInProgress({
-      logs: item.latestResult.logs,
-      iterations: item.latestResult.iterations,
+      logs: item.logs,
+      iterations: item.iterations,
       isPartiallyComplete
     });
 
@@ -97,12 +97,9 @@ const ResultGroup = ({
   const [formattedDate, setFormattedDate] = useState('');
 
   useInterval(() => {
-    const date = formatDistanceToNow(
-      new Date(items[0].latestResult.startDate as string),
-      {
-        includeSeconds: true
-      }
-    );
+    const date = formatDistanceToNow(new Date(items[0].startDate as string), {
+      includeSeconds: true
+    });
 
     setFormattedDate(date);
   }, 3000);

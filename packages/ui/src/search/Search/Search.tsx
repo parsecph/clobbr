@@ -153,8 +153,6 @@ const Search = forwardRef(
             );
           }
 
-          globalStore.results.updateLatestResult({ cacheId, logs });
-
           if (logs.length === globalStore.search.plannedIterations) {
             globalStore.search.setInProgress(false);
 
@@ -167,9 +165,8 @@ const Search = forwardRef(
     );
 
     const runLogResponseCallback = useCallback(
-      async (payload: { runningItemId: string; log: ClobbrLogItem }) => {
-        const { runningItemId, log } = payload;
-        const cacheId = runningItemId;
+      async (payload: { cacheId: string; log: ClobbrLogItem }) => {
+        const { cacheId, log } = payload;
 
         const resultDb = getDb(EDbStores.RESULT_LOGS_STORE_NAME);
 
@@ -248,7 +245,7 @@ const Search = forwardRef(
             }
 
             if (event.includes(WS_EVENTS.API.RUN_CALLBACK)) {
-              runEventCallback(payload.runningItemId, payload.listItemId)(
+              runEventCallback(payload.cacheId, payload.listItemId)(
                 payload.event,
                 payload.log,
                 payload.logs
@@ -257,7 +254,7 @@ const Search = forwardRef(
 
             if (event.includes(WS_EVENTS.API.EMIT_LOG_RESPONSE)) {
               let emitLogPayload: {
-                runningItemId: string;
+                cacheId: string;
                 log: ClobbrLogItem;
               } = payload;
 

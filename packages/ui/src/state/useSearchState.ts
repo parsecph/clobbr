@@ -220,7 +220,7 @@ export const useSearchState = ({ initialState }: { [key: string]: any }) => {
     setPayloadData(payloadData);
     setProperties(item.properties);
     setHeaderInputMode(item.headerInputMode);
-    setHeaderItems(item.headers);
+    setHeaderItems(item.headers || []);
     setHeaderShellCmd(item.headerShellCmd);
     setHeaderNodeScriptData(item.headerNodeScriptData);
     setRequestTimeout(item.timeout);

@@ -93,9 +93,17 @@ export const ShareResultToggle = ({
     let statusMap: { [key: string]: number } = {};
     let statusCodeMap: { [key: string]: number } = {};
 
-    const { latestResult, url, verb, ssl, properties } = item;
-
-    const { iterations, logs, parallel, startDate, endDate } = latestResult;
+    const {
+      iterations,
+      logs,
+      parallel,
+      startDate,
+      endDate,
+      url,
+      verb,
+      ssl,
+      properties
+    } = item;
 
     const sanitizedLogs = logs.map((log) => {
       const { failed, metas } = log;

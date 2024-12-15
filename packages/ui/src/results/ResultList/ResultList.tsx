@@ -1,5 +1,4 @@
-import { useContext } from 'react';
-import { orderBy } from 'lodash-es';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
@@ -12,7 +11,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import ResultGroup from 'results/ResultGroup/ResultGroup';
 
-const MAX_RESULTS = 100;
+const MAX_RESULTS = 1000;
 
 const ResultList = ({
   list,
@@ -21,35 +20,50 @@ const ResultList = ({
   list: Array<ClobbrUIListItem>;
   className?: string;
 }) => {
-  const globalStore = useContext(GlobalStore);
+  const [resultsByUrl, setResultsByUrl] = useState<{
+    [key: string]: { url: string; list: Array<ClobbrUIListItem> };
+  }>({});
 
-  const resultsByUrl = orderBy(
-    globalStore.results.list,
-    ['latestResult.startDate'],
-    ['desc']
-  ).reduce(
-    (acc, cur: ClobbrUIListItem) => {
-      const isGql = cur.properties?.gql?.isGql;
+  const fetchResults = async () => {
+    const results = await (window as any).electronAPI.getResults();
+    const resultsByUrl = results.reduce(
+      (
+        acc: { [key: string]: { url: string; list: Array<ClobbrUIListItem> } },
+        cur: ClobbrUIListItem
+      ) => {
+        const isGql = cur.properties?.gql?.isGql;
 
-      const key = isGql
-        ? `${cur.properties?.gql?.gqlName}-${cur.url}`
-        : cur.url;
+        const key = isGql
+          ? `${cur.properties?.gql?.gqlName}-${cur.url}`
+          : cur.url;
 
-      if (acc[key]) {
-        acc[key].list = acc[key].list.concat(cur);
-      } else {
-        acc[key] = {
-          url: cur.url,
-          list: [cur]
-        };
+        if (acc[key]) {
+          acc[key].list = acc[key].list.concat(cur);
+        } else {
+          acc[key] = {
+            url: cur.url,
+            list: [cur]
+          };
+        }
+
+        return acc;
+      },
+      {} as {
+        [key: string]: { url: string; list: Array<ClobbrUIListItem> };
       }
+    );
+    setResultsByUrl(resultsByUrl);
+  };
 
-      return acc;
-    },
-    {} as {
-      [key: string]: { url: string; list: Array<ClobbrUIListItem> };
-    }
-  );
+  useEffect(() => {
+    fetchResults();
+    const handleNewRun = () => fetchResults();
+    (window as any).electronAPI.onNewRun(handleNewRun);
+
+    return () => {
+      (window as any).electronAPI.offNewRun(handleNewRun);
+    };
+  }, []);
 
   return (
     <GlobalStore.Consumer>

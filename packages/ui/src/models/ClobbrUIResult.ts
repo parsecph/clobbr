@@ -6,28 +6,26 @@ export const UI_RESULT_STATES = {
 };
 
 export type ClobbrUIResultState =
-  typeof UI_RESULT_STATES[keyof typeof UI_RESULT_STATES];
+  (typeof UI_RESULT_STATES)[keyof typeof UI_RESULT_STATES];
 
 export interface ClobbrUIResult {
   cacheId: string;
-  startDate?: string;
-  startTimestamp?: number;
+  data?: { [key: string]: any };
   endDate?: string;
   endTimestamp?: number;
-  resultDurations: Array<number>;
-  logs: Array<ClobbrLogItem>;
-
-  // Config
-  parallel: boolean;
-  iterations: number;
-  headers?: Array<ClobbrUIHeaderItem>;
   headerInputMode?: string;
-  headerShellCmd?: string;
   headerNodeScriptData?: {
     text?: string;
     valid: boolean;
   };
-  data?: { [key: string]: any };
-  timeout: number;
+  headerShellCmd?: string;
+  headers?: Array<ClobbrUIHeaderItem>;
+  iterations: number;
+  logs: Array<ClobbrLogItem>;
+  parallel: boolean;
+  resultDurations: Array<number>;
+  startDate?: string;
+  startTimestamp?: number;
   state?: ClobbrUIResultState;
+  timeout: number;
 }

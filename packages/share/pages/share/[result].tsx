@@ -38,12 +38,9 @@ const Result = ({ ogData }: { ogData?: string }) => {
       return '...';
     }
 
-    const date = formatDistanceToNow(
-      new Date(item.latestResult.startDate as string),
-      {
-        includeSeconds: true
-      }
-    );
+    const date = formatDistanceToNow(new Date(item.startDate as string), {
+      includeSeconds: true
+    });
 
     return date;
   }, [item]);
@@ -173,7 +170,7 @@ const Result = ({ ogData }: { ogData?: string }) => {
             <div className="mb-12">
               <div>
                 <ResultStats
-                  result={item.latestResult}
+                  result={item}
                   otherStats={[
                     {
                       label: 'Pct. of success',
@@ -221,8 +218,8 @@ export async function getServerSideProps(context: {
     const parsed = parseResult(decompressedText);
 
     const gql = parsed.item?.properties?.gql;
-    const stats = parsed.item?.latestResult.logs
-      ? getLogStats(parsed.item.latestResult.logs, parsed.item.latestResult)
+    const stats = parsed.item?.logs
+      ? getLogStats(parsed.item.logs, parsed.item)
       : [];
 
     if (!parsed.item) {
@@ -236,7 +233,7 @@ export async function getServerSideProps(context: {
     const ogData = {
       url: parsed.item.url,
       verb: parsed.item.verb as string,
-      durations: parsed.item.latestResult.resultDurations.join('*'),
+      durations: parsed.item.resultDurations.join('*'),
       isGql: gql ? gql.isGql.toString() : '',
       gqlName: gql ? gql.gqlName : '',
       parallel: parsed.item.parallel.toString(),

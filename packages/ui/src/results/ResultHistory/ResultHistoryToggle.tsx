@@ -50,7 +50,7 @@ export const ResultHistoryToggle = ({
     setShowHistory(false);
   };
 
-  const results = [item.latestResult, ...item.historicalResults];
+  const results = [item, ...item.historicalResults];
 
   const toggleButtonStyle = {
     textTransform: 'none',
