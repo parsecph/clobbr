@@ -92,6 +92,11 @@ const ResultContent = ({
                 Used http instead of https to make the request
               </Typography>
             </li>
+            <li>
+              <Typography variant="body2">
+                Increase the timeout setting if the server is slow
+              </Typography>
+            </li>
           </ul>
 
           <div className="px-4 py-2 mt-6 mb-2">

@@ -76,7 +76,7 @@ export const useResultRunner = ({
 
   const startRun = useCallback(
     async () => {
-      const { listItemId, cacheId } = globalStore.results.addItem({
+      const item = {
         url: requestUrl,
         resultDurations: [],
         logs: [],
@@ -91,7 +91,9 @@ export const useResultRunner = ({
         headerShellCmd,
         headerNodeScriptData,
         timeout
-      });
+      };
+
+      const { listItemId, cacheId } = globalStore.results.addItem(item);
 
       globalStore.results.updateExpandedResults([listItemId]);
       globalStore.search.setInProgress(true);
@@ -175,20 +177,26 @@ export const useResultRunner = ({
             }
           }
 
-          // NB: results would be recieved via websocket and not handled in this hook anymore.
+          // NB: results would be received via websocket and not handled in this hook anymore.
           await electronAPI.run(
             cacheId,
             listItemId,
             parallel,
             options,
+            item,
             runEventCallback(cacheId, listItemId)
           );
         } else {
           await run(parallel, options, runEventCallback(cacheId, listItemId));
         }
       } catch (error) {
-        // TODO dan: toast
-        console.error(error);
+        // Add detailed logging for errors
+        console.error('Error during run:', error);
+        addToast({
+          message:
+            'An error occurred during the run. Please change the settings and try again.',
+          type: 'error'
+        });
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
