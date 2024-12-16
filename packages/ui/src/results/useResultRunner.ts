@@ -60,7 +60,11 @@ export const useResultRunner = ({
         headerInputMode,
         headerShellCmd,
         headerNodeScriptData,
-        timeout
+        timeout,
+        startDate: new Date().toISOString(),
+        startTimestamp: Date.now(),
+        endDate: null,
+        endTimestamp: null
       };
 
       globalStore.search.setInProgress(true);

@@ -1,6 +1,7 @@
 import { orderBy } from 'lodash-es';
 import { GlobalStore } from 'app/globalContext';
 import { ClobbrUIResult } from 'models/ClobbrUIResult';
+import { useCallback, useEffect, useState } from 'react';
 
 import { Typography } from '@mui/material';
 
@@ -14,16 +15,34 @@ import {
   EResultHistoryMode,
   HISTORY_MODES
 } from 'shared/enums/EResultHistoryMode';
+import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
 
 const MAX_RESULTS = 10;
 
 export const ResultHistory = ({
-  results,
+  result,
   mode
 }: {
-  results: Array<ClobbrUIResult>;
+  result: ClobbrUIListItem;
   mode: EResultHistoryMode;
 }) => {
+  const [historicalResults, setHistoricalResults] = useState<ClobbrUIResult[]>(
+    []
+  );
+
+  const fetchHistoricalResults = useCallback(async () => {
+    const results = await (window as any).electronAPI.getHistoricalResults(
+      result.listItemId
+    );
+    setHistoricalResults(results);
+  }, [result.listItemId]);
+
+  useEffect(() => {
+    fetchHistoricalResults();
+  }, [result.listItemId, fetchHistoricalResults]);
+
+  const results = [...historicalResults, result];
+
   const parallelResults = results.filter((result) => result.parallel);
   const sequentialResults = results.filter((result) => !result.parallel);
 

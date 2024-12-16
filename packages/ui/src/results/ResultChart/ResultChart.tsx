@@ -22,6 +22,8 @@ export const ResultChart = ({
     (log) => log.metas.duration as number
   );
 
+  console.log({ qualifiedLogs });
+
   const maxDuration = Math.max(...qualifiedDurations);
   const paddedDuration = maxDuration + maxDuration * 0.1 + 100;
 

@@ -50,8 +50,6 @@ export const ResultHistoryToggle = ({
     setShowHistory(false);
   };
 
-  const results = [item, ...item.historicalResults];
-
   const toggleButtonStyle = {
     textTransform: 'none',
     padding: '0.25rem 1rem',
@@ -187,7 +185,7 @@ export const ResultHistoryToggle = ({
             </div>
 
             <div className="p-4">
-              <ResultHistory mode={historyMode} results={results} />
+              <ResultHistory mode={historyMode} result={item} />
             </div>
           </Modal>
         </div>

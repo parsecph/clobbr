@@ -2,8 +2,7 @@ import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels';
 import MediaQuery, { useMediaQuery } from 'react-responsive';
 import clsx from 'clsx';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { useAsync } from 'react-use';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 import { getTheme } from 'shared/theme';
@@ -12,8 +11,6 @@ import Portal from '@mui/base/Portal';
 
 import { DEFAULT_GLOBAL_STORE, GlobalStore } from './globalContext';
 import { useClobbrState } from 'state/useClobbrState';
-import { getDb } from 'storage/storage';
-import { EDbStores } from 'storage/EDbStores';
 import { SK } from 'storage/storageKeys';
 
 import Search from 'search/Search/Search';
@@ -60,73 +57,43 @@ const App = () => {
 
   const { state } = useClobbrState({ initialState: DEFAULT_GLOBAL_STORE });
 
-  const storedResultState = useAsync(async () => {
-    const resultDb = getDb(EDbStores.RESULT_STORE_NAME);
-    const existingResultList = await resultDb.getItem(SK.RESULT.LIST);
-
-    return existingResultList;
-  });
-
   const expandedResult = state.results.list.find(
     (item: ClobbrUIListItem) =>
       item.listItemId === state.results.expandedResults[0]
   );
 
-  // Result state
-  useEffect(() => {
-    if (resultStorageLoaded || storedResultState.loading) {
-      return;
-    }
+  const fetchResults = useCallback(async () => {
+    try {
+      const results = await (window as any).electronAPI.getResults();
+      state.results.setList(
+        results.map((item: ClobbrUIListItem) => {
+          const isPartiallyComplete = isResultPartiallyComplete({
+            resultState: item.state
+          });
 
-    if (storedResultState.value) {
-      try {
-        // Update unfinised results & set them to partially finished.
-        const resultList = storedResultState.value.map(
-          (item: ClobbrUIListItem) => {
-            const isPartiallyComplete = isResultPartiallyComplete({
-              resultState: item.state
-            });
+          const isInProgress = isResultInProgress({
+            logs: item.logs,
+            iterations: item.iterations,
+            isPartiallyComplete
+          });
 
-            const isInProgress = isResultInProgress({
-              logs: item.logs,
-              iterations: item.iterations,
-              isPartiallyComplete
-            });
-
-            if (isInProgress) {
-              item.state = UI_RESULT_STATES.PARTIALLY_COMPLETED;
-            }
-
-            // Migrate id to listItemId
-            // Save to remove after January 2024
-            if (!item.listItemId) {
-              item.listItemId = (item as unknown as { id: string }).id;
-            }
-
-            return item;
+          if (isInProgress) {
+            item.state = UI_RESULT_STATES.PARTIALLY_COMPLETED;
           }
-        );
 
-        state.results.setList(resultList);
-      } catch (error) {
-        console.error(error);
-      }
+          return item;
+        })
+      );
+      setResultStorageLoaded(true);
+    } catch (error) {
+      console.error(error);
     }
+  }, []);
 
-    setResultStorageLoaded(true);
-  }, [resultStorageLoaded, storedResultState, state]);
-
-  // Result updates
+  // Fetch initial results
   useEffect(() => {
-    if (!resultStorageLoaded) {
-      return;
-    }
-
-    // NB: this could be optimized to not store all history items with each write.
-    // Might be a issue as data piles up.
-    const resultDb = getDb(EDbStores.RESULT_STORE_NAME);
-    resultDb.setItem(SK.RESULT.LIST, state.results.list);
-  }, [resultStorageLoaded, state.results.list]);
+    fetchResults();
+  }, [fetchResults]);
 
   // Theme state
   useEffect(() => {
@@ -147,6 +114,7 @@ const App = () => {
     setThemeMode(state.themeMode);
   }, [state.themeMode]);
 
+  // Topbar height calculation
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     setTimeout(() => {
@@ -256,7 +224,10 @@ const App = () => {
             >
               <Panel className="w-full h-full min-w-[400px]">
                 <div className="flex h-full overflow-auto">
-                  <ResultList list={state.results.list} className="w-full" />
+                  <ResultList
+                    className="w-full"
+                    resultList={state.results.list}
+                  />
                 </div>
               </Panel>
 
