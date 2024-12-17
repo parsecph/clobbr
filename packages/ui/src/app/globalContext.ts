@@ -3,6 +3,7 @@ import React from 'react';
 import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
 import { ClobbrUIHeaderItem } from 'models/ClobbrUIHeaderItem';
 import { ClobbrUIProperties } from 'models/ClobbrUIProperties';
+import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
 import { HEADER_MODES } from 'search/SearchSettings/HeaderSettings/HeaderSettings';
 import {
   ESearchSettingsMode,
@@ -77,7 +78,8 @@ export const DEFAULT_GLOBAL_STORE = {
 
     toggleEdit() {},
     updateExpandedResults(expandedResults: Array<string>) {},
-    updateExpandedResultGroups(expandedResultGroups: Array<string>) {}
+    updateExpandedResultGroups(expandedResultGroups: Array<string>) {},
+    updateResultLog(cacheId: string, log: ClobbrLogItem) {}
   },
 
   themeMode: 'dark',

@@ -148,7 +148,7 @@ const ResultContent = ({
                 startDelay={0}
               />
               <Typography variant="caption">
-                {item.resultDurations.length < item.iterations / 2
+                {item.resultDurations?.length < item.iterations / 2
                   ? 'Getting results'
                   : 'Almost there'}
               </Typography>

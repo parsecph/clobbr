@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
 import { GenericChart } from '../ResultHistory/ResultHistoryChart/GenericChart';
+import { isNumber } from 'lodash-es';
 
 export const ResultChart = ({
   item,
@@ -20,10 +21,25 @@ export const ResultChart = ({
   const [paddedDuration, setPaddedDuration] = useState(0);
 
   useEffect(() => {
-    const qualifiedLogs = item.logs.filter((log) => !log.failed);
+    const qualifiedLogs = item.logs.filter((log) => {
+      if (log.failed) {
+        return false;
+      }
+
+      if (!isNumber(log.metas.duration)) {
+        return false;
+      }
+
+      return true;
+    });
+
     const qualifiedDurations = qualifiedLogs.map(
       (log) => log.metas.duration as number
     );
+
+    if (qualifiedLogs.length < 2) {
+      return;
+    }
 
     const maxDuration = Math.max(...qualifiedDurations);
     setPaddedDuration(maxDuration + maxDuration * 0.1 + 100);
@@ -73,7 +89,14 @@ export const ResultChart = ({
     if (JSON.stringify(newData) !== JSON.stringify(chartData)) {
       setChartData(newData as any);
     }
-  }, [item, showTrendline, showBarCharts, chartDownSampleThreshold, chartData]);
+  }, [
+    item,
+    item.logs,
+    showTrendline,
+    showBarCharts,
+    chartDownSampleThreshold,
+    chartData
+  ]);
 
   return (
     <div className={clsx('relative cursor-crosshair', className)}>

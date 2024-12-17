@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
 import useStateRef from 'react-usestateref';
 import { useThrottle } from 'react-use';
+import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
 
 export const useResultState = ({ initialState }: { [key: string]: any }) => {
   const [editing, setEditing] = useState(false);
@@ -41,6 +42,21 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     setExpandedResultGroups(nextExpandedResultGroups);
   };
 
+  const updateResultLog = (cacheId: string, log: ClobbrLogItem) => {
+    const currentList = listRef.current;
+
+    // Find the item by cached id and push a log to logs
+    const updatedList = currentList.map((item) => {
+      if (item.cacheId === cacheId) {
+        item.logs = [...item.logs, log];
+      }
+
+      return item;
+    });
+
+    setList(updatedList);
+  };
+
   const toggleEdit = () => {
     setEditing(!editing);
   };
@@ -59,7 +75,9 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     updateExpandedResults,
 
     expandedResultGroups,
-    updateExpandedResultGroups
+    updateExpandedResultGroups,
+
+    updateResultLog
   };
 
   return {

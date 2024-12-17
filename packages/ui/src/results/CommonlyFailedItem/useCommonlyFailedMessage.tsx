@@ -1,6 +1,6 @@
 import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
-import { useWorker } from '@koale/useworker';
 import { useEffect, useState } from 'react';
+import { throttle } from 'lodash-es';
 
 const findMessage = (logs: Array<ClobbrLogItem>) => {
   const isString = (value: unknown): value is string => {
@@ -39,18 +39,20 @@ export const useCommonlyFailedMessage = ({
 }: {
   logs: Array<ClobbrLogItem>;
 }) => {
-  const [findMessageWorker] = useWorker(findMessage);
-
   const [message, setMessage] = useState<string>('');
 
   useEffect(() => {
-    const awaitMessage = async () => {
-      const result = await findMessageWorker(logs);
+    const throttledFindMessage = throttle(() => {
+      const result = findMessage(logs);
       setMessage(result || '');
-    };
+    }, 1000);
 
-    awaitMessage();
-  }, [logs, findMessageWorker]);
+    throttledFindMessage();
+
+    return () => {
+      throttledFindMessage.cancel();
+    };
+  }, [logs]);
 
   return {
     message

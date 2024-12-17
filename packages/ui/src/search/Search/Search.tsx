@@ -35,10 +35,6 @@ import { EEvents } from '@clobbr/api/src/enums/events';
 import { WS_EVENTS } from 'shared/consts/wss';
 
 import { useResultRunner } from 'results/useResultRunner';
-import { getResultLogsKey } from 'shared/util/getResultLogsKey';
-import { getDb } from 'storage/storage';
-import { SK } from 'storage/storageKeys';
-import { EDbStores } from 'storage/EDbStores';
 import { useFetchResults } from 'results/useFetchResults';
 import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
 
@@ -148,49 +144,13 @@ const Search = forwardRef(
       }
     });
 
-    const runEventCallback = useCallback(
-      (cacheId: string, listItemId: string) => {
-        return (
-          _event: EEvents,
-          log: ClobbrLogItem,
-          logs: Array<ClobbrLogItem>
-        ) => {
-          if (!log.metas) {
-            console.warn(
-              `Skipped log for item [${cacheId}] because it has no metas`
-            );
-          }
-
-          if (logs.length === globalStore.search.plannedIterations) {
-            globalStore.search.setInProgress(false);
-
-            // Update the expanded item yet again to bring the user to the latest results in case there has been navigation in the meantime.
-            globalStore.results.updateExpandedResults([listItemId]);
-          }
-        };
-      },
-      [globalStore.search, globalStore.results]
-    );
-
-    const runLogResponseCallback = useCallback(
-      async (payload: { cacheId: string; log: ClobbrLogItem }) => {
-        const { cacheId, log } = payload;
-
-        const resultDb = getDb(EDbStores.RESULT_LOGS_STORE_NAME);
-
-        const id = getResultLogsKey({
-          cacheId,
-          index: log.metas.index
-        });
-
-        await resultDb.setItem(`${SK.RESULT_RESPONSE.ITEM}-${id}`, {
-          index: log.metas.index,
-          data: log.metas.data,
-          error: log.error
-        });
-      },
-      []
-    );
+    const runLogResponseCallback = async (payload: {
+      cacheId: string;
+      log: ClobbrLogItem;
+    }) => {
+      const { cacheId, log } = payload;
+      globalStore.results.updateResultLog(cacheId, log);
+    };
 
     const settingsAnimations = {
       animate:
@@ -253,11 +213,7 @@ const Search = forwardRef(
             }
 
             if (event.includes(WS_EVENTS.API.RUN_CALLBACK)) {
-              runEventCallback(payload.cacheId, payload.listItemId)(
-                payload.event,
-                payload.log,
-                payload.logs
-              );
+              // Nothing
             }
 
             if (event.includes(WS_EVENTS.API.EMIT_LOG_RESPONSE)) {
@@ -269,15 +225,19 @@ const Search = forwardRef(
               runLogResponseCallback(emitLogPayload);
             }
 
-            if (event.includes(WS_EVENTS.API.START_RUN)) {
+            if (event === WS_EVENTS.API.START_RUN) {
               fetchResults();
             }
 
-            if (event.includes(WS_EVENTS.API.END_RUN)) {
+            if (event === WS_EVENTS.API.END_RUN) {
               fetchResults();
+              globalStore.search.setInProgress(false);
+
+              // Update the expanded item yet again to bring the user to the latest results in case there has been navigation in the meantime.
+              globalStore.results.updateExpandedResults([payload.listItemId]);
             }
           } catch (error) {
-            console.warn('Skipped ws message, failed to parse JSON');
+            console.warn('Skipped ws message, failed to handle event', error);
           }
         }
       },
