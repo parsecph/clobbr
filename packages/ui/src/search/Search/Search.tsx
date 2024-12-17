@@ -39,6 +39,8 @@ import { getResultLogsKey } from 'shared/util/getResultLogsKey';
 import { getDb } from 'storage/storage';
 import { SK } from 'storage/storageKeys';
 import { EDbStores } from 'storage/EDbStores';
+import { useFetchResults } from 'results/useFetchResults';
+import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
 
 const iterationInputCss = css`
   .MuiInputBase-root {
@@ -139,6 +141,12 @@ const Search = forwardRef(
     const [urlErrorShown, setUrlErrorShown] = useState(false);
     const [inputFocused, setInputFocused] = useState(false);
     const [autoFocusUrlInput, setAutoFocusUrlInput] = useState(true);
+
+    const { fetchResults } = useFetchResults({
+      onList: (results: Array<ClobbrUIListItem>) => {
+        globalStore.results.setList(results);
+      }
+    });
 
     const runEventCallback = useCallback(
       (cacheId: string, listItemId: string) => {
@@ -259,6 +267,14 @@ const Search = forwardRef(
               } = payload;
 
               runLogResponseCallback(emitLogPayload);
+            }
+
+            if (event.includes(WS_EVENTS.API.START_RUN)) {
+              fetchResults();
+            }
+
+            if (event.includes(WS_EVENTS.API.END_RUN)) {
+              fetchResults();
             }
           } catch (error) {
             console.warn('Skipped ws message, failed to parse JSON');

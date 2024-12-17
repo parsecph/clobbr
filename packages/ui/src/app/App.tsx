@@ -24,11 +24,7 @@ import { ToastContainer } from 'toasts/toastContainer';
 import { useStoredPreferences } from 'shared/hooks/useStoredPreferences';
 import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
 import { useToastStore } from 'toasts/state/toastStore';
-import {
-  isResultInProgress,
-  isResultPartiallyComplete
-} from 'results/Result/useResultProperties';
-import { UI_RESULT_STATES } from 'models/ClobbrUIResult';
+import { useFetchResults } from 'results/useFetchResults';
 
 const App = () => {
   const toasts = useToastStore((state) => state.toasts);
@@ -62,38 +58,19 @@ const App = () => {
       item.listItemId === state.results.expandedResults[0]
   );
 
-  const fetchResults = useCallback(async () => {
-    try {
-      const results = await (window as any).electronAPI.getResults();
-      state.results.setList(
-        results.map((item: ClobbrUIListItem) => {
-          const isPartiallyComplete = isResultPartiallyComplete({
-            resultState: item.state
-          });
-
-          const isInProgress = isResultInProgress({
-            logs: item.logs,
-            iterations: item.iterations,
-            isPartiallyComplete
-          });
-
-          if (isInProgress) {
-            item.state = UI_RESULT_STATES.PARTIALLY_COMPLETED;
-          }
-
-          return item;
-        })
-      );
+  const { fetchResults } = useFetchResults({
+    onDone: () => {
       setResultStorageLoaded(true);
-    } catch (error) {
-      console.error(error);
+    },
+    onList: (results: Array<ClobbrUIListItem>) => {
+      state.results.setList(results);
     }
-  }, []);
+  });
 
   // Fetch initial results
   useEffect(() => {
     fetchResults();
-  }, [fetchResults]);
+  }, []);
 
   // Theme state
   useEffect(() => {
@@ -199,64 +176,69 @@ const App = () => {
 
         <Topbar ref={topbarDom} />
 
-        <main
-          className={clsx(
-            'flex flex-col items-center justify-center h-full transition-all',
-            // 'xl:bg-gray-200 xl:dark:bg-zinc-900/40',
-            state.results.list.length === 0 ? ' flex-grow' : 'flex-grow-0'
-          )}
-        >
-          <Search ref={searchDom} />
-
-          {resultStorageLoaded && state.results.list.length > 0 ? (
-            <PanelGroup
-              autoSaveId="mainLayout"
-              direction="horizontal"
-              className="contents xl:flex xl:flex-row-reverse xl:w-full xl:justify-end xl:border-t border-gray-100 dark:border-opacity-30 dark:border-gray-700"
-              style={
-                isXl
-                  ? {
-                      height: `calc(100vh - ${topbarHeight}px)`
-                    }
-                  : {}
-              }
-              storage={dbStorage}
+        <GlobalStore.Consumer>
+          {({ results }) => (
+            <main
+              className={clsx(
+                'flex flex-col items-center justify-center h-full transition-all',
+                results.list.length === 0 ? ' flex-grow' : 'flex-grow-0'
+              )}
             >
-              <Panel className="w-full h-full min-w-[400px]">
-                <div className="flex h-full overflow-auto">
-                  <ResultList
-                    className="w-full"
-                    resultList={state.results.list}
-                  />
-                </div>
-              </Panel>
+              <Search ref={searchDom} />
 
-              <MediaQuery minWidth={mediaQueries.xl}>
-                <PanelResizeHandle className="group w-4 bg-gray-200 dark:bg-zinc-800/70 hover:bg-zinc-300/80 dark:hover:bg-zinc-900/100 opacity-100 hover:opacity-100 transition-all flex items-center justify-center">
-                  <DragIndicatorIcon
-                    aria-label="Resize panel"
-                    className="!w-5 opacity-50 group-hover:opacity-100 transition-all"
-                  />
-                </PanelResizeHandle>
+              {resultStorageLoaded && results.list.length > 0 ? (
+                <PanelGroup
+                  autoSaveId="mainLayout"
+                  direction="horizontal"
+                  className="contents xl:flex xl:flex-row-reverse xl:w-full xl:justify-end xl:border-t border-gray-100 dark:border-opacity-30 dark:border-gray-700"
+                  style={
+                    isXl
+                      ? {
+                          height: `calc(100vh - ${topbarHeight}px)`
+                        }
+                      : {}
+                  }
+                  storage={dbStorage}
+                >
+                  <Panel className="w-full h-full min-w-[400px]">
+                    <div className="flex h-full overflow-auto">
+                      <ResultList
+                        className="w-full"
+                        resultList={results.list}
+                      />
+                    </div>
+                  </Panel>
 
-                <Panel className="w-full flex min-w-[600px]">
-                  {expandedResult ? (
-                    <div className="sticky top-0 overflow-auto w-full pt-12 bg-gray-100 dark:bg-gray-700/30">
-                      <ResultContent item={expandedResult} expanded={true} />
-                    </div>
-                  ) : (
-                    <div className="sticky top-0 overflow-auto w-full flex items-center justify-center pt-12 bg-gray-100 dark:bg-gray-600/30">
-                      <NoResultSelected />
-                    </div>
-                  )}
-                </Panel>
-              </MediaQuery>
-            </PanelGroup>
-          ) : (
-            ''
+                  <MediaQuery minWidth={mediaQueries.xl}>
+                    <PanelResizeHandle className="group w-4 bg-gray-200 dark:bg-zinc-800/70 hover:bg-zinc-300/80 dark:hover:bg-zinc-900/100 opacity-100 hover:opacity-100 transition-all flex items-center justify-center">
+                      <DragIndicatorIcon
+                        aria-label="Resize panel"
+                        className="!w-5 opacity-50 group-hover:opacity-100 transition-all"
+                      />
+                    </PanelResizeHandle>
+
+                    <Panel className="w-full flex min-w-[600px]">
+                      {expandedResult ? (
+                        <div className="sticky top-0 overflow-auto w-full pt-12 bg-gray-100 dark:bg-gray-700/30">
+                          <ResultContent
+                            item={expandedResult}
+                            expanded={true}
+                          />
+                        </div>
+                      ) : (
+                        <div className="sticky top-0 overflow-auto w-full flex items-center justify-center pt-12 bg-gray-100 dark:bg-gray-600/30">
+                          <NoResultSelected />
+                        </div>
+                      )}
+                    </Panel>
+                  </MediaQuery>
+                </PanelGroup>
+              ) : (
+                ''
+              )}
+            </main>
           )}
-        </main>
-
+        </GlobalStore.Consumer>
         <Portal>
           <ToastContainer toasts={toasts} removeToast={removeToast} />
         </Portal>
