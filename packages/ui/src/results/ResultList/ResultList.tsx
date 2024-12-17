@@ -50,8 +50,6 @@ const ResultList = React.memo(
       }
     );
 
-    console.log({ resultsByUrl });
-
     return (
       <GlobalStore.Consumer>
         {({ results }) => (

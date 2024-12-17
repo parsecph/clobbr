@@ -4,7 +4,6 @@ import MonacoEditor from '@uiw/react-monacoeditor';
 import * as monaco from 'monaco-editor';
 import { GlobalStore } from 'app/globalContext';
 import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
-import { ClobbrUICachedLog } from 'models/ClobbrUICachedLog';
 import { useCopyToClipboard } from 'react-use';
 
 import {
@@ -16,9 +15,6 @@ import {
 
 import { MONACO_OPTIONS } from 'shared/monaco/options';
 import { Button } from '@mui/material';
-import { getDb } from 'storage/storage';
-import { EDbStores } from 'storage/EDbStores';
-import { SK } from 'storage/storageKeys';
 import { decompressBrotli } from 'shared/util/compression';
 
 declare type IMonacoEditor = typeof monaco;
@@ -47,10 +43,12 @@ const onEditorMount = (
 export const ResultHistoryResponseViewer = ({
   className,
   log,
+  cacheId,
   logKey
 }: {
   className?: string;
   log: ClobbrLogItem;
+  cacheId: string;
   logKey?: string;
 }) => {
   const [state, copyToClipboard] = useCopyToClipboard();
@@ -88,17 +86,24 @@ export const ResultHistoryResponseViewer = ({
   };
 
   const parseResponse = useCallback(async () => {
-    /* Successful items */
     if (!logKey) {
       setFormattedResponse('');
       return;
     }
 
-    // Get response data from DB.
-    const resultDb = getDb(EDbStores.RESULT_LOGS_STORE_NAME);
-    const cachedResponse = (await resultDb.getItem(
-      `${SK.RESULT_RESPONSE.ITEM}-${logKey}`
-    )) as ClobbrUICachedLog | null;
+    let cachedResponse;
+
+    if (log.failed) {
+      cachedResponse = await (window as any).electronAPI.getLogErrors(
+        cacheId,
+        log.metas.index
+      );
+    } else {
+      cachedResponse = await (window as any).electronAPI.getLogData(
+        cacheId,
+        log.metas.index
+      );
+    }
 
     if (!cachedResponse) {
       setFormattedResponse('');
@@ -109,9 +114,7 @@ export const ResultHistoryResponseViewer = ({
     let decompressedResponse;
 
     try {
-      decompressedResponse = await decompressBrotli(
-        log.failed ? cachedResponse.error : cachedResponse.data
-      );
+      decompressedResponse = await decompressBrotli(cachedResponse);
     } catch (e) {
       console.warn('Could not decompress response', e);
     }
@@ -146,7 +149,7 @@ export const ResultHistoryResponseViewer = ({
     } catch (e) {
       console.warn('Could not parse as XML', e);
     }
-  }, [log.failed, logKey]);
+  }, [log.failed, log.metas.index, cacheId, logKey]);
 
   useEffect(() => {
     const formatResponse = async () => {

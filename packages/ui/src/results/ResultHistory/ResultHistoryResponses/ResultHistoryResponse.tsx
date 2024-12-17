@@ -104,7 +104,11 @@ export const ResultHistoryResponse = ({
       </ul>
 
       {openLog ? (
-        <ResultHistoryResponseViewer log={openLog} logKey={logKey} />
+        <ResultHistoryResponseViewer
+          log={openLog}
+          logKey={logKey}
+          cacheId={result.cacheId}
+        />
       ) : (
         <Typography variant="caption" className="text-center p-6">
           Select an item to view the response.
