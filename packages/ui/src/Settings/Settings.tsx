@@ -31,6 +31,8 @@ import ThemeToggle from 'Settings/ThemeToggle/ThemeToggle';
 import StickySearchToggle from 'Settings/StickySearchToggle/StickySearchToggle';
 import TrendlineToggle from 'Settings/TrendlineToggle/TrendlineToggle';
 import BarChartToggle from 'Settings/BarChartToggle/BarChartToggle';
+import CollectResponseDataToggle from 'Settings/CollectResponseDataToggle/CollectResponseDataToggle';
+import CollectResponseErrorsToggle from 'Settings/CollectResponseErrorsToggle/CollectResponseErrorsToggle';
 import { useToastStore } from 'toasts/state/toastStore';
 
 export const Settings = ({ dismissModal }: { dismissModal: () => void }) => {
@@ -220,6 +222,28 @@ export const Settings = ({ dismissModal }: { dismissModal: () => void }) => {
               className="flex flex-col gap-2"
             >
               <Typography variant="overline" className={'opacity-50'}>
+                Data collection
+              </Typography>
+
+              <CollectResponseDataToggle />
+              {appSettings.collectResponseData ? (
+                <Alert severity="info">
+                  This will store all response data locally. Keep in mind that
+                  this might increase the size of your local data store.
+                </Alert>
+              ) : null}
+
+              <CollectResponseErrorsToggle />
+              {!appSettings.collectResponseErrors ? (
+                <Alert severity="info">
+                  By turning this off you won't be able to see the error details
+                  of a request, you'll just see that it failed. This reduces the
+                  amount of data stored locally but might make it harder to
+                  debug issues.
+                </Alert>
+              ) : null}
+
+              <Typography variant="overline" className={'opacity-50 !mt-6'}>
                 Local data management
               </Typography>
 
@@ -296,12 +320,12 @@ export const Settings = ({ dismissModal }: { dismissModal: () => void }) => {
                   appSettings.setMaxIterations
                 )}
               />
-              {appSettings.maxIterations && appSettings.maxIterations > 100 ? (
+              {appSettings.maxIterations && appSettings.maxIterations > 1000 ? (
                 <Alert severity="warning">
                   Keep in mind that sending these many requests might increase
                   the costs of your server <br />
-                  Generally, around 100 requests should give you a good idea of
-                  the performance of an endpoint.
+                  Generally, around 100-1000 requests should give you a good
+                  idea of the performance of an endpoint.
                 </Alert>
               ) : (
                 <></>

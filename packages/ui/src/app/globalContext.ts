@@ -90,7 +90,7 @@ export const DEFAULT_GLOBAL_STORE = {
     setStickySearch: (stickySearch: boolean) => {},
     toggleStickySearch() {},
 
-    maxIterations: 100,
+    maxIterations: 1000,
     setMaxIterations(maxIterations?: number | '') {},
 
     showTrendline: false,
@@ -102,7 +102,15 @@ export const DEFAULT_GLOBAL_STORE = {
     toggleShowBarCharts() {},
 
     chartDownSampleThreshold: 500,
-    setChartDownSampleThreshold: (chartDownSampleThreshold: number) => {}
+    setChartDownSampleThreshold: (chartDownSampleThreshold: number) => {},
+
+    collectResponseData: false,
+    setCollectResponseData: (collectResponseData: boolean) => {},
+    toggleCollectResponseData: () => {},
+
+    collectResponseErrors: true,
+    setCollectResponseErrors: (collectResponseErrors: boolean) => {},
+    toggleCollectResponseErrors: () => {}
   }
 };
 

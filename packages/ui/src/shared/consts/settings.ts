@@ -3,7 +3,7 @@ const version = require('../../../package.json').version;
 const sanitizeMailBody = (body: string) =>
   body.replace(/(?:\r\n|\r|\n)/g, '%0D%0A');
 
-export const MAX_ITERATIONS = 100;
+export const MAX_ITERATIONS = 1000;
 export const SUPPORT_EMAIL = 'support@clobbr.app';
 
 export const APP_INFO_TEXT = `

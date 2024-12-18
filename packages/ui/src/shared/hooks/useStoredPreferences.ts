@@ -11,6 +11,8 @@ export type Preferences = {
   maxIterations?: number;
   showTrendline?: boolean;
   showBarCharts?: boolean;
+  collectResponseData?: boolean;
+  collectResponseErrors?: boolean;
 };
 
 export const useStoredPreferences = () => {
@@ -26,8 +28,22 @@ export const useStoredPreferences = () => {
     const showBarCharts = await resultDb.getItem(
       SK.PREFERENCES.SHOW_BAR_CHARTS
     );
+    const collectResponseData = await resultDb.getItem(
+      SK.PREFERENCES.COLLECT_RESPONSE_DATA
+    );
+    const collectResponseErrors = await resultDb.getItem(
+      SK.PREFERENCES.COLLECT_RESPONSE_ERRORS
+    );
 
-    return { theme, stickySearch, maxIterations, showTrendline, showBarCharts };
+    return {
+      theme,
+      stickySearch,
+      maxIterations,
+      showTrendline,
+      showBarCharts,
+      collectResponseData,
+      collectResponseErrors
+    };
   });
 
   useEffect(() => {
@@ -41,7 +57,9 @@ export const useStoredPreferences = () => {
         stickySearch: storedPreferences.value.stickySearch,
         maxIterations: storedPreferences.value.maxIterations,
         showTrendline: storedPreferences.value.showTrendline,
-        showBarCharts: storedPreferences.value.showBarCharts
+        showBarCharts: storedPreferences.value.showBarCharts,
+        collectResponseData: storedPreferences.value.collectResponseData,
+        collectResponseErrors: storedPreferences.value.collectResponseErrors
       });
     }
 

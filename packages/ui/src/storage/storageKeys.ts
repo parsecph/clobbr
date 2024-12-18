@@ -12,6 +12,8 @@ export const SK = {
     SHOW_TRENDLINE: 'preferences.showTrendline',
     SHOW_BAR_CHARTS: 'preferences.showBarCharts',
     CHART_DOWNSAMPLE_THRESHOLD: 'preferences.chartDownSampleThreshold',
+    COLLECT_RESPONSE_DATA: 'preferences.collectResponseData',
+    COLLECT_RESPONSE_ERRORS: 'preferences.collectResponseErrors',
     PANELS: {
       MAIN_LAYOUT: 'preferences.panels.mainLayout'
     }

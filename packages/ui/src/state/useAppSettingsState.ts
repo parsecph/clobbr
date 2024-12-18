@@ -18,6 +18,12 @@ export const useAppSettingsState = ({
   const [chartDownSampleThreshold, setChartDownSampleThreshold] = useState(
     initialState.appSettings.chartDownSampleThreshold
   );
+  const [collectResponseData, setCollectResponseData] = useState(
+    initialState.appSettings.collectResponseData
+  );
+  const [collectResponseErrors, setCollectResponseErrors] = useState(
+    initialState.appSettings.collectResponseErrors
+  );
 
   const toggleStickySearch = () => {
     setStickySearch(!stickySearch);
@@ -29,6 +35,14 @@ export const useAppSettingsState = ({
 
   const toggleShowBarCharts = () => {
     setShowBarCharts(!showBarCharts);
+  };
+
+  const toggleCollectResponseData = () => {
+    setCollectResponseData(!collectResponseData);
+  };
+
+  const toggleCollectResponseErrors = () => {
+    setCollectResponseErrors(!collectResponseErrors);
   };
 
   const appSettingsState = {
@@ -48,7 +62,15 @@ export const useAppSettingsState = ({
     toggleShowBarCharts,
 
     chartDownSampleThreshold,
-    setChartDownSampleThreshold
+    setChartDownSampleThreshold,
+
+    collectResponseData,
+    setCollectResponseData,
+    toggleCollectResponseData,
+
+    collectResponseErrors,
+    setCollectResponseErrors,
+    toggleCollectResponseErrors
   };
 
   return {
