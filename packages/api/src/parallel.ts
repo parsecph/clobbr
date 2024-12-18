@@ -11,7 +11,8 @@ import { sanitizeUrl } from './sanitize';
 
 export const runParallel = async (
   settings: ClobbrRequestSettings,
-  eventCallback?: ClobbrEventCallback
+  eventCallback?: ClobbrEventCallback,
+  abortControllers?: Array<AbortController>
 ) => {
   const { iterations, url, verb = Everbs.GET } = settings;
   const sanitizedUrl = sanitizeUrl(url);
@@ -23,19 +24,18 @@ export const runParallel = async (
 
   const results = [] as Array<number>;
   const logs = [] as Array<ClobbrLogItem>;
-  const abortControllers = [] as Array<AbortController>;
 
   const requests = Array.from({ length: iterations }).map(async (_v, index) => {
     const runStartTime = new Date().valueOf(); // Only used for fails.
 
     try {
-      const { duration, logItem, abortController } = await handleApiCall(
+      const { duration, logItem } = await handleApiCall(
         index,
-        settings
+        settings,
+        abortControllers?.[index]
       );
       results.push(duration);
       logs.push(logItem);
-      abortControllers.push(abortController);
 
       if (eventCallback) {
         eventCallback(EVENTS.RESPONSE_OK, logItem, logs);
@@ -56,5 +56,5 @@ export const runParallel = async (
   });
 
   await Promise.all(requests);
-  return { results, logs, average: getTimeAverage(results), abortControllers };
+  return { results, logs, average: getTimeAverage(results) };
 };

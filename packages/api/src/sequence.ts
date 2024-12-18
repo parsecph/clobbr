@@ -11,7 +11,8 @@ import { sanitizeUrl } from './sanitize';
 
 export const runSequence = async (
   settings: ClobbrRequestSettings,
-  eventCallback?: ClobbrEventCallback
+  eventCallback?: ClobbrEventCallback,
+  abortControllers?: Array<AbortController>
 ) => {
   const { iterations, url, verb = Everbs.GET } = settings;
   const sanitizedUrl = sanitizeUrl(url);
@@ -28,7 +29,11 @@ export const runSequence = async (
     const runStartTime = new Date().valueOf(); // Only used for fails.
 
     try {
-      const { duration, logItem } = await handleApiCall(index, settings);
+      const { duration, logItem } = await handleApiCall(
+        index,
+        settings,
+        abortControllers?.[index]
+      );
       results.push(duration);
       logs.push(logItem);
 

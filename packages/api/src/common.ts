@@ -20,21 +20,22 @@ export const handleApiCall = async (
     data,
     timeout,
     includeDataInResponse
-  }: ClobbrRequestSettings
+  }: ClobbrRequestSettings,
+  abortController?: AbortController
 ) => {
   // Don't send payload data if data object is empty
   const payloadData = data && Object.keys(data).length > 0 ? data : undefined;
 
   const sanitizedUrl = sanitizeUrl(url);
   const startTime = new Date().valueOf();
-  const abortController = new AbortController();
+
   const res = await api.http({
     url: sanitizedUrl,
     method: verb,
     headers,
     data: payloadData,
     timeout: timeout || DEFAULT_HTTP_TIMEOUT_IN_MS,
-    signal: abortController.signal
+    ...(abortController ? { signal: abortController.signal } : {})
   });
 
   const endTime = new Date().valueOf();
