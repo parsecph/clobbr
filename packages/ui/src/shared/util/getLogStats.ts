@@ -107,11 +107,22 @@ export const getLogStats = (
       label: RESULT_STAT_TYPES.NINETY_NINTH_PERCENTILE,
       colorClass: getDurationColorClass(q99Value)
     },
-    {
-      value: formatNumber(totalDurationInSeconds, 1),
-      unit: 's',
-      label: 'Total time',
-      colorClass: getDurationColorClass(0) // Always green
-    }
+    ...(result.endTimestamp
+      ? [
+          {
+            value: formatNumber(totalDurationInSeconds, 1),
+            unit: 's',
+            label: 'Total time',
+            colorClass: getDurationColorClass(0) // Always green
+          }
+        ]
+      : [
+          {
+            value: '...',
+            unit: '',
+            label: 'Total time',
+            colorClass: getDurationColorClass(0) // Always green
+          }
+        ])
   ];
 };

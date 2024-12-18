@@ -148,7 +148,6 @@ const Search = forwardRef(
     const runLogResponseCallback = (
       payload: { cacheId: string; log: ClobbrLogItem }[]
     ) => {
-      console.log('payload', payload);
       if (!payload) {
         return;
       }
