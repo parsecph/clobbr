@@ -145,6 +145,15 @@ const Search = forwardRef(
       }
     });
 
+    const cancelRun = async () => {
+      try {
+        await (window as any).electronAPI.cancelRun();
+        globalStore.search.setInProgress(false);
+      } catch (error) {
+        console.error('Failed to cancel run', error);
+      }
+    };
+
     const runLogResponseCallback = (
       payload: { cacheId: string; log: ClobbrLogItem }[]
     ) => {
@@ -363,25 +372,40 @@ const Search = forwardRef(
                 <Tooltip
                   title={!search.isUrlValid ? 'Type a URL first :-)' : ''}
                 >
-                  <Button
-                    variant="contained"
-                    size="large"
-                    className={clsx(
-                      'flex-shrink-0 flex-grow md:flex-grow-0 !rounded-none sm:!rounded-tr-md sm:!rounded-br-md sm:w-28',
-                      search.inProgress ? '!bg-gray-600' : ''
-                    )}
-                    style={{ height: '3.5rem' }}
-                    onClick={
-                      search.isUrlValid ? startRun : () => toggleUrlError()
-                    }
-                    disabled={search.inProgress || !wsReady}
-                  >
-                    {search.inProgress ? (
-                      <CircularProgress size={20} />
-                    ) : (
-                      'Start'
-                    )}
-                  </Button>
+                  {!search.inProgress ? (
+                    <Button
+                      variant="contained"
+                      size="large"
+                      className={clsx(
+                        'flex-shrink-0 flex-grow md:flex-grow-0 !rounded-none sm:!rounded-tr-md sm:!rounded-br-md sm:w-28',
+                        search.inProgress ? '!bg-gray-600' : ''
+                      )}
+                      style={{ height: '3.5rem' }}
+                      onClick={
+                        search.isUrlValid ? startRun : () => toggleUrlError()
+                      }
+                      disabled={search.inProgress || !wsReady}
+                    >
+                      {search.inProgress ? (
+                        <CircularProgress size={20} />
+                      ) : (
+                        'Start'
+                      )}
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      color="error"
+                      size="large"
+                      className={clsx(
+                        'flex-shrink-0 flex-grow md:flex-grow-0 !rounded-none sm:!rounded-tr-md sm:!rounded-br-md sm:w-28'
+                      )}
+                      style={{ height: '3.5rem' }}
+                      onClick={cancelRun}
+                    >
+                      Cancel
+                    </Button>
+                  )}
                 </Tooltip>
               </div>
             </motion.div>
