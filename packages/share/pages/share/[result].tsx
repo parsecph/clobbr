@@ -119,7 +119,6 @@ const Result = ({ ogData }: { ogData?: string }) => {
                   item={item}
                   showUrl={true}
                   themeMode={'dark'}
-                  isInProgress={false}
                   suffixComponent={
                     <Tooltip title={item.parallel ? 'Parallel' : 'Sequence'}>
                       <div
