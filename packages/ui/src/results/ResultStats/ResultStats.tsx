@@ -55,7 +55,7 @@ export const ResultStats = ({
     } else {
       setTimeout(() => {
         setRunInterval(false);
-      }, INTERVAL_MS);
+      }, INTERVAL_MS + 100);
     }
   }, [globalStore.search.inProgress]);
 

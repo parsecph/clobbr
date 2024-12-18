@@ -26,13 +26,31 @@ export const runSequence = async (
   const logs = [] as Array<ClobbrLogItem>;
 
   for (let index = 0; index < iterations; index++) {
-    const runStartTime = new Date().valueOf(); // Only used for fails.
+    const runStartTime = new Date().valueOf();
+    const abortController = abortControllers?.[index];
+
+    // Check if already aborted
+    if (abortController?.signal.aborted) {
+      const { logItem } = handleApiCallError(
+        settings,
+        new AxiosError('Request aborted', 'ABORT'),
+        index,
+        runStartTime
+      );
+      logs.push(logItem);
+
+      if (eventCallback) {
+        eventCallback(EVENTS.RESPONSE_FAILED, logItem, logs);
+      }
+
+      break;
+    }
 
     try {
       const { duration, logItem } = await handleApiCall(
         index,
         settings,
-        abortControllers?.[index]
+        abortController
       );
       results.push(duration);
       logs.push(logItem);
@@ -51,6 +69,11 @@ export const runSequence = async (
 
       if (eventCallback) {
         eventCallback(EVENTS.RESPONSE_FAILED, logItem, logs);
+      }
+
+      // Break loop if request was aborted
+      if ((error as AxiosError)?.name === 'CanceledError') {
+        break;
       }
     }
   }

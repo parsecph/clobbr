@@ -29,10 +29,12 @@ export const runParallel = async (
     const runStartTime = new Date().valueOf(); // Only used for fails.
 
     try {
+      const abortController = abortControllers?.[index];
+
       const { duration, logItem } = await handleApiCall(
         index,
         settings,
-        abortControllers?.[index]
+        abortController
       );
       results.push(duration);
       logs.push(logItem);
