@@ -15,7 +15,12 @@ test('request can be cancelled', async (t) => {
     includeDataInResponse: false
   };
 
-  const { abortController } = await handleApiCall(0, settings);
+  const abortControllers = [new AbortController()];
+  const { abortController } = await handleApiCall(
+    0,
+    settings,
+    abortControllers[0]
+  );
   t.truthy(abortController);
 
   abortController.abort();

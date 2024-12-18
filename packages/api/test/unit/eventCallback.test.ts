@@ -22,7 +22,8 @@ test('eventCallback on success', async (t) => {
     }
   };
 
-  await runParallel(settings, eventCallback);
+  const abortControllers = [new AbortController()];
+  await runParallel(settings, eventCallback, abortControllers);
   t.true(eventCalled);
 });
 
@@ -44,8 +45,9 @@ test('eventCallback on failure', async (t) => {
     }
   };
 
+  const abortControllers = [new AbortController()];
   try {
-    await runParallel(settings, eventCallback);
+    await runParallel(settings, eventCallback, abortControllers);
   } catch (error) {
     // Expected to fail
   }

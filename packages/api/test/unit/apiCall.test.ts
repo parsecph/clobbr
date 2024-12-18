@@ -15,9 +15,11 @@ test('handleApiCall success', async (t) => {
     includeDataInResponse: false
   };
 
+  const abortControllers = [new AbortController()];
   const { logItem, duration, abortController } = await handleApiCall(
     0,
-    settings
+    settings,
+    abortControllers[0]
   );
   t.truthy(logItem);
   t.truthy(duration);
