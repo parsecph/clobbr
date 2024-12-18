@@ -3,7 +3,7 @@ import { Typography } from '@mui/material';
 import { isNumber } from 'lodash-es';
 import { ClobbrUIResult } from 'models/ClobbrUIResult';
 import { getLogStats } from 'shared/util/getLogStats';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { GlobalStore } from 'app/globalContext';
 import clsx from 'clsx';
@@ -31,6 +31,8 @@ export const ResultStats = ({
     colorClass: string;
   }>;
 }) => {
+  const globalStore = useContext(GlobalStore);
+
   const [stats, setStats] = useState<Array<{
     label: string;
     value: string;
@@ -39,8 +41,15 @@ export const ResultStats = ({
   }> | null>(null);
 
   useInterval(() => {
-    setStats(getResultStats(result));
+    if (globalStore.search.inProgress) {
+      setStats(getResultStats(result));
+    }
   }, 1000);
+
+  useEffect(() => {
+    // Set once on mount
+    setStats(getResultStats(result));
+  }, []);
 
   return (
     <GlobalStore.Consumer>
@@ -92,7 +101,7 @@ export const ResultStats = ({
         ) : (
           <Typography
             className={clsx(
-              '!text-xs text-center opacity-50 p-2 min-h-[100px]',
+              '!text-xs text-center opacity-50 p-2 min-h-[100px] flex items-center justify-center',
               search.inProgress ? 'opacity-0' : ''
             )}
           >
