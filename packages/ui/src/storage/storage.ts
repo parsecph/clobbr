@@ -17,12 +17,14 @@ const mainDb = localforage.createInstance({
   description: 'Holds global, generic data'
 });
 
+// @deprecated
 const resultDb = localforage.createInstance({
   name: DB_NAME,
   storeName: EDbStores.RESULT_STORE_NAME,
   description: 'Holds result data'
 });
 
+// @deprecated
 const resultResponseDb = localforage.createInstance({
   name: DB_NAME,
   storeName: EDbStores.RESULT_LOGS_STORE_NAME,

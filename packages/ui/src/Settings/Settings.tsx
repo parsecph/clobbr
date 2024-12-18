@@ -60,40 +60,35 @@ export const Settings = ({ dismissModal }: { dismissModal: () => void }) => {
     };
 
   const clearLocalData = async () => {
-    const resultDb = getDb(EDbStores.RESULT_STORE_NAME);
-    await resultDb.clear();
+    try {
+      await (window as any).electronAPI.deleteAll();
 
-    const resultLogDb = getDb(EDbStores.RESULT_LOGS_STORE_NAME);
-    await resultLogDb.clear();
+      globalStore.results.setList([]);
 
-    globalStore.results.setList([]);
+      setDatabaseCleared(true);
+      setConfirmedClearing(false);
 
-    setDatabaseCleared(true);
-    setConfirmedClearing(false);
+      dismissModal();
 
-    dismissModal();
-
-    addToast({
-      message: 'Local data cleared'
-    });
+      addToast({
+        message: 'Local data cleared'
+      });
+    } catch (error) {
+      console.error('Failed to clear local data', error);
+      addToast({
+        message: 'Failed to clear local data',
+        type: 'error'
+      });
+    }
   };
 
   const [storedDataSize, calculateStoredDataSize] = useAsyncFn(async () => {
-    const estimate = (await navigator.storage.estimate()) as {
-      usageDetails: { indexedDB?: number };
-    };
-
-    const indexedDbSize = estimate.usageDetails.indexedDB;
-
-    if (!indexedDbSize) {
-      return null;
-    }
-
     try {
-      const size = byteSize(indexedDbSize);
-      return `${size.value} ${size.unit}`;
+      const size = await (window as any).electronAPI.getDbSize();
+      const formattedSize = byteSize(size);
+      return `${formattedSize.value} ${formattedSize.unit}`;
     } catch (error) {
-      console.error('Failed to get indexedDB size', error);
+      console.error('Failed to get db size', error);
       return null;
     }
   });

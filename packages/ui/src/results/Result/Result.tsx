@@ -37,6 +37,8 @@ import { ResultListItemSecondaryContent } from 'results/Result/ResultListItemSec
 import { useResultProperties } from 'results/Result/useResultProperties';
 
 import { mediaQueries } from 'shared/mediaQueries';
+import { useToastStore } from 'toasts/state/toastStore';
+import { useFetchResults } from 'results/useFetchResults';
 
 const xIconCss = css`
   && {
@@ -69,6 +71,13 @@ const Result = ({
   const resultDom = useRef(null);
   const globalStore = useContext(GlobalStore);
   const [isPresent, safeToRemove] = usePresence();
+  const addToast = useToastStore((state) => state.addToast);
+
+  const { fetchResults } = useFetchResults({
+    onList: (results: Array<ClobbrUIListItem>) => {
+      globalStore.results.setList(results);
+    }
+  });
 
   const transition = { type: 'spring', stiffness: 500, damping: 50, mass: 1 };
 
@@ -111,18 +120,24 @@ const Result = ({
     }
   };
 
-  const onDeletePressed = () => {
-    const currentScroll = document.documentElement.scrollTop;
+  const onDeletePressed = async () => {
+    try {
+      const currentScroll = document.documentElement.scrollTop;
 
-    const nextResultList = globalStore.results.listRef.current.filter(
-      (result: ClobbrUIListItem) => result.listItemId !== item.listItemId
-    );
-    globalStore.results.setList(nextResultList);
+      await (window as any).electronAPI.deleteItem(item.listItemId);
+      await fetchResults();
 
-    nextTick(() => {
-      // Hack: maintain scroll position after deleting an item.
-      window.scrollTo(0, currentScroll);
-    });
+      nextTick(() => {
+        // Hack: maintain scroll position after deleting an item.
+        window.scrollTo(0, currentScroll);
+      });
+    } catch (error) {
+      console.error(error);
+      addToast({
+        message: 'Failed to delete item',
+        type: 'error'
+      });
+    }
   };
 
   const averageDuration = useMemo(() => {
