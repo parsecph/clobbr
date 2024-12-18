@@ -45,11 +45,22 @@ export const run = (
     return;
   }
 
+  // Create abort controllers before sending requests
+  const abortControllers = Array(parsedOptions.iterations)
+    .fill(null)
+    .map(() => new AbortController());
+
+  abortControllers.forEach((controller) => {
+    controller.signal.addEventListener('abort', () => {
+      console.log(`Abort signal received for controller`);
+    });
+  });
+
   if (parallel) {
-    return runParallel(parsedOptions, eventCallback);
+    return runParallel(parsedOptions, eventCallback, abortControllers);
   }
 
-  return runSequence(parsedOptions, eventCallback);
+  return runSequence(parsedOptions, eventCallback, abortControllers);
 };
 
 export const mathUtils = resultMath;
