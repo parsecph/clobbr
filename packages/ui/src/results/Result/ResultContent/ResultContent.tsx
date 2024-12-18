@@ -121,7 +121,7 @@ const ResultContent = ({
           {expanded && !search.inProgress && !shouldShowChart && !allFailed ? (
             <>
               <Typography variant="body2" className="opacity-50 text-center">
-                Increase the number of itetations to see more stats.
+                Increase the number of iterations to see more stats.
               </Typography>
 
               <div className="w-full absolute z-40 flex gap-4 justify-center -mt-2">
@@ -131,6 +131,20 @@ const ResultContent = ({
               <div className="mt-4">
                 <ResultStats result={item} />
               </div>
+
+              {failedItems.length ? (
+                <Tooltip title={message || ''}>
+                  <div className="flex flex-col items-center">
+                    <Alert severity="error">
+                      {failedItems.length} failed. Showing results only for
+                      successful requests ({Math.round(pctOfSuccess)}%
+                      succeeded).
+                    </Alert>
+                  </div>
+                </Tooltip>
+              ) : (
+                ''
+              )}
 
               <div className="flex justify-center gap-2 px-2 py-6 mt-8">
                 <ReRunResultButton item={item} />
@@ -202,7 +216,7 @@ const ResultContent = ({
                           <Alert severity="error">
                             {failedItems.length} failed. Showing results only
                             for successful requests ({Math.round(pctOfSuccess)}%
-                            succeded).
+                            succeeded).
                           </Alert>
                         </div>
                       </Tooltip>
@@ -218,9 +232,7 @@ const ResultContent = ({
                 </>
               )}
             </div>
-          ) : (
-            ''
-          )}
+          ) : null}
         </AnimatePresence>
       )}
     </GlobalStore.Consumer>

@@ -106,7 +106,10 @@ export const ResultHistoryResponseViewer = ({
     }
 
     if (!cachedResponse) {
-      setFormattedResponse('');
+      const hint = log.failed
+        ? 'Ensure you have error data collection enabled in settings'
+        : 'Ensure you have response data collection enabled in settings';
+      setFormattedResponse(` > No response data found. \n > ${hint}`);
       return;
     }
 
@@ -127,9 +130,34 @@ export const ResultHistoryResponseViewer = ({
     // Try to parse as JSON
     try {
       const json = JSON.parse(decompressedResponse);
+      const isLikelyAxiosError = json.code && json.status && json.message;
+
+      // is this a string
+      if (typeof json === 'string') {
+        throw new Error('Response is a string');
+      }
 
       if (json) {
-        setFormattedResponse(JSON.stringify(json, null, 2));
+        setFormattedResponse(
+          isLikelyAxiosError
+            ? JSON.stringify(
+                {
+                  message: json.message || '',
+                  code: json.code || '',
+                  status: json.status || '',
+                  response: json.response || '',
+                  config: {
+                    url: json.config?.url || '',
+                    method: json.config?.method || '',
+                    headers: json.config?.headers || '',
+                    data: json.config?.data || ''
+                  }
+                },
+                null,
+                2
+              )
+            : JSON.stringify(json, null, 2)
+        );
         setEditorLanguage('json');
         return;
       }

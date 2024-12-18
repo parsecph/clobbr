@@ -87,7 +87,13 @@ export const useResultRunner = ({
         }, {} as any)
       };
 
-      const options = { ...DEFAULTS, ...configuredOptions };
+      const options = {
+        ...DEFAULTS,
+        ...configuredOptions,
+
+        collectResponseData: globalStore.appSettings.collectResponseData,
+        collectResponseErrors: globalStore.appSettings.collectResponseErrors
+      };
 
       try {
         let listItemId = '';
