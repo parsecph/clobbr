@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "ts-node ./index.ts",
     "dev:run": "ts-node ./index.ts run -u https://api.github.com/zen --table=compact -i 50",
-    "dev:run:parallel": "ts-node ./index.ts run -u https://api.github.com/zen --table=compact -i 50 --parallel",
+    "dev:run:parallel": "ts-node ./index.ts run -u https://apple.com --table=compact -i 50 --parallel",
     "dev:run:csv": "ts-node ./index.ts run -u https://api.github.com/zen --outputFormat=csv",
     "dev:run:yaml": "ts-node ./index.ts run -u https://api.github.com/zen --outputFormat=yaml",
     "dev:run:json": "ts-node ./index.ts run -u https://api.github.com/zen --outputFormat=json",

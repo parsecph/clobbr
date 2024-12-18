@@ -78,7 +78,7 @@ export const renderStatsTable = (
     isNumber(startTimestamp) && isNumber(endTimestamp)
       ? endTimestamp - startTimestamp
       : 0;
-  const totalTimeInSeconds = totalTime ? totalTime : 0;
+  const totalTimeInSeconds = totalTime;
 
   const tableHeader = [
     'Average (Mean)',
@@ -96,13 +96,11 @@ export const renderStatsTable = (
   const q99Value = q99(qualifiedDurations) || 0;
 
   const stats = [
-    chalk.hex(getDurationColor(meanValue))(`${formatNumber(meanValue)} ms`),
-    stdValue
-      ? chalk.hex(getDurationColor(stdValue))(`${formatNumber(stdValue)} ms`)
-      : '-',
-    chalk.hex(getDurationColor(q5Value))(`${formatNumber(q5Value)} ms`),
-    chalk.hex(getDurationColor(q95Value))(`${formatNumber(q95Value)} ms`),
-    chalk.hex(getDurationColor(q99Value))(`${formatNumber(q99Value)} ms`),
+    chalk.green(`${formatNumber(meanValue)} ms`),
+    stdValue ? chalk.green(`${formatNumber(stdValue)} ms`) : '-',
+    chalk.green(`${formatNumber(q5Value)} ms`),
+    chalk.green(`${formatNumber(q95Value)} ms`),
+    chalk.green(`${formatNumber(q99Value)} ms`),
     ...(totalTimeInSeconds
       ? [`${formatNumber(totalTimeInSeconds, 0, 0)} ms`]
       : [])
