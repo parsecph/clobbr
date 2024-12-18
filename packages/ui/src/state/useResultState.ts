@@ -57,6 +57,22 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     setList(updatedList);
   };
 
+  const updateResultLogs = (
+    logs: { cacheId: string; log: ClobbrLogItem }[]
+  ) => {
+    const currentList = listRef.current;
+
+    const updatedList = currentList.map((item) => {
+      const itemLogs = logs.filter((log) => log.cacheId === item.cacheId);
+      if (itemLogs.length > 0) {
+        item.logs = [...item.logs, ...itemLogs.map((log) => log.log)];
+      }
+      return item;
+    });
+
+    setList(updatedList);
+  };
+
   const toggleEdit = () => {
     setEditing(!editing);
   };
@@ -77,7 +93,8 @@ export const useResultState = ({ initialState }: { [key: string]: any }) => {
     expandedResultGroups,
     updateExpandedResultGroups,
 
-    updateResultLog
+    updateResultLog,
+    updateResultLogs
   };
 
   return {

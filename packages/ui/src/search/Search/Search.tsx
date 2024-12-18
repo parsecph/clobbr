@@ -6,7 +6,8 @@ import {
   useContext,
   useEffect,
   useState,
-  forwardRef
+  forwardRef,
+  useRef
 } from 'react';
 import { motion } from 'framer-motion';
 import { css } from '@emotion/css';
@@ -31,12 +32,13 @@ import IterationsInput from 'search/Search/IterationsInput';
 
 import { Everbs } from 'shared/enums/http';
 import { ClobbrLogItem } from '@clobbr/api/src/models/ClobbrLog';
-import { EEvents } from '@clobbr/api/src/enums/events';
 import { WS_EVENTS } from 'shared/consts/wss';
 
 import { useResultRunner } from 'results/useResultRunner';
 import { useFetchResults } from 'results/useFetchResults';
 import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
+
+const BATCH_TIMEOUT = 250;
 
 const iterationInputCss = css`
   .MuiInputBase-root {
@@ -144,12 +146,15 @@ const Search = forwardRef(
       }
     });
 
-    const runLogResponseCallback = async (payload: {
-      cacheId: string;
-      log: ClobbrLogItem;
-    }) => {
-      const { cacheId, log } = payload;
-      globalStore.results.updateResultLog(cacheId, log);
+    const runLogResponseCallback = (
+      payload: { cacheId: string; log: ClobbrLogItem }[]
+    ) => {
+      console.log('payload', payload);
+      if (!payload) {
+        return;
+      }
+
+      globalStore.results.updateResultLogs(payload);
     };
 
     const settingsAnimations = {
@@ -217,12 +222,7 @@ const Search = forwardRef(
             }
 
             if (event.includes(WS_EVENTS.API.EMIT_LOG_RESPONSE)) {
-              let emitLogPayload: {
-                cacheId: string;
-                log: ClobbrLogItem;
-              } = payload;
-
-              runLogResponseCallback(emitLogPayload);
+              runLogResponseCallback(payload);
             }
 
             if (event === WS_EVENTS.API.START_RUN) {
@@ -230,11 +230,13 @@ const Search = forwardRef(
             }
 
             if (event === WS_EVENTS.API.END_RUN) {
-              fetchResults();
-              globalStore.search.setInProgress(false);
+              setTimeout(() => {
+                fetchResults();
+                globalStore.search.setInProgress(false);
 
-              // Update the expanded item yet again to bring the user to the latest results in case there has been navigation in the meantime.
-              globalStore.results.updateExpandedResults([payload.listItemId]);
+                // Update the expanded item yet again to bring the user to the latest results in case there has been navigation in the meantime.
+                globalStore.results.updateExpandedResults([payload.listItemId]);
+              }, BATCH_TIMEOUT);
             }
           } catch (error) {
             console.warn('Skipped ws message, failed to handle event', error);

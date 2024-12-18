@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState } from 'react';
 
 import chartTrendline from 'chartjs-plugin-trendline';
-import type { ChartData, ChartArea } from 'chart.js';
+import type { ChartData, ChartArea, DecimationOptions } from 'chart.js';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -110,7 +110,8 @@ export const GenericChart = ({
 }) => {
   const chartWidth = width || 300;
   const chartHeight = height || 100;
-  const samples = numberOfDownSamplePoints || 100;
+  const samples =
+    numberOfDownSamplePoints || Math.floor(data.datasets[0].data.length * 0.05);
   const gradientColorMap = colorMap || DEFAULT_COLOR_MAP;
   const gradientBgColorMap = bgColorMap || DEFAULT_BG_COLOR_MAP;
 
@@ -200,8 +201,8 @@ export const GenericChart = ({
             enabled: true,
             algorithm: 'lttb',
             samples,
-            threshold: downsampleThreshold || 500
-          },
+            threshold: downsampleThreshold || 100
+          } as DecimationOptions,
           legend: {
             display: false
           },
@@ -233,15 +234,17 @@ export const GenericChart = ({
         interaction: {
           intersect: false
         },
-        animations: {
-          tension: {
-            delay: 500,
-            duration: 1000,
-            easing: 'linear',
-            from: 0.5,
-            to: 0.3
-          }
-        } // fancies anim: https://www.chartjs.org/docs/latest/samples/animations/progressive-line.html
+        animations: downsampleThreshold
+          ? (false as unknown as any)
+          : {
+              tension: {
+                delay: 0, // Remove delay
+                duration: 500, // Reduce animation duration to 500ms
+                easing: 'easeInSine',
+                from: 0.5,
+                to: 0.3
+              }
+            } // fancies anim: https://www.chartjs.org/docs/latest/samples/animations/progressive-line.html
       }}
       type="line"
       width={chartWidth}

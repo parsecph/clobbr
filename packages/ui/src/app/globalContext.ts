@@ -79,7 +79,8 @@ export const DEFAULT_GLOBAL_STORE = {
     toggleEdit() {},
     updateExpandedResults(expandedResults: Array<string>) {},
     updateExpandedResultGroups(expandedResultGroups: Array<string>) {},
-    updateResultLog(cacheId: string, log: ClobbrLogItem) {}
+    updateResultLog(cacheId: string, log: ClobbrLogItem) {},
+    updateResultLogs(logs: { cacheId: string; log: ClobbrLogItem }[]) {}
   },
 
   themeMode: 'dark',

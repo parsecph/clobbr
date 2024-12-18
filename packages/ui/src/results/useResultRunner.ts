@@ -151,7 +151,6 @@ export const useResultRunner = ({
 
           // NB: results would be received via websocket and not handled in this hook anymore.
           const res = await electronAPI.run(parallel, options, item);
-
           listItemId = res.listItemId;
         } else {
           console.error('API not available');

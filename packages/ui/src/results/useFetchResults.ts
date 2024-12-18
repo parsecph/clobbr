@@ -15,6 +15,7 @@ export const useFetchResults = ({
   const fetchResults = async () => {
     try {
       const results = await (window as any).electronAPI.getResults();
+
       console.log({ results });
 
       if (results) {
