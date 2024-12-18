@@ -111,8 +111,8 @@ export const ResultHistoryChart = ({
                   <GenericChart
                     data={data}
                     hideXAxis={true}
-                    downsampleThreshold={50}
-                    numberOfDownSamplePoints={30}
+                    downsampleThreshold={1000}
+                    numberOfDownSamplePoints={100}
                   />
                 </li>
               </ul>

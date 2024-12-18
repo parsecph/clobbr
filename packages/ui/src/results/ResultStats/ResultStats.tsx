@@ -1,9 +1,10 @@
-import { useThrottleFn } from 'react-use';
+import { useDebounce } from 'react-use';
 import { Typography } from '@mui/material';
 import { isNumber } from 'lodash-es';
 
 import { ClobbrUIResult } from 'models/ClobbrUIResult';
 import { getLogStats } from 'shared/util/getLogStats';
+import { useState } from 'react';
 
 export const getResultStats = (result: ClobbrUIResult) => {
   const qualifiedDurations = result.logs
@@ -28,11 +29,22 @@ export const ResultStats = ({
     colorClass: string;
   }>;
 }) => {
-  const stats = useThrottleFn((result) => getResultStats(result), 200, [
-    result
-  ]);
+  const [debouncedStats, setDebouncedStats] = useState<Array<{
+    label: string;
+    value: string;
+    unit: string;
+    colorClass: string;
+  }> | null>(null);
 
-  if (!stats) {
+  useDebounce(
+    () => {
+      setDebouncedStats(getResultStats(result));
+    },
+    1000,
+    [result]
+  );
+
+  if (!debouncedStats) {
     return (
       <Typography className="!text-xs text-center opacity-50 p-2">
         No statistics available
@@ -45,7 +57,7 @@ export const ResultStats = ({
       key={'stats-list'}
       className="grid grid-cols-3 md:flex items-center justify-center gap-4"
     >
-      {stats.map(({ label, value, unit }, index) => (
+      {debouncedStats.map(({ label, value, unit }, index) => (
         <li
           key={index}
           className="flex flex-col items-center border-l border-gray-500 border-opacity-20 first:border-0 p-2"

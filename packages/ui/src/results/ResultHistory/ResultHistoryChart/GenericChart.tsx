@@ -91,7 +91,7 @@ export const GenericChart = ({
   hideXAxis,
   hideYAxis,
   suggestedYMax,
-  downsampleThreshold,
+  downsampleThreshold = 100,
   numberOfDownSamplePoints,
   colorMap,
   bgColorMap
@@ -110,8 +110,7 @@ export const GenericChart = ({
 }) => {
   const chartWidth = width || 300;
   const chartHeight = height || 100;
-  const samples =
-    numberOfDownSamplePoints || Math.floor(data.datasets[0].data.length * 0.05);
+  const samples = numberOfDownSamplePoints || 1000;
   const gradientColorMap = colorMap || DEFAULT_COLOR_MAP;
   const gradientBgColorMap = bgColorMap || DEFAULT_BG_COLOR_MAP;
 
@@ -201,7 +200,7 @@ export const GenericChart = ({
             enabled: true,
             algorithm: 'lttb',
             samples,
-            threshold: downsampleThreshold || 100
+            threshold: downsampleThreshold
           } as DecimationOptions,
           legend: {
             display: false
@@ -234,17 +233,18 @@ export const GenericChart = ({
         interaction: {
           intersect: false
         },
-        animations: downsampleThreshold
-          ? (false as unknown as any)
-          : {
-              tension: {
-                delay: 0, // Remove delay
-                duration: 500, // Reduce animation duration to 500ms
-                easing: 'easeInSine',
-                from: 0.5,
-                to: 0.3
-              }
-            } // fancies anim: https://www.chartjs.org/docs/latest/samples/animations/progressive-line.html
+        animations:
+          data.datasets[0].data.length > downsampleThreshold
+            ? (false as unknown as any)
+            : {
+                tension: {
+                  delay: 0, // Remove delay
+                  duration: 500, // Reduce animation duration to 500ms
+                  easing: 'easeInSine',
+                  from: 0.5,
+                  to: 0.3
+                }
+              } // fancies anim: https://www.chartjs.org/docs/latest/samples/animations/progressive-line.html
       }}
       type="line"
       width={chartWidth}

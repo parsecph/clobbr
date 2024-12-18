@@ -6,8 +6,7 @@ import {
   useContext,
   useEffect,
   useState,
-  forwardRef,
-  useRef
+  forwardRef
 } from 'react';
 import { motion } from 'framer-motion';
 import { css } from '@emotion/css';

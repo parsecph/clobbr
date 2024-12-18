@@ -2,7 +2,7 @@ import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels';
 import MediaQuery, { useMediaQuery } from 'react-responsive';
 import clsx from 'clsx';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 import { getTheme } from 'shared/theme';
