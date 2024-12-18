@@ -57,11 +57,11 @@ const createGradient = (
 ) => {
   const gradient = ctx.createLinearGradient(0, area.bottom, 0, area.top);
 
-  gradient.addColorStop(0, colorMap[0]);
-  gradient.addColorStop(0.1, colorMap[0]);
-  gradient.addColorStop(0.4, colorMap[1]);
-  gradient.addColorStop(0.7, colorMap[2]);
-  gradient.addColorStop(0.8, colorMap[4]);
+  // Add more color stops for a smoother gradient
+  gradient.addColorStop(0.8, colorMap[0]);
+  gradient.addColorStop(0.9, colorMap[1]);
+  gradient.addColorStop(0.95, colorMap[2]);
+  gradient.addColorStop(0.97, colorMap[3]);
   gradient.addColorStop(1, colorMap[4]);
 
   return gradient;
@@ -74,11 +74,12 @@ const createBgGradient = (
 ) => {
   const gradient = ctx.createLinearGradient(0, area.bottom, 0, area.top);
 
+  // Add more color stops for a smoother background gradient
   gradient.addColorStop(0, 'transparent');
-  gradient.addColorStop(0.25, colorMap[0]);
-  gradient.addColorStop(0.4, colorMap[1]);
-  gradient.addColorStop(0.8, colorMap[2]);
-  gradient.addColorStop(0.9, colorMap[3]);
+  gradient.addColorStop(0.2, 'transparent');
+  gradient.addColorStop(0.5, colorMap[0]);
+  gradient.addColorStop(0.6, colorMap[1]);
+  gradient.addColorStop(0.9, colorMap[2]);
 
   return gradient;
 };
@@ -237,12 +238,12 @@ export const GenericChart = ({
           data.datasets[0].data.length > downsampleThreshold
             ? (false as unknown as any)
             : {
-                tension: {
-                  delay: 0, // Remove delay
-                  duration: 500, // Reduce animation duration to 500ms
-                  easing: 'easeInSine',
-                  from: 0.5,
-                  to: 0.3
+                opacity: {
+                  delay: 100,
+                  duration: 300,
+                  easing: 'easeOutSine', // Use a subtle easing function
+                  from: 0,
+                  to: 1
                 }
               } // fancies anim: https://www.chartjs.org/docs/latest/samples/animations/progressive-line.html
       }}
