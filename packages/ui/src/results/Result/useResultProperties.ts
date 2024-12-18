@@ -1,7 +1,6 @@
 import differenceInMinutes from 'date-fns/differenceInMinutes';
 
 import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
-import { ClobbrUIResultState, UI_RESULT_STATES } from 'models/ClobbrUIResult';
 
 const TIMEOUT_WAIT_IN_MINUTES = 3;
 
@@ -21,11 +20,11 @@ export const isResultTimeout = ({
 };
 
 export const isResultPartiallyComplete = ({
-  resultState
+  item
 }: {
-  resultState?: ClobbrUIResultState;
+  item: ClobbrUIListItem;
 }) => {
-  return resultState === UI_RESULT_STATES.PARTIALLY_COMPLETED;
+  return item.iterations > item.logs.length;
 };
 
 export const useResultProperties = ({ item }: { item?: ClobbrUIListItem }) => {
@@ -40,7 +39,7 @@ export const useResultProperties = ({ item }: { item?: ClobbrUIListItem }) => {
   }
 
   const isPartiallyComplete = isResultPartiallyComplete({
-    resultState: item.state
+    item
   });
 
   const successfulItems = item.logs.filter((log) => !log.failed);

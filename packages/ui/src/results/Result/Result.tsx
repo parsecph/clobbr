@@ -168,7 +168,7 @@ const Result = ({
 
   return (
     <GlobalStore.Consumer>
-      {({ results }) => (
+      {({ results, search }) => (
         <motion.ul
           className={clsx(
             className,
@@ -266,13 +266,16 @@ const Result = ({
                     </span>
                   </Tooltip>
 
-                  {isPartiallyComplete ? (
+                  {!search.inProgress && isPartiallyComplete ? (
                     <Tooltip
                       title={`${item.logs.length} ${
                         item.logs.length === 1 ? 'call' : 'calls'
                       } ran`}
                     >
-                      <Typography variant="body2" className="opacity-50">
+                      <Typography
+                        variant="body2"
+                        className="!text-xs opacity-50"
+                      >
                         Partial
                       </Typography>
                     </Tooltip>
