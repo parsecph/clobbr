@@ -8,6 +8,8 @@ import { motion } from 'framer-motion';
 import { GlobalStore } from 'app/globalContext';
 import clsx from 'clsx';
 
+const INTERVAL_MS = 1000;
+
 export const getResultStats = (result: ClobbrUIResult) => {
   const qualifiedDurations = result.logs
     .filter((log) => !log.failed)
@@ -32,6 +34,7 @@ export const ResultStats = ({
   }>;
 }) => {
   const globalStore = useContext(GlobalStore);
+  const [runInterval, setRunInterval] = useState(false);
 
   const [stats, setStats] = useState<Array<{
     label: string;
@@ -41,10 +44,20 @@ export const ResultStats = ({
   }> | null>(null);
 
   useInterval(() => {
-    if (globalStore.search.inProgress) {
+    if (runInterval) {
       setStats(getResultStats(result));
     }
-  }, 1000);
+  }, INTERVAL_MS);
+
+  useEffect(() => {
+    if (globalStore.search.inProgress) {
+      setRunInterval(true);
+    } else {
+      setTimeout(() => {
+        setRunInterval(false);
+      }, INTERVAL_MS);
+    }
+  }, [globalStore.search.inProgress]);
 
   useEffect(() => {
     // Set once on mount
