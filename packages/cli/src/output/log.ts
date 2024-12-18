@@ -1,8 +1,8 @@
+import chalk from 'chalk';
 import { EErrors, ERRORS } from '@clobbr/api/src/enums/errors';
 import { VERBS } from '@clobbr/api/src/enums/http';
 import { stripIndent } from 'common-tags';
 
-const chalk = require('chalk');
 const log = (text: string) => console.log(text);
 
 export const info = (text: string) => log(chalk.gray(text));
