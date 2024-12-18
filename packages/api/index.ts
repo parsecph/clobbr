@@ -36,7 +36,8 @@ export const parseOptions = (options?: ClobbrRequestSettings) => {
 export const run = (
   parallel: boolean,
   options: ClobbrRequestSettings,
-  eventCallback?: ClobbrEventCallback
+  eventCallback?: ClobbrEventCallback,
+  abortControllerCallback?: (abortControllers: AbortController[]) => void
 ) => {
   const parsedOptions = parseOptions(options);
 
@@ -50,11 +51,7 @@ export const run = (
     .fill(null)
     .map(() => new AbortController());
 
-  abortControllers.forEach((controller) => {
-    controller.signal.addEventListener('abort', () => {
-      console.log(`Abort signal received for controller`);
-    });
-  });
+  abortControllerCallback?.(abortControllers);
 
   if (parallel) {
     return runParallel(parsedOptions, eventCallback, abortControllers);
