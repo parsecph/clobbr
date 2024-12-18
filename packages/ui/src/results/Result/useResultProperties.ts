@@ -20,18 +20,6 @@ export const isResultTimeout = ({
   );
 };
 
-export const isResultInProgress = ({
-  isPartiallyComplete,
-  logs,
-  iterations
-}: {
-  isPartiallyComplete: boolean;
-  logs: Array<any>;
-  iterations: number;
-}) => {
-  return !isPartiallyComplete && logs.length !== iterations;
-};
-
 export const isResultPartiallyComplete = ({
   resultState
 }: {
@@ -43,22 +31,16 @@ export const isResultPartiallyComplete = ({
 export const useResultProperties = ({ item }: { item?: ClobbrUIListItem }) => {
   if (!item) {
     return {
-      isInProgress: false,
       successfulItems: [],
       failedItems: [],
       allFailed: false,
-      pctOfSuccess: 0
+      pctOfSuccess: 0,
+      progressStats: 0
     };
   }
 
   const isPartiallyComplete = isResultPartiallyComplete({
     resultState: item.state
-  });
-
-  const isInProgress = isResultInProgress({
-    logs: item.logs,
-    iterations: item.iterations,
-    isPartiallyComplete
   });
 
   const successfulItems = item.logs.filter((log) => !log.failed);
@@ -69,12 +51,14 @@ export const useResultProperties = ({ item }: { item?: ClobbrUIListItem }) => {
 
   const pctOfSuccess = (successfulItems.length * 100) / item.iterations;
 
+  const pctOfProgress = Math.floor((item.logs.length * 100) / item.iterations);
+
   return {
-    isInProgress,
     isPartiallyComplete,
     successfulItems,
     failedItems,
     allFailed,
-    pctOfSuccess
+    pctOfSuccess,
+    pctOfProgress
   };
 };

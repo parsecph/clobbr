@@ -19,10 +19,6 @@ import Result from 'results/Result/Result';
 import { VERB_COLOR_CLASS_MAP } from 'shared/enums/VerbsToColorMap';
 
 import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
-import {
-  isResultInProgress,
-  isResultPartiallyComplete
-} from 'results/Result/useResultProperties';
 
 const ResultGroup = ({
   items,
@@ -37,20 +33,6 @@ const ResultGroup = ({
 
   const resultDom = useRef(null);
   const [isPresent, safeToRemove] = usePresence();
-
-  const isInProgress = items.some((item) => {
-    const isPartiallyComplete = isResultPartiallyComplete({
-      resultState: item.state
-    });
-
-    const isInProgress = isResultInProgress({
-      logs: item.logs,
-      iterations: item.iterations,
-      isPartiallyComplete
-    });
-
-    return isInProgress;
-  });
 
   const transition = { type: 'spring', stiffness: 500, damping: 50, mass: 1 };
 
@@ -106,7 +88,7 @@ const ResultGroup = ({
 
   return (
     <GlobalStore.Consumer>
-      {({ results }) => (
+      {({ results, search }) => (
         <motion.div
           className={clsx(
             'w-full',
@@ -127,7 +109,7 @@ const ResultGroup = ({
                       </span>
                     </Tooltip>
 
-                    {isInProgress ? (
+                    {search.inProgress ? (
                       <div className="flex items-center">
                         <CircularProgress size={14} />
                       </div>
@@ -202,7 +184,7 @@ const ResultGroup = ({
                       expanded={isExpanded}
                       animateOnTap={false}
                       className={clsx(
-                        isExpanded && !isInProgress ? 'pb-4 xl:pb-0' : '',
+                        isExpanded && !search.inProgress ? 'pb-4 xl:pb-0' : '',
                         isExpanded && hasBorder
                           ? 'border-b border-solid border-gray-500 border-opacity-30'
                           : '',

@@ -62,7 +62,7 @@ const Result = ({
   className?: string;
   listItemClassName?: string;
 }) => {
-  const { allFailed, isPartiallyComplete, isInProgress } = useResultProperties({
+  const { allFailed, isPartiallyComplete } = useResultProperties({
     item
   });
 
@@ -214,7 +214,6 @@ const Result = ({
                     showUrl={showUrl}
                     showParallelOrSequenceIcon={showParallelOrSequenceIcon}
                     themeMode={globalStore.themeMode}
-                    isInProgress={isInProgress}
                   />
                 }
                 secondary={
