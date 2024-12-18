@@ -12,7 +12,6 @@ const swapUrlSsl = (url: string, ssl: boolean) =>
   ssl ? url.replace('http://', 'https://') : url.replace('https://', 'http://');
 
 export const useSearchState = ({ initialState }: { [key: string]: any }) => {
-  const [plannedIterations, setPlannedIterations] = useState(0);
   const [wsReady, setWsReady] = useState(false);
   const [searchInProgress, setSearchInProgress] = useState(false);
   const [settingsModalOpen, setSettingsModalOpen] = useState(false);
@@ -243,9 +242,6 @@ export const useSearchState = ({ initialState }: { [key: string]: any }) => {
   }, [url.requestUrl]);
 
   const searchState = {
-    plannedIterations,
-    setPlannedIterations,
-
     wsReady,
     setWsReady,
 

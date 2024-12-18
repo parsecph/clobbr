@@ -68,7 +68,6 @@ export const useResultRunner = ({
       };
 
       globalStore.search.setInProgress(true);
-      globalStore.search.setPlannedIterations(iterations);
 
       const configuredOptions = {
         url: requestUrl,
