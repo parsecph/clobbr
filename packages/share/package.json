@@ -1,6 +1,6 @@
 {
   "name": "@clobbr/share",
-  "version": "1.17.0",
+  "version": "1.17.1",
   "private": true,
   "scripts": {
     "dev": "PORT=4343 next dev",
