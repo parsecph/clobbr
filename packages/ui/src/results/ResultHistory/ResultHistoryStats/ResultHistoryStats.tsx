@@ -105,7 +105,7 @@ export const ResultHistoryStats = ({
         </div>
 
         {resultsWithStats.map(({ result, stats, successPct }, index) => (
-          <div className="flex gap-2 relative" key={result.cacheId}>
+          <div className="flex gap-2 relative" key={result.cacheId + index}>
             {index === 0 && results.length > 1 ? (
               <Tooltip title="Latest result">
                 <div className="w-1 h-1 absolute p-2 -left-2.5 -top-1.5">

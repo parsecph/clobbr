@@ -29,7 +29,7 @@ export const ResultHistoryTableLogList = ({
       }}
     >
       {resultsToShow.map((log) => (
-        <li key={log.metas.number} className="inline-flex items-center">
+        <li key={log.metas.index} className="inline-flex items-center">
           {log.metas.statusOk && log.metas.duration ? (
             <ResultHistoryTableItem log={log} />
           ) : (

@@ -1,4 +1,4 @@
-import { useDebounce } from 'react-use';
+import { useInterval } from 'react-use';
 import { Typography } from '@mui/material';
 import { isNumber } from 'lodash-es';
 
@@ -29,22 +29,18 @@ export const ResultStats = ({
     colorClass: string;
   }>;
 }) => {
-  const [debouncedStats, setDebouncedStats] = useState<Array<{
+  const [stats, setStats] = useState<Array<{
     label: string;
     value: string;
     unit: string;
     colorClass: string;
   }> | null>(null);
 
-  useDebounce(
-    () => {
-      setDebouncedStats(getResultStats(result));
-    },
-    1000,
-    [result]
-  );
+  useInterval(() => {
+    setStats(getResultStats(result));
+  }, 1000);
 
-  if (!debouncedStats) {
+  if (!stats) {
     return (
       <Typography className="!text-xs text-center opacity-50 p-2">
         No statistics available
@@ -57,10 +53,10 @@ export const ResultStats = ({
       key={'stats-list'}
       className="grid grid-cols-3 md:flex items-center justify-center gap-4"
     >
-      {debouncedStats.map(({ label, value, unit }, index) => (
+      {stats.map(({ label, value, unit }, index) => (
         <li
           key={index}
-          className="flex flex-col items-center border-l border-gray-500 border-opacity-20 first:border-0 p-2"
+          className="flex flex-col items-center border-l border-gray-500 border-opacity-20 first:border-0 p-2 min-w-[100px] text-center"
         >
           <Typography variant="body2">
             {value} {unit}

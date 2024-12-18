@@ -43,7 +43,7 @@ export const ResultHistoryResponse = ({
     <div className={clsx('flex', className)}>
       <ul className="flex flex-col gap-1 px-6 py-2 flex-shrink-0 overflow-y-auto overflow-x-hidden">
         {resultsToShow.map((log, index) => (
-          <li key={log.metas.number} className={clsx('flex')}>
+          <li key={log.metas.index} className={clsx('flex')}>
             <Button
               size="small"
               variant="text"
