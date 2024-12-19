@@ -51,6 +51,11 @@ const ResultContent = ({
   const shouldShowChart =
     !allFailed && expanded && item.iterations > 1 && successfulItems.length > 1;
 
+  const shouldShowLoader =
+    globalStore.search.inProgress &&
+    item.listItemId === globalStore.search.inProgressListItemId &&
+    successfulItems.length < 2;
+
   return (
     <GlobalStore.Consumer>
       {({ search }) => (
@@ -231,6 +236,16 @@ const ResultContent = ({
                   </footer>
                 </>
               )}
+            </div>
+          ) : null}
+
+          {shouldShowLoader ? (
+            <div className="h-72 flex flex-col items-center justify-center gap-8">
+              <ActivityIndicator
+                animationIterations="infinite"
+                startDelay={0}
+              />
+              <Typography variant="caption">Getting results</Typography>
             </div>
           ) : null}
         </AnimatePresence>
