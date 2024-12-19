@@ -108,7 +108,12 @@ export const ResultHistoryChart = ({
 
               <ul className="flex gap-3 cursor-crosshair">
                 <li>
-                  <GenericChart data={data} hideXAxis={true} />
+                  <GenericChart
+                    data={data}
+                    hideXAxis={true}
+                    downsampleThreshold={1000}
+                    numberOfDownSamplePoints={100}
+                  />
                 </li>
               </ul>
             </div>
