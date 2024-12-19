@@ -185,6 +185,7 @@ const ResultContent = ({
                   </div>
 
                   <ResultChart
+                    key={item.cacheId}
                     item={item}
                     showTrendline={showTrendline}
                     showBarCharts={showBarCharts}
