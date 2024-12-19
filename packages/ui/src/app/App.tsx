@@ -25,6 +25,8 @@ import { useStoredPreferences } from 'shared/hooks/useStoredPreferences';
 import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
 import { useToastStore } from 'toasts/state/toastStore';
 import { useFetchResults } from 'results/useFetchResults';
+import { getDb } from 'storage/storage';
+import { EDbStores } from 'storage/EDbStores';
 
 const App = () => {
   const toasts = useToastStore((state) => state.toasts);
@@ -49,6 +51,7 @@ const App = () => {
   const [resultStorageLoaded, setResultStorageLoaded] = useState(false);
   const [preferencesApplied, setPreferencesApplied] = useState(false);
   const [themeMode, setThemeMode] = useState(DEFAULT_GLOBAL_STORE.themeMode);
+  const [hasMigratedData, setHasMigratedData] = useState(false);
   const { preferences, preferencesLoaded } = useStoredPreferences();
 
   const { state } = useClobbrState({ initialState: DEFAULT_GLOBAL_STORE });
@@ -167,6 +170,35 @@ const App = () => {
     }),
     [is2xl, is3xl]
   );
+
+  useEffect(() => {
+    // Migrate indexdb data once and then clear it.
+    if (hasMigratedData) {
+      return;
+    }
+
+    const migrateData = async () => {
+      const resultDb = getDb(EDbStores.RESULT_STORE_NAME);
+      const existingResultList = await resultDb.getItem(SK.RESULT.LIST);
+
+      if (!existingResultList?.length) {
+        console.warn('Skipping data migration');
+        return;
+      }
+
+      (window as any).electronAPI.migrateData(existingResultList);
+      const results = await (window as any).electronAPI.getResults();
+      state.results.setList(results);
+
+      await resultDb.clear();
+
+      const resultLogDb = getDb(EDbStores.RESULT_LOGS_STORE_NAME);
+      await resultLogDb.clear();
+    };
+
+    setHasMigratedData(true);
+    migrateData();
+  }, []);
 
   return (
     <GlobalStore.Provider value={state}>
