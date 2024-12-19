@@ -109,7 +109,10 @@ const ResultGroup = ({
                       </span>
                     </Tooltip>
 
-                    {search.inProgress ? (
+                    {items.some(
+                      ({ listItemId }) =>
+                        listItemId === search.inProgressListItemId
+                    ) ? (
                       <div className="flex items-center">
                         <CircularProgress size={14} />
                       </div>

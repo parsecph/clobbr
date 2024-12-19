@@ -16,6 +16,7 @@ export const DEFAULT_GLOBAL_STORE = {
   search: {
     wsReady: false,
     inProgress: false,
+    inProgressListItemId: '',
     settingsModalOpen: false,
     settingsMode: SEARCH_SETTINGS_MODE.INPUT as ESearchSettingsMode,
 
@@ -46,6 +47,7 @@ export const DEFAULT_GLOBAL_STORE = {
 
     setWsReady: (wsReady: boolean) => {},
     setInProgress(inProgress: boolean) {},
+    setInProgressListItemId(itemId: string) {},
     showSettingsModal(settingsMode?: ESearchSettingsMode) {},
     hideSettingsModal() {},
     updateUrl(url: string) {},

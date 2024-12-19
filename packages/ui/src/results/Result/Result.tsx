@@ -229,7 +229,7 @@ const Result = ({
                     showUrl={showUrl}
                     showParallelOrSequenceIcon={showParallelOrSequenceIcon}
                     themeMode={globalStore.themeMode}
-                    inProgress={search.inProgress}
+                    inProgress={search.inProgressListItemId === item.listItemId}
                   />
                 }
                 secondary={

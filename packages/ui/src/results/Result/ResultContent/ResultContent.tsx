@@ -175,7 +175,7 @@ const ResultContent = ({
                     <ResultHistoryToggle item={item} />
                     <ShareResultToggle
                       item={item}
-                      disabled={search.inProgress}
+                      disabled={item.listItemId === search.inProgressListItemId}
                     />
                   </div>
 
@@ -188,7 +188,7 @@ const ResultContent = ({
                   />
                   <ResultStats result={item} />
 
-                  {search.inProgress ? (
+                  {item.listItemId === search.inProgressListItemId ? (
                     <div className="opacity-50 absolute xl:-mt-2 w-full flex flex-col items-center">
                       <div className="w-full bg-gray-200 h-0.5 dark:bg-gray-700">
                         <div

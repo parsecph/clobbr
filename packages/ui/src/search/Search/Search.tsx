@@ -233,6 +233,9 @@ const Search = forwardRef(
             }
 
             if (event === WS_EVENTS.API.START_RUN) {
+              if (payload.listItemId) {
+                globalStore.search.setInProgressListItemId(payload.listItemId);
+              }
               fetchResults();
             }
 
@@ -240,6 +243,7 @@ const Search = forwardRef(
               setTimeout(() => {
                 fetchResults();
                 globalStore.search.setInProgress(false);
+                globalStore.search.setInProgressListItemId('');
 
                 // Update the expanded item yet again to bring the user to the latest results in case there has been navigation in the meantime.
                 globalStore.results.updateExpandedResults([payload.listItemId]);

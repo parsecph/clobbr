@@ -14,6 +14,7 @@ const swapUrlSsl = (url: string, ssl: boolean) =>
 export const useSearchState = ({ initialState }: { [key: string]: any }) => {
   const [wsReady, setWsReady] = useState(false);
   const [searchInProgress, setSearchInProgress] = useState(false);
+  const [inProgressListItemId, setInProgressListItemId] = useState('');
   const [settingsModalOpen, setSettingsModalOpen] = useState(false);
   const [settingsMode, setSettingsMode] = useState(SEARCH_SETTINGS_MODE.INPUT);
   const [parallel, setParallel] = useState(initialState.search.parallel);
@@ -247,6 +248,9 @@ export const useSearchState = ({ initialState }: { [key: string]: any }) => {
 
     inProgress: searchInProgress,
     setInProgress: setSearchInProgress,
+
+    inProgressListItemId,
+    setInProgressListItemId,
 
     settingsModalOpen,
     hideSettingsModal,
