@@ -11,6 +11,7 @@ export type Preferences = {
   maxIterations?: number;
   showTrendline?: boolean;
   showBarCharts?: boolean;
+  showYAxis?: boolean;
   collectResponseData?: boolean;
   collectResponseErrors?: boolean;
 };
@@ -28,6 +29,7 @@ export const useStoredPreferences = () => {
     const showBarCharts = await resultDb.getItem(
       SK.PREFERENCES.SHOW_BAR_CHARTS
     );
+    const showYAxis = await resultDb.getItem(SK.PREFERENCES.SHOW_Y_AXIS);
     const collectResponseData = await resultDb.getItem(
       SK.PREFERENCES.COLLECT_RESPONSE_DATA
     );
@@ -41,6 +43,7 @@ export const useStoredPreferences = () => {
       maxIterations,
       showTrendline,
       showBarCharts,
+      showYAxis,
       collectResponseData,
       collectResponseErrors
     };
@@ -58,6 +61,7 @@ export const useStoredPreferences = () => {
         maxIterations: storedPreferences.value.maxIterations,
         showTrendline: storedPreferences.value.showTrendline,
         showBarCharts: storedPreferences.value.showBarCharts,
+        showYAxis: storedPreferences.value.showYAxis,
         collectResponseData: storedPreferences.value.collectResponseData,
         collectResponseErrors: storedPreferences.value.collectResponseErrors
       });

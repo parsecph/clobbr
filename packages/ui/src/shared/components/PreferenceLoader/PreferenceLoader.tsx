@@ -41,6 +41,10 @@ const PreferenceLoader = () => {
       if (isBoolean(preferences.showBarCharts)) {
         globalStore.appSettings.setShowBarCharts(preferences.showBarCharts);
       }
+
+      if (isBoolean(preferences.showYAxis)) {
+        globalStore.appSettings.setShowYAxis(preferences.showYAxis);
+      }
     }
 
     setPreferencesApplied(true);

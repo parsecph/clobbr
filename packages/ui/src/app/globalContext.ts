@@ -103,6 +103,10 @@ export const DEFAULT_GLOBAL_STORE = {
     setShowBarCharts: (showBarCharts: boolean) => {},
     toggleShowBarCharts() {},
 
+    showYAxis: false,
+    setShowYAxis: (showYAxis: boolean) => {},
+    toggleShowYAxis() {},
+
     chartDownSampleThreshold: 500,
     setChartDownSampleThreshold: (chartDownSampleThreshold: number) => {},
 

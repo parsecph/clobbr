@@ -162,6 +162,7 @@ const Result = ({ ogData }: { ogData?: string }) => {
 
             <ResultChart
               chartDownSampleThreshold={1000}
+              showYAxis={true}
               item={item}
               className="mt-4"
             />

@@ -116,7 +116,8 @@ export const GenericChart = ({
   downsampleThreshold = 1000,
   numberOfDownSamplePoints = 1000,
   colorMap,
-  bgColorMap
+  bgColorMap,
+  xAxisType
 }: {
   data: ChartData<'line' | 'bar'>;
   width?: number | string;
@@ -129,14 +130,15 @@ export const GenericChart = ({
   numberOfDownSamplePoints?: number;
   colorMap?: { [key: number]: string };
   bgColorMap?: { [key: number]: string };
+  xAxisType?: 'category' | 'linear';
 }) => {
-  console.log({ downsampleThreshold, numberOfDownSamplePoints });
   const chartWidth = width || 300;
   const chartHeight = height || 100;
   const gradientColorMap = colorMap || DEFAULT_COLOR_MAP;
   const gradientBgColorMap = bgColorMap || DEFAULT_BG_COLOR_MAP;
   const threshold = downsampleThreshold;
   const samples = numberOfDownSamplePoints;
+  const scaleXType = xAxisType || 'linear';
 
   const chartRef = useRef<ChartJS>(null);
   const [chartData, setChartData] = useState<ChartData<'line' | 'bar'>>({
@@ -207,19 +209,47 @@ export const GenericChart = ({
                         size: 1
                       }
                     },
-                    type: 'linear'
+                    type: scaleXType
                   }
                 }
-              : {}),
+              : {
+                  x: {
+                    type: scaleXType
+                  }
+                }),
             ...(hideYAxis
               ? {
                   y: {
-                    display: false,
+                    display: false
+                  }
+                }
+              : {
+                  y: {
+                    display: true,
+                    position: 'right',
+                    ticks: {
+                      color: 'rgba(160,160,160,0.5)', // Color of the tick labels
+                      font: {
+                        size: 12, // Font size of the tick labels
+                        weight: 'normal'
+                      },
+                      stepSize: 100
+                    },
+
+                    grid: {
+                      // display: false,
+                      color: 'rgba(160,160,160,0.2)', // Color of the tick labels
+                      drawBorder: false,
+                      drawOnChartArea: true,
+                      borderDash: [3, 3]
+                    },
+                    title: {
+                      display: false
+                    },
                     suggestedMin: 50,
                     ...(suggestedYMax ? { suggestedMax: suggestedYMax } : {})
                   }
-                }
-              : {})
+                })
           },
           indexAxis: 'x',
           plugins: {

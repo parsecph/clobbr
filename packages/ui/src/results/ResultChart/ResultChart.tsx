@@ -8,12 +8,14 @@ export const ResultChart = ({
   item,
   showTrendline,
   showBarCharts,
+  showYAxis = false,
   chartDownSampleThreshold,
   className
 }: {
   item: ClobbrUIListItem;
   showTrendline?: boolean;
   showBarCharts?: boolean;
+  showYAxis?: boolean;
   chartDownSampleThreshold: number;
   className?: string;
 }) => {
@@ -106,7 +108,7 @@ export const ResultChart = ({
           downsampleThreshold={chartDownSampleThreshold}
           suggestedYMax={paddedDuration}
           responsive={true}
-          hideYAxis={true}
+          hideYAxis={!showYAxis}
           hideXAxis={true}
         />
       )}

@@ -45,6 +45,7 @@ const ResultContent = ({
 
   const showTrendline = globalStore.appSettings.showTrendline;
   const showBarCharts = globalStore.appSettings.showBarCharts;
+  const showYAxis = globalStore.appSettings.showYAxis;
   const chartDownSampleThreshold =
     globalStore.appSettings.chartDownSampleThreshold;
 
@@ -189,6 +190,7 @@ const ResultContent = ({
                     item={item}
                     showTrendline={showTrendline}
                     showBarCharts={showBarCharts}
+                    showYAxis={showYAxis}
                     chartDownSampleThreshold={chartDownSampleThreshold}
                     className="mt-4"
                   />

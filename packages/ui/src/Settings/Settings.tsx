@@ -31,6 +31,7 @@ import ThemeToggle from 'Settings/ThemeToggle/ThemeToggle';
 import StickySearchToggle from 'Settings/StickySearchToggle/StickySearchToggle';
 import TrendlineToggle from 'Settings/TrendlineToggle/TrendlineToggle';
 import BarChartToggle from 'Settings/BarChartToggle/BarChartToggle';
+import YAxisToggle from 'Settings/YAxisToggle/YAxisToggle';
 import CollectResponseDataToggle from 'Settings/CollectResponseDataToggle/CollectResponseDataToggle';
 import CollectResponseErrorsToggle from 'Settings/CollectResponseErrorsToggle/CollectResponseErrorsToggle';
 import { useToastStore } from 'toasts/state/toastStore';
@@ -205,6 +206,7 @@ export const Settings = ({ dismissModal }: { dismissModal: () => void }) => {
                 Chart visualization settings
               </Typography>
 
+              <YAxisToggle />
               <TrendlineToggle />
               <BarChartToggle />
             </FormControl>

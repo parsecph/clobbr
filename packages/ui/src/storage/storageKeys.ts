@@ -11,6 +11,7 @@ export const SK = {
     MAX_ITERATIONS: 'preferences.maxIterations',
     SHOW_TRENDLINE: 'preferences.showTrendline',
     SHOW_BAR_CHARTS: 'preferences.showBarCharts',
+    SHOW_Y_AXIS: 'preferences.showYAxis',
     CHART_DOWNSAMPLE_THRESHOLD: 'preferences.chartDownSampleThreshold',
     COLLECT_RESPONSE_DATA: 'preferences.collectResponseData',
     COLLECT_RESPONSE_ERRORS: 'preferences.collectResponseErrors',

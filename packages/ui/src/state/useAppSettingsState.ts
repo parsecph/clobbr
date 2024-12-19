@@ -15,6 +15,9 @@ export const useAppSettingsState = ({
   const [showBarCharts, setShowBarCharts] = useState(
     initialState.appSettings.showBarCharts
   );
+  const [showYAxis, setShowYAxis] = useState(
+    initialState.appSettings.showYAxis
+  );
   const [chartDownSampleThreshold, setChartDownSampleThreshold] = useState(
     initialState.appSettings.chartDownSampleThreshold
   );
@@ -35,6 +38,10 @@ export const useAppSettingsState = ({
 
   const toggleShowBarCharts = () => {
     setShowBarCharts(!showBarCharts);
+  };
+
+  const toggleShowYAxis = () => {
+    setShowYAxis(!showYAxis);
   };
 
   const toggleCollectResponseData = () => {
@@ -60,6 +67,10 @@ export const useAppSettingsState = ({
     showBarCharts,
     setShowBarCharts,
     toggleShowBarCharts,
+
+    showYAxis,
+    setShowYAxis,
+    toggleShowYAxis,
 
     chartDownSampleThreshold,
     setChartDownSampleThreshold,
