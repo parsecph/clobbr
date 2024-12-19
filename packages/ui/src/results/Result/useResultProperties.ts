@@ -2,7 +2,7 @@ import differenceInMinutes from 'date-fns/differenceInMinutes';
 
 import { ClobbrUIListItem } from 'models/ClobbrUIListItem';
 
-const TIMEOUT_WAIT_IN_MINUTES = 3;
+const TIMEOUT_WAIT_IN_MINUTES = 3; // TODO Dan might have to revisit if this is needed
 
 export const isResultTimeout = ({
   startDate,
@@ -51,6 +51,7 @@ export const useResultProperties = ({ item }: { item?: ClobbrUIListItem }) => {
   const pctOfSuccess = (successfulItems.length * 100) / item.iterations;
 
   const pctOfProgress = Math.floor((item.logs.length * 100) / item.iterations);
+  const normalizedPctOfProgress = pctOfProgress > 100 ? 99 : pctOfProgress;
 
   return {
     isPartiallyComplete,
@@ -58,6 +59,6 @@ export const useResultProperties = ({ item }: { item?: ClobbrUIListItem }) => {
     failedItems,
     allFailed,
     pctOfSuccess,
-    pctOfProgress
+    pctOfProgress: normalizedPctOfProgress
   };
 };

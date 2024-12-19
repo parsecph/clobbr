@@ -189,7 +189,7 @@ const ResultContent = ({
                   <ResultStats result={item} />
 
                   {search.inProgress ? (
-                    <div className="opacity-50 absolute -mt-2 w-full flex flex-col items-center">
+                    <div className="opacity-50 absolute xl:-mt-2 w-full flex flex-col items-center">
                       <div className="w-full bg-gray-200 h-0.5 dark:bg-gray-700">
                         <div
                           className="bg-black dark:bg-white h-0.5 rounded-tr-full rounded-br-full transition-all duration-500"
