@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
+import { useThrottle } from 'react-use';
 
 import chartTrendline from 'chartjs-plugin-trendline';
 import type { ChartData, ChartArea, DecimationOptions } from 'chart.js';
@@ -19,6 +20,7 @@ import {
 } from 'chart.js';
 import { Chart } from 'react-chartjs-2';
 import { formatNumber } from 'shared/util/numberFormat';
+import { Button } from '@mui/material';
 
 ChartJS.register(
   chartTrendline,
@@ -91,11 +93,17 @@ const ErrorFallback = ({
   error: Error;
   resetErrorBoundary: () => void;
 }) => (
-  <div className="p-4" role="alert">
-    <p>Something went wrong</p>
-    <button onClick={resetErrorBoundary}>Try again</button>
+  <div className="p-4 text-center flex flex-col gap-2" role="alert">
+    <p>Something went wrong :-(</p>
+    <div>
+      <Button size="small" className="text-xs" onClick={resetErrorBoundary}>
+        Restore
+      </Button>
+    </div>
   </div>
 );
+
+const THROTTLE_INTERVAL = 250;
 
 export const GenericChart = ({
   data,
@@ -105,8 +113,8 @@ export const GenericChart = ({
   hideXAxis,
   hideYAxis,
   suggestedYMax,
-  downsampleThreshold = 100,
-  numberOfDownSamplePoints,
+  downsampleThreshold = 1000,
+  numberOfDownSamplePoints = 1000,
   colorMap,
   bgColorMap
 }: {
@@ -122,16 +130,20 @@ export const GenericChart = ({
   colorMap?: { [key: number]: string };
   bgColorMap?: { [key: number]: string };
 }) => {
+  console.log({ downsampleThreshold, numberOfDownSamplePoints });
   const chartWidth = width || 300;
   const chartHeight = height || 100;
-  const samples = numberOfDownSamplePoints || 1000;
   const gradientColorMap = colorMap || DEFAULT_COLOR_MAP;
   const gradientBgColorMap = bgColorMap || DEFAULT_BG_COLOR_MAP;
+  const threshold = downsampleThreshold;
+  const samples = numberOfDownSamplePoints;
 
   const chartRef = useRef<ChartJS>(null);
   const [chartData, setChartData] = useState<ChartData<'line' | 'bar'>>({
     datasets: []
   });
+
+  const throttledData = useThrottle(data, THROTTLE_INTERVAL);
 
   useEffect(() => {
     const chart = chartRef.current;
@@ -141,8 +153,8 @@ export const GenericChart = ({
     }
 
     const chartData = {
-      ...data,
-      datasets: data.datasets.map((dataset) => ({
+      ...throttledData,
+      datasets: throttledData.datasets.map((dataset) => ({
         ...dataset,
         ...(dataset.type === 'bar'
           ? {
@@ -169,7 +181,7 @@ export const GenericChart = ({
     };
 
     setChartData(chartData);
-  }, [data, gradientColorMap, gradientBgColorMap]);
+  }, [throttledData, gradientColorMap, gradientBgColorMap]);
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
@@ -215,7 +227,7 @@ export const GenericChart = ({
               enabled: true,
               algorithm: 'lttb',
               samples,
-              threshold: downsampleThreshold
+              threshold
             } as DecimationOptions,
             legend: {
               display: false
@@ -247,19 +259,19 @@ export const GenericChart = ({
           },
           interaction: {
             intersect: false
-          },
-          animations:
-            data.datasets[0].data.length > downsampleThreshold
-              ? (false as unknown as any)
-              : {
-                  opacity: {
-                    delay: 100,
-                    duration: 300,
-                    easing: 'easeOutSine', // Use a subtle easing function
-                    from: 0,
-                    to: 1
-                  }
-                } // fancies anim: https://www.chartjs.org/docs/latest/samples/animations/progressive-line.html
+          }
+          // animations:
+          //   data.datasets[0].data.length > threshold
+          //     ? (false as unknown as any)
+          //     : {
+          //         opacity: {
+          //           delay: 0,
+          //           duration: 200,
+          //           easing: 'easeInBack', // Use a subtle easing function
+          //           from: 0,
+          //           to: 1
+          //         }
+          //       } // fancies anim: https://www.chartjs.org/docs/latest/samples/animations/progressive-line.html
         }}
         type="line"
         width={chartWidth}
