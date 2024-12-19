@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import chartTrendline from 'chartjs-plugin-trendline';
 import type { ChartData, ChartArea, DecimationOptions } from 'chart.js';
@@ -84,6 +85,18 @@ const createBgGradient = (
   return gradient;
 };
 
+const ErrorFallback = ({
+  resetErrorBoundary
+}: {
+  error: Error;
+  resetErrorBoundary: () => void;
+}) => (
+  <div className="p-4" role="alert">
+    <p>Something went wrong</p>
+    <button onClick={resetErrorBoundary}>Try again</button>
+  </div>
+);
+
 export const GenericChart = ({
   data,
   width,
@@ -159,98 +172,100 @@ export const GenericChart = ({
   }, [data, gradientColorMap, gradientBgColorMap]);
 
   return (
-    <Chart
-      ref={chartRef}
-      options={{
-        parsing: false,
-        responsive,
-        maintainAspectRatio: true,
-        layout: {
-          padding: 0
-        },
-        scales: {
-          ...(hideXAxis
-            ? {
-                x: {
-                  display: false,
-                  ticks: {
-                    // Hacks so the chart is full width inside the canvas
-                    minRotation: 90,
-                    maxTicksLimit: samples + 1,
-                    font: {
-                      size: 1
-                    }
-                  },
-                  type: 'linear'
-                }
-              }
-            : {}),
-          ...(hideYAxis
-            ? {
-                y: {
-                  display: false,
-                  suggestedMin: 50,
-                  ...(suggestedYMax ? { suggestedMax: suggestedYMax } : {})
-                }
-              }
-            : {})
-        },
-        indexAxis: 'x',
-        plugins: {
-          decimation: {
-            enabled: true,
-            algorithm: 'lttb',
-            samples,
-            threshold: downsampleThreshold
-          } as DecimationOptions,
-          legend: {
-            display: false
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <Chart
+        ref={chartRef}
+        options={{
+          parsing: false,
+          responsive,
+          maintainAspectRatio: true,
+          layout: {
+            padding: 0
           },
-          tooltip: {
-            usePointStyle: false,
-            boxWidth: 0,
-            boxHeight: 0,
-            boxPadding: 0,
-            borderColor: 'transparent',
-            bodyFont: {
-              size: 16
+          scales: {
+            ...(hideXAxis
+              ? {
+                  x: {
+                    display: false,
+                    ticks: {
+                      // Hacks so the chart is full width inside the canvas
+                      minRotation: 90,
+                      maxTicksLimit: samples + 1,
+                      font: {
+                        size: 1
+                      }
+                    },
+                    type: 'linear'
+                  }
+                }
+              : {}),
+            ...(hideYAxis
+              ? {
+                  y: {
+                    display: false,
+                    suggestedMin: 50,
+                    ...(suggestedYMax ? { suggestedMax: suggestedYMax } : {})
+                  }
+                }
+              : {})
+          },
+          indexAxis: 'x',
+          plugins: {
+            decimation: {
+              enabled: true,
+              algorithm: 'lttb',
+              samples,
+              threshold: downsampleThreshold
+            } as DecimationOptions,
+            legend: {
+              display: false
             },
-            caretPadding: 10,
-            xAlign: 'center',
-            yAlign: 'bottom',
-            callbacks: {
-              title: (tooltipItem) => {
-                return '';
+            tooltip: {
+              usePointStyle: false,
+              boxWidth: 0,
+              boxHeight: 0,
+              boxPadding: 0,
+              borderColor: 'transparent',
+              bodyFont: {
+                size: 16
               },
-              label: function (context) {
-                const label = context.dataset.label || '';
-                return context.parsed?.y
-                  ? `${formatNumber(context.parsed.y)} ms`
-                  : label;
+              caretPadding: 10,
+              xAlign: 'center',
+              yAlign: 'bottom',
+              callbacks: {
+                title: (tooltipItem) => {
+                  return '';
+                },
+                label: function (context) {
+                  const label = context.dataset.label || '';
+                  return context.parsed?.y
+                    ? `${formatNumber(context.parsed.y)} ms`
+                    : label;
+                }
               }
             }
-          }
-        },
-        interaction: {
-          intersect: false
-        },
-        animations:
-          data.datasets[0].data.length > downsampleThreshold
-            ? (false as unknown as any)
-            : {
-                opacity: {
-                  delay: 100,
-                  duration: 300,
-                  easing: 'easeOutSine', // Use a subtle easing function
-                  from: 0,
-                  to: 1
-                }
-              } // fancies anim: https://www.chartjs.org/docs/latest/samples/animations/progressive-line.html
-      }}
-      type="line"
-      width={chartWidth}
-      height={chartHeight}
-      data={chartData}
-    />
+          },
+          interaction: {
+            intersect: false
+          },
+          animations:
+            data.datasets[0].data.length > downsampleThreshold
+              ? (false as unknown as any)
+              : {
+                  opacity: {
+                    delay: 100,
+                    duration: 300,
+                    easing: 'easeOutSine', // Use a subtle easing function
+                    from: 0,
+                    to: 1
+                  }
+                } // fancies anim: https://www.chartjs.org/docs/latest/samples/animations/progressive-line.html
+        }}
+        type="line"
+        width={chartWidth}
+        height={chartHeight}
+        data={chartData}
+      />
+    </ErrorBoundary>
   );
 };
