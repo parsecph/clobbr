@@ -23,7 +23,7 @@ jobs:
         run: |
           npm -v
           node -v
-          npm i -g yarn
+          npm i -g yarn typescript ava
           yarn
           npm run bootstrap
           npm run build-api && npm run build-cli
