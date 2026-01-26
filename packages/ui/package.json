@@ -41,7 +41,7 @@
 		"is-absolute-url": "^3.0.3",
 		"js-beautify": "^1.14.9",
 		"localforage": "^1.10.0",
-		"lodash-es": "^4.17.21",
+		"lodash-es": "^4.17.23",
 		"react": "18.2.0",
 		"react-app-rewired": "^2.2.1",
 		"react-chartjs-2": "^5.2.0",
