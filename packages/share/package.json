@@ -31,7 +31,7 @@
     "framer-motion": "^6.2.10",
     "framer-motion-3d": "^6.2.10",
     "google-auth-library": "^8.6.0",
-    "lodash-es": "^4.17.21",
+    "lodash-es": "^4.17.23",
     "next": "13.0.1",
     "react": "18.2.0",
     "react-chartjs-2": "^4.3.1",
