@@ -16,15 +16,9 @@
   "license": "MIT",
   "dependencies": {
     "@faker-js/faker": "^9.3.0",
-<<<<<<< Updated upstream
     "@vercel/ncc": "^0.38.3",
     "axios": "^0.30.0",
     "is-absolute-url": "^3.0.3",
-=======
-    "@vercel/ncc": "^0.38.4",
-    "axios": "^1.16.0",
-    "is-absolute-url": "^5.0.0",
->>>>>>> Stashed changes
     "object-sizeof": "^2.6.5"
   },
   "devDependencies": {
