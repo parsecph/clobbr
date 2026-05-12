@@ -23,8 +23,8 @@
     }
   },
   "dependencies": {
-    "@clobbr/api": "^1.16.1",
-    "axios": "^1.7.9",
+    "@clobbr/api": "^1.18.0",
+    "axios": "^1.16.0",
     "react-chartjs-2": "^5.2.0"
   }
 }
